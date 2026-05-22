@@ -1,6 +1,12 @@
-import prisma from "../lib/prisma";
-import { hashPassword } from "../utils/hashPassword";
-export const register = async (req, res) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.register = void 0;
+const prisma_1 = __importDefault(require("../lib/prisma"));
+const hashPassword_1 = require("../utils/hashPassword");
+const register = async (req, res) => {
     try {
         const { name, studentId, password, } = req.body;
         // =========================
@@ -20,7 +26,7 @@ export const register = async (req, res) => {
         // =========================
         // CHECK EXISTING USER
         // =========================
-        const existingUser = await prisma.user.findUnique({
+        const existingUser = await prisma_1.default.user.findUnique({
             where: {
                 studentId,
             },
@@ -33,11 +39,11 @@ export const register = async (req, res) => {
         // =========================
         // HASH PASSWORD
         // =========================
-        const hashedPassword = await hashPassword(password);
+        const hashedPassword = await (0, hashPassword_1.hashPassword)(password);
         // =========================
         // CREATE USER
         // =========================
-        const user = await prisma.user.create({
+        const user = await prisma_1.default.user.create({
             data: {
                 name,
                 studentId,
@@ -65,3 +71,4 @@ export const register = async (req, res) => {
         });
     }
 };
+exports.register = register;

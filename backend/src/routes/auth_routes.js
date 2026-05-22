@@ -1,15 +1,20 @@
-import express from "express";
-import { login } from "../controllers/login_controller";
-import { register } from "../controllers/register_controller";
-import { getMe } from "../controllers/me_controller";
-import { authMiddleware } from "../middleware/auth_middleware";
-const router = express.Router();
-router.post("/login", login);
-router.post("/register", register);
-router.get("/me", authMiddleware, getMe);
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const login_controller_1 = require("../controllers/login_controller");
+const register_controller_1 = require("../controllers/register_controller");
+const me_controller_1 = require("../controllers/me_controller");
+const auth_middleware_1 = require("../middleware/auth_middleware");
+const router = express_1.default.Router();
+router.post("/login", login_controller_1.login);
+router.post("/register", register_controller_1.register);
+router.get("/me", auth_middleware_1.authMiddleware, me_controller_1.getMe);
 router.get("/", (req, res) => {
     res.json({
         message: "Auth route working",
     });
 });
-export default router;
+exports.default = router;

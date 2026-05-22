@@ -1,7 +1,13 @@
-import prisma from "../lib/prisma";
-import { comparePassword } from "../utils/comparePassword";
-import { generateToken } from "../utils/generateToken";
-export const login = async (req, res) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.login = void 0;
+const prisma_1 = __importDefault(require("../lib/prisma"));
+const comparePassword_1 = require("../utils/comparePassword");
+const generateToken_1 = require("../utils/generateToken");
+const login = async (req, res) => {
     try {
         const { login, password } = req.body;
         // =========================
@@ -15,7 +21,7 @@ export const login = async (req, res) => {
         // =========================
         // FIND USER
         // =========================
-        const user = await prisma.user.findFirst({
+        const user = await prisma_1.default.user.findFirst({
             where: {
                 OR: [
                     {
@@ -53,7 +59,7 @@ export const login = async (req, res) => {
         // =========================
         // PASSWORD CHECK
         // =========================
-        const isMatch = await comparePassword(password, user.password);
+        const isMatch = await (0, comparePassword_1.comparePassword)(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
                 message: "Invalid credentials",
@@ -62,7 +68,7 @@ export const login = async (req, res) => {
         // =========================
         // GENERATE TOKEN
         // =========================
-        const token = generateToken(user.id);
+        const token = (0, generateToken_1.generateToken)(user.id);
         // =========================
         // COOKIE
         // =========================
@@ -95,3 +101,4 @@ export const login = async (req, res) => {
         });
     }
 };
+exports.login = login;
