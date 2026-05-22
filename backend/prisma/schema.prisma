@@ -24,6 +24,8 @@ model User {
 
   role       Role
 
+  status     String   @default("PENDING")
+
   createdAt  DateTime @default(now())
 }
 
