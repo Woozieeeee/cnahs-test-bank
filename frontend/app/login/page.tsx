@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Swal from "sweetalert2";
 import { loginUser } from "@/services/auth_service";
 
 export default function LoginPage() {
@@ -17,19 +18,27 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const data = await loginUser({
-        login,
-        password,
-      });
+  const data = await loginUser({
+    login,
+    password,
+  });
 
-      console.log(data);
+  Swal.fire({
+    icon: "success",
+    title: "Welcome",
+    text: "Login successful",
+  });
 
-      alert("Login successful");
-    } catch (error) {
-      console.log(error);
+} catch (error: any) {
 
-      alert("Login failed");
-    }
+  Swal.fire({
+    icon: "error",
+    title: "Login Failed",
+    text:
+      error.response?.data?.message ||
+      "Something went wrong",
+  });
+}
   };
 
   return (
