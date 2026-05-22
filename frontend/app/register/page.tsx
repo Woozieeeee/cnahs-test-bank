@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { registerUser } from "../../services/auth_service";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const [name, setName] =
@@ -134,6 +135,15 @@ export default function RegisterPage() {
         >
           Register
         </button>
+        <div className="mt-6 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="font-medium text-black hover:underline"
+          >
+            Login here
+          </Link>
+        </div>
       </form>
     </div>
   );
