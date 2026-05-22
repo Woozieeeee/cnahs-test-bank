@@ -44,7 +44,7 @@ export default function LoginPage() {
 
         <input
           type="text"
-          placeholder="Student ID or Username"
+          placeholder="Enter your Student ID"
           value={login}
           onChange={(e) =>
             setLogin(e.target.value)
@@ -62,12 +62,24 @@ export default function LoginPage() {
           className="mb-4 w-full rounded border p-3"
         />
 
+
+
         <button
           type="submit"
           className="w-full rounded bg-black p-3 text-white"
         >
           Login
         </button>
+
+        <div className="mt-6 text-center text-sm text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-black hover:underline"
+          >
+            Register here
+          </Link>
+        </div>
       </form>
     </div>
   );
