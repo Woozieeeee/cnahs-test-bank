@@ -11,9 +11,6 @@ export default function RegisterPage() {
   const [studentId, setStudentId] =
     useState("");
 
-  const [username, setUsername] =
-    useState("");
-
   const [password, setPassword] =
     useState("");
 
@@ -63,12 +60,20 @@ export default function RegisterPage() {
       console.log(data);
 
       alert("Registered successfully");
-    } catch (error) {
-      console.log(error);
+    }  catch (error: any) {
+  console.log(error);
 
-      alert("Registration failed");
-    }
+  console.log(error.response);
+
+  alert(
+    error.response?.data?.message ||
+    "Registration failed"
+  );
+}
+    
   };
+
+  
 
   return (
     <div className="flex min-h-screen items-center justify-center">
