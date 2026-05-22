@@ -6,7 +6,10 @@ import authRoutes from "./routes/auth_routes";
 const app = express();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: [
+      "http://localhost:3000",
+      "https://cnahs-test-bank.vercel.app",
+    ],
   credentials: true,
 }));
 
