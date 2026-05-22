@@ -9,17 +9,16 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  username   String?  @unique
-  studentId  String?  @unique
-  password   String
-  role       Role
-  status     AccountStatus @default(PENDING)
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
 }
 
 enum Role {
@@ -28,8 +27,3 @@ enum Role {
   STUDENT
 }
 
-enum AccountStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
