@@ -1,7 +1,3 @@
 export default function TakeExamPage() {
-  return (
-    <div>
-      Take Exam
-    </div>
-  );
+  return <div>Take Exam</div>;
 }

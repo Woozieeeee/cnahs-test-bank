@@ -1,7 +1,3 @@
 export default function StudentExamsPage() {
-  return (
-    <div>
-      Student Exams
-    </div>
-  );
+  return <div>Student Exams</div>;
 }

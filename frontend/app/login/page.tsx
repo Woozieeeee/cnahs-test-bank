@@ -2,43 +2,78 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Swal from "sweetalert2";
+import {
+  successToast,
+  errorToast,
+  infoToast,
+} from "@/lib/swal";
 import { loginUser } from "@/services/auth_service";
 
 export default function LoginPage() {
-  const [login, setLogin] =
-    useState("");
+  const [login, setLogin] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-  const data = await loginUser({
-    login,
-    password,
-  });
+      const data = await loginUser({
+        login,
+        password,
+      });
 
-  Swal.fire({
-    icon: "success",
-    title: "Welcome",
-    text: "Login successful",
-  });
+      // =========================
+      // FIRST LOGIN
+      // =========================
 
-} catch (error: any) {
+      if (data.user.firstLogin) {
+        await successToast(
+          "Your account has been approved successfully."
+        );
+      } else {
+        // =========================
+        // NORMAL LOGIN
+        // =========================
 
-  Swal.fire({
-    icon: "error",
-    title: "Login Failed",
-    text:
-      error.response?.data?.message ||
-      "Something went wrong",
-  });
-}
+        await successToast(
+          `Welcome back, ${data.user.name}!`
+        );
+      }
+    } catch (error: any) {
+      const message = error.response?.data?.message;
+
+      // =========================
+      // PENDING ACCOUNT
+      // =========================
+
+      if (message === "Account pending approval") {
+        infoToast(
+          "Your account is waiting for admin approval."
+        );
+
+        return;
+      }
+
+      // =========================
+      // REJECTED ACCOUNT
+      // =========================
+
+      if (message === "Account rejected") {
+        errorToast("Please contact the administrator.");
+
+        return;
+      }
+
+      // =========================
+      // DEFAULT ERROR
+      // =========================
+
+      errorToast(
+        message ||
+          "The Student ID and Password is incorrect./n Please try again."
+      );
+    }
   };
 
   return (
@@ -47,17 +82,13 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-md rounded-lg border p-6 shadow"
       >
-        <h1 className="mb-6 text-2xl font-bold">
-          Login
-        </h1>
+        <h1 className="mb-6 text-2xl font-bold">Login</h1>
 
         <input
           type="text"
           placeholder="Enter your Student ID"
           value={login}
-          onChange={(e) =>
-            setLogin(e.target.value)
-          }
+          onChange={(e) => setLogin(e.target.value)}
           className="mb-4 w-full rounded border p-3"
         />
 
@@ -65,13 +96,9 @@ export default function LoginPage() {
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
           className="mb-4 w-full rounded border p-3"
         />
-
-
 
         <button
           type="submit"

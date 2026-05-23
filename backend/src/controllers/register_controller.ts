@@ -9,18 +9,13 @@ export const register = async (
   res: Response
 ) => {
   try {
-    const {
-      name,
-      studentId,
-      password,
-    } = req.body;
+    const { name, studentId, password } = req.body;
 
     // =========================
     // VALIDATE STUDENT ID
     // =========================
 
-    const studentIdRegex =
-      /^\d{2}-\d{5}$/;
+    const studentIdRegex = /^\d{2}-\d{5}$/;
 
     if (!studentId) {
       return res.status(400).json({
@@ -28,12 +23,9 @@ export const register = async (
       });
     }
 
-    if (
-      !studentIdRegex.test(studentId)
-    ) {
+    if (!studentIdRegex.test(studentId)) {
       return res.status(400).json({
-        message:
-          "Invalid student ID format",
+        message: "Invalid student ID format",
       });
     }
 
@@ -41,17 +33,15 @@ export const register = async (
     // CHECK EXISTING USER
     // =========================
 
-    const existingUser =
-      await prisma.user.findUnique({
-        where: {
-          studentId,
-        },
-      });
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        studentId,
+      },
+    });
 
     if (existingUser) {
       return res.status(400).json({
-        message:
-          "Student already exists",
+        message: "Student already exists",
       });
     }
 
@@ -59,8 +49,7 @@ export const register = async (
     // HASH PASSWORD
     // =========================
 
-    const hashedPassword =
-      await hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     // =========================
     // CREATE USER
@@ -83,8 +72,7 @@ export const register = async (
     // =========================
 
     res.status(201).json({
-      message:
-        "Registration submitted successfully",
+      message: "Registration submitted successfully",
 
       user: {
         name: user.name,

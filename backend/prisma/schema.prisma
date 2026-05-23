@@ -14,19 +14,13 @@ datasource db {
 
 model User {
   id         Int      @id @default(autoincrement())
-
   name       String
-
   username   String?  @unique
-
   studentId  String?  @unique
-
   password   String
-
   role       Role
-
   status     String   @default("PENDING")
-
+  isFirstLogin  Boolean @default(true)
   createdAt  DateTime @default(now())
 }
 

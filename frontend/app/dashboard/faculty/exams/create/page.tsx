@@ -1,7 +1,3 @@
 export default function CreateExamPage() {
-  return (
-    <div>
-      Create Exam
-    </div>
-  );
+  return <div>Create Exam</div>;
 }

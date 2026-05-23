@@ -1,7 +1,3 @@
 export default function AnalyticsPage() {
-  return (
-    <div>
-      Faculty Analytics
-    </div>
-  );
+  return <div>Faculty Analytics</div>;
 }

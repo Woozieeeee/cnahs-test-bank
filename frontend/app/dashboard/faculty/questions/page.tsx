@@ -1,7 +1,3 @@
 export default function QuestionsPage() {
-  return (
-    <div>
-      Faculty Questions
-    </div>
-  );
+  return <div>Faculty Questions</div>;
 }

@@ -10,8 +10,7 @@ export const login = async (
   res: Response
 ) => {
   try {
-    const { login, password } =
-      req.body;
+    const { login, password } = req.body;
 
     // =========================
     // VALIDATION
@@ -19,8 +18,7 @@ export const login = async (
 
     if (!login || !password) {
       return res.status(400).json({
-        message:
-          "Login and password required",
+        message: "Login and password required",
       });
     }
 
@@ -28,19 +26,18 @@ export const login = async (
     // FIND USER
     // =========================
 
-    const user =
-      await prisma.user.findFirst({
-        where: {
-          OR: [
-            {
-              username: login,
-            },
-            {
-              studentId: login,
-            },
-          ],
-        },
-      });
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            username: login,
+          },
+          {
+            studentId: login,
+          },
+        ],
+      },
+    });
 
     // =========================
     // USER NOT FOUND
@@ -53,24 +50,34 @@ export const login = async (
     }
 
     // =========================
+    // PASSWORD CHECK
+    // =========================
+
+    const isMatch = await comparePassword(
+      password,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message:
+          "Student ID and Password is Incorrect. Please try again.",
+      });
+    }
+
+    // =========================
     // ACCOUNT STATUS
     // =========================
 
-    if (
-      user.role === "STUDENT"
-    ) {
-      if (
-        user.status === "PENDING"
-      ) {
+    if (user.role === "STUDENT") {
+      if (user.status === "PENDING") {
         return res.status(403).json({
           message:
             "Your account is still waiting for administrator approval. Please try again later.",
         });
       }
 
-      if (
-        user.status === "REJECTED"
-      ) {
+      if (user.status === "REJECTED") {
         return res.status(403).json({
           message:
             "Your registration request was rejected. Please contact the administrator.",
@@ -79,18 +86,19 @@ export const login = async (
     }
 
     // =========================
-    // PASSWORD CHECK
+    // FIRST LOGIN CHECK
     // =========================
 
-    const isMatch =
-      await comparePassword(
-        password,
-        user.password
-      );
+    const firstLogin = user.isFirstLogin;
 
-    if (!isMatch) {
-      return res.status(400).json({
-        message: "Invalid credentials",
+    if (firstLogin) {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          isFirstLogin: false,
+        },
       });
     }
 
@@ -98,9 +106,7 @@ export const login = async (
     // GENERATE TOKEN
     // =========================
 
-    const token = generateToken(
-      user.id
-    );
+    const token = generateToken(user.id);
 
     // =========================
     // COOKIE
@@ -109,16 +115,11 @@ export const login = async (
     res.cookie("token", token, {
       httpOnly: true,
 
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
 
       sameSite: "lax",
 
-      maxAge:
-        7 *
-        24 *
-        60 *
-        60 *
-        1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     // =========================
@@ -134,6 +135,8 @@ export const login = async (
         role: user.role,
 
         status: user.status,
+
+        firstLogin,
       },
     });
   } catch (error) {
