@@ -39,9 +39,8 @@ export default function LoginPage() {
         // NORMAL LOGIN
         // =========================
 
-        await successToast(
-          `Welcome back, ${data.user.name}!`
-        );
+        successToast(`Welcome back, ${data.user.name}!`);
+        router.push("/admin/dashboard");
       }
       // =========================
       // ROLE REDIRECT
