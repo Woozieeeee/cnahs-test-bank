@@ -1,58 +1,26 @@
 "use client";
 
-import StatCard from "@/components/admin/statCard";
-import { useEffect } from "react";
-import useAuth from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import {
+  Users,
+  ClipboardList,
+  FileText,
+  GraduationCap,
+} from "lucide-react";
+
+import OverviewCard from "@/components/admin/overviewCard";
+
+import QuickAccessCard from "@/components/admin/quickAccessCard";
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
-
-  const { user, loading } = useAuth();
-
-  // =========================
-  // AUTH PROTECTION
-  // =========================
-
-  useEffect(() => {
-    if (!loading) {
-      // NOT LOGGED IN
-      if (!user) {
-        router.push("/login");
-
-        return;
-      }
-
-      // NOT ADMIN
-      if (user.role !== "ADMIN") {
-        router.push("/login");
-      }
-    }
-  }, [user, loading, router]);
-
-  // =========================
-  // LOADING SCREEN
-  // =========================
-
-  if (loading) {
-    return (
-      <div
-        className="
-          flex
-          min-h-screen
-          items-center
-          justify-center
-        "
-      >
-        Loading...
-      </div>
-    );
-  }
-
   return (
-    <div>
-      {/* Page Title */}
-      <div className="mb-6">
+    <div className="space-y-8">
+      {/* ========================= */}
+      {/* HEADER */}
+      {/* ========================= */}
+
+      <div>
         <h1
           className="
             text-3xl
@@ -60,67 +28,153 @@ export default function AdminDashboardPage() {
             text-gray-800
           "
         >
-          Admin Dashboard
+          Welcome back, Admin
         </h1>
 
-        <p className="text-gray-500">
-          Overview of the system
+        <p className="mt-2 text-gray-500">
+          Manage students, approvals, faculty, and
+          examinations easily.
         </p>
       </div>
 
-      {/* Statistics Cards */}
-      <div
-        className="
-          grid
-          gap-6
-          md:grid-cols-2
-          xl:grid-cols-4
-        "
-      >
-        <StatCard
-          title="Total Students"
-          value={120}
-          description="Registered students"
-        />
+      {/* ========================= */}
+      {/* QUICK ACCESS */}
+      {/* ========================= */}
 
-        <StatCard
-          title="Pending Accounts"
-          value={15}
-          description="Waiting approval"
-        />
+      <div>
+        <h2
+          className="
+            mb-4
+            text-xl
+            font-semibold
+            text-gray-800
+          "
+        >
+          Quick Access
+        </h2>
 
-        <StatCard
-          title="Approved Accounts"
-          value={105}
-          description="Active students"
-        />
+        <div
+          className="
+            grid
+            gap-6
+            md:grid-cols-2
+            xl:grid-cols-4
+          "
+        >
+          <QuickAccessCard
+            title="Student Approvals"
+            description="Review pending student accounts"
+            href="/admin/approvals"
+            icon={<ClipboardList size={28} />}
+          />
 
-        <StatCard
-          title="Total Exams"
-          value={8}
-          description="Available exams"
-        />
+          <QuickAccessCard
+            title="Manage Students"
+            description="View and manage student records"
+            href="/admin/users"
+            icon={<Users size={28} />}
+          />
+
+          <QuickAccessCard
+            title="Manage Exams"
+            description="Create and organize exams"
+            href="/admin/exams"
+            icon={<FileText size={28} />}
+          />
+
+          <QuickAccessCard
+            title="Faculty Accounts"
+            description="Manage faculty members"
+            href="/admin/faculty"
+            icon={<GraduationCap size={28} />}
+          />
+        </div>
       </div>
 
-      {/* Recent Registrations */}
+      {/* ========================= */}
+      {/* SYSTEM OVERVIEW */}
+      {/* ========================= */}
+
+      <div>
+        <h2
+          className="
+            mb-4
+            text-xl
+            font-semibold
+            text-gray-800
+          "
+        >
+          System Overview
+        </h2>
+
+        <div
+          className="
+            grid
+            gap-6
+            md:grid-cols-2
+            xl:grid-cols-4
+          "
+        >
+          <OverviewCard
+            title="Total Students"
+            value="120"
+          />
+
+          <OverviewCard
+            title="Pending Accounts"
+            value="15"
+          />
+
+          <OverviewCard title="Total Exams" value="8" />
+
+          <OverviewCard
+            title="Faculty Members"
+            value="12"
+          />
+        </div>
+      </div>
+
+      {/* ========================= */}
+      {/* RECENT REGISTRATIONS */}
+      {/* ========================= */}
+
       <div
         className="
-          mt-8
           rounded-2xl
           bg-white
           p-6
           shadow-sm
         "
       >
-        <h2
+        <div
           className="
             mb-4
-            text-xl
-            font-semibold
+            flex
+            items-center
+            justify-between
           "
         >
-          Recent Registrations
-        </h2>
+          <h2
+            className="
+              text-xl
+              font-semibold
+            "
+          >
+            Recent Registrations
+          </h2>
+
+          <Link
+            href="/admin/approvals"
+            className="
+              text-sm
+              font-medium
+              text-black
+              hover:underline
+            "
+          >
+            View All
+          </Link>
+        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -129,6 +183,7 @@ export default function AdminDashboardPage() {
                 className="
                   border-b
                   text-left
+                  text-gray-500
                 "
               >
                 <th className="p-3">Name</th>
@@ -160,8 +215,18 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="mt-8">
+      {/* ========================= */}
+      {/* RECENT ACTIVITY */}
+      {/* ========================= */}
+
+      <div
+        className="
+          rounded-2xl
+          bg-white
+          p-6
+          shadow-sm
+        "
+      >
         <h2
           className="
             mb-4
@@ -169,57 +234,39 @@ export default function AdminDashboardPage() {
             font-semibold
           "
         >
-          Quick Actions
+          Recent Activity
         </h2>
 
-        <div
-          className="
-            grid
-            gap-6
-            md:grid-cols-3
-          "
-        >
-          <button
+        <div className="space-y-4">
+          <div
             className="
-              rounded-2xl
-              bg-white
-              p-6
-              text-left
-              shadow-sm
-              transition
-              hover:bg-gray-50
+              rounded-lg
+              bg-gray-50
+              p-4
             "
           >
-            Approve Students
-          </button>
+            John Doe registered for an account.
+          </div>
 
-          <button
+          <div
             className="
-              rounded-2xl
-              bg-white
-              p-6
-              text-left
-              shadow-sm
-              transition
-              hover:bg-gray-50
+              rounded-lg
+              bg-gray-50
+              p-4
             "
           >
-            Manage Users
-          </button>
+            Pharmacology Exam was created.
+          </div>
 
-          <button
+          <div
             className="
-              rounded-2xl
-              bg-white
-              p-6
-              text-left
-              shadow-sm
-              transition
-              hover:bg-gray-50
+              rounded-lg
+              bg-gray-50
+              p-4
             "
           >
-            Create Exam
-          </button>
+            5 student accounts were approved today.
+          </div>
         </div>
       </div>
     </div>
