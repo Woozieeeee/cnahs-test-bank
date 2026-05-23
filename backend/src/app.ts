@@ -7,12 +7,9 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://cnahs-test-bank.vercel.app",
-    ],
+    origin: ["http://localhost:3000", "https://cnahs-test-bank.vercel.app"],
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());

@@ -5,10 +5,7 @@ import prisma from "../lib/prisma";
 import { comparePassword } from "../utils/comparePassword";
 import { generateToken } from "../utils/generateToken";
 
-export const login = async (
-  req: Request,
-  res: Response
-) => {
+export const login = async (req: Request, res: Response) => {
   try {
     const { login, password } = req.body;
 
@@ -53,15 +50,11 @@ export const login = async (
     // PASSWORD CHECK
     // =========================
 
-    const isMatch = await comparePassword(
-      password,
-      user.password
-    );
+    const isMatch = await comparePassword(password, user.password);
 
     if (!isMatch) {
       return res.status(400).json({
-        message:
-          "Student ID and Password is Incorrect. Please try again.",
+        message: "Student ID and Password is Incorrect. Please try again.",
       });
     }
 

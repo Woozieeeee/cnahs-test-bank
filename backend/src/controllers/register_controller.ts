@@ -4,10 +4,7 @@ import prisma from "../lib/prisma";
 
 import { hashPassword } from "../utils/hashPassword";
 
-export const register = async (
-  req: Request,
-  res: Response
-) => {
+export const register = async (req: Request, res: Response) => {
   try {
     const { name, studentId, password } = req.body;
 

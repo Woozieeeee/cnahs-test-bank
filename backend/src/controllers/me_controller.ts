@@ -3,10 +3,7 @@ import prisma from "../lib/prisma";
 
 import { AuthRequest } from "../middleware/auth_middleware";
 
-export const getMe = async (
-  req: AuthRequest,
-  res: Response
-) => {
+export const getMe = async (req: AuthRequest, res: Response) => {
   const user = await prisma.user.findUnique({
     where: {
       id: req.userId,
