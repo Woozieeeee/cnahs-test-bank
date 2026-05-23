@@ -17,6 +17,6 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("status/:studentId", trackStatus);
+router.get("/status/:studentId", trackStatus);
 
 export default router;
