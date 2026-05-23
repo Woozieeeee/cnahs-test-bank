@@ -1,7 +1,7 @@
 interface Props {
   title: string;
 
-  value: string;
+  value: number | string;
 }
 
 export default function OverviewCard({

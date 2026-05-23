@@ -29,3 +29,25 @@ export const rejectStudent = async (id: string) => {
 
   return response.data;
 };
+
+// =========================
+// DASHBOARD STATS
+// =========================
+
+export const getDashboardStats = async () => {
+  const response = await api.get("/admin/dashboard/stats");
+
+  return response.data;
+};
+
+// =========================
+// RECENT REGISTRATIONS
+// =========================
+
+export const getRecentRegistrations = async () => {
+  const response = await api.get(
+    "/admin/dashboard/recent-registrations"
+  );
+
+  return response.data;
+};
