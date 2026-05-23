@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-
 import prisma from "../lib/prisma";
-
 import { comparePassword } from "../utils/comparePassword";
 import { generateToken } from "../utils/generateToken";
 
@@ -110,7 +108,7 @@ export const login = async (req: Request, res: Response) => {
 
       secure: process.env.NODE_ENV === "production",
 
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });

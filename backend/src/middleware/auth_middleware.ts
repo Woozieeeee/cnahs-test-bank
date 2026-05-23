@@ -1,36 +1,65 @@
 import { Request, Response, NextFunction } from "express";
+
 import jwt from "jsonwebtoken";
+
+import prisma from "../lib/prisma";
 
 interface JwtPayload {
   userId: number;
 }
 
 export interface AuthRequest extends Request {
-  userId?: number;
+  user?: any;
 }
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const authHeader = req.headers.authorization;
+    // =========================
+    // GET TOKEN FROM COOKIE
+    // =========================
 
-    if (!authHeader) {
+    const token = req.cookies.token;
+
+    if (!token) {
       return res.status(401).json({
-        message: "No token provided",
+        message: "Unauthorized",
       });
     }
 
-    const token = authHeader.split(" ")[1];
+    // =========================
+    // VERIFY TOKEN
+    // =========================
 
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET as string,
     ) as JwtPayload;
 
-    req.userId = decoded.userId;
+    // =========================
+    // FIND USER
+    // =========================
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: decoded.userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        message: "User not found",
+      });
+    }
+
+    // =========================
+    // ATTACH USER
+    // =========================
+
+    req.user = user;
 
     next();
   } catch (error) {

@@ -8,11 +8,14 @@ import {
   infoToast,
 } from "@/lib/swal";
 import { loginUser } from "@/services/auth_service";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [login, setLogin] = useState("");
 
   const [password, setPassword] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +42,21 @@ export default function LoginPage() {
         await successToast(
           `Welcome back, ${data.user.name}!`
         );
+      }
+      // =========================
+      // ROLE REDIRECT
+      // =========================
+
+      if (data.user.role === "ADMIN") {
+        router.push("/admin/dashboard");
+      }
+
+      if (data.user.role === "FACULTY") {
+        router.push("/faculty/dashboard");
+      }
+
+      if (data.user.role === "STUDENT") {
+        router.push("/student/dashboard");
       }
     } catch (error: any) {
       const message = error.response?.data?.message;
@@ -71,7 +89,7 @@ export default function LoginPage() {
 
       errorToast(
         message ||
-          "The Student ID and Password is incorrect./n Please try again."
+          "The Student ID and Password is incorrect. Please try again."
       );
     }
   };
