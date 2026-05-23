@@ -12,6 +12,8 @@ import { getRecentRegistrations } from "../controllers/admin/dashboard/getRecent
 
 import { getRecentActivity } from "../controllers/admin/get_recent_activity_controller";
 
+import { getUsers } from "../controllers/admin/get_users_controller";
+
 const router = express.Router();
 
 // DASHBOARD
@@ -31,5 +33,9 @@ router.patch("/reject/:id", rejectStudent);
 // Activity
 
 router.get("/recent-activity", getRecentActivity);
+
+// Users Management
+
+router.get("/users", getUsers);
 
 export default router;

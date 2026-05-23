@@ -61,3 +61,13 @@ export const getRecentActivity = async () => {
 
   return response.data;
 };
+
+// =========================
+// USERS MANAGEMENT
+// =========================
+
+export const getUsers = async () => {
+  const response = await api.get("/admin/users");
+
+  return response.data;
+};
