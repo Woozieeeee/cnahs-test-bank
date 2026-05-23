@@ -31,7 +31,7 @@ export default function LoginPage() {
       // =========================
 
       if (data.user.firstLogin) {
-        await successToast(
+        successToast(
           "Your account has been approved successfully."
         );
       } else {
@@ -40,7 +40,6 @@ export default function LoginPage() {
         // =========================
 
         successToast(`Welcome back, ${data.user.name}!`);
-        router.push("/admin/dashboard");
       }
       // =========================
       // ROLE REDIRECT
