@@ -4,38 +4,64 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-import {
-  successToast,
-  errorToast,
-  infoToast,
-} from "@/lib/swal";
-
 import { checkStatus } from "@/services/auth_service";
 
 export default function TrackStatusPage() {
   const [studentId, setStudentId] = useState("");
 
+  const [message, setMessage] = useState("");
+
+  const [type, setType] = useState<
+    "success" | "error" | "info" | ""
+  >("");
+
   const handleCheck = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setMessage("");
 
     try {
       const data = await checkStatus(studentId);
 
+      // =========================
+      // PENDING
+      // =========================
+
       if (data.status === "PENDING") {
-        infoToast(
-          "Your account is still pending approval."
+        setType("info");
+
+        setMessage(
+          "Your account is still waiting for administrator approval."
         );
       }
 
+      // =========================
+      // APPROVED
+      // =========================
+
       if (data.status === "APPROVED") {
-        successToast("Your account has been approved.");
+        setType("success");
+
+        setMessage(
+          "Your account has been approved. You may now log in."
+        );
       }
 
+      // =========================
+      // REJECTED
+      // =========================
+
       if (data.status === "REJECTED") {
-        errorToast("Your account was rejected.");
+        setType("error");
+
+        setMessage(
+          "Your account was rejected. Please contact the administrator."
+        );
       }
     } catch (error: any) {
-      errorToast(
+      setType("error");
+
+      setMessage(
         error.response?.data?.message ||
           "Something went wrong"
       );
@@ -59,6 +85,22 @@ export default function TrackStatusPage() {
           onChange={(e) => setStudentId(e.target.value)}
           className="mb-4 w-full rounded border p-3"
         />
+
+        {/* STATUS MESSAGE */}
+
+        {message && (
+          <div
+            className={`mb-4 rounded p-3 text-sm ${
+              type === "success"
+                ? "bg-green-100 text-green-700"
+                : type === "info"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : "bg-red-100 text-red-700"
+            }`}
+          >
+            {message}
+          </div>
+        )}
 
         <button
           type="submit"
