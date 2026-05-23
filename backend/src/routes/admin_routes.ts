@@ -10,6 +10,8 @@ import { getDashboardStats } from "../controllers/admin/dashboard/getDashboardSt
 
 import { getRecentRegistrations } from "../controllers/admin/dashboard/getRecentRegistrations";
 
+import { getRecentActivity } from "../controllers/admin/get_recent_activity_controller";
+
 const router = express.Router();
 
 // DASHBOARD
@@ -25,5 +27,9 @@ router.get("/pending-students", getPendingStudents);
 router.patch("/approve/:id", approveStudent);
 
 router.patch("/reject/:id", rejectStudent);
+
+// Activity
+
+router.get("/recent-activity", getRecentActivity);
 
 export default router;

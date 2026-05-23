@@ -1,4 +1,18 @@
-export default function RecentActivitySection() {
+interface Activity {
+  id: number;
+
+  message: string;
+
+  createdAt: string;
+}
+
+interface Props {
+  activities: Activity[];
+}
+
+export default function RecentActivitySection({
+  activities,
+}: Props) {
   return (
     <div
       className="
@@ -19,35 +33,43 @@ export default function RecentActivitySection() {
       </h2>
 
       <div className="space-y-4">
-        <div
-          className="
-            rounded-lg
-            bg-gray-50
-            p-4
-          "
-        >
-          John Doe registered for an account.
-        </div>
+        {activities.map((activity) => (
+          <div
+            key={activity.id}
+            className="
+                rounded-lg
+                bg-gray-50
+                p-4
+              "
+          >
+            <p>{activity.message}</p>
 
-        <div
-          className="
-            rounded-lg
-            bg-gray-50
-            p-4
-          "
-        >
-          Pharmacology Exam was created.
-        </div>
+            <p
+              className="
+                  mt-1
+                  text-sm
+                  text-gray-500
+                "
+            >
+              {new Date(
+                activity.createdAt
+              ).toLocaleString()}
+            </p>
+          </div>
+        ))}
 
-        <div
-          className="
-            rounded-lg
-            bg-gray-50
-            p-4
-          "
-        >
-          5 student accounts were approved today.
-        </div>
+        {activities.length === 0 && (
+          <div
+            className="
+              rounded-lg
+              bg-gray-50
+              p-4
+              text-gray-500
+            "
+          >
+            No recent activity found.
+          </div>
+        )}
       </div>
     </div>
   );

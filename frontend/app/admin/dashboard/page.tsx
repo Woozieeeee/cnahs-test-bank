@@ -19,6 +19,8 @@ import RecentActivitySection from "@/components/admin/dashboard/recentActivitySe
 
 import DashboardLoader from "@/components/admin/dashboard/dashboardLoader";
 
+import { getRecentActivity } from "@/services/admin_service";
+
 interface DashboardStats {
   totalStudents: number;
 
@@ -53,10 +55,16 @@ export default function AdminDashboardPage() {
 
   const [loading, setLoading] = useState(true);
 
+  const [activities, setActivities] = useState([]);
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const statsData = await getDashboardStats();
+
+        const activitiesData = await getRecentActivity();
+
+        setActivities(activitiesData);
 
         const registrationsData =
           await getRecentRegistrations();
@@ -90,7 +98,7 @@ export default function AdminDashboardPage() {
         registrations={recentRegistrations}
       />
 
-      <RecentActivitySection />
+      <RecentActivitySection activities={activities} />
     </div>
   );
 }

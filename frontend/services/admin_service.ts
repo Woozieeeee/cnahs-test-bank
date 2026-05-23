@@ -51,3 +51,13 @@ export const getRecentRegistrations = async () => {
 
   return response.data;
 };
+
+// =========================
+// RECENT ACTIVITY
+// =========================
+
+export const getRecentActivity = async () => {
+  const response = await api.get("/admin/recent-activity");
+
+  return response.data;
+};
