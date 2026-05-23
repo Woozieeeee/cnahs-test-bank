@@ -1,4 +1,5 @@
 import Sidebar from "@/components/admin/sidebar";
+
 import Navbar from "@/components/admin/navbar";
 
 export default function AdminLayout({
@@ -7,15 +8,23 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
+    <div
+      className="
+        flex
+        min-h-screen
+        bg-gray-100
+      "
+    >
+      {/* SIDEBAR */}
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col">
+      {/* MAIN CONTENT */}
+      <div className="flex-1">
+        {/* NAVBAR */}
         <Navbar />
 
-        <main className="flex-1 p-6">{children}</main>
+        {/* PAGE CONTENT */}
+        <main className="p-6">{children}</main>
       </div>
     </div>
   );

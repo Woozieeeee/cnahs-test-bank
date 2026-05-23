@@ -2,6 +2,9 @@ export default function Navbar() {
   return (
     <header
       className="
+        sticky
+        top-0
+        z-40
         flex
         items-center
         justify-between
@@ -50,6 +53,7 @@ export default function Navbar() {
             rounded-full
             bg-black
             text-white
+            font-semibold
           "
         >
           A

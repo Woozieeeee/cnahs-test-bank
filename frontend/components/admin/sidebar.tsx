@@ -20,6 +20,8 @@ export default function Sidebar() {
   return (
     <aside
       className="
+        sticky
+        top-0
         h-screen
         w-64
         border-r
