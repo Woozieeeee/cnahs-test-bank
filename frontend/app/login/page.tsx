@@ -116,6 +116,15 @@ export default function LoginPage() {
             Register here
           </Link>
         </div>
+
+        <div className="mt-2 text-center text-sm">
+          <Link
+            href="/track-status"
+            className="text-gray-600 hover:underline"
+          >
+            Track application status
+          </Link>
+        </div>
       </form>
     </div>
   );
