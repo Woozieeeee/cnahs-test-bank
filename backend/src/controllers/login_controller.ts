@@ -15,12 +15,14 @@ export const login = async (req: Request, res: Response) => {
     // SET COOKIE
     // =========================
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("token", token, {
       httpOnly: true,
 
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
 
-      sameSite: "lax",
+      sameSite: "none",
 
       maxAge: 1000 * 60 * 60 * 24,
     });
