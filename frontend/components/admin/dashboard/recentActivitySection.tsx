@@ -1,7 +1,17 @@
 interface Activity {
   id: number;
 
-  message: string;
+  action: string;
+
+  category: string;
+
+  severity: string;
+
+  description?: string;
+
+  performedBy: string;
+
+  targetUser?: string;
 
   createdAt: string;
 }
@@ -37,24 +47,66 @@ export default function RecentActivitySection({
           <div
             key={activity.id}
             className="
-                rounded-lg
-                bg-gray-50
-                p-4
-              "
+    rounded-xl
+    border
+    border-gray-100
+    bg-gray-50
+    p-4
+    transition
+    hover:bg-gray-100
+  "
           >
-            <p>{activity.message}</p>
-
-            <p
+            <div
               className="
-                  mt-1
-                  text-sm
-                  text-gray-500
-                "
+      flex
+      items-start
+      justify-between
+      gap-4
+    "
             >
-              {new Date(
-                activity.createdAt
-              ).toLocaleString()}
-            </p>
+              <div>
+                <p className="font-medium">
+                  {activity.description}
+                </p>
+
+                <div
+                  className="
+          mt-2
+          flex
+          items-center
+          gap-2
+          text-sm
+          text-gray-500
+        "
+                >
+                  <span>{activity.category}</span>
+
+                  <span>•</span>
+
+                  <span>{activity.severity}</span>
+
+                  {activity.targetUser && (
+                    <>
+                      <span>•</span>
+
+                      <span>{activity.targetUser}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <p
+                className="
+        whitespace-nowrap
+        text-sm
+        text-gray-400
+      "
+              >
+                {new Date(
+                  activity.createdAt
+                ).toLocaleString()}
+              </p>
+            </div>
           </div>
         ))}
 

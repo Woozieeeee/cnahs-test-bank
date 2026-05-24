@@ -17,18 +17,13 @@ export const getRecentActivityService = async () => {
   // FORMAT ACTIVITIES
   // =========================
 
-  const activities = recentUsers.map((user) => ({
-    id: user.id,
+  const activities = await prisma.activityLog.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
 
-    message:
-      user.status === "APPROVED"
-        ? `${user.name} was approved.`
-        : user.status === "REJECTED"
-          ? `${user.name} was rejected.`
-          : `${user.name} registered an account.`,
-
-    createdAt: user.createdAt,
-  }));
+    take: 5,
+  });
 
   return activities;
 };

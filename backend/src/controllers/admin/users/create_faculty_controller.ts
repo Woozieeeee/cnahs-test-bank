@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
 import { createFacultyService } from "../../../services/admin/users/create_faculty_service";
 
-export const createFaculty = async (req: Request, res: Response) => {
+import { AuthRequest } from "../../../middleware/auth_middleware";
+
+import { logActivity } from "../../../utils/log_activity";
+
+export const createFaculty = async (req: AuthRequest, res: Response) => {
   try {
     const { name, username, password } = req.body;
 
@@ -18,9 +22,32 @@ export const createFaculty = async (req: Request, res: Response) => {
       password,
     });
 
+    const adminName = req.user?.name;
+
+    let activityLogRecorded = true;
+    try {
+      await logActivity({
+        action: "CREATE_FACULTY",
+
+        category: "USER_MANAGEMENT",
+
+        severity: "INFO",
+
+        description: `${adminName} created faculty ${faculty.name}`,
+
+        performedBy: adminName || "Unknown Admin",
+
+        targetUser: faculty.name,
+      });
+    } catch (error) {
+      activityLogRecorded = false;
+      console.error("Failed to record activity log (create faculty):", error);
+    }
+
     return res.status(201).json({
       message: "Faculty created successfully",
       faculty,
+      activityLogRecorded,
     });
   } catch (error: any) {
     return res.status(500).json({

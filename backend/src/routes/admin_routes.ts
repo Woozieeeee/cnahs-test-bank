@@ -10,8 +10,14 @@ import upload from "../middleware/upload_middleware";
 import { uploadStudentRecords } from "../controllers/admin/student_records/upload_student_records_controller";
 import { createFaculty } from "../controllers/admin/users/create_faculty_controller";
 import { getActivityLogs } from "../controllers/admin/activity/get_activity_log_controller";
+import { authMiddleware } from "../middleware/auth_middleware";
+import { authorizeRoles } from "../middleware/role_middleware";
+import { adminActivityLogger } from "../middleware/admin_activity_logger_middleware";
 
 const router = express.Router();
+
+router.use(authMiddleware, authorizeRoles("ADMIN"));
+router.use(adminActivityLogger);
 
 // DASHBOARD
 router.get("/dashboard/stats", getDashboardStats);
