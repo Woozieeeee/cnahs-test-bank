@@ -4,6 +4,10 @@ import UsersTabs from "./usersTabs";
 
 import UsersTable from "./usersTable";
 
+import UsersSearch from "./usersSearch";
+
+import UsersRoleFilter from "./usersRoleFilter";
+
 import UsersPagination from "./usersPagination";
 
 interface User {
@@ -38,6 +42,14 @@ interface Props {
   onApprove: (id: number) => Promise<void>;
 
   onReject: (id: number) => Promise<void>;
+
+  search: string;
+
+  setSearch: (value: string) => void;
+
+  roleFilter: string;
+
+  setRoleFilter: (value: string) => void;
 }
 
 export default function UsersManagementTable({
@@ -56,6 +68,14 @@ export default function UsersManagementTable({
   onApprove,
 
   onReject,
+
+  search,
+
+  setSearch,
+
+  roleFilter,
+
+  setRoleFilter,
 }: Props) {
   return (
     <div
@@ -89,6 +109,25 @@ export default function UsersManagementTable({
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
+
+      {/* FILTERS */}
+
+      <div
+        className="
+          mt-6
+          flex
+          flex-col
+          gap-4
+          md:flex-row
+        "
+      >
+        <UsersSearch value={search} onChange={setSearch} />
+
+        <UsersRoleFilter
+          value={roleFilter}
+          onChange={setRoleFilter}
+        />
+      </div>
 
       {/* TABLE */}
 

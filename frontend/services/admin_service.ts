@@ -66,10 +66,34 @@ export const getRecentActivity = async () => {
 // USERS MANAGEMENT
 // =========================
 
-export const getUsers = async (page = 1, limit = 10) => {
+export const getUsers = async ({
+  page = 1,
+
+  limit = 10,
+
+  search = "",
+
+  role = "ALL",
+
+  status = "ALL",
+}) => {
   const response = await api.get(
-    `/admin/users?page=${page}&limit=${limit}`
+    `/admin/users?page=${page}&limit=${limit}&search=${search}&role=${role}&status=${status}`
   );
+
+  return response.data;
+};
+
+// =========================
+// CREATE FACULTY
+// =========================
+
+export const createFaculty = async (data: {
+  name: string;
+  username: string;
+  password: string;
+}) => {
+  const response = await api.post("/admin/faculty", data);
 
   return response.data;
 };

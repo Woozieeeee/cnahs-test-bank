@@ -1,51 +1,37 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { getUsers } from "@/services/admin_service";
-
 import UsersTable from "@/components/admin/users/usersTable";
-
 import UsersLoader from "@/components/admin/users/usersLoader";
-
 import UsersStatsBar from "@/components/admin/users/usersStatsBar";
-
 import UsersTabs from "@/components/admin/users/usersTabs";
-
 import UsersManagementTable from "@/components/admin/users/usersManagementTable";
-
 import UsersPagination from "@/components/admin/users/usersPagination";
-
 import { useUserActions } from "@/hooks/admin/users/useUserActions";
-
 import AnimatedPage from "@/components/common/animatedPage";
+import AddFacultyModal from "@/lib/components/admin/users/addFacultyModal";
 
 interface User {
   id: number;
-
   name: string;
-
   studentId: string;
-
   username?: string;
-
   role: string;
-
   status: string;
-
   createdAt: string;
 }
 
 export default function UsersPage() {
   const [activeTab, setActiveTab] = useState("ALL");
-
   const [users, setUsers] = useState<User[]>([]);
-
   const [loading, setLoading] = useState(true);
-
   const [page, setPage] = useState(1);
-
   const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
+  const [openFacultyModal, setOpenFacultyModal] =
+    useState(false);
+  const [roleFilter, setRoleFilter] = useState("ALL");
 
   // =========================
   // USER ACTIONS HOOK
@@ -64,7 +50,17 @@ export default function UsersPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await getUsers();
+        const data = await getUsers({
+          page,
+
+          limit: 10,
+
+          search,
+
+          role: roleFilter,
+
+          status: activeTab,
+        });
 
         setUsers(data.users);
 
@@ -77,7 +73,7 @@ export default function UsersPage() {
     };
 
     fetchUsers();
-  }, []);
+  }, [page, search, roleFilter, activeTab]);
 
   // =========================
   // LOADING
@@ -114,6 +110,12 @@ export default function UsersPage() {
             Manage student and faculty accounts.
           </p>
         </div>
+        <button
+          onClick={() => setOpenFacultyModal(true)}
+          className="rounded-lg bg-black px-4 py-2 text-white"
+        >
+          Add Faculty
+        </button>
 
         {/* STATS */}
 
@@ -141,8 +143,19 @@ export default function UsersPage() {
           totalPages={totalPages}
           onApprove={approveUser}
           onReject={rejectUser}
+          search={search}
+          setSearch={setSearch}
+          roleFilter={roleFilter}
+          setRoleFilter={setRoleFilter}
         />
       </div>
+      <AddFacultyModal
+        open={openFacultyModal}
+        onOpenChange={setOpenFacultyModal}
+        onSuccess={() => {
+          window.location.reload();
+        }}
+      />
     </AnimatedPage>
   );
 }
