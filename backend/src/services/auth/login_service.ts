@@ -78,6 +78,8 @@ export const loginService = async ({ login, password }: LoginData) => {
   return {
     token,
 
-    user: {},
+    user: {
+      role: user.role,
+    },
   };
 };
