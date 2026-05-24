@@ -4,9 +4,25 @@ import { getUsersService } from "../../services/admin/users/get_users_service";
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await getUsersService();
+    // =========================
+    // QUERY PARAMS
+    // =========================
 
-    return res.json(users);
+    const page = Number(req.query.page) || 1;
+
+    const limit = Number(req.query.limit) || 10;
+
+    // =========================
+    // FETCH USERS
+    // =========================
+
+    const data = await getUsersService({
+      page,
+
+      limit,
+    });
+
+    return res.json(data);
   } catch (error) {
     console.log(error);
 

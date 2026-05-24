@@ -12,6 +12,8 @@ import UsersStatsBar from "@/components/admin/users/usersStatsBar";
 
 import UsersTabs from "@/components/admin/users/usersTabs";
 
+import UsersPagination from "@/components/admin/users/usersPagination";
+
 import { useUserActions } from "@/hooks/admin/users/useUserActions";
 
 interface User {
@@ -37,6 +39,10 @@ export default function UsersPage() {
 
   const [loading, setLoading] = useState(true);
 
+  const [page, setPage] = useState(1);
+
+  const [totalPages, setTotalPages] = useState(1);
+
   // =========================
   // USER ACTIONS HOOK
   // =========================
@@ -56,7 +62,9 @@ export default function UsersPage() {
       try {
         const data = await getUsers();
 
-        setUsers(data);
+        setUsers(data.users);
+
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.log(error);
       } finally {
@@ -132,6 +140,14 @@ export default function UsersPage() {
         users={filteredUsers}
         onApprove={approveUser}
         onReject={rejectUser}
+      />
+
+      {/* TABLE PAGINATION */}
+
+      <UsersPagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
       />
     </div>
   );
