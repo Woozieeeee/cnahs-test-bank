@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { getRecentActivityService } from "../../services/admin/get_recent_activity_service";
+import { getRecentActivityService } from "../../services/admin/activity/get_recent_activity_service";
 
 export const getRecentActivity = async (req: Request, res: Response) => {
   try {

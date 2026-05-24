@@ -1,106 +1,18 @@
 import { Request, Response } from "express";
-import prisma from "../lib/prisma";
-import { comparePassword } from "../utils/comparePassword";
-import { generateToken } from "../utils/generateToken";
+
+import { loginService } from "../services/auth/login_service";
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { login, password } = req.body;
+    const { login: loginInput, password } = req.body;
 
-    // =========================
-    // VALIDATION
-    // =========================
-
-    if (!login || !password) {
-      return res.status(400).json({
-        message: "Login and password required",
-      });
-    }
-
-    // =========================
-    // FIND USER
-    // =========================
-
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          {
-            username: login,
-          },
-          {
-            studentId: login,
-          },
-        ],
-      },
+    const { token, user } = await loginService({
+      login: loginInput,
+      password,
     });
 
     // =========================
-    // USER NOT FOUND
-    // =========================
-
-    if (!user) {
-      return res.status(400).json({
-        message: "Invalid credentials",
-      });
-    }
-
-    // =========================
-    // PASSWORD CHECK
-    // =========================
-
-    const isMatch = await comparePassword(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({
-        message: "Student ID and Password is Incorrect. Please try again.",
-      });
-    }
-
-    // =========================
-    // ACCOUNT STATUS
-    // =========================
-
-    if (user.role === "STUDENT") {
-      if (user.status === "PENDING") {
-        return res.status(403).json({
-          message:
-            "Your account is still waiting for administrator approval. Please try again later.",
-        });
-      }
-
-      if (user.status === "REJECTED") {
-        return res.status(403).json({
-          message:
-            "Your registration request was rejected. Please contact the administrator.",
-        });
-      }
-    }
-
-    // =========================
-    // FIRST LOGIN CHECK
-    // =========================
-
-    const firstLogin = user.isFirstLogin;
-
-    if (firstLogin) {
-      await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          isFirstLogin: false,
-        },
-      });
-    }
-
-    // =========================
-    // GENERATE TOKEN
-    // =========================
-
-    const token = generateToken(user.id);
-
-    // =========================
-    // COOKIE
+    // SET COOKIE
     // =========================
 
     res.cookie("token", token, {
@@ -108,33 +20,19 @@ export const login = async (req: Request, res: Response) => {
 
       secure: process.env.NODE_ENV === "production",
 
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: "lax",
 
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 1000 * 60 * 60 * 24,
     });
 
-    // =========================
-    // SAFE RESPONSE
-    // =========================
-
-    res.status(200).json({
+    return res.json({
       message: "Login successful",
 
-      user: {
-        name: user.name,
-
-        role: user.role,
-
-        status: user.status,
-
-        firstLogin,
-      },
+      user,
     });
-  } catch (error) {
-    console.log(error);
-
-    res.status(500).json({
-      message: "Server Error",
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
     });
   }
 };

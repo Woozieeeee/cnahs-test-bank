@@ -8,6 +8,10 @@ import UsersTable from "@/components/admin/users/usersTable";
 
 import UsersLoader from "@/components/admin/users/usersLoader";
 
+import UsersStatsBar from "@/components/admin/users/usersStatsBar";
+
+import UsersTabs from "@/components/admin/users/usersTabs";
+
 interface User {
   id: number;
 
@@ -25,6 +29,8 @@ interface User {
 }
 
 export default function UsersPage() {
+  const [activeTab, setActiveTab] = useState("ALL");
+
   const [users, setUsers] = useState<User[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -49,6 +55,11 @@ export default function UsersPage() {
     return <UsersLoader />;
   }
 
+  const filteredUsers =
+    activeTab === "ALL"
+      ? users
+      : users.filter((user) => user.status === activeTab);
+
   return (
     <div className="space-y-6">
       <div>
@@ -67,7 +78,27 @@ export default function UsersPage() {
         </p>
       </div>
 
-      <UsersTable users={users} />
+      <UsersStatsBar
+        total={users.length}
+        pending={
+          users.filter((u) => u.status === "PENDING").length
+        }
+        approved={
+          users.filter((u) => u.status === "APPROVED")
+            .length
+        }
+        rejected={
+          users.filter((u) => u.status === "REJECTED")
+            .length
+        }
+      />
+
+      <UsersTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+
+      <UsersTable users={filteredUsers} />
     </div>
   );
 }

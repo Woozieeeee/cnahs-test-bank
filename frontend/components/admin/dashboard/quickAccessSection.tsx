@@ -30,9 +30,9 @@ export default function QuickAccessSection() {
         "
       >
         <QuickAccessCard
-          title="Student Approvals"
-          description="Review pending student accounts"
-          href="/admin/approvals"
+          title="Pending Accounts"
+          description="Review accounts awaiting approval"
+          href="/admin/users"
           icon={<ClipboardList size={28} />}
         />
 

@@ -54,19 +54,6 @@ export default function Sidebar() {
         </Link>
 
         <Link
-          href="/admin/approvals"
-          className="
-            block
-            rounded-lg
-            p-3
-            transition
-            hover:bg-gray-100
-          "
-        >
-          Approvals
-        </Link>
-
-        <Link
           href="/admin/users"
           className="
             block

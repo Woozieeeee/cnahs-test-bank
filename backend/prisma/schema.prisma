@@ -13,15 +13,51 @@ datasource db {
 }
 
 model User {
+  id            Int      @id @default(autoincrement())
+
+  name          String
+
+  username      String?  @unique
+
+  studentId     String?  @unique
+
+  studentRecord StudentRecord? @relation(fields: [studentId], references: [studentId])
+
+  password      String
+
+  role          Role
+
+  status        String   @default("PENDING")
+
+  isFirstLogin  Boolean  @default(true)
+
+  createdAt     DateTime @default(now())
+}
+
+model StudentRecord {
   id         Int      @id @default(autoincrement())
-  name       String
-  username   String?  @unique
-  studentId  String?  @unique
-  password   String
-  role       Role
-  status     String   @default("PENDING")
-  isFirstLogin  Boolean @default(true)
+
+  studentId  String   @unique
+
+  fullName   String
+
+  program    String
+
   createdAt  DateTime @default(now())
+
+  user       User?
+}
+
+model ActivityLog {
+  id          Int      @id @default(autoincrement())
+
+  action      String
+
+  performedBy String
+
+  targetUser  String?
+
+  createdAt   DateTime @default(now())
 }
 
 enum Role {

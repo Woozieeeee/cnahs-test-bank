@@ -4,12 +4,14 @@ import jwt from "jsonwebtoken";
 
 import prisma from "../lib/prisma";
 
+import { User } from "@prisma/client";
+
 interface JwtPayload {
   userId: number;
 }
 
 export interface AuthRequest extends Request {
-  user?: any;
+  user?: User;
 }
 
 export const authMiddleware = async (

@@ -6,6 +6,7 @@ import {
   successToast,
   errorToast,
   infoToast,
+  warningToast,
 } from "@/lib/swal";
 import { loginUser } from "@/services/auth_service";
 import { useRouter } from "next/navigation";
@@ -30,7 +31,7 @@ export default function LoginPage() {
       // FIRST LOGIN
       // =========================
 
-      if (data.user.firstLogin) {
+      if (data.user.isFirstLogin) {
         successToast(
           "Your account has been approved successfully."
         );
@@ -77,6 +78,19 @@ export default function LoginPage() {
 
       if (message === "Account rejected") {
         errorToast("Please contact the administrator.");
+
+        return;
+      }
+
+      // =========================
+      // LOGIN ATTEMPTS
+      // =========================
+
+      if (
+        message ===
+        "Too many login attempts. Please try again later."
+      ) {
+        warningToast(message);
 
         return;
       }
