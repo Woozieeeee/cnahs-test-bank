@@ -49,31 +49,55 @@ const getCategoryFromPath = (path: string) => {
 // =========================
 
 const getActionLabel = (method: string, path: string) => {
-  // FACULTY
+  // =========================
+  // DASHBOARD
+  // =========================
 
-  if (method === "POST" && path.includes("/faculty")) {
-    return "CREATE_FACULTY";
+  if (method === "GET" && path.includes("/dashboard")) {
+    return "Viewed dashboard";
   }
 
+  // =========================
+  // USERS
+  // =========================
+
+  if (method === "GET" && path.includes("/users")) {
+    return "Viewed user management";
+  }
+
+  // =========================
+  // FACULTY
+  // =========================
+
+  if (method === "POST" && path.includes("/faculty")) {
+    return "Created faculty account";
+  }
+
+  // =========================
   // APPROVALS
+  // =========================
 
   if (method === "PATCH" && path.includes("/approve")) {
-    return "APPROVE_STUDENT";
+    return "Approved student account";
   }
 
   if (method === "PATCH" && path.includes("/reject")) {
-    return "REJECT_STUDENT";
+    return "Rejected student account";
   }
 
+  // =========================
   // STUDENT RECORDS
+  // =========================
 
   if (method === "POST" && path.includes("/student-records")) {
-    return "UPLOAD_STUDENT_RECORDS";
+    return "Uploaded student records";
   }
 
+  // =========================
   // DEFAULT
+  // =========================
 
-  return `${method} ${path}`;
+  return "Performed administrative action";
 };
 
 // =========================
