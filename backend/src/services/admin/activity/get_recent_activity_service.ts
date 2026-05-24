@@ -10,7 +10,7 @@ export const getRecentActivityService = async () => {
       createdAt: "desc",
     },
 
-    take: 5,
+    take: 10,
   });
 
   // =========================
@@ -22,7 +22,7 @@ export const getRecentActivityService = async () => {
       createdAt: "desc",
     },
 
-    take: 5,
+    take: 10,
   });
 
   return activities;

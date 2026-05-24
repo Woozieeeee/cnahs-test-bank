@@ -1,3 +1,7 @@
+import Link from "next/link";
+
+import ActivityTimelineItem from "@/components/admin/activity/activityTimelineItem";
+
 interface Activity {
   id: number;
 
@@ -32,90 +36,64 @@ export default function RecentActivitySection({
         shadow-sm
       "
     >
-      <h2
+      {/* HEADER */}
+
+      <div
         className="
-          mb-4
-          text-xl
-          font-semibold
-        "
-      >
-        Recent Activity
-      </h2>
-
-      <div className="space-y-4">
-        {activities.map((activity) => (
-          <div
-            key={activity.id}
-            className="
-    rounded-xl
-    border
-    border-gray-100
-    bg-gray-50
-    p-4
-    transition
-    hover:bg-gray-100
-  "
-          >
-            <div
-              className="
-      flex
-      items-start
-      justify-between
-      gap-4
-    "
-            >
-              <div>
-                <p className="font-medium">
-                  {activity.description}
-                </p>
-
-                <div
-                  className="
-          mt-2
+          mb-6
           flex
           items-center
-          gap-2
-          text-sm
-          text-gray-500
+          justify-between
         "
-                >
-                  <span>{activity.category}</span>
+      >
+        <div>
+          <h2
+            className="
+              text-xl
+              font-semibold
+            "
+          >
+            Recent Activity
+          </h2>
 
-                  <span>•</span>
+          <p className="text-sm text-gray-500">
+            Latest administrative actions
+          </p>
+        </div>
 
-                  <span>{activity.severity}</span>
+        <Link
+          href="/admin/activity-logs"
+          className="
+            text-sm
+            font-medium
+            text-black
+            hover:underline
+          "
+        >
+          View All
+        </Link>
+      </div>
 
-                  {activity.targetUser && (
-                    <>
-                      <span>•</span>
+      {/* TIMELINE */}
 
-                      <span>{activity.targetUser}</span>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <p
-                className="
-        whitespace-nowrap
-        text-sm
-        text-gray-400
-      "
-              >
-                {new Date(
-                  activity.createdAt
-                ).toLocaleString()}
-              </p>
-            </div>
-          </div>
+      <div className="space-y-6">
+        {activities.map((activity) => (
+          <ActivityTimelineItem
+            key={activity.id}
+            activity={activity}
+          />
         ))}
+
+        {/* EMPTY STATE */}
 
         {activities.length === 0 && (
           <div
             className="
-              rounded-lg
-              bg-gray-50
-              p-4
+              rounded-xl
+              border
+              border-dashed
+              p-6
+              text-center
               text-gray-500
             "
           >

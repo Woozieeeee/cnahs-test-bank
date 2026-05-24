@@ -100,6 +100,14 @@ export const adminActivityLogger = (
   }
 
   // =========================
+  // SKIP GET REQUESTS
+  // =========================
+
+  if (req.method === "GET") {
+    return next();
+  }
+
+  // =========================
   // AFTER RESPONSE
   // =========================
 
