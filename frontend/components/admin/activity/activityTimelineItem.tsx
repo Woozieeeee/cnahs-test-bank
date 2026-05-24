@@ -20,102 +20,134 @@ interface Activity {
 
 interface Props {
   activity: Activity;
+
+  timeLabel: string;
+
+  isLast?: boolean;
 }
 
 export default function ActivityTimelineItem({
   activity,
+
+  timeLabel,
+
+  isLast = false,
 }: Props) {
+  const initials = activity.performedBy
+    .split(" ")
+    .map((name) => name[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <div className="flex gap-3">
-      {/* TIMELINE */}
+    <div className="grid grid-cols-[84px_28px_1fr] gap-4">
+      <div className="pt-5 text-right text-sm text-gray-400">
+        {timeLabel}
+      </div>
 
-      <div
-        className="
-    relative
-    flex
-    flex-col
-    items-center
-  "
-      >
-        {/* TOP LINE */}
-
-        <div
-          className="
-      absolute
-      top-0
-      h-full
-      w-px
-      bg-gray-200
-    "
-        />
-
-        {/* TIMELINE NODE */}
-
-        <div
-          className="
-      relative
-      z-10
-      flex
-      h-10
-      w-10
-      items-center
-      justify-center
-      rounded-full
-      border
-      border-gray-200
-      bg-white
-      shadow-sm
-    "
-        >
+      <div className="relative flex justify-center">
+        {!isLast && (
           <div
             className="
-        h-3
-        w-3
-        rounded-full
-        bg-black
-      "
+              absolute
+              left-1/2
+              top-7
+              h-full
+              w-px
+              -translate-x-1/2
+              bg-slate-200
+            "
           />
+        )}
+
+        <div
+          className="
+            relative
+            z-10
+            mt-5
+            flex
+            h-5
+            w-5
+            items-center
+            justify-center
+            rounded-full
+            bg-sky-50
+          "
+        >
+          <div className="h-2 w-2 rounded-full bg-sky-500" />
         </div>
       </div>
 
-      {/* CONTENT */}
-
       <div
         className="
-          flex-1
-          rounded-2xl
+          rounded-xl
           border
-          border-gray-100
-          bg-white
-          p-4
-          shadow-sm
+          border-slate-200
+          bg-slate-50/80
+          p-5
           transition
-          hover:-translate-y-0.5
-          hover:shadow-md
+          hover:border-slate-300
+          hover:bg-white
         "
       >
-        <div
-          className="
-            flex
-            items-start
-            justify-between
-            gap-4
-          "
-        >
-          <div>
-            <h3 className="font-semibold">
-              {activity.action}
-            </h3>
-
-            <p
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div
               className="
-                mt-1
+                flex
+                flex-wrap
+                items-center
+                gap-2
                 text-sm
-                text-gray-600
+                text-slate-700
               "
             >
-              {activity.description}
-            </p>
+              <div
+                className="
+                  flex
+                  h-7
+                  w-7
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-slate-900
+                  text-xs
+                  font-semibold
+                  text-white
+                "
+              >
+                {initials || "A"}
+              </div>
+
+              <span className="font-semibold text-slate-900">
+                {activity.performedBy}
+              </span>
+
+              <span>{activity.action}</span>
+
+              {activity.targetUser && (
+                <span
+                  className="
+                    rounded-md
+                    bg-slate-200
+                    px-2
+                    py-0.5
+                    font-medium
+                    text-slate-700
+                  "
+                >
+                  {activity.targetUser}
+                </span>
+              )}
+            </div>
+
+            {activity.description && (
+              <p className="mt-3 text-sm leading-6 text-slate-600">
+                {activity.description}
+              </p>
+            )}
 
             <div
               className="
@@ -125,50 +157,23 @@ export default function ActivityTimelineItem({
                 items-center
                 gap-2
                 text-xs
-                text-gray-500
+                text-slate-500
               "
             >
               <span>{activity.category}</span>
 
-              <span>•</span>
+              <span>&bull;</span>
 
-              <span>{activity.performedBy}</span>
-
-              {activity.targetUser && (
-                <>
-                  <span>•</span>
-
-                  <span>{activity.targetUser}</span>
-                </>
-              )}
+              <span>
+                {new Date(activity.createdAt).toLocaleString()}
+              </span>
             </div>
           </div>
 
-          <div
-            className="
-              flex
-              flex-col
-              items-end
-              gap-2
-            "
-          >
-            <ActivitySeverityBadge
-              severity={activity.severity}
-            />
-
-            <p
-              className="
-                text-xs
-                text-gray-400
-              "
-            >
-              {new Date(
-                activity.createdAt
-              ).toLocaleString()}
-            </p>
-          </div>
+          <ActivitySeverityBadge severity={activity.severity} />
         </div>
       </div>
     </div>
   );
 }
+
