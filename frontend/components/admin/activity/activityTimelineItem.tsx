@@ -24,12 +24,16 @@ interface Props {
   timeLabel: string;
 
   isLast?: boolean;
+
+  onClick?: () => void;
 }
 
 export default function ActivityTimelineItem({
   activity,
 
   timeLabel,
+
+  onClick,
 
   isLast = false,
 }: Props) {
@@ -79,8 +83,10 @@ export default function ActivityTimelineItem({
         </div>
       </div>
 
-      <div
+      <button
+        onClick={onClick}
         className="
+          w-full
           rounded-xl
           border
           border-slate-200
@@ -165,15 +171,18 @@ export default function ActivityTimelineItem({
               <span>&bull;</span>
 
               <span>
-                {new Date(activity.createdAt).toLocaleString()}
+                {new Date(
+                  activity.createdAt
+                ).toLocaleString()}
               </span>
             </div>
           </div>
 
-          <ActivitySeverityBadge severity={activity.severity} />
+          <ActivitySeverityBadge
+            severity={activity.severity}
+          />
         </div>
-      </div>
+      </button>
     </div>
   );
 }
-

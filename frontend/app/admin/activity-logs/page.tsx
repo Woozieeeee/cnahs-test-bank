@@ -10,6 +10,8 @@ import UsersPagination from "@/components/admin/users/usersPagination";
 
 import { getActivityLogs } from "@/services/admin_service";
 
+import ActivityDetailsModal from "@/components/admin/activity/activityDetailsModal";
+
 interface Activity {
   id: number;
 
@@ -42,6 +44,9 @@ export default function ActivityLogsPage() {
   const [category, setCategory] = useState("ALL");
 
   const [severity, setSeverity] = useState("ALL");
+
+  const [selectedActivity, setSelectedActivity] =
+    useState<Activity | null>(null);
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -189,6 +194,9 @@ export default function ActivityLogsPage() {
                   activity.createdAt
                 ).toLocaleTimeString()}
                 isLast={index === logs.length - 1}
+                onClick={() =>
+                  setSelectedActivity(activity)
+                }
               />
             ))}
           </div>
@@ -218,6 +226,10 @@ export default function ActivityLogsPage() {
           </div>
         </div>
       </div>
+      <ActivityDetailsModal
+        activity={selectedActivity}
+        onClose={() => setSelectedActivity(null)}
+      />
     </AnimatedPage>
   );
 }
