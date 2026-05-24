@@ -26,33 +26,56 @@ export default function ActivityTimelineItem({
   activity,
 }: Props) {
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-3">
       {/* TIMELINE */}
 
       <div
         className="
-          flex
-          flex-col
-          items-center
-        "
+    relative
+    flex
+    flex-col
+    items-center
+  "
       >
-        <div
-          className="
-            h-3
-            w-3
-            rounded-full
-            bg-black
-          "
-        />
+        {/* TOP LINE */}
 
         <div
           className="
-            mt-1
-            h-full
-            w-px
-            bg-gray-200
-          "
+      absolute
+      top-0
+      h-full
+      w-px
+      bg-gray-200
+    "
         />
+
+        {/* TIMELINE NODE */}
+
+        <div
+          className="
+      relative
+      z-10
+      flex
+      h-10
+      w-10
+      items-center
+      justify-center
+      rounded-full
+      border
+      border-gray-200
+      bg-white
+      shadow-sm
+    "
+        >
+          <div
+            className="
+        h-3
+        w-3
+        rounded-full
+        bg-black
+      "
+          />
+        </div>
       </div>
 
       {/* CONTENT */}
