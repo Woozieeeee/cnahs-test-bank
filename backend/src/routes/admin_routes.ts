@@ -9,6 +9,7 @@ import { getUsers } from "../controllers/admin/get_users_controller";
 import upload from "../middleware/upload_middleware";
 import { uploadStudentRecords } from "../controllers/admin/student_records/upload_student_records_controller";
 import { createFaculty } from "../controllers/admin/users/create_faculty_controller";
+import { getActivityLogs } from "../controllers/admin/activity/get_activity_log_controller";
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.patch("/reject/:id", rejectStudent);
 
 // Activity
 router.get("/recent-activity", getRecentActivity);
+router.get("/activity-logs", getActivityLogs);
 
 // Users Management
 router.get("/users", getUsers);

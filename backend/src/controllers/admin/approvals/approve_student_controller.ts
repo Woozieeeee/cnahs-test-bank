@@ -4,6 +4,8 @@ import { AuthRequest } from "../../../middleware/auth_middleware";
 
 import { approveStudentService } from "../../../services/admin/approvals/approve_student_service";
 
+import { logActivity } from "../../../utils/log_activity";
+
 export const approveStudent = async (req: AuthRequest, res: Response) => {
   try {
     const id = Number(req.params.id);
@@ -12,10 +14,32 @@ export const approveStudent = async (req: AuthRequest, res: Response) => {
 
     const student = await approveStudentService(id, adminName);
 
+    let activityLogRecorded = true;
+    try {
+      await logActivity({
+        action: "APPROVE_STUDENT",
+
+        category: "USER_MANAGEMENT",
+
+        severity: "INFO",
+
+        description: `${adminName} approved ${student.name}`,
+
+        performedBy: adminName || "Unknown Admin",
+
+        targetUser: student.name,
+      });
+    } catch (error) {
+      activityLogRecorded = false;
+      console.error("Failed to record activity log (approve student):", error);
+    }
+
     return res.json({
       message: "Student approved successfully.",
 
       student,
+
+      activityLogRecorded,
     });
   } catch (error) {
     return res.status(500).json({

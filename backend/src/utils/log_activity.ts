@@ -1,11 +1,7 @@
-import prisma from "../../lib/prisma";
+import prisma from "../lib/prisma";
 
-interface ActivityLogData {
+interface LogActivityInput {
   action: string;
-
-  performedBy: string;
-
-  targetUser?: string;
 
   category?: string;
 
@@ -13,15 +9,15 @@ interface ActivityLogData {
 
   description?: string;
 
+  performedBy: string;
+
+  targetUser?: string;
+
   metadata?: any;
 }
 
-export const createActivityLog = async ({
+export const logActivity = async ({
   action,
-
-  performedBy,
-
-  targetUser,
 
   category = "SYSTEM",
 
@@ -29,15 +25,15 @@ export const createActivityLog = async ({
 
   description,
 
+  performedBy,
+
+  targetUser,
+
   metadata,
-}: ActivityLogData) => {
-  return prisma.activityLog.create({
+}: LogActivityInput) => {
+  const log = await prisma.activityLog.create({
     data: {
       action,
-
-      performedBy,
-
-      targetUser,
 
       category,
 
@@ -45,7 +41,13 @@ export const createActivityLog = async ({
 
       description,
 
+      performedBy,
+
+      targetUser,
+
       metadata,
     },
   });
+
+  return log;
 };

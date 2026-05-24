@@ -112,7 +112,7 @@ export default function UsersPage() {
         </div>
         <button
           onClick={() => setOpenFacultyModal(true)}
-          className="rounded-lg bg-black px-4 py-2 text-white"
+          className="rounded-lg bg-black px-4 py-2 text-white "
         >
           Add Faculty
         </button>

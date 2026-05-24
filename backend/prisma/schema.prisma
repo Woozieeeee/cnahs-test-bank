@@ -53,9 +53,17 @@ model ActivityLog {
 
   action      String
 
+  category    String   @default("SYSTEM")
+
+  severity    String   @default("INFO")
+
+  description String?
+
   performedBy String
 
   targetUser  String?
+
+  metadata    Json?
 
   createdAt   DateTime @default(now())
 }
