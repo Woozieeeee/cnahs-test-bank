@@ -1,3 +1,6 @@
+import MotionButton from "@/components/motion/motionButton";
+import MotionDropdown from "@/components/motion/motionDropdown";
+
 interface Props {
   onLogout?: () => void;
 }
@@ -6,7 +9,7 @@ export default function NavbarProfileDropdown({
   onLogout,
 }: Props) {
   return (
-    <div
+    <MotionDropdown
       className="
         absolute
         right-0
@@ -19,7 +22,7 @@ export default function NavbarProfileDropdown({
         shadow-lg
       "
     >
-      <button
+      <MotionButton
         className="
           w-full
           rounded-lg
@@ -31,9 +34,9 @@ export default function NavbarProfileDropdown({
         "
       >
         Profile
-      </button>
+      </MotionButton>
 
-      <button
+      <MotionButton
         className="
           w-full
           rounded-lg
@@ -45,9 +48,9 @@ export default function NavbarProfileDropdown({
         "
       >
         Settings
-      </button>
+      </MotionButton>
 
-      <button
+      <MotionButton
         onClick={onLogout}
         className="
           w-full
@@ -61,7 +64,7 @@ export default function NavbarProfileDropdown({
         "
       >
         Logout
-      </button>
-    </div>
+      </MotionButton>
+    </MotionDropdown>
   );
 }

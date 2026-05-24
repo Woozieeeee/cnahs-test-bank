@@ -1,3 +1,5 @@
+import MotionButton from "@/components/motion/motionButton";
+
 interface Props {
   activeTab: string;
 
@@ -19,7 +21,7 @@ export default function UsersTabs({
       "
     >
       {tabs.map((tab) => (
-        <button
+        <MotionButton
           key={tab}
           onClick={() => setActiveTab(tab)}
           className={`
@@ -38,7 +40,7 @@ export default function UsersTabs({
           `}
         >
           {tab}
-        </button>
+        </MotionButton>
       ))}
     </div>
   );

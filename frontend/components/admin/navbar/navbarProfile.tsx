@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import MotionButton from "@/components/motion/motionButton";
+
 import { ChevronDown } from "lucide-react";
 
 import NavbarProfileDropdown from "./navbarProfileDropdown";
@@ -11,7 +13,7 @@ export default function NavbarProfile() {
 
   return (
     <div className="relative">
-      <button
+      <div
         onClick={() => setShowDropdown(!showDropdown)}
         className="
           flex
@@ -54,7 +56,7 @@ export default function NavbarProfile() {
         </div>
 
         <ChevronDown size={18} />
-      </button>
+      </div>
 
       {showDropdown && <NavbarProfileDropdown />}
     </div>

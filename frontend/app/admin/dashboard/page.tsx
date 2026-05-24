@@ -7,6 +7,8 @@ import {
   getRecentRegistrations,
 } from "@/services/admin_service";
 
+import AnimatedPage from "@/components/common/animatedPage";
+
 import DashboardHeader from "@/components/admin/dashboard/dashboardHeader";
 
 import QuickAccessSection from "@/components/admin/dashboard/quickAccessSection";
@@ -87,18 +89,20 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <DashboardHeader />
+    <AnimatedPage>
+      <div className="space-y-8">
+        <DashboardHeader />
 
-      <QuickAccessSection />
+        <QuickAccessSection />
 
-      <SystemOverviewSection stats={stats} />
+        <SystemOverviewSection stats={stats} />
 
-      <RecentRegistrationsTable
-        registrations={recentRegistrations}
-      />
+        <RecentRegistrationsTable
+          registrations={recentRegistrations}
+        />
 
-      <RecentActivitySection activities={activities} />
-    </div>
+        <RecentActivitySection activities={activities} />
+      </div>
+    </AnimatedPage>
   );
 }

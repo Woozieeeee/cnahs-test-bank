@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface Props {
   title: string;
 
@@ -9,7 +11,13 @@ export default function OverviewCard({
   value,
 }: Props) {
   return (
-    <div
+    <motion.div
+      whileHover={{
+        y: -3,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
       className="
         rounded-2xl
         bg-white
@@ -29,6 +37,6 @@ export default function OverviewCard({
       >
         {value}
       </h2>
-    </div>
+    </motion.div>
   );
 }

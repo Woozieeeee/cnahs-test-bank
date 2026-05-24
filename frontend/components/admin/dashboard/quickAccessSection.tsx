@@ -1,3 +1,5 @@
+import MotionCard from "@/components/motion/motionCard";
+
 import {
   Users,
   ClipboardList,
@@ -21,7 +23,7 @@ export default function QuickAccessSection() {
         Quick Access
       </h2>
 
-      <div
+      <MotionCard
         className="
           grid
           gap-6
@@ -56,7 +58,7 @@ export default function QuickAccessSection() {
           href="/admin/faculty"
           icon={<GraduationCap size={28} />}
         />
-      </div>
+      </MotionCard>
     </div>
   );
 }

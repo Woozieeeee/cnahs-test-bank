@@ -12,9 +12,13 @@ import UsersStatsBar from "@/components/admin/users/usersStatsBar";
 
 import UsersTabs from "@/components/admin/users/usersTabs";
 
+import UsersManagementTable from "@/components/admin/users/usersManagementTable";
+
 import UsersPagination from "@/components/admin/users/usersPagination";
 
 import { useUserActions } from "@/hooks/admin/users/useUserActions";
+
+import AnimatedPage from "@/components/common/animatedPage";
 
 interface User {
   id: number;
@@ -93,62 +97,52 @@ export default function UsersPage() {
       : users.filter((user) => user.status === activeTab);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1
-          className="
+    <AnimatedPage>
+      <div className="space-y-6">
+        <div>
+          <h1
+            className="
             text-3xl
             font-bold
             text-gray-800
           "
-        >
-          User Management
-        </h1>
+          >
+            User Management
+          </h1>
 
-        <p className="mt-2 text-gray-500">
-          Manage student and faculty accounts.
-        </p>
+          <p className="mt-2 text-gray-500">
+            Manage student and faculty accounts.
+          </p>
+        </div>
+
+        {/* STATS */}
+
+        <UsersStatsBar
+          total={users.length}
+          pending={
+            users.filter((u) => u.status === "PENDING")
+              .length
+          }
+          approved={
+            users.filter((u) => u.status === "APPROVED")
+              .length
+          }
+          rejected={
+            users.filter((u) => u.status === "REJECTED")
+              .length
+          }
+        />
+        <UsersManagementTable
+          users={filteredUsers}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          onApprove={approveUser}
+          onReject={rejectUser}
+        />
       </div>
-
-      {/* STATS */}
-
-      <UsersStatsBar
-        total={users.length}
-        pending={
-          users.filter((u) => u.status === "PENDING").length
-        }
-        approved={
-          users.filter((u) => u.status === "APPROVED")
-            .length
-        }
-        rejected={
-          users.filter((u) => u.status === "REJECTED")
-            .length
-        }
-      />
-
-      {/* TABS */}
-
-      <UsersTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-
-      {/* TABLE */}
-
-      <UsersTable
-        users={filteredUsers}
-        onApprove={approveUser}
-        onReject={rejectUser}
-      />
-
-      {/* TABLE PAGINATION */}
-
-      <UsersPagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
-    </div>
+    </AnimatedPage>
   );
 }

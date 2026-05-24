@@ -1,4 +1,5 @@
 import UserStatusBadge from "./userStatusBadge";
+import MotionButton from "@/components/motion/motionButton";
 
 interface Props {
   user: {
@@ -49,7 +50,7 @@ export default function UserTableRow({
         <div className="flex gap-2">
           {user.status === "PENDING" && (
             <>
-              <button
+              <MotionButton
                 onClick={() => onApprove(user.id)}
                 className="
                   rounded-lg
@@ -63,9 +64,9 @@ export default function UserTableRow({
                 "
               >
                 Approve
-              </button>
+              </MotionButton>
 
-              <button
+              <MotionButton
                 onClick={() => onReject(user.id)}
                 className="
                   rounded-lg
@@ -79,7 +80,7 @@ export default function UserTableRow({
                 "
               >
                 Reject
-              </button>
+              </MotionButton>
             </>
           )}
         </div>

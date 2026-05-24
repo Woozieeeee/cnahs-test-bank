@@ -8,6 +8,8 @@ import { successToast, errorToast } from "@/lib/swal";
 
 import { changePassword } from "@/services/auth_service";
 
+import AnimatedPage from "@/components/common/animatedPage";
+
 export default function ChangePasswordPage() {
   const router = useRouter();
 
@@ -67,8 +69,10 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div
-      className="
+    <AnimatedPage>
+      {" "}
+      <div
+        className="
         flex
         min-h-screen
         items-center
@@ -76,10 +80,10 @@ export default function ChangePasswordPage() {
         bg-gray-50
         px-4
       "
-    >
-      <form
-        onSubmit={handleSubmit}
-        className="
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="
           w-full
           max-w-md
           rounded-2xl
@@ -87,50 +91,50 @@ export default function ChangePasswordPage() {
           p-8
           shadow-sm
         "
-      >
-        <h1
-          className="
+        >
+          <h1
+            className="
             mb-2
             text-3xl
             font-bold
             text-gray-800
           "
-        >
-          Change Password
-        </h1>
+          >
+            Change Password
+          </h1>
 
-        <p
-          className="
+          <p
+            className="
             mb-6
             text-sm
             text-gray-500
           "
-        >
-          Please change your temporary password before
-          continuing.
-        </p>
+          >
+            Please change your temporary password before
+            continuing.
+          </p>
 
-        {/* CURRENT PASSWORD */}
+          {/* CURRENT PASSWORD */}
 
-        <div className="mb-4">
-          <label
-            className="
+          <div className="mb-4">
+            <label
+              className="
               mb-2
               block
               text-sm
               font-medium
             "
-          >
-            Current Password
-          </label>
+            >
+              Current Password
+            </label>
 
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) =>
-              setCurrentPassword(e.target.value)
-            }
-            className="
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) =>
+                setCurrentPassword(e.target.value)
+              }
+              className="
               w-full
               rounded-lg
               border
@@ -138,29 +142,31 @@ export default function ChangePasswordPage() {
               outline-none
               focus:border-black
             "
-            required
-          />
-        </div>
+              required
+            />
+          </div>
 
-        {/* NEW PASSWORD */}
+          {/* NEW PASSWORD */}
 
-        <div className="mb-4">
-          <label
-            className="
+          <div className="mb-4">
+            <label
+              className="
               mb-2
               block
               text-sm
               font-medium
             "
-          >
-            New Password
-          </label>
+            >
+              New Password
+            </label>
 
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) =>
+                setNewPassword(e.target.value)
+              }
+              className="
               w-full
               rounded-lg
               border
@@ -168,31 +174,31 @@ export default function ChangePasswordPage() {
               outline-none
               focus:border-black
             "
-            required
-          />
-        </div>
+              required
+            />
+          </div>
 
-        {/* CONFIRM PASSWORD */}
+          {/* CONFIRM PASSWORD */}
 
-        <div className="mb-6">
-          <label
-            className="
+          <div className="mb-6">
+            <label
+              className="
               mb-2
               block
               text-sm
               font-medium
             "
-          >
-            Confirm Password
-          </label>
+            >
+              Confirm Password
+            </label>
 
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) =>
-              setConfirmPassword(e.target.value)
-            }
-            className="
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) =>
+                setConfirmPassword(e.target.value)
+              }
+              className="
               w-full
               rounded-lg
               border
@@ -200,14 +206,14 @@ export default function ChangePasswordPage() {
               outline-none
               focus:border-black
             "
-            required
-          />
-        </div>
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="
+          <button
+            type="submit"
+            disabled={loading}
+            className="
             w-full
             rounded-lg
             bg-black
@@ -218,12 +224,13 @@ export default function ChangePasswordPage() {
             hover:opacity-90
             disabled:opacity-50
           "
-        >
-          {loading
-            ? "Changing Password..."
-            : "Change Password"}
-        </button>
-      </form>
-    </div>
+          >
+            {loading
+              ? "Changing Password..."
+              : "Change Password"}
+          </button>
+        </form>
+      </div>
+    </AnimatedPage>
   );
 }

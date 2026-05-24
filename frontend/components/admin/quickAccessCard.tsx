@@ -1,4 +1,4 @@
-import Link from "next/link";
+import MotionCard from "../motion/motionCard";
 
 interface Props {
   title: string;
@@ -17,8 +17,7 @@ export default function QuickAccessCard({
   icon,
 }: Props) {
   return (
-    <Link
-      href={href}
+    <MotionCard
       className="
         rounded-2xl
         bg-white
@@ -50,6 +49,6 @@ export default function QuickAccessCard({
       >
         {description}
       </p>
-    </Link>
+    </MotionCard>
   );
 }

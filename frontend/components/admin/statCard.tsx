@@ -1,3 +1,5 @@
+import MotionCard from "../motion/motionCard";
+
 type StatCardProps = {
   title: string;
 
@@ -12,7 +14,7 @@ export default function StatCard({
   description,
 }: StatCardProps) {
   return (
-    <div
+    <MotionCard
       className="
         rounded-2xl
         bg-white
@@ -48,6 +50,6 @@ export default function StatCard({
       >
         {description}
       </p>
-    </div>
+    </MotionCard>
   );
 }
