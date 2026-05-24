@@ -12,6 +12,8 @@ import UsersStatsBar from "@/components/admin/users/usersStatsBar";
 
 import UsersTabs from "@/components/admin/users/usersTabs";
 
+import { useUserActions } from "@/hooks/admin/users/useUserActions";
+
 interface User {
   id: number;
 
@@ -35,6 +37,20 @@ export default function UsersPage() {
 
   const [loading, setLoading] = useState(true);
 
+  // =========================
+  // USER ACTIONS HOOK
+  // =========================
+
+  const {
+    approveUser,
+
+    rejectUser,
+  } = useUserActions(setUsers);
+
+  // =========================
+  // FETCH USERS
+  // =========================
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -51,9 +67,17 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
+  // =========================
+  // LOADING
+  // =========================
+
   if (loading) {
     return <UsersLoader />;
   }
+
+  // =========================
+  // FILTER USERS
+  // =========================
 
   const filteredUsers =
     activeTab === "ALL"
@@ -78,6 +102,8 @@ export default function UsersPage() {
         </p>
       </div>
 
+      {/* STATS */}
+
       <UsersStatsBar
         total={users.length}
         pending={
@@ -93,12 +119,20 @@ export default function UsersPage() {
         }
       />
 
+      {/* TABS */}
+
       <UsersTabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
 
-      <UsersTable users={filteredUsers} />
+      {/* TABLE */}
+
+      <UsersTable
+        users={filteredUsers}
+        onApprove={approveUser}
+        onReject={rejectUser}
+      />
     </div>
   );
 }

@@ -14,9 +14,19 @@ interface Props {
 
     createdAt: string;
   };
+
+  onApprove: (id: number) => Promise<void>;
+
+  onReject: (id: number) => Promise<void>;
 }
 
-export default function UserTableRow({ user }: Props) {
+export default function UserTableRow({
+  user,
+
+  onApprove,
+
+  onReject,
+}: Props) {
   return (
     <tr className="border-b">
       <td className="p-3">{user.name}</td>
@@ -31,6 +41,48 @@ export default function UserTableRow({ user }: Props) {
 
       <td className="p-3">
         {new Date(user.createdAt).toLocaleDateString()}
+      </td>
+
+      {/* ACTIONS */}
+
+      <td className="p-3">
+        <div className="flex gap-2">
+          {user.status === "PENDING" && (
+            <>
+              <button
+                onClick={() => onApprove(user.id)}
+                className="
+                  rounded-lg
+                  bg-green-500
+                  px-3
+                  py-1
+                  text-sm
+                  text-white
+                  transition
+                  hover:bg-green-600
+                "
+              >
+                Approve
+              </button>
+
+              <button
+                onClick={() => onReject(user.id)}
+                className="
+                  rounded-lg
+                  bg-red-500
+                  px-3
+                  py-1
+                  text-sm
+                  text-white
+                  transition
+                  hover:bg-red-600
+                "
+              >
+                Reject
+              </button>
+            </>
+          )}
+        </div>
       </td>
     </tr>
   );

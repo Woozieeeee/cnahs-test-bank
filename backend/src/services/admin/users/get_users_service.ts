@@ -2,6 +2,12 @@ import prisma from "../../../lib/prisma";
 
 export const getUsersService = async () => {
   const users = await prisma.user.findMany({
+    where: {
+      NOT: {
+        role: "ADMIN",
+      },
+    },
+
     orderBy: {
       createdAt: "desc",
     },
@@ -22,6 +28,4 @@ export const getUsersService = async () => {
       createdAt: true,
     },
   });
-
-  return users;
 };

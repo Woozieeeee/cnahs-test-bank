@@ -16,9 +16,19 @@ interface User {
 
 interface Props {
   users: User[];
+
+  onApprove: (id: number) => Promise<void>;
+
+  onReject: (id: number) => Promise<void>;
 }
 
-export default function UsersTable({ users }: Props) {
+export default function UsersTable({
+  users,
+
+  onApprove,
+
+  onReject,
+}: Props) {
   return (
     <div
       className="
@@ -46,18 +56,25 @@ export default function UsersTable({ users }: Props) {
             <th className="p-4">Status</th>
 
             <th className="p-4">Registered</th>
+
+            <th className="p-4">Actions</th>
           </tr>
         </thead>
 
         <tbody>
           {users.map((user) => (
-            <UserTableRow key={user.id} user={user} />
+            <UserTableRow
+              key={user.id}
+              user={user}
+              onApprove={onApprove}
+              onReject={onReject}
+            />
           ))}
 
           {users.length === 0 && (
             <tr>
               <td
-                colSpan={5}
+                colSpan={6}
                 className="
                   p-6
                   text-center

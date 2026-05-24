@@ -14,7 +14,7 @@ export const getPendingStudents = async () => {
 // APPROVE STUDENT
 // =========================
 
-export const approveStudent = async (id: string) => {
+export const approveStudent = async (id: number) => {
   const response = await api.patch(`/admin/approve/${id}`);
 
   return response.data;
@@ -24,7 +24,7 @@ export const approveStudent = async (id: string) => {
 // REJECT STUDENT
 // =========================
 
-export const rejectStudent = async (id: string) => {
+export const rejectStudent = async (id: number) => {
   const response = await api.patch(`/admin/reject/${id}`);
 
   return response.data;
