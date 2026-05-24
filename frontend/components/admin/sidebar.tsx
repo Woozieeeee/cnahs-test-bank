@@ -79,6 +79,19 @@ export default function Sidebar() {
           Exams
         </Link>
 
+        <Link
+          href="/admin/activity-logs"
+          className="
+            block
+            rounded-lg
+            p-3
+            transition
+            hover:bg-gray-100
+          "
+        >
+          Activity Logs
+        </Link>
+
         <button
           onClick={handleLogout}
           className="

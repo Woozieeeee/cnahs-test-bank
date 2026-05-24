@@ -97,3 +97,24 @@ export const createFaculty = async (data: {
 
   return response.data;
 };
+
+// =========================
+// ACTIVITY LOGS
+// =========================
+export const getActivityLogs = async (params: {
+  page: number;
+
+  limit: number;
+
+  search: string;
+
+  category: string;
+
+  severity: string;
+}) => {
+  const response = await api.get("/admin/activity-logs", {
+    params,
+  });
+
+  return response.data;
+};
