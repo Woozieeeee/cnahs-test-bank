@@ -79,7 +79,17 @@ export const loginService = async ({ login, password }: LoginData) => {
     token,
 
     user: {
+      id: user.id,
+
+      name: user.name,
+
       role: user.role,
+
+      status: user.status,
+
+      isFirstLogin: user.isFirstLogin,
+
+      mustChangePassword: user.isFirstLogin && user.role !== "STUDENT",
     },
   };
 };
