@@ -33,7 +33,7 @@ export const createFaculty = async (req: AuthRequest, res: Response) => {
 
         severity: "INFO",
 
-        description: `${adminName} created faculty ${faculty.name}`,
+        description: `New faculty member added to the system.`,
 
         performedBy: adminName || "Unknown Admin",
 

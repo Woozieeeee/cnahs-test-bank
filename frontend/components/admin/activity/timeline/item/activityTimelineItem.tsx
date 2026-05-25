@@ -1,15 +1,19 @@
-import ActivitySeverityBadge from "../../activitySeverityBadge";
-import { ACTIVITY_SEVERITY_COLORS } from "@/lib/constants/activitySeverity";
 import MotionCard from "@/components/motion/motionCard";
+import ActivitySeverityBadge from "../../activitySeverityBadge";
 import ActivityTimelineDot from "./activityTimelineDot";
-import ActivityTimelineAvatar from "./activityTimelineAvatar";
 import ActivityTimelineMeta from "./activityTimelineMeta";
+import ActivityTimelineHeader from "./activityTimelineHeader";
+import ActivityTimelineCategories from "./activityTimelineCategories";
+import { ACTIVITY_SEVERITY_COLORS } from "@/lib/constants/activitySeverity";
 import type { ActivityLog } from "@/types/activity";
 
 interface Props {
   activity: ActivityLog;
+
   timeLabel: string;
+
   isLast?: boolean;
+
   onClick?: () => void;
 }
 
@@ -24,6 +28,11 @@ export default function ActivityTimelineItem({
       activity.severity as keyof typeof ACTIVITY_SEVERITY_COLORS
     ] || "bg-slate-400";
 
+  const isViolation =
+    activity.categories.includes("VIOLATIONS");
+
+  const isHighSeverity = activity.severity === "ERROR";
+
   return (
     <div className="grid grid-cols-[84px_28px_1fr] gap-4">
       {/* TIME */}
@@ -32,7 +41,7 @@ export default function ActivityTimelineItem({
         {timeLabel}
       </div>
 
-      {/* DOT */}
+      {/* TIMELINE DOT */}
 
       <ActivityTimelineDot
         severityColor={severityColor}
@@ -51,90 +60,68 @@ export default function ActivityTimelineItem({
               onClick?.();
             }
           }}
-          className="
+          className={`
             w-full
             cursor-pointer
             rounded-xl
             border
-            border-slate-200
-            bg-slate-50/80
             p-5
             text-left
             transition-all
             hover:-translate-y-0.5
-            hover:border-slate-300
-            hover:bg-white
             hover:shadow-sm
-          "
+
+            ${
+              isViolation
+                ? `
+                  border-red-200
+                  bg-red-50/50
+                  hover:border-red-300
+                  hover:bg-red-50
+                `
+                : isHighSeverity
+                  ? `
+                    border-amber-200
+                    bg-amber-50/40
+                    hover:border-amber-300
+                  `
+                  : `
+                    border-slate-200
+                    bg-slate-50/80
+                    hover:border-slate-300
+                  `
+            }
+          `}
         >
           <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               {/* HEADER */}
 
-              <div
-                className="
-                  flex
-                  flex-wrap
-                  items-center
-                  gap-2
-                  text-sm
-                  text-slate-700
-                "
-              >
-                <ActivityTimelineAvatar
-                  performedBy={activity.performedBy}
-                />
-
-                <span className="font-semibold text-slate-900">
-                  {activity.performedBy}
-                </span>
-
-                <span>{activity.action}</span>
-
-                {activity.targetUser && (
-                  <span
-                    className="
-                      rounded-md
-                      bg-slate-200
-                      px-2
-                      py-0.5
-                      font-medium
-                      text-slate-700
-                    "
-                  >
-                    {activity.targetUser}
-                  </span>
-                )}
-              </div>
+              <ActivityTimelineHeader
+                activity={activity}
+                isViolation={isViolation}
+              />
 
               {/* DESCRIPTION */}
 
               {activity.description && (
-                <p className="mt-3 text-sm leading-6 text-slate-600">
+                <p
+                  className="
+                    mt-3
+                    text-sm
+                    leading-6
+                    text-slate-600
+                  "
+                >
                   {activity.description}
                 </p>
               )}
 
               {/* CATEGORIES */}
 
-              <div className="mt-3 flex flex-wrap gap-2">
-                {activity.categories.map((category) => (
-                  <span
-                    key={category}
-                    className="
-        rounded-md
-        bg-slate-100
-        px-2
-        py-1
-        text-[11px]
-        font-medium
-        text-slate-600
-      "
-                  >
-                    {category.replaceAll("_", " ")}
-                  </span>
-                ))}
-              </div>
+              <ActivityTimelineCategories
+                categories={activity.categories}
+              />
 
               {/* META */}
 
@@ -142,6 +129,8 @@ export default function ActivityTimelineItem({
                 createdAt={activity.createdAt}
               />
             </div>
+
+            {/* SEVERITY */}
 
             <ActivitySeverityBadge
               severity={activity.severity}

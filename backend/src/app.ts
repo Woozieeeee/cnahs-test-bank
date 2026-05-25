@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth_routes";
 import adminRoutes from "./routes/admin_routes";
+import examRoutes from "./routes/exam_routes";
 
 const app = express();
 
@@ -14,11 +15,9 @@ app.use(
 );
 
 app.use(express.json());
-
 app.use(cookieParser());
-
 app.use("/api/auth", authRoutes);
-
 app.use("/api/admin", adminRoutes);
+app.use("/exam", examRoutes);
 
 export default app;

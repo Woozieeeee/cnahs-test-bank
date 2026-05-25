@@ -1,0 +1,14 @@
+export const EXAM_VIOLATIONS = [
+  "TAB_SWITCH",
+  "WINDOW_BLUR",
+  "FULLSCREEN_EXIT",
+  "COPY_ATTEMPT",
+  "PASTE_ATTEMPT",
+  "MULTIPLE_FACE_DETECTED",
+  "NO_FACE_DETECTED",
+  "DEVICE_CHANGE",
+  "SUSPICIOUS_ACTIVITY",
+] as const;
+
+export type ExamViolation =
+  (typeof EXAM_VIOLATIONS)[number];

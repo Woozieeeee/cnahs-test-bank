@@ -1,19 +1,21 @@
 export const ACTIVITY_CATEGORIES = [
   "ALL",
-  "USER_MANAGEMENT",
+  "AUTH",
   "APPROVALS",
+  "EXAM",
   "REJECTIONS",
   "STUDENT_RECORDS",
-  "EXAM",
-  "VIOLATION",
   "SECURITY",
   "SYSTEM",
+  "USER_MANAGEMENT",
+  "VIOLATIONS",
 ] as const;
 
 export const ACTIVITY_SEVERITIES = [
   "ALL",
+  "ERROR",
   "INFO",
   "SUCCESS",
+  "VIOLATIONS",
   "WARNING",
-  "ERROR",
 ] as const;

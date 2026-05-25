@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+import { logActivity } from "../utils/log_activity";
 import { loginService } from "../services/auth/login_service";
 
 export const login = async (req: Request, res: Response) => {
@@ -26,6 +26,22 @@ export const login = async (req: Request, res: Response) => {
 
       maxAge: 1000 * 60 * 60 * 24,
     });
+
+    try {
+      await logActivity({
+        action: "Admin signed in",
+
+        categories: ["AUTH", "SECURITY", "SYSTEM"],
+
+        severity: "INFO",
+
+        description: "Secure session started successfully.",
+
+        performedBy: user.name,
+      });
+    } catch (error) {
+      console.error("Failed to record login activity:", error);
+    }
 
     return res.json({
       message: "Login successful",

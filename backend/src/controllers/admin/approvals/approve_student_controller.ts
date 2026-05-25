@@ -23,7 +23,7 @@ export const approveStudent = async (req: AuthRequest, res: Response) => {
 
         severity: "INFO",
 
-        description: `${adminName} approved ${student.name}`,
+        description: `Registration verified and access granted.`,
 
         performedBy: adminName || "Unknown Admin",
 

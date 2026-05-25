@@ -23,7 +23,7 @@ export const rejectStudent = async (req: AuthRequest, res: Response) => {
 
         severity: "INFO",
 
-        description: `${adminName} rejected ${student.name}`,
+        description: `Registration requirements were not met.`,
 
         performedBy: adminName || "Unknown Admin",
 
