@@ -1,19 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import MotionButton from "@/components/motion/motionButton";
-
 import SectionsGrid from "./sectionsGrid";
-
 import { getSections } from "@/services/academic_service";
-
+import CreateSectionModal from "./createSectionModal";
 import type { Section } from "@/types/section";
 
 export default function SectionsDashboard() {
   const [sections, setSections] = useState<Section[]>([]);
-
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchSections = async () => {
@@ -60,6 +57,7 @@ export default function SectionsDashboard() {
         </div>
 
         <MotionButton
+          onClick={() => setOpenModal(true)}
           className="
             rounded-xl
             bg-slate-900
@@ -75,6 +73,15 @@ export default function SectionsDashboard() {
           Create Section
         </MotionButton>
       </div>
+      <CreateSectionModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSuccess={async () => {
+          const data = await getSections();
+
+          setSections(data);
+        }}
+      />
 
       {/* CONTENT */}
 
