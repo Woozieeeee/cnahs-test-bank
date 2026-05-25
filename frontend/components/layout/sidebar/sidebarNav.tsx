@@ -14,6 +14,12 @@ const navItems = [
   },
 
   {
+    href: "/admin/academic",
+
+    label: "Academic Management",
+  },
+
+  {
     href: "/admin/exams",
 
     label: "Exams",
