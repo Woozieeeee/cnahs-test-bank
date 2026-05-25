@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AppThemeProvider from "@/components/providers/themeProvider";
 
 import "./globals.css";
 
@@ -24,7 +25,7 @@ export default function RootLayout({
           antialiased
         "
       >
-        {children}
+        <AppThemeProvider>{children}</AppThemeProvider>
       </body>
     </html>
   );

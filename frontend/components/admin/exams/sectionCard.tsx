@@ -11,7 +11,9 @@ interface Section {
 
   name: string;
 
-  students: number;
+  totalStudents: number;
+
+  studentsTaking: number;
 
   ongoingExam: boolean;
 
@@ -56,31 +58,37 @@ export default function SectionCard({ section }: Props) {
             </h2>
 
             <p className="mt-1 text-sm text-slate-500">
-              {section.students} students
+              {section.totalStudents} students
             </p>
           </div>
 
           <SectionStatusBadge
             active={section.ongoingExam}
+            hasViolations={section.violations > 0}
+            hasSuspicious={section.suspicious > 0}
           />
         </div>
 
         {/* STATS */}
 
+        {/* STATS */}
+
         <div
           className="
-            mt-6
-            grid
-            grid-cols-2
-            gap-4
-          "
+    mt-6
+    grid
+    grid-cols-2
+    gap-4
+  "
         >
+          {/* VIOLATIONS */}
+
           <div
             className="
-              rounded-xl
-              bg-slate-50
-              p-4
-            "
+      rounded-xl
+      bg-slate-50
+      p-4
+    "
           >
             <p className="text-sm text-slate-500">
               Violations
@@ -88,22 +96,24 @@ export default function SectionCard({ section }: Props) {
 
             <p
               className="
-                mt-2
-                text-2xl
-                font-bold
-                text-red-600
-              "
+        mt-2
+        text-2xl
+        font-bold
+        text-red-600
+      "
             >
               {section.violations}
             </p>
           </div>
 
+          {/* SUSPICIOUS */}
+
           <div
             className="
-              rounded-xl
-              bg-slate-50
-              p-4
-            "
+      rounded-xl
+      bg-slate-50
+      p-4
+    "
           >
             <div className="flex items-center gap-2">
               <ShieldAlert
@@ -118,15 +128,90 @@ export default function SectionCard({ section }: Props) {
 
             <p
               className="
-                mt-2
-                text-2xl
-                font-bold
-                text-amber-600
-              "
+        mt-2
+        text-2xl
+        font-bold
+        text-amber-600
+      "
             >
               {section.suspicious}
             </p>
           </div>
+
+          {/* TAKING EXAM */}
+
+          <div
+            className="
+      rounded-xl
+      bg-slate-50
+      p-4
+    "
+          >
+            <p className="text-sm text-slate-500">
+              Taking Exam
+            </p>
+
+            <p
+              className="
+        mt-2
+        text-2xl
+        font-bold
+        text-slate-900
+      "
+            >
+              {section.studentsTaking}
+            </p>
+          </div>
+
+          {/* TOTAL STUDENTS */}
+
+          <div
+            className="
+      rounded-xl
+      bg-slate-50
+      p-4
+    "
+          >
+            <p className="text-sm text-slate-500">
+              Enrolled
+            </p>
+
+            <p
+              className="
+        mt-2
+        text-2xl
+        font-bold
+        text-slate-900
+      "
+            >
+              {section.totalStudents}
+            </p>
+          </div>
+        </div>
+
+        {/* STATUS SUMMARY */}
+
+        <div
+          className="
+    mt-6
+    rounded-xl
+    border
+    border-slate-200
+    bg-slate-50
+    p-4
+  "
+        >
+          <p
+            className="
+      text-sm
+      font-medium
+      text-slate-700
+    "
+          >
+            {section.ongoingExam
+              ? "An examination is currently active for this section."
+              : "No ongoing examination session."}
+          </p>
         </div>
       </button>
     </MotionCard>

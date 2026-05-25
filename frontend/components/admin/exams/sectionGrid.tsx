@@ -6,7 +6,9 @@ const sections = [
 
     name: "Nursing 4A",
 
-    students: 42,
+    totalStudents: 42,
+
+    studentsTaking: 31,
 
     ongoingExam: true,
 
@@ -20,7 +22,9 @@ const sections = [
 
     name: "Nursing 3B",
 
-    students: 38,
+    totalStudents: 38,
+
+    studentsTaking: 0,
 
     ongoingExam: false,
 
@@ -34,7 +38,9 @@ const sections = [
 
     name: "Nursing 2A",
 
-    students: 35,
+    totalStudents: 35,
+
+    studentsTaking: 28,
 
     ongoingExam: true,
 

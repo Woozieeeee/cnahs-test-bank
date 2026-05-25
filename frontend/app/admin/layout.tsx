@@ -1,6 +1,6 @@
-import Sidebar from "@/components/admin/sidebar";
+import AppSidebar from "@/components/layout/sidebar/appSidebar";
+import Navbar from "@/components/layout/navbar/navbar";
 
-import Navbar from "@/components/admin/navbar/navbar";
 export default function AdminLayout({
   children,
 }: {
@@ -15,7 +15,7 @@ export default function AdminLayout({
       "
     >
       {/* SIDEBAR */}
-      <Sidebar />
+      <AppSidebar />
 
       {/* MAIN CONTENT */}
       <div className="flex-1">
