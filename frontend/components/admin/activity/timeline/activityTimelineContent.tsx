@@ -1,22 +1,5 @@
 import ActivityTimelineItem from "./item/activityTimelineItem";
-
-interface ActivityLog {
-  id: number;
-
-  action: string;
-
-  category: string;
-
-  severity: string;
-
-  description?: string;
-
-  performedBy: string;
-
-  targetUser?: string;
-
-  createdAt: string;
-}
+import type { ActivityLog } from "@/types/activity";
 
 interface Props {
   logs: ActivityLog[];

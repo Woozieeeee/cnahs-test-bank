@@ -7,7 +7,7 @@ interface ActivityLogData {
 
   targetUser?: string;
 
-  category?: string;
+  categories?: string[];
 
   severity?: string;
 
@@ -23,7 +23,7 @@ export const createActivityLog = async ({
 
   targetUser,
 
-  category = "SYSTEM",
+  categories = ["APPROVALS", "SYSTEM"],
 
   severity = "INFO",
 
@@ -39,7 +39,7 @@ export const createActivityLog = async ({
 
       targetUser,
 
-      category,
+      categories,
 
       severity,
 

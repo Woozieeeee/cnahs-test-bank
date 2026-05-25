@@ -5,22 +5,14 @@ import MotionCard from "@/components/motion/motionCard";
 import ActivityTimelineContent from "./activityTimelineContent";
 import ActivityTimelineEmpty from "./activityTimelineEmpty";
 import ActivityTimelinePagination from "./activityTimelinePagination";
-
-interface ActivityLog {
-  id: number;
-  action: string;
-  category: string;
-  severity: string;
-  description?: string;
-  performedBy: string;
-  targetUser?: string;
-  createdAt: string;
-}
+import type { ActivityLog } from "@/types/activity";
+import ActivityTimelineLoading from "./activityTimelineLoading";
 
 interface Props {
   logs: ActivityLog[];
   page: number;
   totalPages: number;
+  loading: boolean;
   onPageChange: (page: number) => void;
   onSelectActivity: (activity: ActivityLog) => void;
 }
@@ -28,6 +20,7 @@ interface Props {
 export default function ActivityTimeline({
   logs,
   page,
+  loading,
   totalPages,
   onPageChange,
   onSelectActivity,
@@ -41,7 +34,9 @@ export default function ActivityTimeline({
         shadow-sm
       "
     >
-      {logs.length > 0 ? (
+      {loading ? (
+        <ActivityTimelineLoading />
+      ) : logs.length > 0 ? (
         <ActivityTimelineContent
           logs={logs}
           onSelectActivity={onSelectActivity}

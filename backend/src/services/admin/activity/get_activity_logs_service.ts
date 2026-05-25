@@ -12,21 +12,13 @@ interface GetActivityLogsParams {
   severity?: string;
 }
 
-const HIDDEN_ACTIONS = [
-  "APPROVE_STUDENT",
-  "REJECT_STUDENT",
-  "CREATE_FACULTY",
-];
+const HIDDEN_ACTIONS = ["APPROVE_STUDENT", "REJECT_STUDENT", "CREATE_FACULTY"];
 
 export const getActivityLogsService = async ({
   page = 1,
-
   limit = 10,
-
   search = "",
-
   category,
-
   severity,
 }: GetActivityLogsParams) => {
   const skip = (page - 1) * limit;
@@ -42,6 +34,7 @@ export const getActivityLogsService = async ({
   };
 
   // SEARCH
+
   if (search) {
     where.OR = [
       {
@@ -70,36 +63,40 @@ export const getActivityLogsService = async ({
     ];
   }
 
-  // CATEGORY FILTER
-  if (category && category !== "ALL") {
-    where.category = category;
-  }
-
   // SEVERITY FILTER
+
   if (severity && severity !== "ALL") {
     where.severity = severity;
   }
 
-  const logs = await prisma.activityLog.findMany({
+  // FETCH ALL LOGS
+
+  const allLogs = await prisma.activityLog.findMany({
     where,
 
     orderBy: {
       createdAt: "desc",
     },
-
-    skip,
-
-    take: limit,
   });
 
-  const total = await prisma.activityLog.count({
-    where,
-  });
+  // CATEGORY FILTER
+
+  const filteredLogs =
+    category && category !== "ALL"
+      ? allLogs.filter(
+          (log) =>
+            Array.isArray(log.categories) && log.categories.includes(category),
+        )
+      : allLogs;
+
+  // MANUAL PAGINATION
+
+  const paginatedLogs = filteredLogs.slice(skip, skip + limit);
 
   return {
-    logs,
+    logs: paginatedLogs,
 
-    totalPages: Math.ceil(total / limit),
+    totalPages: Math.ceil(filteredLogs.length / limit),
 
     currentPage: page,
   };

@@ -1,37 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import MotionPage from "@/components/motion/motionPage";
-import { getActivityLogs } from "@/services/admin_service";
-import ActivityDetailsModal from "@/components/admin/activity/activityDetailsModal";
+
 import ActivityTabs from "@/components/admin/activity/activityTabs";
 import ActivityFilters from "@/components/admin/activity/activityFilters";
+
 import ActivityTimeline from "@/components/admin/activity/timeline/activityTimeline";
 
-interface ActivityLog {
-  id: number;
-  action: string;
-  category: string;
-  severity: string;
-  description?: string;
-  performedBy: string;
-  targetUser?: string;
-  createdAt: string;
-}
+import ActivityDetailsModal from "@/components/admin/activity/modal/activityDetailsModal";
+
+import { getActivityLogs } from "@/services/admin_service";
+
+import type { ActivityLog } from "@/types/activity";
 
 export default function ActivityLogsPage() {
   const [logs, setLogs] = useState<ActivityLog[]>([]);
+
   const [loading, setLoading] = useState(true);
+
   const [page, setPage] = useState(1);
+
   const [totalPages, setTotalPages] = useState(1);
+
   const [search, setSearch] = useState("");
+
   const [category, setCategory] = useState("ALL");
+
   const [severity, setSeverity] = useState("ALL");
+
   const [selectedActivity, setSelectedActivity] =
     useState<ActivityLog | null>(null);
 
   useEffect(() => {
     const fetchLogs = async () => {
+      setLoading(true);
+
       try {
         const data = await getActivityLogs({
           page,
@@ -49,7 +54,10 @@ export default function ActivityLogsPage() {
 
         setTotalPages(data.totalPages);
       } catch (error) {
-        console.log(error);
+        console.error(
+          "Failed to fetch activity logs:",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -75,8 +83,8 @@ export default function ActivityLogsPage() {
           </h1>
 
           <p className="mt-2 text-slate-500">
-            Monitor recent administrative actions and system
-            events.
+            Monitor recent administrative actions,
+            violations, approvals, and system events.
           </p>
         </div>
 
@@ -84,24 +92,41 @@ export default function ActivityLogsPage() {
 
         <ActivityTabs
           activeTab={category}
-          setActiveTab={setCategory}
+          setActiveTab={(value) => {
+            setCategory(value);
+
+            setPage(1);
+          }}
         />
 
         {/* FILTERS */}
 
         <ActivityFilters
           search={search}
-          setSearch={setSearch}
+          setSearch={(value) => {
+            setSearch(value);
+
+            setPage(1);
+          }}
           category={category}
-          setCategory={setCategory}
+          setCategory={(value) => {
+            setCategory(value);
+
+            setPage(1);
+          }}
           severity={severity}
-          setSeverity={setSeverity}
+          setSeverity={(value) => {
+            setSeverity(value);
+
+            setPage(1);
+          }}
         />
 
         {/* TIMELINE */}
 
         <ActivityTimeline
           logs={logs}
+          loading={loading}
           page={page}
           totalPages={totalPages}
           onPageChange={setPage}

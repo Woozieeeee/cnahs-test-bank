@@ -9,7 +9,7 @@ interface Activity {
 
   action: string;
 
-  category: string;
+  categories: string[];
 
   severity: string;
 

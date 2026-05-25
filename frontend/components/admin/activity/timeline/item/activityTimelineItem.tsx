@@ -4,20 +4,10 @@ import MotionCard from "@/components/motion/motionCard";
 import ActivityTimelineDot from "./activityTimelineDot";
 import ActivityTimelineAvatar from "./activityTimelineAvatar";
 import ActivityTimelineMeta from "./activityTimelineMeta";
-
-interface Activity {
-  id: number;
-  action: string;
-  category: string;
-  severity: string;
-  description?: string;
-  performedBy: string;
-  targetUser?: string;
-  createdAt: string;
-}
+import type { ActivityLog } from "@/types/activity";
 
 interface Props {
-  activity: Activity;
+  activity: ActivityLog;
   timeLabel: string;
   isLast?: boolean;
   onClick?: () => void;
@@ -125,10 +115,30 @@ export default function ActivityTimelineItem({
                 </p>
               )}
 
+              {/* CATEGORIES */}
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {activity.categories.map((category) => (
+                  <span
+                    key={category}
+                    className="
+        rounded-md
+        bg-slate-100
+        px-2
+        py-1
+        text-[11px]
+        font-medium
+        text-slate-600
+      "
+                  >
+                    {category.replaceAll("_", " ")}
+                  </span>
+                ))}
+              </div>
+
               {/* META */}
 
               <ActivityTimelineMeta
-                category={activity.category}
                 createdAt={activity.createdAt}
               />
             </div>
