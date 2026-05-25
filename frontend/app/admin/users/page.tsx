@@ -110,12 +110,6 @@ export default function UsersPage() {
             Manage student and faculty accounts.
           </p>
         </div>
-        <button
-          onClick={() => setOpenFacultyModal(true)}
-          className="rounded-lg bg-black px-4 py-2 text-white "
-        >
-          Add Faculty
-        </button>
 
         {/* STATS */}
 
@@ -147,6 +141,9 @@ export default function UsersPage() {
           setSearch={setSearch}
           roleFilter={roleFilter}
           setRoleFilter={setRoleFilter}
+          onOpenFacultyModal={() =>
+            setOpenFacultyModal(true)
+          }
         />
       </div>
       <AddFacultyModal

@@ -56,10 +56,6 @@ export default function SectionCard({ section }: Props) {
             >
               {section.name}
             </h2>
-
-            <p className="mt-1 text-sm text-slate-500">
-              {section.totalStudents} students
-            </p>
           </div>
 
           <SectionStatusBadge

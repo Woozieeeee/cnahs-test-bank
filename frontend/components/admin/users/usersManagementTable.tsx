@@ -1,80 +1,51 @@
 "use client";
 
 import UsersTabs from "./usersTabs";
-
 import UsersTable from "./usersTable";
-
 import UsersSearch from "./usersSearch";
-
 import UsersRoleFilter from "./usersRoleFilter";
-
 import UsersPagination from "./usersPagination";
+import MotionButton from "@/components/motion/motionButton";
 
 interface User {
   id: number;
-
   name: string;
-
   studentId: string;
-
   username?: string;
-
   role: string;
-
   status: string;
-
   createdAt: string;
 }
 
 interface Props {
   users: User[];
-
   activeTab: string;
-
-  setActiveTab: (tab: string) => void;
-
   page: number;
-
-  setPage: (page: number) => void;
-
   totalPages: number;
-
-  onApprove: (id: number) => Promise<void>;
-
-  onReject: (id: number) => Promise<void>;
-
-  search: string;
-
-  setSearch: (value: string) => void;
-
   roleFilter: string;
-
+  search: string;
+  setActiveTab: (tab: string) => void;
+  setPage: (page: number) => void;
+  onApprove: (id: number) => Promise<void>;
+  onReject: (id: number) => Promise<void>;
+  setSearch: (value: string) => void;
   setRoleFilter: (value: string) => void;
+  onOpenFacultyModal: () => void;
 }
 
 export default function UsersManagementTable({
   users,
-
   activeTab,
-
-  setActiveTab,
-
-  page,
-
-  setPage,
-
   totalPages,
-
-  onApprove,
-
-  onReject,
-
   search,
-
-  setSearch,
-
   roleFilter,
-
+  page,
+  onOpenFacultyModal,
+  setActiveTab,
+  setPage,
+  setSearch,
+  onApprove,
+  onReject,
   setRoleFilter,
 }: Props) {
   return (
@@ -88,19 +59,47 @@ export default function UsersManagementTable({
     >
       {/* HEADER */}
 
-      <div className="mb-6">
-        <h2
-          className="
-            text-xl
-            font-semibold
-          "
-        >
-          Users
-        </h2>
+      <div
+        className="
+    mb-6
+    flex
+    items-start
+    justify-between
+    gap-4
+  "
+      >
+        <div>
+          <h2
+            className="
+        text-xl
+        font-semibold
+        text-slate-900
+      "
+          >
+            Users
+          </h2>
 
-        <p className="text-sm text-gray-500">
-          Manage student and faculty accounts
-        </p>
+          <p className="mt-1 text-sm text-slate-500">
+            Manage student and faculty accounts
+          </p>
+        </div>
+
+        <MotionButton
+          onClick={onOpenFacultyModal}
+          className="
+      rounded-xl
+      bg-slate-900
+      px-4
+      py-2
+      text-sm
+      font-medium
+      text-white
+      transition
+      hover:bg-slate-800
+    "
+        >
+          Add Faculty
+        </MotionButton>
       </div>
 
       {/* TABS */}
