@@ -1,3 +1,5 @@
+import ActivitySeverityBadge from "./activitySeverityBadge";
+
 interface Activity {
   id: number;
 
@@ -56,35 +58,49 @@ export default function ActivityDetailsModal({
       >
         {/* HEADER */}
 
-        <div
-          className="
-            flex
-            items-start
-            justify-between
-          "
-        >
+        <div className="flex items-start justify-between">
           <div>
-            <h2
-              className="
-                text-2xl
-                font-bold
-              "
-            >
+            <div className="flex items-center gap-2">
+              <ActivitySeverityBadge
+                severity={activity.severity}
+              />
+
+              <span
+                className="
+          rounded-md
+          bg-slate-100
+          px-2
+          py-1
+          text-xs
+          font-medium
+          text-slate-600
+        "
+              >
+                {activity.category}
+              </span>
+            </div>
+
+            <h2 className="mt-3 text-2xl font-bold">
               {activity.action}
             </h2>
 
-            <p className="mt-1 text-slate-500">
-              Activity details and metadata
+            <p className="mt-1 text-sm text-slate-500">
+              {new Date(
+                activity.createdAt
+              ).toLocaleString()}
             </p>
           </div>
 
           <button
             onClick={onClose}
             className="
-              rounded-lg
-              px-3
-              py-1
-              hover:bg-slate-100
+            rounded-lg
+            px-3
+            py-1
+            text-slate-500
+            transition
+            hover:bg-slate-100
+            hover:text-slate-900
             "
           >
             ✕
@@ -144,21 +160,42 @@ export default function ActivityDetailsModal({
         {/* METADATA */}
 
         {activity.metadata && (
-          <div className="mt-6">
-            <h3 className="font-semibold">Metadata</h3>
+          <div
+            className="
+    mt-2
+    space-y-2
+    rounded-xl
+    bg-slate-100
+    p-4
+  "
+          >
+            {Object.entries(activity.metadata).map(
+              ([key, value]) => (
+                <div
+                  key={key}
+                  className="
+          flex
+          items-center
+          justify-between
+          gap-4
+          border-b
+          border-slate-200
+          pb-2
+          text-sm
+          last:border-0
+          last:pb-0
+        "
+                >
+                  <span className="font-medium capitalize text-slate-600">
+                    {key}
+                  </span>
 
-            <pre
-              className="
-                mt-2
-                overflow-auto
-                rounded-xl
-                bg-slate-100
-                p-4
-                text-sm
-              "
-            >
-              {JSON.stringify(activity.metadata, null, 2)}
-            </pre>
+                  <span className="text-slate-900">
+                    {String(value)}
+                  </span>
+                </div>
+              )
+            )}
           </div>
         )}
       </div>

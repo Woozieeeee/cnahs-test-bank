@@ -1,28 +1,13 @@
+import { ACTIVITY_CATEGORIES } from "@/lib/constants/activity";
+
 interface Props {
   activeTab: string;
 
   setActiveTab: (tab: string) => void;
 }
 
-const tabs = [
-  "ALL",
-
-  "USER_MANAGEMENT",
-
-  "APPROVALS",
-
-  "EXAM_VIOLATIONS",
-
-  "SECURITY",
-
-  "STUDENT_RECORDS",
-
-  "SYSTEM",
-];
-
 export default function ActivityTabs({
   activeTab,
-
   setActiveTab,
 }: Props) {
   return (
@@ -33,10 +18,10 @@ export default function ActivityTabs({
         gap-2
       "
     >
-      {tabs.map((tab) => (
+      {ACTIVITY_CATEGORIES.map((category) => (
         <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
+          key={category}
+          onClick={() => setActiveTab(category)}
           className={`
             rounded-xl
             px-4
@@ -46,8 +31,8 @@ export default function ActivityTabs({
             transition
 
             ${
-              activeTab === tab
-                ? "bg-black text-white"
+              activeTab === category
+                ? "bg-slate-900 text-white"
                 : `
                   bg-white
                   text-slate-600
@@ -56,7 +41,7 @@ export default function ActivityTabs({
             }
           `}
         >
-          {tab.replaceAll("_", " ")}
+          {category.replaceAll("_", " ")}
         </button>
       ))}
     </div>

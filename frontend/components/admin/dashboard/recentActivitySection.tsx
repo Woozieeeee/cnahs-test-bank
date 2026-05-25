@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ChevronDown } from "lucide-react";
 
-import ActivityTimelineItem from "@/components/admin/activity/activityTimelineItem";
+import ActivityTimelineItem from "@/components/admin/activity/timeline/item/activityTimelineItem";
 
 interface Activity {
   id: number;
@@ -49,7 +49,7 @@ const getDateLabel = (date: Date) => {
 
 const getTimeLabel = (date: Date) => {
   const diffInMinutes = Math.floor(
-    (Date.now() - date.getTime()) / 60000,
+    (Date.now() - date.getTime()) / 60000
   );
 
   if (diffInMinutes < 1) {
@@ -72,7 +72,9 @@ export default function RecentActivitySection({
   const groupedActivities = activities.reduce<
     Record<string, Activity[]>
   >((groups, activity) => {
-    const label = getDateLabel(new Date(activity.createdAt));
+    const label = getDateLabel(
+      new Date(activity.createdAt)
+    );
 
     return {
       ...groups,
@@ -164,7 +166,7 @@ export default function RecentActivitySection({
                     key={activity.id}
                     activity={activity}
                     timeLabel={getTimeLabel(
-                      new Date(activity.createdAt),
+                      new Date(activity.createdAt)
                     )}
                     isLast={index === group.length - 1}
                   />
