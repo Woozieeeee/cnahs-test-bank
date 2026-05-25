@@ -13,6 +13,8 @@ import { getActivityLogs } from "../controllers/admin/activity/get_activity_log_
 import { authMiddleware } from "../middleware/auth_middleware";
 import { authorizeRoles } from "../middleware/role_middleware";
 import { adminActivityLogger } from "../middleware/admin_activity_logger_middleware";
+import { createSection } from "../controllers/admin/academic/sections/create_section_controller";
+import { getSections } from "../controllers/admin/academic/sections/get_sections_controller";
 
 const router = express.Router();
 
@@ -35,6 +37,14 @@ router.get("/activity-logs", getActivityLogs);
 // Users Management
 router.get("/users", getUsers);
 router.post("/faculty", createFaculty);
+
+// Create Faculty
+router.post("/faculty", createFaculty);
+
+// Academic Management
+
+router.get("/academic/sections", getSections);
+router.post("/academic/sections", createSection);
 
 // Student ID upload (CSV)
 router.post(
