@@ -17,7 +17,7 @@ export const rejectStudent = async (req: AuthRequest, res: Response) => {
     let activityLogRecorded = true;
     try {
       await logActivity({
-        action: "REJECT_STUDENT",
+        action: "Rejected student account",
 
         category: "USER_MANAGEMENT",
 

@@ -27,7 +27,7 @@ export const createFaculty = async (req: AuthRequest, res: Response) => {
     let activityLogRecorded = true;
     try {
       await logActivity({
-        action: "CREATE_FACULTY",
+        action: "Created faculty account",
 
         category: "USER_MANAGEMENT",
 

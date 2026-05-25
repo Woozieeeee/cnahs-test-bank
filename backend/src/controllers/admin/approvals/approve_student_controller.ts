@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
 import { AuthRequest } from "../../../middleware/auth_middleware";
 
@@ -17,7 +17,7 @@ export const approveStudent = async (req: AuthRequest, res: Response) => {
     let activityLogRecorded = true;
     try {
       await logActivity({
-        action: "APPROVE_STUDENT",
+        action: "Approved student account",
 
         category: "USER_MANAGEMENT",
 

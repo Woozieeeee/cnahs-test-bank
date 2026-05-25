@@ -13,7 +13,7 @@ const EXCLUDED_PATHS = new Set([
 
   "/recent-activity",
 
-  "/faculty/create",
+  "/faculty",
 ]);
 
 // =========================

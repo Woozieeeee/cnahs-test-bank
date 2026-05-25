@@ -12,6 +12,12 @@ interface GetActivityLogsParams {
   severity?: string;
 }
 
+const HIDDEN_ACTIONS = [
+  "APPROVE_STUDENT",
+  "REJECT_STUDENT",
+  "CREATE_FACULTY",
+];
+
 export const getActivityLogsService = async ({
   page = 1,
 
@@ -25,7 +31,15 @@ export const getActivityLogsService = async ({
 }: GetActivityLogsParams) => {
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  const where: any = {
+    NOT: [
+      {
+        action: {
+          in: HIDDEN_ACTIONS,
+        },
+      },
+    ],
+  };
 
   // SEARCH
   if (search) {
