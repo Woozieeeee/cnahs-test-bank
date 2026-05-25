@@ -1,7 +1,9 @@
 "use client";
 
-import MotionCard from "@/components/motion/motionCard";
 import Link from "next/link";
+
+import MotionCard from "@/components/motion/motionCard";
+
 import type { Section } from "@/types/section";
 
 interface Props {
@@ -14,6 +16,7 @@ export default function SectionCard({ section }: Props) {
       <Link
         href={`/admin/academic/sections/${section.id}`}
         className="
+          block
           rounded-2xl
           border
           border-slate-200
@@ -26,20 +29,36 @@ export default function SectionCard({ section }: Props) {
       >
         {/* HEADER */}
 
-        <div>
-          <h2
+        <div className="flex items-start justify-between">
+          <div>
+            <h2
+              className="
+                text-xl
+                font-semibold
+                text-slate-900
+              "
+            >
+              {section.name}
+            </h2>
+
+            <p className="mt-1 text-sm text-slate-500">
+              {section.program}
+            </p>
+          </div>
+
+          <div
             className="
-              text-xl
+              rounded-full
+              bg-slate-100
+              px-3
+              py-1
+              text-xs
               font-semibold
-              text-slate-900
+              text-slate-600
             "
           >
-            {section.name}
-          </h2>
-
-          <p className="mt-1 text-sm text-slate-500">
-            {section.program}
-          </p>
+            Year {section.yearLevel}
+          </div>
         </div>
 
         {/* STATS */}
@@ -95,6 +114,34 @@ export default function SectionCard({ section }: Props) {
               {section.exams.length}
             </p>
           </div>
+        </div>
+
+        {/* FOOTER */}
+
+        <div
+          className="
+            mt-6
+            flex
+            items-center
+            justify-between
+            border-t
+            border-slate-100
+            pt-4
+          "
+        >
+          <p className="text-sm text-slate-500">
+            View section details
+          </p>
+
+          <span
+            className="
+              text-sm
+              font-medium
+              text-slate-900
+            "
+          >
+            →
+          </span>
         </div>
       </Link>
     </MotionCard>

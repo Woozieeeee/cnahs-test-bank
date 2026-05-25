@@ -22,3 +22,11 @@ export const createSection = async (data: {
 
   return response.data;
 };
+
+export const getSectionById = async (id: number) => {
+  const response = await api.get(
+    `/admin/academic/sections/${id}`
+  );
+
+  return response.data;
+};
