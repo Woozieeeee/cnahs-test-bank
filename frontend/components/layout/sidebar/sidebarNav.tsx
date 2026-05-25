@@ -17,18 +17,24 @@ const navItems = [
     href: "/admin/academic",
 
     label: "Academic Management",
+
+    nested: true,
   },
 
   {
     href: "/admin/exams",
 
     label: "Exams",
+
+    nested: true,
   },
 
   {
     href: "/admin/activity-logs",
 
     label: "Activity Logs",
+
+    nested: true,
   },
 ];
 
@@ -40,6 +46,7 @@ export default function SidebarNav() {
           key={item.href}
           href={item.href}
           label={item.label}
+          nested={item.nested}
         />
       ))}
     </nav>

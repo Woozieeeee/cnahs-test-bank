@@ -1,23 +1,24 @@
 "use client";
 
 import Link from "next/link";
-
 import { usePathname } from "next/navigation";
 
 interface Props {
   href: string;
-
   label: string;
+  nested?: boolean;
 }
 
 export default function SidebarNavItem({
   href,
   label,
+  nested,
 }: Props) {
   const pathname = usePathname();
 
-  const active = pathname === href;
-
+  const isActive = nested
+    ? pathname.startsWith(href)
+    : pathname === href;
   return (
     <Link
       href={href}
@@ -30,7 +31,7 @@ export default function SidebarNavItem({
         transition
 
         ${
-          active
+          isActive
             ? `
               bg-slate-900
               text-white
