@@ -19,7 +19,7 @@ export const rejectStudent = async (req: AuthRequest, res: Response) => {
       await logActivity({
         action: "Rejected student account",
 
-        category: "USER_MANAGEMENT",
+        categories: ["USER_MANAGEMENT", "APPROVALS"],
 
         severity: "INFO",
 

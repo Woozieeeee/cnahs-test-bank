@@ -29,7 +29,7 @@ export const createFaculty = async (req: AuthRequest, res: Response) => {
       await logActivity({
         action: "Created faculty account",
 
-        category: "USER_MANAGEMENT",
+        categories: ["USER_MANAGEMENT"],
 
         severity: "INFO",
 

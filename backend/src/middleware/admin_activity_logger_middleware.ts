@@ -140,13 +140,13 @@ export const adminActivityLogger = (
 
     const performedBy = req.user?.name || "Unknown Admin";
 
-    const category = getCategoryFromPath(path);
+    const categories = [getCategoryFromPath(path)];
 
     try {
       await logActivity({
         action: getActionLabel(req.method, path),
 
-        category,
+        categories,
 
         severity: "INFO",
 

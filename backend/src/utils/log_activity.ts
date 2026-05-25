@@ -3,7 +3,7 @@ import prisma from "../lib/prisma";
 interface LogActivityInput {
   action: string;
 
-  category?: string;
+  categories?: string[];
 
   severity?: string;
 
@@ -19,7 +19,7 @@ interface LogActivityInput {
 export const logActivity = async ({
   action,
 
-  category = "SYSTEM",
+  categories = ["SYSTEM"],
 
   severity = "INFO",
 
@@ -35,7 +35,7 @@ export const logActivity = async ({
     data: {
       action,
 
-      category,
+      categories,
 
       severity,
 

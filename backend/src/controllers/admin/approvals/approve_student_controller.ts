@@ -19,7 +19,7 @@ export const approveStudent = async (req: AuthRequest, res: Response) => {
       await logActivity({
         action: "Approved student account",
 
-        category: "USER_MANAGEMENT",
+        categories: ["USER_MANAGEMENT", "APPROVALS"],
 
         severity: "INFO",
 
