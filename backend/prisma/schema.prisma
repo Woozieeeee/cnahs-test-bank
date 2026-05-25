@@ -14,59 +14,90 @@ datasource db {
 
 model User {
   id            Int      @id @default(autoincrement())
-
   name          String
-
   username      String?  @unique
-
   studentId     String?  @unique
-
   studentRecord StudentRecord? @relation(fields: [studentId], references: [studentId])
-
   password      String
-
   role          Role
-
   status        String   @default("PENDING")
-
+  sectionId     Int?
   isFirstLogin  Boolean  @default(true)
-
   createdAt     DateTime @default(now())
+  section       Section? @relation(fields: [sectionId], references: [id])
+  subjects Subject[]
 }
 
 model StudentRecord {
   id         Int      @id @default(autoincrement())
-
   studentId  String   @unique
-
   fullName   String
-
   program    String
-
   createdAt  DateTime @default(now())
-
   user       User?
+}
+
+model Section {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  yearLevel   Int
+  program     String
+  createdAt   DateTime @default(now())
+  users       User[]
+  exams       Exam[]
+  sectionSubjects SectionSubject[]
+}
+
+model Subject {
+  id          Int      @id @default(autoincrement())
+  name        String
+  code        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  facultyId   Int?
+  faculty     User?    @relation(fields: [facultyId], references: [id])
+  exams       Exam[]
+  sectionSubjects SectionSubject[]
+}
+
+model SectionSubject {
+  id          Int      @id @default(autoincrement())
+  sectionId   Int
+  subjectId   Int
+  createdAt   DateTime @default(now())
+  section     Section  @relation(fields: [sectionId], references: [id])
+  subject     Subject  @relation(fields: [subjectId], references: [id])
+  @@unique([sectionId, subjectId])
+}
+
+model Exam {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?
+  duration      Int
+  status        String   @default("DRAFT")
+  startsAt      DateTime?
+  endsAt        DateTime?
+  createdAt     DateTime @default(now())
+  subjectId     Int
+  subject       Subject @relation(fields: [subjectId], references: [id])
+  sectionId     Int
+  section       Section  @relation(fields: [sectionId], references: [id])
 }
 
 model ActivityLog {
   id          Int      @id @default(autoincrement())
-
   action      String
-
   categories  Json
-
   severity    String   @default("INFO")
-
   description String?
-
   performedBy String
-
   targetUser  String?
-
   metadata    Json?
-
   createdAt   DateTime @default(now())
 }
+
+
 
 enum Role {
   ADMIN
