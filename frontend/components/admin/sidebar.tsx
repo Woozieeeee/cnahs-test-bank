@@ -67,7 +67,7 @@ export default function Sidebar() {
         </Link>
 
         <Link
-          href="/admin/exams"
+          href="/admin/exam"
           className="
             block
             rounded-lg
