@@ -53,6 +53,12 @@ export default function LoginPage() {
       }
 
       if (data.user.role === "FACULTY") {
+        if (data.user.mustChangePassword) {
+          router.push("/change-password");
+
+          return;
+        }
+
         router.push("/faculty/dashboard");
       }
 

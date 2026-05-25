@@ -11,16 +11,38 @@ import Link from "next/link";
 import AnimatedPage from "@/components/common/animatedPage";
 import PasswordInput from "@/components/common/passwordInput";
 import { Loader2 } from "lucide-react";
+import PasswordRules from "@/components/auth/passwordRules";
+import PasswordMatchIndicator from "@/components/auth/passwordMatchIndicator";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
   const [loading, setLoading] = useState(false);
   const studentIdRegex = /^\d{2}-\d{5}$/;
 
   const isStudentIdValid =
     studentId === "" || studentIdRegex.test(studentId);
+
+  const passwordsMatch = password === confirmPassword;
+  const hasMinLength = password.length >= 8;
+
+  const hasUppercase = /[A-Z]/.test(password);
+
+  const hasLowercase = /[a-z]/.test(password);
+
+  const hasNumber = /[0-9]/.test(password);
+
+  const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
+  const isPasswordStrong =
+    hasMinLength &&
+    hasUppercase &&
+    hasLowercase &&
+    hasNumber &&
+    hasSymbol;
 
   const handleStudentIdChange = (value: string) => {
     const filteredValue = value.replace(/[^0-9-]/g, "");
@@ -35,6 +57,18 @@ export default function RegisterPage() {
 
     if (!isStudentIdValid) {
       alert("Student ID format must be nn-nnnnn");
+
+      return;
+    }
+
+    if (!isPasswordStrong) {
+      errorToast("Please create a stronger password.");
+
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      errorToast("Passwords do not match.");
 
       return;
     }
@@ -138,6 +172,26 @@ export default function RegisterPage() {
               onChange={setPassword}
               placeholder="Password"
             />
+
+            <PasswordRules
+              hasMinLength={hasMinLength}
+              hasUppercase={hasUppercase}
+              hasLowercase={hasLowercase}
+              hasNumber={hasNumber}
+              hasSymbol={hasSymbol}
+            />
+          </div>
+
+          <div className="mb-4">
+            <PasswordInput
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              placeholder="Confirm Password"
+            />
+            <PasswordMatchIndicator
+              visible={!!confirmPassword}
+              match={passwordsMatch}
+            />
           </div>
 
           <button
@@ -178,4 +232,25 @@ export default function RegisterPage() {
       </div>
     </AnimatedPage>
   );
+  function PasswordRule({
+    valid,
+
+    label,
+  }: {
+    valid: boolean;
+
+    label: string;
+  }) {
+    return (
+      <p
+        className={`flex items-center gap-2 ${
+          valid ? "text-emerald-600" : "text-slate-400"
+        }`}
+      >
+        <span>{valid ? "✓" : "•"}</span>
+
+        <span>{label}</span>
+      </p>
+    );
+  }
 }

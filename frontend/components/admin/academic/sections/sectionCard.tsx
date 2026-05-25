@@ -1,7 +1,7 @@
 "use client";
 
 import MotionCard from "@/components/motion/motionCard";
-
+import Link from "next/link";
 import type { Section } from "@/types/section";
 
 interface Props {
@@ -11,7 +11,8 @@ interface Props {
 export default function SectionCard({ section }: Props) {
   return (
     <MotionCard>
-      <div
+      <Link
+        href={`/admin/academic/sections/${section.id}`}
         className="
           rounded-2xl
           border
@@ -95,7 +96,7 @@ export default function SectionCard({ section }: Props) {
             </p>
           </div>
         </div>
-      </div>
+      </Link>
     </MotionCard>
   );
 }

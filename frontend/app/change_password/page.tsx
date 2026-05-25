@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-
 import { useRouter } from "next/navigation";
-
 import { successToast, errorToast } from "@/lib/swal";
-
 import { changePassword } from "@/services/auth_service";
-
 import AnimatedPage from "@/components/common/animatedPage";
+import PasswordInput from "@/components/common/passwordInput";
+import PasswordRules from "@/components/auth/passwordRules";
+import PasswordMatchIndicator from "@/components/auth/passwordMatchIndicator";
+import { Loader2 } from "lucide-react";
 
 export default function ChangePasswordPage() {
   const router = useRouter();
@@ -22,6 +22,18 @@ export default function ChangePasswordPage() {
     useState("");
 
   const [loading, setLoading] = useState(false);
+  const passwordsMatch = newPassword === confirmPassword;
+  const hasMinLength = newPassword.length >= 8;
+  const hasUppercase = /[A-Z]/.test(newPassword);
+  const hasLowercase = /[a-z]/.test(newPassword);
+  const hasNumber = /[0-9]/.test(newPassword);
+  const hasSymbol = /[^A-Za-z0-9]/.test(newPassword);
+  const isPasswordStrong =
+    hasMinLength &&
+    hasUppercase &&
+    hasLowercase &&
+    hasNumber &&
+    hasSymbol;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +52,8 @@ export default function ChangePasswordPage() {
     // PASSWORD LENGTH
     // =========================
 
-    if (newPassword.length < 8) {
-      errorToast("Password must be at least 8 characters.");
+    if (!isPasswordStrong) {
+      errorToast("Please create a stronger password.");
 
       return;
     }
@@ -128,21 +140,10 @@ export default function ChangePasswordPage() {
               Current Password
             </label>
 
-            <input
-              type="password"
+            <PasswordInput
               value={currentPassword}
-              onChange={(e) =>
-                setCurrentPassword(e.target.value)
-              }
-              className="
-              w-full
-              rounded-lg
-              border
-              p-3
-              outline-none
-              focus:border-black
-            "
-              required
+              onChange={setCurrentPassword}
+              placeholder="Current Password"
             />
           </div>
 
@@ -160,21 +161,18 @@ export default function ChangePasswordPage() {
               New Password
             </label>
 
-            <input
-              type="password"
+            <PasswordInput
               value={newPassword}
-              onChange={(e) =>
-                setNewPassword(e.target.value)
-              }
-              className="
-              w-full
-              rounded-lg
-              border
-              p-3
-              outline-none
-              focus:border-black
-            "
-              required
+              onChange={setNewPassword}
+              placeholder="New Password"
+            />
+
+            <PasswordRules
+              hasMinLength={hasMinLength}
+              hasUppercase={hasUppercase}
+              hasLowercase={hasLowercase}
+              hasNumber={hasNumber}
+              hasSymbol={hasSymbol}
             />
           </div>
 
@@ -192,21 +190,15 @@ export default function ChangePasswordPage() {
               Confirm Password
             </label>
 
-            <input
-              type="password"
+            <PasswordInput
               value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(e.target.value)
-              }
-              className="
-              w-full
-              rounded-lg
-              border
-              p-3
-              outline-none
-              focus:border-black
-            "
-              required
+              onChange={setConfirmPassword}
+              placeholder="Confirm Password"
+            />
+
+            <PasswordMatchIndicator
+              visible={!!confirmPassword}
+              match={passwordsMatch}
             />
           </div>
 
@@ -214,17 +206,26 @@ export default function ChangePasswordPage() {
             type="submit"
             disabled={loading}
             className="
-            w-full
-            rounded-lg
-            bg-black
-            p-3
-            font-medium
-            text-white
-            transition
-            hover:opacity-90
-            disabled:opacity-50
-          "
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-2
+              rounded-lg
+              bg-black
+              p-3
+              font-medium
+              text-white
+              transition
+              hover:bg-slate-800
+              disabled:cursor-not-allowed
+              disabled:opacity-70
+            "
           >
+            {loading && (
+              <Loader2 size={18} className="animate-spin" />
+            )}
+
             {loading
               ? "Changing Password..."
               : "Change Password"}
