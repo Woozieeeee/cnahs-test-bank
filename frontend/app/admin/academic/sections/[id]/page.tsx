@@ -2,19 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+import { useParams } from "next/navigation";
+
 import { getSectionById } from "@/services/academic_service";
 
 import type { Section } from "@/types/section";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
+export default function SectionDetailsPage() {
+  const params = useParams();
 
-export default function SectionDetailsPage({
-  params,
-}: Props) {
+  const id = Number(params.id);
+
   const [section, setSection] = useState<Section | null>(
     null
   );
@@ -22,11 +20,11 @@ export default function SectionDetailsPage({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id) return;
+
     const fetchSection = async () => {
       try {
-        const data = await getSectionById(
-          Number(params.id)
-        );
+        const data = await getSectionById(id);
 
         setSection(data);
       } catch (error) {
@@ -37,11 +35,19 @@ export default function SectionDetailsPage({
     };
 
     fetchSection();
-  }, [params.id]);
+  }, [id]);
+
+  // =========================
+  // LOADING
+  // =========================
 
   if (loading) {
     return <div className="p-6">Loading section...</div>;
   }
+
+  // =========================
+  // NOT FOUND
+  // =========================
 
   if (!section) {
     return <div className="p-6">Section not found.</div>;
