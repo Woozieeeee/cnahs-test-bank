@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from "react";
-
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import { Input } from "@/components/ui/input";
-
 import { Button } from "@/components/ui/button";
-
+import PasswordInput from "@/components/common/passwordInput";
+import { Loader2 } from "lucide-react";
 import { createFaculty } from "@/services/admin_service";
 
 interface Props {
@@ -27,13 +25,9 @@ export default function AddFacultyModal({
   onSuccess,
 }: Props) {
   const [name, setName] = useState("");
-
   const [username, setUsername] = useState("");
-
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -80,18 +74,27 @@ export default function AddFacultyModal({
             onChange={(e) => setUsername(e.target.value)}
           />
 
-          <Input
-            type="password"
-            placeholder="Password"
+          <PasswordInput
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
+            placeholder="Password"
           />
 
           <Button
-            className="w-full"
+            className="
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-2
+            "
             onClick={handleSubmit}
             disabled={loading}
           >
+            {loading && (
+              <Loader2 size={18} className="animate-spin" />
+            )}
+
             {loading ? "Creating..." : "Create Faculty"}
           </Button>
         </div>

@@ -11,16 +11,17 @@ import {
 import AnimatedPage from "@/components/common/animatedPage";
 import { loginUser } from "@/services/auth_service";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/common/passwordInput";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const [login, setLogin] = useState("");
-
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const data = await loginUser({
@@ -104,6 +105,8 @@ export default function LoginPage() {
         message ||
           "The Student ID and Password is incorrect. Please try again."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,19 +127,30 @@ export default function LoginPage() {
             className="mb-4 w-full rounded border p-3"
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mb-4 w-full rounded border p-3"
-          />
+          <div className="mb-4">
+            <PasswordInput
+              value={password}
+              onChange={setPassword}
+              placeholder="Password"
+            />
+          </div>
 
           <button
             type="submit"
-            className="w-full rounded bg-black p-3 text-white"
+            disabled={loading}
+            className="
+              w-full
+              rounded
+              bg-black
+              p-3
+              text-white
+              transition
+              hover:bg-slate-800
+              disabled:cursor-not-allowed
+              disabled:opacity-70
+            "
           >
-            Login
+            {loading ? "Signing in..." : "Login"}
           </button>
 
           <div className="mt-6 text-center text-sm text-gray-600">

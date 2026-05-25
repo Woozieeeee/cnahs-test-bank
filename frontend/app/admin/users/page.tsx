@@ -10,7 +10,7 @@ import UsersManagementTable from "@/components/admin/users/usersManagementTable"
 import UsersPagination from "@/components/admin/users/usersPagination";
 import { useUserActions } from "@/hooks/admin/users/useUserActions";
 import AnimatedPage from "@/components/common/animatedPage";
-import AddFacultyModal from "@/lib/components/admin/users/addFacultyModal";
+import AddFacultyModal from "@/components/admin/users/addFacultyModal";
 
 interface User {
   id: number;

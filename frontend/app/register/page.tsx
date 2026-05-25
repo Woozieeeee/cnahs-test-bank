@@ -9,14 +9,14 @@ import {
 } from "@/lib/swal";
 import Link from "next/link";
 import AnimatedPage from "@/components/common/animatedPage";
+import PasswordInput from "@/components/common/passwordInput";
+import { Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
-
   const [studentId, setStudentId] = useState("");
-
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const studentIdRegex = /^\d{2}-\d{5}$/;
 
   const isStudentIdValid =
@@ -38,6 +38,8 @@ export default function RegisterPage() {
 
       return;
     }
+
+    setLoading(true);
 
     try {
       const payload = {
@@ -80,6 +82,8 @@ export default function RegisterPage() {
         message ||
           "Registration failed /n Something went wrong."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,20 +132,38 @@ export default function RegisterPage() {
               )}
           </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mb-4 w-full rounded border p-3"
-            required
-          />
+          <div className="mb-4">
+            <PasswordInput
+              value={password}
+              onChange={setPassword}
+              placeholder="Password"
+            />
+          </div>
 
           <button
             type="submit"
-            className="w-full rounded bg-black p-3 text-white"
+            disabled={loading}
+            className="
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-2
+              rounded
+              bg-black
+              p-3
+              text-white
+              transition
+              hover:bg-slate-800
+              disabled:cursor-not-allowed
+              disabled:opacity-70
+            "
           >
-            Register
+            {loading && (
+              <Loader2 size={18} className="animate-spin" />
+            )}
+
+            {loading ? "Registering..." : "Register"}
           </button>
           <div className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
