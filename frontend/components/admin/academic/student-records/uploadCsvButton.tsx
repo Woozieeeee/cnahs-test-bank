@@ -41,10 +41,14 @@ export default function UploadCsvButton({
     try {
       setLoading(true);
 
-      await uploadStudentRecords(file);
+      const response = await uploadStudentRecords(file);
 
       successToast(
-        "Student records uploaded successfully."
+        `
+        Inserted: ${response.inserted}
+        Updated: ${response.updated}
+        Skipped: ${response.skipped}
+        `
       );
 
       onSuccess();

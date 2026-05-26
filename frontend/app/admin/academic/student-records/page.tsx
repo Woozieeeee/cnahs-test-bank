@@ -5,6 +5,7 @@ import { getStudentRecords } from "@/services/academic_service";
 import StudentRecordsHeader from "@/components/admin/academic/student-records/studentRecordsHeader";
 import StudentRecordsTable from "@/components/admin/academic/student-records/studentRecordsTable";
 import UploadCsvButton from "@/components/admin/academic/student-records/uploadCsvButton";
+import DownloadTemplateButton from "@/components/admin/academic/student-records/downloadTemplateButton";
 
 interface StudentRecord {
   id: number;
@@ -99,11 +100,15 @@ export default function StudentRecordsPage() {
           "
         />
 
-        <UploadCsvButton
-          onSuccess={() => {
-            window.location.reload();
-          }}
-        />
+        <div className="flex items-center gap-3">
+          <DownloadTemplateButton />
+
+          <UploadCsvButton
+            onSuccess={() => {
+              window.location.reload();
+            }}
+          />
+        </div>
       </div>
 
       {/* TABLE */}

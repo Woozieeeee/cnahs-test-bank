@@ -29,10 +29,12 @@ export const uploadStudentRecords = async (req: Request, res: Response) => {
       })
 
       .on("end", async () => {
-        await uploadStudentRecordsService(results);
+        const summary = await uploadStudentRecordsService(results);
 
         return res.json({
           message: "Student records uploaded successfully",
+
+          ...summary,
         });
       });
   } catch (error) {

@@ -1,3 +1,5 @@
+import { ACADEMIC_PROGRAMS } from "../../../lib/constants/activity_programs";
+
 import prisma from "../../../lib/prisma";
 
 interface StudentRecordData {
@@ -11,22 +13,98 @@ interface StudentRecordData {
 export const uploadStudentRecordsService = async (
   records: StudentRecordData[],
 ) => {
+  // =========================
+  // VALID PROGRAMS
+  // =========================
+
+  const allowedPrograms = ["BSN"];
+
+  // =========================
+  // VALIDATION REGEX
+  // =========================
+
+  const studentIdRegex = /^\d{2}-\d{5}$/;
+
+  const fullNameRegex = /^[A-Za-z\s.-]+$/;
+
+  // =========================
+  // TRACK RESULTS
+  // =========================
+
+  let inserted = 0;
+
+  let updated = 0;
+
+  let skipped = 0;
+
+  const errors: string[] = [];
+
+  // =========================
+  // PROCESS RECORDS
+  // =========================
+
   for (const record of records) {
+    const studentId = record.studentId?.trim();
+
+    const fullName = record.fullName?.trim();
+
+    const program = record.program?.trim() || "BSN";
+
     // =========================
-    // SKIP EMPTY ROWS
+    // EMPTY VALUES
     // =========================
 
-    if (!record.studentId || !record.fullName) {
+    if (!studentId || !fullName) {
+      skipped++;
+
+      errors.push(`Missing required fields`);
+
       continue;
     }
 
     // =========================
-    // CHECK EXISTING RECORD
+    // INVALID STUDENT ID
+    // =========================
+
+    if (!studentIdRegex.test(studentId)) {
+      skipped++;
+
+      errors.push(`Invalid student ID: ${studentId}`);
+
+      continue;
+    }
+
+    // =========================
+    // INVALID NAME
+    // =========================
+
+    if (!fullNameRegex.test(fullName)) {
+      skipped++;
+
+      errors.push(`Invalid name: ${fullName}`);
+
+      continue;
+    }
+
+    // =========================
+    // INVALID PROGRAM
+    // =========================
+
+    if (!allowedPrograms.includes(program)) {
+      skipped++;
+
+      errors.push(`Invalid program: ${program}`);
+
+      continue;
+    }
+
+    // =========================
+    // CHECK EXISTING
     // =========================
 
     const existingRecord = await prisma.studentRecord.findUnique({
       where: {
-        studentId: record.studentId,
+        studentId,
       },
     });
 
@@ -37,15 +115,17 @@ export const uploadStudentRecordsService = async (
     if (existingRecord) {
       await prisma.studentRecord.update({
         where: {
-          studentId: record.studentId,
+          studentId,
         },
 
         data: {
-          fullName: record.fullName,
+          fullName,
 
-          program: record.program || "BSN",
+          program,
         },
       });
+
+      updated++;
 
       continue;
     }
@@ -56,12 +136,28 @@ export const uploadStudentRecordsService = async (
 
     await prisma.studentRecord.create({
       data: {
-        studentId: record.studentId,
+        studentId,
 
-        fullName: record.fullName,
+        fullName,
 
-        program: record.program || "BSN",
+        program,
       },
     });
+
+    inserted++;
   }
+
+  // =========================
+  // RETURN SUMMARY
+  // =========================
+
+  return {
+    inserted,
+
+    updated,
+
+    skipped,
+
+    errors,
+  };
 };
