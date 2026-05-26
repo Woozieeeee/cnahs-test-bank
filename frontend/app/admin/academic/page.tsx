@@ -1,54 +1,142 @@
 "use client";
 
-import { useState } from "react";
-import MotionPage from "@/components/motion/motionPage";
-import AcademicTabs from "@/components/admin/academic/academicTabs";
-import SectionsDashboard from "@/components/admin/academic/sections/sectionsDashboard";
-import SubjectsDashboard from "@/components/admin/academic/subjects/subjectsDashboard";
-import AssignmentsDashboard from "@/components/admin/academic/assignments/assignmentsDashboard";
+import Link from "next/link";
+
+import MotionCard from "@/components/motion/motionCard";
+
+import {
+  BookOpen,
+  Users,
+  FolderKanban,
+} from "lucide-react";
+
+const academicCards = [
+  {
+    title: "Sections",
+
+    description: "Manage academic sections and classrooms.",
+
+    href: "/admin/academic/sections",
+
+    icon: Users,
+  },
+
+  {
+    title: "Subjects",
+
+    description: "Manage subjects and faculty assignments.",
+
+    href: "/admin/academic/subjects",
+
+    icon: BookOpen,
+  },
+
+  {
+    title: "Student Records",
+
+    description:
+      "Manage official institutional student data.",
+
+    href: "/admin/academic/student-records",
+
+    icon: FolderKanban,
+  },
+];
 
 export default function AcademicPage() {
-  const [activeTab, setActiveTab] = useState("SECTIONS");
-
   return (
-    <MotionPage>
-      <div className="space-y-6">
-        {/* HEADER */}
+    <div className="space-y-6 p-6">
+      {/* HEADER */}
 
-        <div>
-          <h1
-            className="
-              text-3xl
-              font-bold
-              text-slate-900
-            "
-          >
-            Academic Management
-          </h1>
+      <div>
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-slate-900
+          "
+        >
+          Academic Management
+        </h1>
 
-          <p className="mt-2 text-slate-500">
-            Manage sections, subjects, and academic
-            assignments.
-          </p>
-        </div>
-
-        {/* TABS */}
-
-        <AcademicTabs
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-
-        {/* TAB CONTENT */}
-
-        {activeTab === "SECTIONS" && <SectionsDashboard />}
-
-        {activeTab === "SUBJECTS" && <SubjectsDashboard />}
-
-        {activeTab === "ASSIGNMENTS" && (
-          <AssignmentsDashboard />
-        )}
+        <p className="mt-2 text-slate-500">
+          Manage academic structure, sections, subjects, and
+          institutional records.
+        </p>
       </div>
-    </MotionPage>
+
+      {/* GRID */}
+
+      <div
+        className="
+          grid
+          gap-6
+          md:grid-cols-2
+          xl:grid-cols-3
+        "
+      >
+        {academicCards.map((card) => {
+          const Icon = card.icon;
+
+          return (
+            <MotionCard key={card.title}>
+              <Link
+                href={card.href}
+                className="
+                  block
+                  rounded-2xl
+                  border
+                  border-slate-200
+                  bg-white
+                  p-6
+                  transition
+                  hover:border-slate-300
+                  hover:shadow-md
+                "
+              >
+                <div
+                  className="
+                    flex
+                    h-12
+                    w-12
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-slate-100
+                  "
+                >
+                  <Icon
+                    size={22}
+                    className="text-slate-700"
+                  />
+                </div>
+
+                <h2
+                  className="
+                    mt-5
+                    text-xl
+                    font-semibold
+                    text-slate-900
+                  "
+                >
+                  {card.title}
+                </h2>
+
+                <p
+                  className="
+                    mt-2
+                    text-sm
+                    leading-relaxed
+                    text-slate-500
+                  "
+                >
+                  {card.description}
+                </p>
+              </Link>
+            </MotionCard>
+          );
+        })}
+      </div>
+    </div>
   );
 }
