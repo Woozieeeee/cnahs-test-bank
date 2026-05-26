@@ -21,7 +21,7 @@ import { assignSection } from "../controllers/admin/academic/student_records/ass
 
 const router = express.Router();
 
-// router.use(authMiddleware, authorizeRoles("ADMIN"));
+router.use(authMiddleware, authorizeRoles("ADMIN"));
 router.use(adminActivityLogger);
 
 // DASHBOARD

@@ -32,6 +32,9 @@ export default function UsersPage() {
   const [openFacultyModal, setOpenFacultyModal] =
     useState(false);
   const [roleFilter, setRoleFilter] = useState("ALL");
+  const [selectedUsers, setSelectedUsers] = useState<
+    number[]
+  >([]);
 
   // =========================
   // USER ACTIONS HOOK
@@ -141,6 +144,8 @@ export default function UsersPage() {
           setSearch={setSearch}
           roleFilter={roleFilter}
           setRoleFilter={setRoleFilter}
+          selectedUsers={selectedUsers}
+          setSelectedUsers={setSelectedUsers}
           onOpenFacultyModal={() =>
             setOpenFacultyModal(true)
           }

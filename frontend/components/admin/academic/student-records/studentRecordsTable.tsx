@@ -1,3 +1,5 @@
+import MotionButton from "@/components/motion/motionButton";
+
 interface StudentRecord {
   id: number;
 
@@ -14,10 +16,12 @@ interface StudentRecord {
 
 interface Props {
   records: StudentRecord[];
+  onEdit: (record: StudentRecord) => void;
 }
 
 export default function StudentRecordsTable({
   records,
+  onEdit,
 }: Props) {
   return (
     <div
@@ -46,6 +50,10 @@ export default function StudentRecordsTable({
 
             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
               Section
+            </th>
+
+            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+              Actions
             </th>
           </tr>
         </thead>
@@ -90,6 +98,26 @@ export default function StudentRecordsTable({
 
               <td className="px-6 py-4 text-sm text-slate-700">
                 {record.section?.name || "Unassigned"}
+              </td>
+
+              <td className="px-6 py-4">
+                <MotionButton
+                  onClick={() => onEdit(record)}
+                  className="
+                  rounded-lg
+                  border
+                  border-slate-200
+                  px-3
+                  py-2
+                  text-sm
+                  font-medium
+                  text-slate-700
+                  transition
+                  hover:bg-slate-50
+                "
+                >
+                  Edit
+                </MotionButton>
               </td>
             </tr>
           ))}

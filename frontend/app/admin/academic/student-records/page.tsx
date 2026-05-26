@@ -9,6 +9,7 @@ import DownloadTemplateButton from "@/components/admin/academic/student-records/
 import Pagination from "@/components/common/pagination";
 import StudentRecordsActions from "@/components/admin/academic/student-records/studentRecordsActions";
 import AddStudentRecordModal from "@/components/admin/academic/student-records/addStudentRecordModal";
+import EditStudentRecordModal from "@/components/admin/academic/student-records/editStudentRecordModal";
 
 interface StudentRecord {
   id: number;
@@ -29,6 +30,9 @@ export default function StudentRecordsPage() {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedRecord, setSelectedRecord] =
+    useState<StudentRecord | null>(null);
 
   // =========================
   // FETCH RECORDS
@@ -134,11 +138,27 @@ export default function StudentRecordsPage() {
 
       {/* TABLE */}
 
-      <StudentRecordsTable records={paginatedRecords} />
+      <StudentRecordsTable
+        records={paginatedRecords}
+        onEdit={(record) => {
+          setSelectedRecord(record);
+
+          setOpenEditModal(true);
+        }}
+      />
 
       <AddStudentRecordModal
         open={openAddModal}
         onOpenChange={setOpenAddModal}
+        onSuccess={() => {
+          window.location.reload();
+        }}
+      />
+
+      <EditStudentRecordModal
+        open={openEditModal}
+        onOpenChange={setOpenEditModal}
+        record={selectedRecord}
         onSuccess={() => {
           window.location.reload();
         }}

@@ -6,6 +6,7 @@ import UsersSearch from "./usersSearch";
 import UsersRoleFilter from "./usersRoleFilter";
 import UsersPagination from "./usersPagination";
 import MotionButton from "@/components/motion/motionButton";
+import UsersBulkActions from "./usersBulkActions";
 
 interface User {
   id: number;
@@ -31,6 +32,10 @@ interface Props {
   setSearch: (value: string) => void;
   setRoleFilter: (value: string) => void;
   onOpenFacultyModal: () => void;
+  selectedUsers: number[];
+  setSelectedUsers: React.Dispatch<
+    React.SetStateAction<number[]>
+  >;
 }
 
 export default function UsersManagementTable({
@@ -47,6 +52,8 @@ export default function UsersManagementTable({
   onApprove,
   onReject,
   setRoleFilter,
+  selectedUsers,
+  setSelectedUsers,
 }: Props) {
   return (
     <div
@@ -128,6 +135,21 @@ export default function UsersManagementTable({
         />
       </div>
 
+      {/* BULK ACTIONS */}
+
+      <div className="mt-6">
+        <UsersBulkActions
+          selectedCount={selectedUsers.length}
+          onClear={() => setSelectedUsers([])}
+          onApprove={() => {
+            console.log("Approve selected:", selectedUsers);
+          }}
+          onReject={() => {
+            console.log("Reject selected:", selectedUsers);
+          }}
+        />
+      </div>
+
       {/* TABLE */}
 
       <div className="mt-6">
@@ -135,6 +157,8 @@ export default function UsersManagementTable({
           users={users}
           onApprove={onApprove}
           onReject={onReject}
+          selectedUsers={selectedUsers}
+          setSelectedUsers={setSelectedUsers}
         />
       </div>
 
