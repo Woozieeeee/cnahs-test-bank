@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 
 import { getSections } from "@/services/academic_service";
 
+import Link from "next/link";
+
+import { ArrowLeft } from "lucide-react";
+
 import SectionCard from "@/components/admin/academic/sections/sectionCard";
 
 import CreateSectionModal from "@/components/admin/academic/sections/createSectionModal";
@@ -59,20 +63,38 @@ export default function SectionsPage() {
           justify-between
         "
       >
-        <div>
-          <h2
+        <div className="space-y-4">
+          <Link
+            href="/admin/academic"
             className="
-              text-xl
-              font-semibold
-              text-slate-900
-            "
+      inline-flex
+      items-center
+      gap-2
+      text-sm
+      text-slate-500
+      transition
+      hover:text-slate-900
+    "
           >
-            Sections
-          </h2>
+            <ArrowLeft size={16} />
+            Back to Academic Management
+          </Link>
 
-          <p className="mt-1 text-sm text-slate-500">
-            Manage academic sections and classrooms.
-          </p>
+          <div>
+            <h1
+              className="
+        text-3xl
+        font-bold
+        text-slate-900
+      "
+            >
+              Sections
+            </h1>
+
+            <p className="mt-2 text-slate-500">
+              Manage academic sections and classrooms.
+            </p>
+          </div>
         </div>
 
         <MotionButton

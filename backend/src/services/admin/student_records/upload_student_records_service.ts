@@ -11,11 +11,57 @@ interface StudentRecordData {
 export const uploadStudentRecordsService = async (
   records: StudentRecordData[],
 ) => {
-  const createdRecords = await prisma.studentRecord.createMany({
-    data: records,
+  for (const record of records) {
+    // =========================
+    // SKIP EMPTY ROWS
+    // =========================
 
-    skipDuplicates: true,
-  });
+    if (!record.studentId || !record.fullName) {
+      continue;
+    }
 
-  return createdRecords;
+    // =========================
+    // CHECK EXISTING RECORD
+    // =========================
+
+    const existingRecord = await prisma.studentRecord.findUnique({
+      where: {
+        studentId: record.studentId,
+      },
+    });
+
+    // =========================
+    // UPDATE EXISTING
+    // =========================
+
+    if (existingRecord) {
+      await prisma.studentRecord.update({
+        where: {
+          studentId: record.studentId,
+        },
+
+        data: {
+          fullName: record.fullName,
+
+          program: record.program || "BSN",
+        },
+      });
+
+      continue;
+    }
+
+    // =========================
+    // CREATE NEW RECORD
+    // =========================
+
+    await prisma.studentRecord.create({
+      data: {
+        studentId: record.studentId,
+
+        fullName: record.fullName,
+
+        program: record.program || "BSN",
+      },
+    });
+  }
 };

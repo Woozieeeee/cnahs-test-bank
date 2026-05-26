@@ -63,3 +63,31 @@ export const getStudentRecords = async () => {
 
   return response.data;
 };
+
+// =========================
+// UPLOAD STUDENT RECORDS
+// =========================
+
+export const uploadStudentRecords = async (file: File) => {
+  const formData = new FormData();
+
+  formData.append(
+    "file",
+
+    file
+  );
+
+  const response = await api.post(
+    "/admin/academic/student-records/upload",
+
+    formData,
+
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
+};
