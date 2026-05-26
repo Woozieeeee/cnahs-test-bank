@@ -49,15 +49,17 @@ model StudentRecord {
   user       User?
 }
 model Section {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  yearLevel   Int
-  program     String
-  createdAt   DateTime @default(now())
-  users       User[]
+  id            Int      @id @default(autoincrement())
+  name          String   @unique
+  sectionCode   String
+  yearLevel     Int
+  program       String
+  createdAt     DateTime @default(now())
+  users         User[]
   studentRecords StudentRecord[]
-  exams       Exam[]
+  exams         Exam[]
   sectionSubjects SectionSubject[]
+  @@unique([program, yearLevel, sectionCode])
 }
 
 model Subject {
@@ -108,8 +110,6 @@ model ActivityLog {
   metadata    Json?
   createdAt   DateTime @default(now())
 }
-
-
 
 enum Role {
   ADMIN

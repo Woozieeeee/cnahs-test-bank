@@ -7,6 +7,10 @@ interface Props {
 }
 
 export default function SectionsGrid({ sections }: Props) {
+  // =========================
+  // EMPTY STATE
+  // =========================
+
   if (sections.length === 0) {
     return (
       <div
@@ -14,17 +18,32 @@ export default function SectionsGrid({ sections }: Props) {
           rounded-2xl
           border
           border-dashed
-          border-slate-200
+          border-slate-300
           bg-white
           p-10
           text-center
-          text-slate-500
         "
       >
-        No sections found.
+        <h3
+          className="
+            text-lg
+            font-semibold
+            text-slate-900
+          "
+        >
+          No sections created
+        </h3>
+
+        <p className="mt-2 text-sm text-slate-500">
+          Create your first academic section to get started.
+        </p>
       </div>
     );
   }
+
+  // =========================
+  // GRID
+  // =========================
 
   return (
     <div

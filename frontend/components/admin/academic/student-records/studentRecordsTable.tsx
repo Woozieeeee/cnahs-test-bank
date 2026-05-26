@@ -51,6 +51,23 @@ export default function StudentRecordsTable({
         </thead>
 
         <tbody>
+          {records.length === 0 && (
+            <tr>
+              <td
+                colSpan={4}
+                className="
+                  px-6
+                  py-10
+                  text-center
+                  align-middle
+                  text-sm
+                  text-slate-500
+                "
+              >
+                No student records found.
+              </td>
+            </tr>
+          )}
           {records.map((record) => (
             <tr
               key={record.id}

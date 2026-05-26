@@ -6,11 +6,14 @@ import SectionsGrid from "./sectionsGrid";
 import { getSections } from "@/services/academic_service";
 import CreateSectionModal from "./createSectionModal";
 import type { Section } from "@/types/section";
+import Pagination from "@/components/common/pagination";
 
 export default function SectionsDashboard() {
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
 
   useEffect(() => {
     const fetchSections = async () => {
@@ -27,6 +30,16 @@ export default function SectionsDashboard() {
 
     fetchSections();
   }, []);
+
+  const totalPages = Math.ceil(
+    sections.length / ITEMS_PER_PAGE
+  );
+
+  const paginatedSections = sections.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div className="space-y-6">
@@ -98,7 +111,15 @@ export default function SectionsDashboard() {
           Loading sections...
         </div>
       ) : (
-        <SectionsGrid sections={sections} />
+        <>
+          <SectionsGrid sections={paginatedSections} />
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
     </div>
   );

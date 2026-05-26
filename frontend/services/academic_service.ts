@@ -13,10 +13,8 @@ export const getSections = async () => {
 // CREATE SECTION
 
 export const createSection = async (data: {
-  name: string;
-
+  sectionCode: string;
   yearLevel: number;
-
   program: string;
 }) => {
   const response = await api.post(

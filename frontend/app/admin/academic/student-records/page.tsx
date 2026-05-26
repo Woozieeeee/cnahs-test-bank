@@ -6,6 +6,8 @@ import StudentRecordsHeader from "@/components/admin/academic/student-records/st
 import StudentRecordsTable from "@/components/admin/academic/student-records/studentRecordsTable";
 import UploadCsvButton from "@/components/admin/academic/student-records/uploadCsvButton";
 import DownloadTemplateButton from "@/components/admin/academic/student-records/downloadTemplateButton";
+import Pagination from "@/components/common/pagination";
+import StudentRecordsActions from "@/components/admin/academic/student-records/studentRecordsActions";
 
 interface StudentRecord {
   id: number;
@@ -23,6 +25,8 @@ export default function StudentRecordsPage() {
   );
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
 
   // =========================
   // FETCH RECORDS
@@ -53,6 +57,20 @@ export default function StudentRecordsPage() {
       .join(" ")
       .toLowerCase()
       .includes(search.toLowerCase())
+  );
+
+  // =========================
+  // PAGINATION
+  // =========================
+
+  const totalPages = Math.ceil(
+    filteredRecords.length / ITEMS_PER_PAGE
+  );
+
+  const paginatedRecords = filteredRecords.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+
+    currentPage * ITEMS_PER_PAGE
   );
 
   // =========================
@@ -101,11 +119,12 @@ export default function StudentRecordsPage() {
         />
 
         <div className="flex items-center gap-3">
-          <DownloadTemplateButton />
-
-          <UploadCsvButton
-            onSuccess={() => {
+          <StudentRecordsActions
+            onUploadSuccess={() => {
               window.location.reload();
+            }}
+            onAddStudent={() => {
+              console.log("Open Add Student Modal");
             }}
           />
         </div>
@@ -113,7 +132,13 @@ export default function StudentRecordsPage() {
 
       {/* TABLE */}
 
-      <StudentRecordsTable records={filteredRecords} />
+      <StudentRecordsTable records={paginatedRecords} />
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

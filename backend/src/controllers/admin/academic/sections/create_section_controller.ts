@@ -1,51 +1,65 @@
-import { Request, Response } from "express";
+import prisma from "../../../../lib/prisma";
 
-import { createSectionService } from "../../../../services/admin/academic/sections/create_section_service";
+interface CreateSectionData {
+  sectionCode: string;
 
-import { logActivity } from "../../../../utils/log_activity";
+  yearLevel: number;
 
-export const createSection = async (
-  req: Request,
+  program: string;
+}
 
-  res: Response,
-) => {
-  try {
-    const {
-      name,
+export const createSectionService = async ({
+  sectionCode,
+
+  yearLevel,
+
+  program,
+}: CreateSectionData) => {
+  // =========================
+  // CLEAN INPUTS
+  // =========================
+
+  const normalizedCode = sectionCode.trim().toUpperCase();
+
+  // =========================
+  // GENERATE NAME
+  // =========================
+
+  const name = `${program} ${yearLevel}${normalizedCode}`;
+
+  // =========================
+  // CHECK DUPLICATE
+  // =========================
+
+  const existingSection = await prisma.section.findFirst({
+    where: {
+      program,
 
       yearLevel,
 
-      program,
-    } = req.body;
+      sectionCode: normalizedCode,
+    },
+  });
 
-    const section = await createSectionService({
-      name,
-
-      yearLevel,
-
-      program,
-    });
-
-    await logActivity({
-      action: "Created section",
-
-      categories: ["ACADEMIC", "SECTIONS"],
-
-      severity: "SUCCESS",
-
-      description: `Created ${section.name} section.`,
-
-      performedBy: "Admin",
-    });
-
-    return res.json({
-      message: "Section created successfully.",
-
-      section,
-    });
-  } catch (error: any) {
-    return res.status(400).json({
-      message: error.message,
-    });
+  if (existingSection) {
+    throw new Error("Section already exists");
   }
+
+  // =========================
+  // CREATE SECTION
+  // =========================
+
+  const section = await prisma.section.create({
+    data: {
+      name,
+
+      sectionCode: normalizedCode,
+
+      yearLevel,
+
+      program,
+    },
+  });
+
+  return section;
 };

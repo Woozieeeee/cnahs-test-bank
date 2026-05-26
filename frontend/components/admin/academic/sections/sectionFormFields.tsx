@@ -1,7 +1,7 @@
 interface Props {
-  name: string;
+  sectionCode: string;
 
-  setName: (value: string) => void;
+  setSectionCode: (value: string) => void;
 
   yearLevel: number;
 
@@ -13,9 +13,9 @@ interface Props {
 }
 
 export default function SectionFormFields({
-  name,
+  sectionCode,
 
-  setName,
+  setSectionCode,
 
   yearLevel,
 
@@ -25,9 +25,11 @@ export default function SectionFormFields({
 
   setProgram,
 }: Props) {
+  const generatedName = `${program} ${yearLevel}${sectionCode}`;
+
   return (
     <div className="mt-6 space-y-4">
-      {/* SECTION NAME */}
+      {/* PROGRAM */}
 
       <div>
         <label
@@ -37,14 +39,12 @@ export default function SectionFormFields({
             text-slate-700
           "
         >
-          Section Name
+          Program
         </label>
 
-        <input
-          type="text"
-          placeholder="Nursing 4A"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+        <select
+          value={program}
+          onChange={(e) => setProgram(e.target.value)}
           className="
             mt-2
             w-full
@@ -53,11 +53,10 @@ export default function SectionFormFields({
             border-slate-200
             px-4
             py-3
-            outline-none
-            transition
-            focus:border-slate-400
           "
-        />
+        >
+          <option value="BSN">BSN</option>
+        </select>
       </div>
 
       {/* YEAR LEVEL */}
@@ -98,7 +97,7 @@ export default function SectionFormFields({
         </select>
       </div>
 
-      {/* PROGRAM */}
+      {/* SECTION CODE */}
 
       <div>
         <label
@@ -108,13 +107,17 @@ export default function SectionFormFields({
             text-slate-700
           "
         >
-          Program
+          Section Code
         </label>
 
         <input
           type="text"
-          value={program}
-          onChange={(e) => setProgram(e.target.value)}
+          placeholder="A"
+          value={sectionCode}
+          onChange={(e) =>
+            setSectionCode(e.target.value.toUpperCase())
+          }
+          maxLength={2}
           className="
             mt-2
             w-full
@@ -123,11 +126,40 @@ export default function SectionFormFields({
             border-slate-200
             px-4
             py-3
+            uppercase
             outline-none
             transition
             focus:border-slate-400
           "
         />
+      </div>
+
+      {/* GENERATED NAME */}
+
+      <div
+        className="
+          rounded-xl
+          border
+          border-dashed
+          border-slate-300
+          bg-slate-50
+          p-4
+        "
+      >
+        <p className="text-sm text-slate-500">
+          Generated Section Name
+        </p>
+
+        <h3
+          className="
+            mt-1
+            text-lg
+            font-semibold
+            text-slate-900
+          "
+        >
+          {generatedName}
+        </h3>
       </div>
     </div>
   );

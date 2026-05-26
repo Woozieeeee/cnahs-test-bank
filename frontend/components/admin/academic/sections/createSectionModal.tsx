@@ -25,7 +25,7 @@ export default function CreateSectionModal({
 
   onSuccess,
 }: Props) {
-  const [name, setName] = useState("");
+  const [sectionCode, setSectionCode] = useState("");
 
   const [yearLevel, setYearLevel] = useState(1);
 
@@ -35,12 +35,22 @@ export default function CreateSectionModal({
 
   if (!open) return null;
 
+  // =========================
+  // HANDLE SUBMIT
+  // =========================
+
   const handleSubmit = async () => {
     try {
+      if (!sectionCode) {
+        errorToast("Section code is required.");
+
+        return;
+      }
+
       setLoading(true);
 
       await createSection({
-        name,
+        sectionCode,
 
         yearLevel,
 
@@ -53,7 +63,9 @@ export default function CreateSectionModal({
 
       onOpenChange(false);
 
-      setName("");
+      // RESET FORM
+
+      setSectionCode("");
 
       setYearLevel(1);
 
@@ -93,7 +105,13 @@ export default function CreateSectionModal({
       >
         {/* HEADER */}
 
-        <div className="flex items-start justify-between">
+        <div
+          className="
+            flex
+            items-start
+            justify-between
+          "
+        >
           <div>
             <h2
               className="
@@ -105,8 +123,14 @@ export default function CreateSectionModal({
               Create Section
             </h2>
 
-            <p className="mt-1 text-sm text-slate-500">
-              Create a new academic section.
+            <p
+              className="
+                mt-1
+                text-sm
+                text-slate-500
+              "
+            >
+              Create a structured academic section.
             </p>
           </div>
 
@@ -128,8 +152,8 @@ export default function CreateSectionModal({
         {/* FORM */}
 
         <SectionFormFields
-          name={name}
-          setName={setName}
+          sectionCode={sectionCode}
+          setSectionCode={setSectionCode}
           yearLevel={yearLevel}
           setYearLevel={setYearLevel}
           program={program}
