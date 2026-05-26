@@ -13,7 +13,7 @@ import { getActivityLogs } from "../controllers/admin/activity/get_activity_log_
 import { authMiddleware } from "../middleware/auth_middleware";
 import { authorizeRoles } from "../middleware/role_middleware";
 import { adminActivityLogger } from "../middleware/admin_activity_logger_middleware";
-import { createSection } from "../controllers/admin/academic/sections/create_section_controller";
+import { createSectionService } from "../controllers/admin/academic/sections/create_section_controller";
 import { getSections } from "../controllers/admin/academic/sections/get_sections_controller";
 import { getSectionById } from "../controllers/admin/academic/sections/get_section_by_id_controller";
 import { getStudentRecords } from "../controllers/admin/academic/sections/get_student_records_controller";
@@ -46,7 +46,7 @@ router.post("/faculty", createFaculty);
 
 // Academic Management
 router.get("/academic/sections", getSections);
-router.post("/academic/sections", createSection);
+router.post("/academic/sections", createSectionService);
 router.get("/academic/sections/:id", getSectionById);
 router.get("/academic/student-records", getStudentRecords);
 

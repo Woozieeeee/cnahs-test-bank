@@ -1,4 +1,4 @@
-import { ACADEMIC_PROGRAMS } from "../../../lib/constants/activity_programs";
+import { ACADEMIC_PROGRAMS } from "../../../lib/constants/academic_programs";
 
 import prisma from "../../../lib/prisma";
 

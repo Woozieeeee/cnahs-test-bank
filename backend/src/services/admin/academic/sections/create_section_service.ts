@@ -1,7 +1,7 @@
 import prisma from "../../../../lib/prisma";
 
 interface CreateSectionData {
-  name: string;
+  sectionCode: string;
 
   yearLevel: number;
 
@@ -9,15 +9,35 @@ interface CreateSectionData {
 }
 
 export const createSectionService = async ({
-  name,
+  sectionCode,
 
   yearLevel,
 
   program,
 }: CreateSectionData) => {
-  const existingSection = await prisma.section.findUnique({
+  // =========================
+  // NORMALIZE SECTION CODE
+  // =========================
+
+  const normalizedCode = sectionCode.trim().toUpperCase();
+
+  // =========================
+  // GENERATE SECTION NAME
+  // =========================
+
+  const name = `${program} ${yearLevel}${normalizedCode}`;
+
+  // =========================
+  // CHECK DUPLICATE
+  // =========================
+
+  const existingSection = await prisma.section.findFirst({
     where: {
-      name,
+      program,
+
+      yearLevel,
+
+      sectionCode: normalizedCode,
     },
   });
 
@@ -25,9 +45,15 @@ export const createSectionService = async ({
     throw new Error("Section already exists.");
   }
 
+  // =========================
+  // CREATE SECTION
+  // =========================
+
   return prisma.section.create({
     data: {
       name,
+
+      sectionCode: normalizedCode,
 
       yearLevel,
 

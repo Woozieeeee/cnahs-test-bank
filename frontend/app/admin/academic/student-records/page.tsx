@@ -8,6 +8,7 @@ import UploadCsvButton from "@/components/admin/academic/student-records/uploadC
 import DownloadTemplateButton from "@/components/admin/academic/student-records/downloadTemplateButton";
 import Pagination from "@/components/common/pagination";
 import StudentRecordsActions from "@/components/admin/academic/student-records/studentRecordsActions";
+import AddStudentRecordModal from "@/components/admin/academic/student-records/addStudentRecordModal";
 
 interface StudentRecord {
   id: number;
@@ -25,6 +26,7 @@ export default function StudentRecordsPage() {
   );
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
 
@@ -124,7 +126,7 @@ export default function StudentRecordsPage() {
               window.location.reload();
             }}
             onAddStudent={() => {
-              console.log("Open Add Student Modal");
+              setOpenAddModal(true);
             }}
           />
         </div>
@@ -133,6 +135,14 @@ export default function StudentRecordsPage() {
       {/* TABLE */}
 
       <StudentRecordsTable records={paginatedRecords} />
+
+      <AddStudentRecordModal
+        open={openAddModal}
+        onOpenChange={setOpenAddModal}
+        onSuccess={() => {
+          window.location.reload();
+        }}
+      />
 
       <Pagination
         currentPage={currentPage}
