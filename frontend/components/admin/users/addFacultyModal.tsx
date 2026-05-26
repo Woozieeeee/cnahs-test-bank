@@ -17,9 +17,9 @@ import { Loader2 } from "lucide-react";
 
 import PasswordInput from "@/components/common/passwordInput";
 
-import PasswordRules from "@/components/auth/passwordRules";
+import PasswordRules from "@/components/auth/shared/passwordRules";
 
-import PasswordMatchIndicator from "@/components/auth/passwordMatchIndicator";
+import PasswordMatchIndicator from "@/components/auth/shared/passwordMatchIndicator";
 
 import { errorToast, successToast } from "@/lib/swal";
 

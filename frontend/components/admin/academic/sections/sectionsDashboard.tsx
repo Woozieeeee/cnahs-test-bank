@@ -75,7 +75,7 @@ export default function SectionsDashboard() {
       </div>
       <CreateSectionModal
         open={openModal}
-        onClose={() => setOpenModal(false)}
+        onOpenChange={setOpenModal}
         onSuccess={async () => {
           const data = await getSections();
 

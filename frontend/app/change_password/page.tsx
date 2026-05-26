@@ -6,8 +6,8 @@ import { successToast, errorToast } from "@/lib/swal";
 import { changePassword } from "@/services/auth_service";
 import AnimatedPage from "@/components/common/animatedPage";
 import PasswordInput from "@/components/common/passwordInput";
-import PasswordRules from "@/components/auth/passwordRules";
-import PasswordMatchIndicator from "@/components/auth/passwordMatchIndicator";
+import PasswordRules from "@/components/auth/shared/passwordRules";
+import PasswordMatchIndicator from "@/components/auth/shared/passwordMatchIndicator";
 import { Loader2 } from "lucide-react";
 
 export default function ChangePasswordPage() {

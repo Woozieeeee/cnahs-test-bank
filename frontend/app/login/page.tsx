@@ -1,183 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import {
-  successToast,
-  errorToast,
-  infoToast,
-  warningToast,
-} from "@/lib/swal";
 import AnimatedPage from "@/components/common/animatedPage";
-import { loginUser } from "@/services/auth_service";
-import { useRouter } from "next/navigation";
-import PasswordInput from "@/components/common/passwordInput";
-import { Loader2 } from "lucide-react";
+
+import LoginForm from "@/components/auth/login/loginForm";
+
+import useGuestGuard from "@/hooks/useGuestGuard";
 
 export default function LoginPage() {
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const { loading } = useGuestGuard();
 
-    try {
-      const data = await loginUser({
-        login,
-        password,
-      });
-
-      // =========================
-      // FIRST LOGIN
-      // =========================
-
-      if (data.user.isFirstLogin) {
-        successToast(
-          "Your account has been approved successfully."
-        );
-      } else {
-        // =========================
-        // NORMAL LOGIN
-        // =========================
-
-        successToast(`Welcome back, ${data.user.name}!`);
-      }
-      // =========================
-      // ROLE REDIRECT
-      // =========================
-
-      if (data.user.role === "ADMIN") {
-        router.push("/admin/dashboard");
-      }
-
-      if (data.user.role === "FACULTY") {
-        if (data.user.mustChangePassword) {
-          router.push("/change-password");
-
-          return;
-        }
-
-        router.push("/faculty/dashboard");
-      }
-
-      if (data.user.role === "STUDENT") {
-        router.push("/student/dashboard");
-      }
-    } catch (error: any) {
-      const message = error.response?.data?.message;
-
-      // =========================
-      // PENDING ACCOUNT
-      // =========================
-
-      if (message === "Account pending approval") {
-        infoToast(
-          "Your account is waiting for admin approval."
-        );
-
-        return;
-      }
-
-      // =========================
-      // REJECTED ACCOUNT
-      // =========================
-
-      if (message === "Account rejected") {
-        errorToast("Please contact the administrator.");
-
-        return;
-      }
-
-      // =========================
-      // LOGIN ATTEMPTS
-      // =========================
-
-      if (
-        message ===
-        "Too many login attempts. Please try again later."
-      ) {
-        warningToast(message);
-
-        return;
-      }
-
-      // =========================
-      // DEFAULT ERROR
-      // =========================
-
-      errorToast(
-        message ||
-          "The Student ID and Password is incorrect. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (loading) {
+    return null;
+  }
 
   return (
     <AnimatedPage>
-      <div className="flex min-h-screen items-center justify-center">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md rounded-lg border p-6 shadow"
-        >
-          <h1 className="mb-6 text-2xl font-bold">Login</h1>
-
-          <input
-            type="text"
-            placeholder="Enter your Student ID"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            className="mb-4 w-full rounded border p-3"
-          />
-
-          <div className="mb-4">
-            <PasswordInput
-              value={password}
-              onChange={setPassword}
-              placeholder="Password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="
-              w-full
-              rounded
-              bg-black
-              p-3
-              text-white
-              transition
-              hover:bg-slate-800
-              disabled:cursor-not-allowed
-              disabled:opacity-70
-            "
-          >
-            {loading ? "Signing in..." : "Login"}
-          </button>
-
-          <div className="mt-6 text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="font-medium text-black hover:underline"
-            >
-              Register here
-            </Link>
-          </div>
-
-          <div className="mt-2 text-center text-sm">
-            <Link
-              href="/track-status"
-              className="text-gray-600 hover:underline"
-            >
-              Track application status
-            </Link>
-          </div>
-        </form>
+      <div
+        className="
+          flex
+          min-h-screen
+          items-center
+          justify-center
+        "
+      >
+        <LoginForm />
       </div>
     </AnimatedPage>
   );

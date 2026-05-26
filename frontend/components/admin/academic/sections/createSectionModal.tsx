@@ -8,10 +8,12 @@ import { successToast, errorToast } from "@/lib/swal";
 
 import { createSection } from "@/services/academic_service";
 
+import SectionFormFields from "./sectionFormFields";
+
 interface Props {
   open: boolean;
 
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
 
   onSuccess: () => void;
 }
@@ -19,7 +21,7 @@ interface Props {
 export default function CreateSectionModal({
   open,
 
-  onClose,
+  onOpenChange,
 
   onSuccess,
 }: Props) {
@@ -49,7 +51,7 @@ export default function CreateSectionModal({
 
       onSuccess();
 
-      onClose();
+      onOpenChange(false);
 
       setName("");
 
@@ -109,7 +111,7 @@ export default function CreateSectionModal({
           </div>
 
           <button
-            onClick={onClose}
+            onClick={() => onOpenChange(false)}
             className="
               rounded-lg
               px-3
@@ -125,104 +127,14 @@ export default function CreateSectionModal({
 
         {/* FORM */}
 
-        <div className="mt-6 space-y-4">
-          <div>
-            <label
-              className="
-                text-sm
-                font-medium
-                text-slate-700
-              "
-            >
-              Section Name
-            </label>
-
-            <input
-              type="text"
-              placeholder="Nursing 4A"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="
-                mt-2
-                w-full
-                rounded-xl
-                border
-                border-slate-200
-                px-4
-                py-3
-                outline-none
-                transition
-                focus:border-slate-400
-              "
-            />
-          </div>
-
-          <div>
-            <label
-              className="
-                text-sm
-                font-medium
-                text-slate-700
-              "
-            >
-              Year Level
-            </label>
-
-            <select
-              value={yearLevel}
-              onChange={(e) =>
-                setYearLevel(Number(e.target.value))
-              }
-              className="
-                mt-2
-                w-full
-                rounded-xl
-                border
-                border-slate-200
-                px-4
-                py-3
-              "
-            >
-              <option value={1}>1st Year</option>
-
-              <option value={2}>2nd Year</option>
-
-              <option value={3}>3rd Year</option>
-
-              <option value={4}>4th Year</option>
-            </select>
-          </div>
-
-          <div>
-            <label
-              className="
-                text-sm
-                font-medium
-                text-slate-700
-              "
-            >
-              Program
-            </label>
-
-            <input
-              type="text"
-              value={program}
-              onChange={(e) => setProgram(e.target.value)}
-              className="
-                mt-2
-                w-full
-                rounded-xl
-                border
-                border-slate-200
-                px-4
-                py-3
-                outline-none
-                transition
-                focus:border-slate-400
-              "
-            />
-          </div>
-        </div>
+        <SectionFormFields
+          name={name}
+          setName={setName}
+          yearLevel={yearLevel}
+          setYearLevel={setYearLevel}
+          program={program}
+          setProgram={setProgram}
+        />
 
         {/* ACTIONS */}
 
@@ -235,7 +147,7 @@ export default function CreateSectionModal({
           "
         >
           <MotionButton
-            onClick={onClose}
+            onClick={() => onOpenChange(false)}
             className="
               rounded-xl
               border
