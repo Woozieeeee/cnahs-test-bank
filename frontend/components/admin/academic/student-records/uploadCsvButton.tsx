@@ -80,10 +80,12 @@ export default function UploadCsvButton({
         onClick={() => inputRef.current?.click()}
         disabled={loading}
         className="
-          rounded-xl
+          w-full
+          rounded-lg
           bg-slate-900
           px-4
           py-3
+          text-left
           text-sm
           font-medium
           text-white

@@ -30,8 +30,8 @@ export default function StudentRecordsActions({
         className="
           rounded-xl
           bg-slate-900
-          px-4
-          py-3
+          px-5
+          h-[50px]
           text-sm
           font-medium
           text-white
@@ -52,8 +52,8 @@ export default function StudentRecordsActions({
             border
             border-slate-200
             bg-white
-            px-4
-            py-3
+            px-5
+            h-[50px]
             text-sm
             font-medium
             text-slate-700
@@ -72,8 +72,8 @@ export default function StudentRecordsActions({
               absolute
               right-0
               z-20
-              mt-2
-              w-52
+              mt-1
+              w-56
               rounded-xl
               border
               border-slate-200
@@ -82,7 +82,7 @@ export default function StudentRecordsActions({
               shadow-lg
             "
           >
-            <div className="space-y-2">
+            <div className="space-y-1">
               <DownloadTemplateButton />
 
               <UploadCsvButton
