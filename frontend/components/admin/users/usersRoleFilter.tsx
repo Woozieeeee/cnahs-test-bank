@@ -18,7 +18,6 @@ export default function UsersRoleFilter({
         border
         px-4
         py-3
-        outline-none
       "
     >
       <option value="ALL">All Roles</option>

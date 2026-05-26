@@ -34,9 +34,20 @@ model StudentRecord {
   fullName   String
   program    String
   createdAt  DateTime @default(now())
+
+  // =========================
+  // SECTION RELATION
+  // =========================
+
+  sectionId  Int?
+  section    Section? @relation(fields: [sectionId], references: [id])
+
+  // =========================
+  // USER RELATION
+  // =========================
+
   user       User?
 }
-
 model Section {
   id          Int      @id @default(autoincrement())
   name        String   @unique
@@ -44,6 +55,7 @@ model Section {
   program     String
   createdAt   DateTime @default(now())
   users       User[]
+  studentRecords StudentRecord[]
   exams       Exam[]
   sectionSubjects SectionSubject[]
 }

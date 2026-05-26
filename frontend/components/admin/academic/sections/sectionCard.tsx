@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-
 import MotionCard from "@/components/motion/motionCard";
-
+import SectionCardActions from "./sectionCardActions";
 import type { Section } from "@/types/section";
 
 interface Props {
@@ -33,10 +32,10 @@ export default function SectionCard({ section }: Props) {
           <div>
             <h2
               className="
-                text-xl
-                font-semibold
-                text-slate-900
-              "
+        text-xl
+        font-semibold
+        text-slate-900
+      "
             >
               {section.name}
             </h2>
@@ -46,19 +45,14 @@ export default function SectionCard({ section }: Props) {
             </p>
           </div>
 
-          <div
-            className="
-              rounded-full
-              bg-slate-100
-              px-3
-              py-1
-              text-xs
-              font-semibold
-              text-slate-600
-            "
-          >
-            Year {section.yearLevel}
-          </div>
+          <SectionCardActions
+            onEdit={() => {
+              console.log("Edit section");
+            }}
+            onArchive={() => {
+              console.log("Archive section");
+            }}
+          />
         </div>
 
         {/* STATS */}

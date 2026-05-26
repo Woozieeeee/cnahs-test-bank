@@ -66,10 +66,25 @@ export const registerService = async ({
   }
 
   // =========================
+  // PASSWORD VALIDATION
+  // =========================
+
+  const strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+  if (!strongPassword.test(password)) {
+    throw new Error("Password does not meet security requirements");
+  }
+
+  // =========================
   // HASH PASSWORD
   // =========================
 
   const hashedPassword = await bcrypt.hash(password, 10);
+
+  if (!strongPassword.test(password)) {
+    throw new Error("Password does not meet security requirements");
+  }
 
   // =========================
   // CREATE USER
@@ -88,6 +103,26 @@ export const registerService = async ({
       status: "PENDING",
 
       isFirstLogin: false,
+    },
+  });
+
+  // =========================
+  // ACTIVITY LOG
+  // =========================
+
+  await prisma.activityLog.create({
+    data: {
+      action: "Student Registration",
+
+      categories: ["AUTH"],
+
+      severity: "INFO",
+
+      description: `${studentRecord.fullName} submitted a registration request.`,
+
+      performedBy: studentRecord.fullName,
+
+      targetUser: studentRecord.fullName,
     },
   });
 

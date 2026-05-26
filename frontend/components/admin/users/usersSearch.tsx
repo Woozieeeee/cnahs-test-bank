@@ -21,7 +21,6 @@ export default function UsersSearch({
         border
         px-4
         py-3
-        outline-none
         transition
         focus:border-black
       "
