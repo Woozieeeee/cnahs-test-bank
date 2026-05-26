@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MotionButton from "@/components/motion/motionButton";
 
 import UploadCsvButton from "./uploadCsvButton";
 
 import DownloadTemplateButton from "./downloadTemplateButton";
+
+import { ChevronDown, Plus } from "lucide-react";
 
 interface Props {
   onUploadSuccess: () => void;
@@ -21,6 +23,35 @@ export default function StudentRecordsActions({
 }: Props) {
   const [openTools, setOpenTools] = useState(false);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // =========================
+  // CLICK OUTSIDE
+  // =========================
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenTools(false);
+      }
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
   return (
     <div className="flex items-center gap-3">
       {/* ADD STUDENT */}
@@ -28,10 +59,12 @@ export default function StudentRecordsActions({
       <MotionButton
         onClick={onAddStudent}
         className="
+          flex
+          h-[50px]
+          items-center
           rounded-xl
           bg-slate-900
           px-5
-          h-[50px]
           text-sm
           font-medium
           text-white
@@ -39,21 +72,34 @@ export default function StudentRecordsActions({
           hover:bg-slate-800
         "
       >
-        Add Student
+        <div className="flex items-center gap-2">
+          <Plus size={16} />
+
+          <span>Add Student</span>
+        </div>
       </MotionButton>
 
       {/* TOOLS */}
 
-      <div className="relative">
+      <div ref={dropdownRef} className="relative">
         <MotionButton
           onClick={() => setOpenTools(!openTools)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setOpenTools(false);
+            }
+          }}
+          aria-expanded={openTools}
+          aria-haspopup="menu"
           className="
+            flex
+            h-[50px]
+            items-center
             rounded-xl
             border
             border-slate-200
             bg-white
             px-5
-            h-[50px]
             text-sm
             font-medium
             text-slate-700
@@ -61,7 +107,19 @@ export default function StudentRecordsActions({
             hover:bg-slate-50
           "
         >
-          Tools ▾
+          <div className="flex items-center gap-2">
+            <span>Tools</span>
+
+            <ChevronDown
+              size={16}
+              className={`
+                transition-transform
+                duration-200
+
+                ${openTools ? "rotate-180" : ""}
+              `}
+            />
+          </div>
         </MotionButton>
 
         {/* DROPDOWN */}
@@ -74,12 +132,17 @@ export default function StudentRecordsActions({
               z-20
               mt-1
               w-56
+              origin-top-right
               rounded-xl
               border
               border-slate-200
               bg-white
               p-2
               shadow-lg
+              animate-in
+              fade-in
+              zoom-in-95
+              duration-150
             "
           >
             <div className="space-y-1">

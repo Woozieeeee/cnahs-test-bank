@@ -1,15 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 
-interface Props {
-  children: React.ReactNode;
+import { ReactNode } from "react";
 
-  className?: string;
+interface Props extends HTMLMotionProps<"button"> {
+  children: ReactNode;
 
-  onClick?: () => void;
+  hoverScale?: number;
 
-  type?: "button" | "submit";
+  tapScale?: number;
 }
 
 export default function MotionButton({
@@ -17,21 +17,25 @@ export default function MotionButton({
 
   className = "",
 
-  onClick,
+  hoverScale = 1.01,
 
-  type = "button",
+  tapScale = 0.97,
+
+  ...props
 }: Props) {
   return (
     <motion.button
+      whileHover={{
+        scale: hoverScale,
+      }}
       whileTap={{
-        scale: 0.97,
+        scale: tapScale,
       }}
       transition={{
-        duration: 0.1,
+        duration: 0.15,
       }}
-      onClick={onClick}
-      type={type}
       className={className}
+      {...props}
     >
       {children}
     </motion.button>

@@ -1,4 +1,4 @@
-import MotionCard from "../motion/motionCard";
+import MotionCard from "../../motion/motionCard";
 
 type StatCardProps = {
   title: string;

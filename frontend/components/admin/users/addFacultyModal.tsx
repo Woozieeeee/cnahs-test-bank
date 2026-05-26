@@ -2,26 +2,17 @@
 
 import { useState } from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import MotionButton from "@/components/motion/motionButton";
 
-import { Input } from "@/components/ui/input";
+import MotionModal from "@/components/motion/motionModal";
 
-import { Button } from "@/components/ui/button";
+import FacultyFormFields from "../faculty/facultyFormFields";
 
-import { Loader2 } from "lucide-react";
-
-import PasswordInput from "@/components/common/passwordInput";
-
-import PasswordRules from "@/components/auth/shared/passwordRules";
-
-import PasswordMatchIndicator from "@/components/auth/shared/passwordMatchIndicator";
+import FacultyPasswordFields from "../faculty/facultyPasswordFields";
 
 import { errorToast, successToast } from "@/lib/swal";
+
+import { Loader2 } from "lucide-react";
 
 import { createFaculty } from "@/services/admin_service";
 
@@ -132,83 +123,130 @@ export default function AddFacultyModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add Faculty</DialogTitle>
-        </DialogHeader>
+    <MotionModal open={open}>
+      <div className="p-6">
+        {/* HEADER */}
 
-        <div className="space-y-4">
-          {/* NAME */}
-
-          <Input
-            placeholder="Faculty Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-
-          {/* USERNAME */}
-
-          <Input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-
-          {/* PASSWORD */}
-
+        <div
+          className="
+          flex
+          items-start
+          justify-between
+        "
+        >
           <div>
-            <PasswordInput
-              value={password}
-              onChange={setPassword}
-              placeholder="Password"
-            />
-
-            <PasswordRules
-              hasMinLength={hasMinLength}
-              hasUppercase={hasUppercase}
-              hasLowercase={hasLowercase}
-              hasNumber={hasNumber}
-              hasSymbol={hasSymbol}
-            />
-          </div>
-
-          {/* CONFIRM PASSWORD */}
-
-          <div>
-            <PasswordInput
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              placeholder="Confirm Password"
-            />
-
-            <PasswordMatchIndicator
-              visible={!!confirmPassword}
-              match={passwordsMatch}
-            />
-          </div>
-
-          {/* SUBMIT */}
-
-          <Button
-            className="
-              flex
-              w-full
-              items-center
-              justify-center
-              gap-2
+            <h2
+              className="
+              text-2xl
+              font-bold
+              text-slate-900
             "
+            >
+              Add Faculty
+            </h2>
+
+            <p
+              className="
+              mt-1
+              text-sm
+              text-slate-500
+            "
+            >
+              Create a new faculty account.
+            </p>
+          </div>
+
+          <button
+            onClick={() => onOpenChange(false)}
+            className="
+            rounded-lg
+            px-3
+            py-1
+            text-slate-500
+            transition
+            hover:bg-slate-100
+          "
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* FORM */}
+
+        <FacultyFormFields
+          name={name}
+          setName={setName}
+          username={username}
+          setUsername={setUsername}
+        />
+
+        <FacultyPasswordFields
+          password={password}
+          setPassword={setPassword}
+          confirmPassword={confirmPassword}
+          setConfirmPassword={setConfirmPassword}
+          hasMinLength={hasMinLength}
+          hasUppercase={hasUppercase}
+          hasLowercase={hasLowercase}
+          hasNumber={hasNumber}
+          hasSymbol={hasSymbol}
+          passwordsMatch={passwordsMatch}
+        />
+
+        {/* ACTIONS */}
+
+        <div
+          className="
+    mt-6
+    flex
+    justify-end
+    gap-3
+  "
+        >
+          <MotionButton
+            onClick={() => onOpenChange(false)}
+            className="
+      rounded-xl
+      border
+      border-slate-200
+      px-4
+      py-2
+      text-sm
+      font-medium
+      text-slate-700
+    "
+          >
+            Cancel
+          </MotionButton>
+
+          <MotionButton
             onClick={handleSubmit}
             disabled={loading}
+            className="
+      flex
+      items-center
+      justify-center
+      gap-2
+      rounded-xl
+      bg-slate-900
+      px-4
+      py-2
+      text-sm
+      font-medium
+      text-white
+      transition
+      hover:bg-slate-800
+      disabled:opacity-70
+    "
           >
             {loading && (
               <Loader2 size={18} className="animate-spin" />
             )}
 
             {loading ? "Creating..." : "Create Faculty"}
-          </Button>
+          </MotionButton>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </MotionModal>
   );
 }

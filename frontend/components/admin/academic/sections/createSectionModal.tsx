@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-
 import MotionButton from "@/components/motion/motionButton";
-
 import { successToast, errorToast } from "@/lib/swal";
-
 import { createSection } from "@/services/academic_service";
-
+import MotionModal from "@/components/motion/motionModal";
 import SectionFormFields from "./sectionFormFields";
 
 interface Props {
@@ -81,28 +78,8 @@ export default function CreateSectionModal({
   };
 
   return (
-    <div
-      className="
-        fixed
-        inset-0
-        z-50
-        flex
-        items-center
-        justify-center
-        bg-black/40
-        p-4
-      "
-    >
-      <div
-        className="
-          w-full
-          max-w-md
-          rounded-2xl
-          bg-white
-          p-6
-          shadow-xl
-        "
-      >
+    <MotionModal open={open}>
+      <div className="p-6">
         {/* HEADER */}
 
         <div
@@ -204,6 +181,6 @@ export default function CreateSectionModal({
           </MotionButton>
         </div>
       </div>
-    </div>
+    </MotionModal>
   );
 }

@@ -1,4 +1,4 @@
-import MotionCard from "../motion/motionCard";
+import MotionCard from "../../motion/motionCard";
 
 interface Props {
   title: string;

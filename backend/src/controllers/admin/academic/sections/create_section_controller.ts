@@ -1,65 +1,27 @@
-import prisma from "../../../../lib/prisma";
+import { Request, Response } from "express";
 
-interface CreateSectionData {
-  sectionCode: string;
+import { createSectionService } from "../../../../services/admin/academic/sections/create_section_service";
 
-  yearLevel: number;
+export const createSection = async (req: Request, res: Response) => {
+  try {
+    const { sectionCode, yearLevel, program } = req.body ?? {};
 
-  program: string;
-}
+    if (!sectionCode || !yearLevel || !program) {
+      return res.status(400).json({
+        message: "sectionCode, yearLevel, and program are required.",
+      });
+    }
 
-export const createSectionService = async ({
-  sectionCode,
-
-  yearLevel,
-
-  program,
-}: CreateSectionData) => {
-  // =========================
-  // CLEAN INPUTS
-  // =========================
-
-  const normalizedCode = sectionCode.trim().toUpperCase();
-
-  // =========================
-  // GENERATE NAME
-  // =========================
-
-  const name = `${program} ${yearLevel}${normalizedCode}`;
-
-  // =========================
-  // CHECK DUPLICATE
-  // =========================
-
-  const existingSection = await prisma.section.findFirst({
-    where: {
+    const section = await createSectionService({
+      sectionCode,
+      yearLevel: Number(yearLevel),
       program,
+    });
 
-      yearLevel,
-
-      sectionCode: normalizedCode,
-    },
-  });
-
-  if (existingSection) {
-    throw new Error("Section already exists");
+    return res.status(201).json(section);
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error?.message || "Failed to create section.",
+    });
   }
-
-  // =========================
-  // CREATE SECTION
-  // =========================
-
-  const section = await prisma.section.create({
-    data: {
-      name,
-
-      sectionCode: normalizedCode,
-
-      yearLevel,
-
-      program,
-    },
-  });
-
-  return section;
 };

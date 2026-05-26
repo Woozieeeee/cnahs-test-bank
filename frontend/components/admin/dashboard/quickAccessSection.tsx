@@ -7,7 +7,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 
-import QuickAccessCard from "../quickAccessCard";
+import QuickAccessCard from "./quickAccessCard";
 
 export default function QuickAccessSection() {
   return (

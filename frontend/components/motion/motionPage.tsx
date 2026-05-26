@@ -1,17 +1,23 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 
-interface Props {
-  children: React.ReactNode;
+import { ReactNode } from "react";
+
+interface Props extends HTMLMotionProps<"div"> {
+  children: ReactNode;
 }
 
-export default function MotionPage({ children }: Props) {
+export default function MotionPage({
+  children,
+
+  ...props
+}: Props) {
   return (
     <motion.div
       initial={{
         opacity: 0,
-        y: 10,
+        y: 8,
       }}
       animate={{
         opacity: 1,
@@ -20,6 +26,7 @@ export default function MotionPage({ children }: Props) {
       transition={{
         duration: 0.25,
       }}
+      {...props}
     >
       {children}
     </motion.div>

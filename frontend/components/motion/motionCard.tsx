@@ -1,27 +1,34 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 
-interface Props {
-  children: React.ReactNode;
+import { ReactNode } from "react";
 
-  className?: string;
+interface Props extends HTMLMotionProps<"div"> {
+  children: ReactNode;
+
+  hoverY?: number;
 }
 
 export default function MotionCard({
   children,
 
   className = "",
+
+  hoverY = -3,
+
+  ...props
 }: Props) {
   return (
     <motion.div
       whileHover={{
-        y: -3,
+        y: hoverY,
       }}
       transition={{
         duration: 0.2,
       }}
       className={className}
+      {...props}
     >
       {children}
     </motion.div>
