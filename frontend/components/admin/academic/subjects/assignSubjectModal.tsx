@@ -6,6 +6,8 @@ import MotionModal from "@/components/motion/motionModal";
 
 import MotionButton from "@/components/motion/motionButton";
 
+import SectionMultiSelect from "../shared/sectionMultiSelect";
+
 interface Section {
   id: number;
 
@@ -37,14 +39,6 @@ export default function AssignSectionsModal({
 
   if (!open) return null;
 
-  const toggleSection = (id: number) => {
-    setSelectedSections((prev) =>
-      prev.includes(id)
-        ? prev.filter((sectionId) => sectionId !== id)
-        : [...prev, id]
-    );
-  };
-
   return (
     <MotionModal open={open}>
       <div className="p-6">
@@ -75,83 +69,14 @@ export default function AssignSectionsModal({
           </p>
         </div>
 
-        {/* SECTIONS */}
+        {/* MULTI SELECT */}
 
-        <div
-          className="
-            mt-6
-            max-h-72
-            space-y-3
-            overflow-y-auto
-          "
-        >
-          {sections.map((section) => {
-            const selected = selectedSections.includes(
-              section.id
-            );
-
-            return (
-              <button
-                key={section.id}
-                onClick={() => toggleSection(section.id)}
-                className={`
-                  flex
-                  w-full
-                  items-center
-                  justify-between
-                  rounded-xl
-                  border
-                  px-4
-                  py-3
-                  text-left
-                  transition
-
-                  ${
-                    selected
-                      ? `
-                        border-primary
-                        bg-primary/10
-                      `
-                      : `
-                        border-border
-                        bg-card
-                        hover:bg-muted
-                      `
-                  }
-                `}
-              >
-                <span
-                  className="
-                    text-sm
-                    font-medium
-                    text-foreground
-                  "
-                >
-                  {section.name}
-                </span>
-
-                <div
-                  className={`
-                    h-5
-                    w-5
-                    rounded-full
-                    border
-
-                    ${
-                      selected
-                        ? `
-                          border-primary
-                          bg-primary
-                        `
-                        : `
-                          border-border
-                        `
-                    }
-                  `}
-                />
-              </button>
-            );
-          })}
+        <div className="mt-6">
+          <SectionMultiSelect
+            sections={sections}
+            selectedSections={selectedSections}
+            setSelectedSections={setSelectedSections}
+          />
         </div>
 
         {/* ACTIONS */}

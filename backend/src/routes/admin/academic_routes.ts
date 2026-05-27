@@ -1,10 +1,8 @@
-import { Router } from "express";
-import { createSection } from "../../controllers/admin/academic/sections/create_section_controller";
-import { getSections } from "../../controllers/admin/academic/sections/get_sections_controller";
+import express from "express";
+import { archiveSubject } from "../../controllers/admin/academic/subjects/archive_subject_controller";
+import { restoreSubject } from "../../controllers/admin/academic/subjects/restore_subject_controller";
 
-const router = Router();
+const router = express.Router();
 
-router.post("/sections", createSection);
-router.get("/sections", getSections);
-
-export default router;
+router.patch("/subjects/:id/archive", archiveSubject);
+router.patch("/subjects/:id/restore", restoreSubject);

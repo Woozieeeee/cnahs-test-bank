@@ -1,4 +1,5 @@
 import prisma from "../../../lib/prisma";
+import { PROGRAMS } from "../../../lib/constants/programs";
 
 interface StudentRecordData {
   studentId: string;
@@ -21,7 +22,7 @@ export const uploadStudentRecordsService = async (
   // VALID PROGRAMS
   // =========================
 
-  const allowedPrograms = ["BSN"];
+  const allowedPrograms = PROGRAMS;
 
   // =========================
   // VALIDATION REGEX

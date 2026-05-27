@@ -7,6 +7,7 @@ import { getSections } from "@/services/academic_service";
 import CreateSectionModal from "./createSectionModal";
 import type { Section } from "@/types/section";
 import Pagination from "@/components/common/pagination";
+import BackButton from "@/components/common/backButton";
 
 export default function SectionsDashboard() {
   const [sections, setSections] = useState<Section[]>([]);

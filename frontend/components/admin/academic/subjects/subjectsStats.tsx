@@ -5,6 +5,8 @@ interface Props {
 
   unassignedSubjects: number;
 
+  archivedSubjects: number;
+
   totalSections: number;
 }
 
@@ -53,6 +55,7 @@ export default function SubjectsStats({
   totalSubjects,
   assignedFaculty,
   unassignedSubjects,
+  archivedSubjects,
   totalSections,
 }: Props) {
   return (
@@ -61,7 +64,7 @@ export default function SubjectsStats({
         grid
         gap-4
         md:grid-cols-2
-        xl:grid-cols-4
+        xl:grid-cols-5
       "
     >
       <StatCard
@@ -82,6 +85,11 @@ export default function SubjectsStats({
       <StatCard
         label="Active Sections"
         value={totalSections}
+      />
+
+      <StatCard
+        label="Archived Subjects"
+        value={archivedSubjects}
       />
     </div>
   );

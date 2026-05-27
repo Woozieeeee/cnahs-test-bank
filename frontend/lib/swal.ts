@@ -1,18 +1,34 @@
 import Swal from "sweetalert2";
 
 // =========================
+// BASE TOAST
+// =========================
+
+const Toast = Swal.mixin({
+  toast: true,
+
+  position: "top-end",
+
+  showConfirmButton: false,
+
+  timerProgressBar: true,
+
+  customClass: {
+    popup: "rounded-xl",
+  },
+});
+
+// =========================
 // SUCCESS TOAST
 // =========================
 
 export const successToast = (title: string) => {
-  Swal.fire({
-    toast: true,
-    position: "top-end",
+  Toast.fire({
     icon: "success",
+
     title,
-    showConfirmButton: false,
+
     timer: 3000,
-    timerProgressBar: true,
   });
 };
 
@@ -21,14 +37,12 @@ export const successToast = (title: string) => {
 // =========================
 
 export const errorToast = (title: string) => {
-  Swal.fire({
-    toast: true,
-    position: "top-end",
+  Toast.fire({
     icon: "error",
+
     title,
-    showConfirmButton: false,
+
     timer: 4000,
-    timerProgressBar: true,
   });
 };
 
@@ -37,14 +51,12 @@ export const errorToast = (title: string) => {
 // =========================
 
 export const infoToast = (title: string) => {
-  Swal.fire({
-    toast: true,
-    position: "top-end",
+  Toast.fire({
     icon: "info",
+
     title,
-    showConfirmButton: false,
+
     timer: 3000,
-    timerProgressBar: true,
   });
 };
 
@@ -53,14 +65,12 @@ export const infoToast = (title: string) => {
 // =========================
 
 export const warningToast = (title: string) => {
-  Swal.fire({
-    toast: true,
-    position: "top-end",
+  Toast.fire({
     icon: "warning",
+
     title,
-    showConfirmButton: false,
+
     timer: 3500,
-    timerProgressBar: true,
   });
 };
 
@@ -70,22 +80,42 @@ export const warningToast = (title: string) => {
 
 export const confirmDialog = async ({
   title,
+
   text,
+
   confirmText = "Confirm",
+
   cancelText = "Cancel",
+
+  destructive = true,
 }: {
   title: string;
+
   text: string;
+
   confirmText?: string;
+
   cancelText?: string;
+
+  destructive?: boolean;
 }) => {
   return Swal.fire({
     title,
+
     text,
+
     icon: "warning",
+
     showCancelButton: true,
+
     confirmButtonText: confirmText,
+
     cancelButtonText: cancelText,
+
     reverseButtons: true,
+
+    focusCancel: true,
+
+    confirmButtonColor: destructive ? "#dc2626" : "#2563eb",
   });
 };

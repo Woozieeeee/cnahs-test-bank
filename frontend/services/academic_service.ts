@@ -144,3 +144,108 @@ export const updateStudentRecord = async (
 
   return response.data;
 };
+
+// =========================
+// ARCHIVE SUBJECTS
+// =========================
+
+export const archiveSubject = async (id: number) => {
+  const response = await api.patch(
+    `/admin/academic/subjects/${id}/archive`
+  );
+
+  return response.data;
+};
+
+// =========================
+// RESTORE SUBJECTS
+// =========================
+
+export const restoreSubject = async (id: number) => {
+  const response = await api.patch(
+    `/admin/academic/subjects/${id}/restore`
+  );
+
+  return response.data;
+};
+
+export const getSubjects = async (tab: string) => {
+  const response = await api.get(
+    `/admin/academic/subjects?tab=${tab}`
+  );
+
+  return response.data;
+};
+
+// =========================
+// ASSIGN SUBJECTS TO SECTION
+// =========================
+
+export const assignSubjectSections = async (
+  subjectId: number,
+  sectionIds: number[]
+) => {
+  const response = await api.patch(
+    `/admin/academic/subjects/${subjectId}/assign-sections`,
+    {
+      sectionIds,
+    }
+  );
+
+  return response.data;
+};
+
+// =========================
+// CREATE SUBJECTS
+// =========================
+
+export const createSubject = async (data: {
+  name: string;
+
+  code: string;
+
+  description: string;
+}) => {
+  const response = await api.post(
+    "/admin/academic/subjects",
+    data
+  );
+
+  return response.data;
+};
+
+// =========================
+// UPDATE SUBJECTS
+// =========================
+
+export const updateSubject = async (
+  id: number,
+  data: {
+    name: string;
+
+    code: string;
+
+    description?: string;
+  }
+) => {
+  const response = await api.patch(
+    `/admin/academic/subjects/${id}`,
+    data
+  );
+
+  return response.data;
+};
+
+export const assignFacultyToSubject = async (
+  subjectId: number,
+  facultyId: number
+) => {
+  const response = await api.patch(
+    `/admin/academic/subjects/${subjectId}/assign-faculty`,
+    {
+      facultyId,
+    }
+  );
+
+  return response.data;
+};

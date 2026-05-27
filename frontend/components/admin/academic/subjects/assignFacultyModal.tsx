@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import MotionModal from "@/components/motion/motionModal";
-
+import FacultySelect from "../shared/facultyMultiSelect";
 import MotionButton from "@/components/motion/motionButton";
 
 interface Faculty {
@@ -31,8 +31,9 @@ export default function AssignFacultyModal({
   subjectName,
   onAssign,
 }: Props) {
-  const [selectedFaculty, setSelectedFaculty] =
-    useState("");
+  const [selectedFaculty, setSelectedFaculty] = useState<
+    number | null
+  >(null);
 
   if (!open) return null;
 
@@ -69,33 +70,11 @@ export default function AssignFacultyModal({
         {/* SELECT */}
 
         <div className="mt-6">
-          <select
-            value={selectedFaculty}
-            onChange={(e) =>
-              setSelectedFaculty(e.target.value)
-            }
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
-          >
-            <option value="">Select faculty</option>
-
-            {facultyList.map((faculty) => (
-              <option key={faculty.id} value={faculty.id}>
-                {faculty.name}
-              </option>
-            ))}
-          </select>
+          <FacultySelect
+            facultyList={facultyList}
+            selectedFaculty={selectedFaculty}
+            setSelectedFaculty={setSelectedFaculty}
+          />
         </div>
 
         {/* ACTIONS */}
@@ -129,7 +108,7 @@ export default function AssignFacultyModal({
             onClick={() => {
               if (!selectedFaculty) return;
 
-              onAssign(Number(selectedFaculty));
+              onAssign(selectedFaculty);
 
               onOpenChange(false);
             }}

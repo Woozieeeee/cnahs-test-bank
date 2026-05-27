@@ -96,7 +96,7 @@ export default function UploadCsvButton({
   cursor-pointer
 "
       >
-        {loading ? "Uploading..." : "Upload CSV"}
+        {loading ? "Uploading..." : "Upload Student CSV"}
       </button>
     </>
   );

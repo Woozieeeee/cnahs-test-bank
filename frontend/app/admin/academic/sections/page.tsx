@@ -16,6 +16,8 @@ import MotionButton from "@/components/motion/motionButton";
 
 import type { Section } from "@/types/section";
 
+import BackButton from "@/components/common/backButton";
+
 export default function SectionsPage() {
   const [sections, setSections] = useState<Section[]>([]);
 
@@ -64,21 +66,10 @@ export default function SectionsPage() {
         "
       >
         <div className="space-y-4">
-          <Link
+          <BackButton
             href="/admin/academic"
-            className="
-      inline-flex
-      items-center
-      gap-2
-      text-sm
-      text-muted-foreground
-      transition
-      hover:text-foreground
-    "
-          >
-            <ArrowLeft size={16} />
-            Back to Academic Management
-          </Link>
+            label="Back to Academic Management"
+          />
 
           <div>
             <h1

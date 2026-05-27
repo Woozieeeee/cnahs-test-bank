@@ -1,26 +1,14 @@
 import Link from "next/link";
-
+import BackButton from "@/components/common/backButton";
 import { ArrowLeft } from "lucide-react";
 
 export default function StudentRecordsHeader() {
   return (
     <div className="space-y-4">
-      <Link
+      <BackButton
         href="/admin/academic"
-        className="
-          inline-flex
-          items-center
-          gap-2
-          text-sm
-          text-muted-foreground
-          transition
-          hover:text-foreground
-        "
-      >
-        <ArrowLeft size={16} />
-        Back to Academic Management
-      </Link>
-
+        label="Back to Academic Management"
+      />
       <div>
         <h1
           className="

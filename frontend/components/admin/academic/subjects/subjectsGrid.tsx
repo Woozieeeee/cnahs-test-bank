@@ -1,37 +1,29 @@
 import SubjectCard from "./subjectCard";
 
-interface Subject {
-  id: number;
-
-  name: string;
-
-  code: string;
-
-  faculty?: {
-    name: string;
-  } | null;
-
-  sections?: {
-    id: number;
-
-    name: string;
-  }[];
-
-  exams?: {
-    id: number;
-  }[];
-}
+import type { Subject } from "@/types/subject";
 
 interface Props {
   subjects: Subject[];
+
+  onEdit: (subject: Subject) => void;
+
   onAssignFaculty: (subject: Subject) => void;
+
   onAssignSections: (subject: Subject) => void;
+
+  onRefresh: () => void;
 }
 
 export default function SubjectsGrid({
   subjects,
+
+  onEdit,
+
   onAssignFaculty,
+
   onAssignSections,
+
+  onRefresh,
 }: Props) {
   if (subjects.length === 0) {
     return (
@@ -65,8 +57,10 @@ export default function SubjectsGrid({
         <SubjectCard
           key={subject.id}
           subject={subject}
+          onEdit={() => onEdit(subject)}
           onAssignFaculty={() => onAssignFaculty(subject)}
           onAssignSections={() => onAssignSections(subject)}
+          onRefresh={onRefresh}
         />
       ))}
     </div>

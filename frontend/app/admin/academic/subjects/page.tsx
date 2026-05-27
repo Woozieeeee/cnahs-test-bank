@@ -1,98 +1,84 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import SubjectsStats from "@/components/admin/academic/subjects/subjectsStats";
 import SubjectsGrid from "@/components/admin/academic/subjects/subjectsGrid";
-import SubjectsFilters from "@/components/admin/academic/subjects/subjectsFilters";
+import SubjectsTabs from "@/components/admin/academic/subjects/subjectTabs";
 import CreateSubjectModal from "@/components/admin/academic/subjects/createSubjectModal";
 import AssignFacultyModal from "@/components/admin/academic/subjects/assignFacultyModal";
 import AssignSectionsModal from "@/components/admin/academic/subjects/assignSubjectModal";
-
-import { useMemo, useState } from "react";
+import EditSubjectModal from "@/components/admin/academic/subjects/editSubjectModal";
+import SubjectsHeader from "@/components/admin/academic/subjects/sections/subjectsHeader";
+import SubjectsActions from "@/components/admin/academic/subjects/sections/subjectsActions";
+import {
+  updateSubject,
+  assignFacultyToSubject,
+} from "@/services/academic_service";
+import { createSubject } from "@/services/academic_service";
+import { mockFaculty } from "@/components/admin/academic/subjects/data/mockFaculty";
+import { mockSections } from "@/components/admin/academic/subjects/data/mockSections";
+import { assignSubjectSections } from "@/services/academic_service";
+import { successToast, errorToast } from "@/lib/swal";
+import { getSubjects } from "@/services/academic_service";
+import type { Subject } from "@/types/subject";
 
 export default function SubjectsPage() {
+  // =========================
+  // STATES
+  // =========================
+
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+
+  const [initialLoading, setInitialLoading] =
+    useState(true);
+
   const [search, setSearch] = useState("");
-
-  const [openCreateModal, setOpenCreateModal] =
-    useState(false);
-
-  const [openAssignFaculty, setOpenAssignFaculty] =
-    useState(false);
-
-  const [selectedSubject, setSelectedSubject] =
-    useState<any>(null);
 
   const [assignmentFilter, setAssignmentFilter] =
     useState("ALL");
 
+  const [activeTab, setActiveTab] = useState("ALL");
+
+  const [selectedSubject, setSelectedSubject] =
+    useState<Subject | null>(null);
+
+  // =========================
+  // MODALS
+  // =========================
+
+  const [openCreateModal, setOpenCreateModal] =
+    useState(false);
+
+  const [openEditModal, setOpenEditModal] = useState(false);
+
+  const [openAssignFaculty, setOpenAssignFaculty] =
+    useState(false);
+
   const [openAssignSections, setOpenAssignSections] =
     useState(false);
 
-  const subjects = [
-    {
-      id: 1,
-      name: "Fundamentals of Nursing",
-      code: "NCM101",
+  // =========================
+  // FETCH SUBJECTS
+  // =========================
 
-      faculty: {
-        name: "Prof. Maria Santos",
-      },
+  const fetchSubjects = async () => {
+    try {
+      const data = await getSubjects(activeTab);
+      setSubjects(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
-      sections: [
-        {
-          id: 1,
-          name: "BSN 1A",
-        },
-      ],
+  useEffect(() => {
+    fetchSubjects();
+  }, [activeTab]);
 
-      exams: [{ id: 1 }, { id: 2 }],
-    },
-
-    {
-      id: 2,
-      name: "Pharmacology",
-      code: "PHARMA201",
-
-      faculty: null,
-
-      sections: [],
-
-      exams: [],
-    },
-  ];
-
-  const facultyList = [
-    {
-      id: 1,
-      name: "Prof. Maria Santos",
-    },
-
-    {
-      id: 2,
-      name: "Prof. John Reyes",
-    },
-
-    {
-      id: 3,
-      name: "Prof. Angela Cruz",
-    },
-  ];
-
-  const sections = [
-    {
-      id: 1,
-      name: "BSN 1A",
-    },
-
-    {
-      id: 2,
-      name: "BSN 1B",
-    },
-
-    {
-      id: 3,
-      name: "BSN 2A",
-    },
-  ];
+  // =========================
+  // FILTERING
+  // =========================
 
   const filteredSubjects = useMemo(() => {
     return subjects.filter((subject) => {
@@ -115,76 +101,70 @@ export default function SubjectsPage() {
     });
   }, [subjects, search, assignmentFilter]);
 
+  // =========================
+  // LOADING
+  // =========================
+
+  if (initialLoading) {
+    return <div className="p-6">Loading subjects...</div>;
+  }
+
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       {/* HEADER */}
 
-      <div>
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-foreground
-          "
-        >
-          Subjects
-        </h1>
+      <SubjectsHeader />
 
-        <p className="mt-2 text-muted-foreground">
-          Manage academic subjects, faculty assignments, and
-          section allocations.
-        </p>
-      </div>
+      {/* TABS */}
+
+      <SubjectsTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
 
       {/* STATS */}
 
       <SubjectsStats
-        totalSubjects={0}
-        assignedFaculty={0}
-        unassignedSubjects={0}
-        totalSections={0}
+        totalSubjects={subjects.length}
+        assignedFaculty={
+          subjects.filter((subject) => subject.faculty)
+            .length
+        }
+        unassignedSubjects={
+          subjects.filter((subject) => !subject.faculty)
+            .length
+        }
+        totalSections={subjects.reduce(
+          (total, subject) =>
+            total + (subject.sectionSubjects?.length || 0),
+          0
+        )}
+        archivedSubjects={
+          subjects.filter((subject) => subject.isArchived)
+            .length
+        }
       />
 
-      {/* FILTERS */}
+      {/* ACTIONS */}
 
-      <div
-        className="
-    flex
-    flex-col
-    gap-4
-    md:flex-row
-    md:items-center
-  "
-      >
-        <div className="flex-1">
-          <SubjectsFilters
-            search={search}
-            setSearch={setSearch}
-            assignmentFilter={assignmentFilter}
-            setAssignmentFilter={setAssignmentFilter}
-          />
-        </div>
+      <SubjectsActions
+        search={search}
+        setSearch={setSearch}
+        assignmentFilter={assignmentFilter}
+        setAssignmentFilter={setAssignmentFilter}
+        onCreate={() => setOpenCreateModal(true)}
+      />
 
-        <button
-          onClick={() => setOpenCreateModal(true)}
-          className="
-      rounded-xl
-      bg-primary
-      px-4
-      py-3
-      text-sm
-      font-medium
-      text-primary-foreground
-      transition
-      hover:bg-primary/90
-    "
-        >
-          Create Subject
-        </button>
-      </div>
+      {/* GRID */}
 
       <SubjectsGrid
         subjects={filteredSubjects}
+        onRefresh={fetchSubjects}
+        onEdit={(subject) => {
+          setSelectedSubject(subject);
+
+          setOpenEditModal(true);
+        }}
         onAssignFaculty={(subject) => {
           setSelectedSubject(subject);
 
@@ -197,41 +177,107 @@ export default function SubjectsPage() {
         }}
       />
 
+      {/* MODALS */}
+
       <CreateSubjectModal
         open={openCreateModal}
         onOpenChange={setOpenCreateModal}
-        onCreate={(data) => {
-          console.log(data);
+        onCreate={async (data) => {
+          try {
+            await createSubject(data);
+
+            successToast("Subject created successfully.");
+
+            fetchSubjects();
+          } catch (error: any) {
+            console.error(error);
+
+            errorToast(
+              error?.response?.data?.message ||
+                "Failed to create subject."
+            );
+          }
+        }}
+      />
+
+      <EditSubjectModal
+        open={openEditModal}
+        onOpenChange={setOpenEditModal}
+        subject={selectedSubject}
+        onSave={async (updatedSubject) => {
+          if (!selectedSubject) return;
+
+          try {
+            await updateSubject(
+              selectedSubject.id,
+              updatedSubject
+            );
+
+            successToast("Subject updated successfully.");
+
+            setOpenEditModal(false);
+
+            fetchSubjects();
+          } catch (error: any) {
+            console.error(error);
+
+            errorToast(
+              error?.response?.data?.message ||
+                "Failed to update subject."
+            );
+          }
         }}
       />
 
       <AssignFacultyModal
         open={openAssignFaculty}
         onOpenChange={setOpenAssignFaculty}
-        facultyList={facultyList}
+        facultyList={mockFaculty}
         subjectName={selectedSubject?.name || ""}
-        onAssign={(facultyId) => {
-          console.log(
-            "Assign faculty",
-            facultyId,
-            "to",
-            selectedSubject
-          );
+        onAssign={async (facultyId) => {
+          if (!selectedSubject) return;
+
+          try {
+            await assignFacultyToSubject(
+              selectedSubject.id,
+              facultyId
+            );
+
+            successToast("Faculty assigned successfully.");
+
+            setOpenAssignFaculty(false);
+
+            fetchSubjects();
+          } catch (error) {
+            console.error(error);
+
+            errorToast("Failed to assign faculty.");
+          }
         }}
       />
 
       <AssignSectionsModal
         open={openAssignSections}
         onOpenChange={setOpenAssignSections}
-        sections={sections}
+        sections={mockSections}
         subjectName={selectedSubject?.name || ""}
-        onAssign={(sectionIds) => {
-          console.log(
-            "Assign sections",
-            sectionIds,
-            "to",
-            selectedSubject
-          );
+        onAssign={async (sectionIds) => {
+          if (!selectedSubject) return;
+
+          try {
+            await assignSubjectSections(
+              selectedSubject.id,
+              sectionIds
+            );
+
+            successToast("Sections assigned successfully.");
+
+            fetchSubjects();
+          } catch (error) {
+            console.error(error);
+
+            errorToast("Failed to assign sections.");
+          }
         }}
       />
     </div>

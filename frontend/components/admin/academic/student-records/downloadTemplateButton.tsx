@@ -3,8 +3,9 @@
 export default function DownloadTemplateButton() {
   const handleDownload = () => {
     const csvContent =
-      `studentId,fullName,program\n` +
-      `22-03123,Juan Dela Cruz,BSN`;
+      `studentId,firstName,middleName,lastName,suffix,program\n` +
+      `22-03123,Juan,Santos,Dela Cruz,,BSN\n` +
+      `22-04567,Maria,,Reyes,,BSN`;
 
     const blob = new Blob(
       [csvContent],
@@ -53,7 +54,7 @@ export default function DownloadTemplateButton() {
   cursor-pointer
 "
     >
-      Download Template
+      Download CSV Template
     </button>
   );
 }

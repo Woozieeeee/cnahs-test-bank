@@ -1,128 +1,186 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { MoreVertical } from "lucide-react";
+import SubjectDropdownItem from "./actions/subjectDropdownItem";
+import SubjectActionsDropdown from "./actions/subjectActionsDropdown";
+import {
+  archiveSubject,
+  restoreSubject,
+} from "@/services/academic_service";
 
-import MotionDropdown from "@/components/motion/motionDropdown";
+import {
+  confirmDialog,
+  successToast,
+  errorToast,
+} from "@/lib/swal";
 
 interface Props {
+  hasFacultyAssigned: boolean;
+  hasSectionsAssigned: boolean;
   onEdit: () => void;
-
   onAssignFaculty: () => void;
-
+  onUnassignFaculty: () => void;
   onAssignSections: () => void;
-
-  onArchive: () => void;
+  onUnassignSections: () => void;
+  subjectId: number;
+  isArchived?: boolean;
+  onRefresh: () => void;
 }
 
 export default function SubjectCardActions({
+  hasFacultyAssigned,
+  hasSectionsAssigned,
   onEdit,
   onAssignFaculty,
+  onUnassignFaculty,
   onAssignSections,
-  onArchive,
+  onUnassignSections,
+  subjectId,
+  isArchived,
+  onRefresh,
 }: Props) {
   const [open, setOpen] = useState(false);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleArchive = async () => {
+    const result = await confirmDialog({
+      title: "Archive Subject?",
+      text: "This subject will be moved to archived subjects.",
+      confirmText: "Archive",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await archiveSubject(subjectId);
+
+      successToast("Subject archived successfully.");
+
+      onRefresh();
+    } catch (error) {
+      console.error(error);
+
+      errorToast("Failed to archive subject.");
+    }
+  };
+
+  const handleRestore = async () => {
+    const result = await confirmDialog({
+      title: "Restore Subject?",
+      text: "This subject will become active again.",
+      confirmText: "Restore",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await restoreSubject(subjectId);
+
+      successToast("Subject restored successfully.");
+
+      onRefresh();
+    } catch (error) {
+      console.error(error);
+
+      errorToast("Failed to restore subject.");
+    }
+  };
+
+  // =========================
+  // OUTSIDE CLICK
+  // =========================
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
+  // =========================
+  // HANDLE ACTION
+  // =========================
+
+  const handleConfirmAction = async ({
+    title,
+    text,
+    confirmText,
+    action,
+  }: {
+    title: string;
+
+    text: string;
+
+    confirmText: string;
+
+    action: () => void;
+  }) => {
+    const result = await confirmDialog({
+      title,
+      text,
+      confirmText,
+    });
+
+    if (result.isConfirmed) {
+      action();
+
+      setOpen(false);
+    }
+  };
+
   return (
-    <div className="relative">
+    <div ref={dropdownRef} className="relative">
+      {/* TRIGGER */}
+
       <button
         onClick={() => setOpen(!open)}
         className="
           rounded-lg
-          px-3
-          py-2
+          p-2
           text-muted-foreground
           transition
           hover:bg-muted
+          hover:text-foreground
         "
       >
-        ⋮
+        <MoreVertical size={18} />
       </button>
 
+      {/* DROPDOWN */}
+
       {open && (
-        <MotionDropdown
-          className="
-            absolute
-            right-0
-            z-20
-            mt-2
-            w-52
-            rounded-xl
-            border
-            border-border
-            bg-card
-            p-2
-            shadow-lg
-          "
-        >
-          <button
-            onClick={onEdit}
-            className="
-              w-full
-              rounded-lg
-              px-4
-              py-2
-              text-left
-              text-sm
-              text-foreground
-              transition
-              hover:bg-muted
-            "
-          >
-            Edit Subject
-          </button>
-
-          <button
-            onClick={onAssignFaculty}
-            className="
-              w-full
-              rounded-lg
-              px-4
-              py-2
-              text-left
-              text-sm
-              text-foreground
-              transition
-              hover:bg-muted
-            "
-          >
-            Assign Faculty
-          </button>
-
-          <button
-            onClick={onAssignSections}
-            className="
-              w-full
-              rounded-lg
-              px-4
-              py-2
-              text-left
-              text-sm
-              text-foreground
-              transition
-              hover:bg-muted
-            "
-          >
-            Assign Sections
-          </button>
-
-          <button
-            onClick={onArchive}
-            className="
-              w-full
-              rounded-lg
-              px-4
-              py-2
-              text-left
-              text-sm
-              text-red-500
-              transition
-              hover:bg-red-50
-              dark:hover:bg-red-500/10
-            "
-          >
-            Archive Subject
-          </button>
-        </MotionDropdown>
+        <SubjectActionsDropdown
+          hasFacultyAssigned={hasFacultyAssigned}
+          hasSectionsAssigned={hasSectionsAssigned}
+          isArchived={isArchived}
+          onEdit={onEdit}
+          onAssignFaculty={onAssignFaculty}
+          onUnassignFaculty={onUnassignFaculty}
+          onAssignSections={onAssignSections}
+          onUnassignSections={onUnassignSections}
+          onArchive={handleArchive}
+          onRestore={handleRestore}
+          onConfirmAction={handleConfirmAction}
+          onClose={() => setOpen(false)}
+        />
       )}
     </div>
   );
