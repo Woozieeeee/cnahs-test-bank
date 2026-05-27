@@ -17,7 +17,8 @@ export default function NavbarProfileDropdown({
         w-48
         rounded-xl
         border
-        bg-white
+        border-border
+        bg-popover
         p-2
         shadow-lg
       "
@@ -30,7 +31,7 @@ export default function NavbarProfileDropdown({
           py-2
           text-left
           transition
-          hover:bg-gray-100
+          hover:bg-muted
         "
       >
         Profile
@@ -44,7 +45,7 @@ export default function NavbarProfileDropdown({
           py-2
           text-left
           transition
-          hover:bg-gray-100
+          hover:bg-muted
         "
       >
         Settings
@@ -60,7 +61,7 @@ export default function NavbarProfileDropdown({
           text-left
           text-red-500
           transition
-          hover:bg-red-50
+          hover:bg-red-500/10
         "
       >
         Logout

@@ -32,11 +32,12 @@ export default function ActivityTabs({
 
             ${
               activeTab === category
-                ? "bg-slate-900 text-white"
+                ? "bg-primary text-primary-foreground"
                 : `
-                  bg-white
-                  text-slate-600
-                  hover:bg-slate-100
+                  bg-card
+                  text-muted-foreground
+                  hover:bg-muted
+                  hover:text-foreground
                 `
             }
           `}

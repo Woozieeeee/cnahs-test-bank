@@ -5,13 +5,13 @@ export default function DashboardHeader() {
         className="
           text-3xl
           font-bold
-          text-gray-800
+          text-foreground
         "
       >
         Welcome back, Admin
       </h1>
 
-      <p className="mt-2 text-gray-500">
+      <p className="mt-2 text-muted-foreground">
         Manage students, approvals, faculty, and
         examinations easily.
       </p>

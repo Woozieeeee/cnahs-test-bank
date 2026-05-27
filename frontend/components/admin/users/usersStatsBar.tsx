@@ -53,20 +53,25 @@ export default function UsersStatsBar({
         <div
           key={stat.label}
           className="
-            rounded-2xl
-            bg-white
-            p-5
-            shadow-sm
+             rounded-2xl
+             bg-card
+             p-6
+             shadow-sm
+             transition
+             hover:-translate-y-1
+             hover:bg-muted/60
           "
         >
-          <p className="text-gray-500">{stat.label}</p>
+          <p className="text-muted-foreground">
+            {stat.label}
+          </p>
 
           <h2
             className="
               mt-2
               text-3xl
               font-bold
-              text-gray-800
+              text-foreground
             "
           >
             {stat.value}

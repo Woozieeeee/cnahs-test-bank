@@ -76,13 +76,13 @@ export default function ActivityLogsPage() {
             className="
               text-3xl
               font-bold
-              text-slate-900
+              text-foreground
             "
           >
             Activity Logs
           </h1>
 
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-muted-foreground">
             Monitor recent administrative actions,
             violations, approvals, and system events.
           </p>

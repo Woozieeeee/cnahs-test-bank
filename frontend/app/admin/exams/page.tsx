@@ -15,13 +15,13 @@ export default function AdminExamsPage() {
             className="
               text-3xl
               font-bold
-              text-slate-900
+              text-foreground
             "
           >
             Exam Monitoring
           </h1>
 
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-muted-foreground">
             Monitor ongoing exams, violations, and section
             activity in real time.
           </p>

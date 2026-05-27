@@ -62,13 +62,13 @@ export default function SectionDetailsPage() {
           className="
             text-3xl
             font-bold
-            text-slate-900
+            text-foreground
           "
         >
           {section.name}
         </h1>
 
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-muted-foreground">
           {section.program} • Year {section.yearLevel}
         </p>
       </div>
@@ -107,12 +107,11 @@ export default function SectionDetailsPage() {
         className="
           rounded-2xl
           border
-          border-dashed
-          border-slate-200
-          bg-white
+          border-border
+          bg-card
           p-10
           text-center
-          text-slate-500
+          text-muted-foreground
         "
       >
         Section monitoring tabs coming soon.
@@ -135,19 +134,21 @@ function StatCard({
       className="
         rounded-2xl
         border
-        border-slate-200
-        bg-white
+        border-border
+        bg-card
         p-6
       "
     >
-      <p className="text-sm text-slate-500">{label}</p>
+      <p className="text-sm text-muted-foreground">
+        {label}
+      </p>
 
       <h2
         className="
           mt-2
           text-3xl
           font-bold
-          text-slate-900
+          text-foreground
         "
       >
         {value}

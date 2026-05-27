@@ -6,6 +6,7 @@ export default function UsersLoader() {
         min-h-screen
         items-center
         justify-center
+        text-muted-foreground
       "
     >
       Loading users...

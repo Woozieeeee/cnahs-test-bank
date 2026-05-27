@@ -89,3 +89,58 @@ export const uploadStudentRecords = async (file: File) => {
 
   return response.data;
 };
+
+// =========================
+// CREATE STUDENT RECORD
+// =========================
+
+export const createStudentRecord = async (data: {
+  studentId: string;
+
+  firstName: string;
+
+  middleName?: string;
+
+  lastName: string;
+
+  suffix?: string;
+
+  program: string;
+}) => {
+  const response = await api.post(
+    "/admin/academic/student-records",
+    data
+  );
+
+  return response.data;
+};
+
+// =========================
+// UPDATE STUDENT RECORD
+// =========================
+
+export const updateStudentRecord = async (
+  id: number,
+
+  data: {
+    studentId: string;
+
+    firstName: string;
+
+    middleName?: string;
+
+    lastName: string;
+
+    suffix?: string;
+
+    program: string;
+  }
+) => {
+  const response = await api.patch(
+    `/admin/academic/student-records/${id}`,
+
+    data
+  );
+
+  return response.data;
+};

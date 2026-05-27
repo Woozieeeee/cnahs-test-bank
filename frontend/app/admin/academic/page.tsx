@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-
 import MotionCard from "@/components/motion/motionCard";
 
 import {
@@ -53,13 +52,13 @@ export default function AcademicPage() {
           className="
             text-3xl
             font-bold
-            text-slate-900
+            text-foreground
           "
         >
           Academic Management
         </h1>
 
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-muted-foreground">
           Manage academic structure, sections, subjects, and
           institutional records.
         </p>
@@ -83,52 +82,52 @@ export default function AcademicPage() {
               <Link
                 href={card.href}
                 className="
-                  block
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  bg-white
-                  p-6
-                  transition
-                  hover:border-slate-300
-                  hover:shadow-md
-                "
+        block
+        rounded-2xl
+        border
+        border-border
+        bg-card
+        p-6
+        transition
+        hover:border-ring
+        hover:shadow-md
+      "
               >
                 <div
                   className="
-                    flex
-                    h-12
-                    w-12
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-slate-100
-                  "
+          flex
+          h-12
+          w-12
+          items-center
+          justify-center
+          rounded-xl
+          bg-muted
+        "
                 >
                   <Icon
                     size={22}
-                    className="text-slate-700"
+                    className="text-foreground"
                   />
                 </div>
 
                 <h2
                   className="
-                    mt-5
-                    text-xl
-                    font-semibold
-                    text-slate-900
-                  "
+          mt-5
+          text-xl
+          font-semibold
+          text-card-foreground
+        "
                 >
                   {card.title}
                 </h2>
 
                 <p
                   className="
-                    mt-2
-                    text-sm
-                    leading-relaxed
-                    text-slate-500
-                  "
+          mt-2
+          text-sm
+          leading-relaxed
+          text-muted-foreground
+        "
                 >
                   {card.description}
                 </p>

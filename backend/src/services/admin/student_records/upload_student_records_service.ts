@@ -1,11 +1,15 @@
-import { ACADEMIC_PROGRAMS } from "../../../lib/constants/academic_programs";
-
 import prisma from "../../../lib/prisma";
 
 interface StudentRecordData {
   studentId: string;
 
-  fullName: string;
+  firstName: string;
+
+  middleName?: string;
+
+  lastName: string;
+
+  suffix?: string;
 
   program: string;
 }
@@ -25,7 +29,7 @@ export const uploadStudentRecordsService = async (
 
   const studentIdRegex = /^\d{2}-\d{5}$/;
 
-  const fullNameRegex = /^[A-Za-z\s.-]+$/;
+  const nameRegex = /^[A-Za-z\s.-]+$/;
 
   // =========================
   // TRACK RESULTS
@@ -46,7 +50,13 @@ export const uploadStudentRecordsService = async (
   for (const record of records) {
     const studentId = record.studentId?.trim();
 
-    const fullName = record.fullName?.trim();
+    const firstName = record.firstName?.trim();
+
+    const middleName = record.middleName?.trim();
+
+    const lastName = record.lastName?.trim();
+
+    const suffix = record.suffix?.trim();
 
     const program = record.program?.trim() || "BSN";
 
@@ -54,7 +64,7 @@ export const uploadStudentRecordsService = async (
     // EMPTY VALUES
     // =========================
 
-    if (!studentId || !fullName) {
+    if (!studentId || !firstName || !lastName) {
       skipped++;
 
       errors.push(`Missing required fields`);
@@ -75,13 +85,49 @@ export const uploadStudentRecordsService = async (
     }
 
     // =========================
-    // INVALID NAME
+    // INVALID FIRST NAME
     // =========================
 
-    if (!fullNameRegex.test(fullName)) {
+    if (!nameRegex.test(firstName)) {
       skipped++;
 
-      errors.push(`Invalid name: ${fullName}`);
+      errors.push(`Invalid first name: ${firstName}`);
+
+      continue;
+    }
+
+    // =========================
+    // INVALID LAST NAME
+    // =========================
+
+    if (!nameRegex.test(lastName)) {
+      skipped++;
+
+      errors.push(`Invalid last name: ${lastName}`);
+
+      continue;
+    }
+
+    // =========================
+    // INVALID MIDDLE NAME
+    // =========================
+
+    if (middleName && !nameRegex.test(middleName)) {
+      skipped++;
+
+      errors.push(`Invalid middle name: ${middleName}`);
+
+      continue;
+    }
+
+    // =========================
+    // INVALID SUFFIX
+    // =========================
+
+    if (suffix && !nameRegex.test(suffix)) {
+      skipped++;
+
+      errors.push(`Invalid suffix: ${suffix}`);
 
       continue;
     }
@@ -119,7 +165,13 @@ export const uploadStudentRecordsService = async (
         },
 
         data: {
-          fullName,
+          firstName,
+
+          middleName,
+
+          lastName,
+
+          suffix,
 
           program,
         },
@@ -138,7 +190,13 @@ export const uploadStudentRecordsService = async (
       data: {
         studentId,
 
-        fullName,
+        firstName,
+
+        middleName,
+
+        lastName,
+
+        suffix,
 
         program,
       },

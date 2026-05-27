@@ -31,8 +31,8 @@ export default function UsersBulkActions({
         justify-between
         rounded-2xl
         border
-        border-slate-200
-        bg-white
+        border-border
+        bg-card
         p-4
       "
     >
@@ -42,7 +42,7 @@ export default function UsersBulkActions({
         className="
           text-sm
           font-medium
-          text-slate-700
+          text-foreground
         "
       >
         {selectedCount} users selected
@@ -56,14 +56,14 @@ export default function UsersBulkActions({
           className="
             rounded-xl
             border
-            border-slate-200
+            border-border
             px-4
             py-2
             text-sm
             font-medium
-            text-slate-700
+            text-foreground
             transition
-            hover:bg-slate-50
+            hover:bg-muted
           "
         >
           Clear Selection

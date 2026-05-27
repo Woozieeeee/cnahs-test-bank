@@ -34,6 +34,9 @@ export default function MotionButton({
       transition={{
         duration: 0.15,
       }}
+      style={{
+        willChange: "transform",
+      }}
       className={className}
       {...props}
     >

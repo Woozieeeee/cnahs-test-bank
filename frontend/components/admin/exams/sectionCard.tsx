@@ -34,12 +34,12 @@ export default function SectionCard({ section }: Props) {
           w-full
           rounded-2xl
           border
-          border-slate-200
-          bg-white
+          border-border
+          bg-card
           p-6
           text-left
           transition
-          hover:border-slate-300
+          hover:border-border/70
           hover:shadow-md
         "
       >
@@ -51,7 +51,7 @@ export default function SectionCard({ section }: Props) {
               className="
                 text-xl
                 font-semibold
-                text-slate-900
+                text-foreground
               "
             >
               {section.name}
@@ -79,14 +79,14 @@ export default function SectionCard({ section }: Props) {
         >
           {/* VIOLATIONS */}
 
-          <div
-            className="
+      <div
+        className="
       rounded-xl
-      bg-slate-50
+      bg-muted/40
       p-4
     "
-          >
-            <p className="text-sm text-slate-500">
+      >
+            <p className="text-sm text-muted-foreground">
               Violations
             </p>
 
@@ -104,20 +104,20 @@ export default function SectionCard({ section }: Props) {
 
           {/* SUSPICIOUS */}
 
-          <div
-            className="
+      <div
+        className="
       rounded-xl
-      bg-slate-50
+      bg-muted/40
       p-4
     "
-          >
+      >
             <div className="flex items-center gap-2">
               <ShieldAlert
                 size={16}
                 className="text-amber-500"
               />
 
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-muted-foreground">
                 Suspicious
               </p>
             </div>
@@ -136,14 +136,14 @@ export default function SectionCard({ section }: Props) {
 
           {/* TAKING EXAM */}
 
-          <div
-            className="
+      <div
+        className="
       rounded-xl
-      bg-slate-50
+      bg-muted/40
       p-4
     "
-          >
-            <p className="text-sm text-slate-500">
+      >
+            <p className="text-sm text-muted-foreground">
               Taking Exam
             </p>
 
@@ -152,7 +152,7 @@ export default function SectionCard({ section }: Props) {
         mt-2
         text-2xl
         font-bold
-        text-slate-900
+        text-foreground
       "
             >
               {section.studentsTaking}
@@ -161,14 +161,14 @@ export default function SectionCard({ section }: Props) {
 
           {/* TOTAL STUDENTS */}
 
-          <div
-            className="
+      <div
+        className="
       rounded-xl
-      bg-slate-50
+      bg-muted/40
       p-4
     "
-          >
-            <p className="text-sm text-slate-500">
+      >
+            <p className="text-sm text-muted-foreground">
               Enrolled
             </p>
 
@@ -177,7 +177,7 @@ export default function SectionCard({ section }: Props) {
         mt-2
         text-2xl
         font-bold
-        text-slate-900
+        text-foreground
       "
             >
               {section.totalStudents}
@@ -187,13 +187,13 @@ export default function SectionCard({ section }: Props) {
 
         {/* STATUS SUMMARY */}
 
-        <div
+  <div
           className="
     mt-6
     rounded-xl
     border
-    border-slate-200
-    bg-slate-50
+    border-border
+    bg-muted/40
     p-4
   "
         >
@@ -201,7 +201,7 @@ export default function SectionCard({ section }: Props) {
             className="
       text-sm
       font-medium
-      text-slate-700
+      text-foreground
     "
           >
             {section.ongoingExam

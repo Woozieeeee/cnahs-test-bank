@@ -36,7 +36,7 @@ export default function SectionFormFields({
           className="
             text-sm
             font-medium
-            text-slate-700
+            text-muted-foreground
           "
         >
           Program
@@ -50,7 +50,8 @@ export default function SectionFormFields({
             w-full
             rounded-xl
             border
-            border-slate-200
+            bg-card
+            border-border
             px-4
             py-3
           "
@@ -66,7 +67,7 @@ export default function SectionFormFields({
           className="
             text-sm
             font-medium
-            text-slate-700
+            text-muted-foreground
           "
         >
           Year Level
@@ -81,8 +82,9 @@ export default function SectionFormFields({
             mt-2
             w-full
             rounded-xl
+            bg-card
             border
-            border-slate-200
+            border-border
             px-4
             py-3
           "
@@ -104,7 +106,7 @@ export default function SectionFormFields({
           className="
             text-sm
             font-medium
-            text-slate-700
+            text-muted-foreground
           "
         >
           Section Code
@@ -114,22 +116,26 @@ export default function SectionFormFields({
           type="text"
           placeholder="A"
           value={sectionCode}
-          onChange={(e) =>
-            setSectionCode(e.target.value.toUpperCase())
-          }
-          maxLength={2}
+          onChange={(e) => {
+            const value = e.target.value
+              .replace(/[^A-Za-z]/g, "")
+              .toUpperCase();
+
+            setSectionCode(value);
+          }}
+          maxLength={3}
           className="
             mt-2
             w-full
             rounded-xl
             border
-            border-slate-200
+            border-border
             px-4
             py-3
             uppercase
             outline-none
             transition
-            focus:border-slate-400
+            focus:border-ring
           "
         />
       </div>
@@ -141,12 +147,12 @@ export default function SectionFormFields({
           rounded-xl
           border
           border-dashed
-          border-slate-300
-          bg-slate-50
+          border-border
+          bg-muted
           p-4
         "
       >
-        <p className="text-sm text-slate-500">
+        <p className="text-sm muted-foreground">
           Generated Section Name
         </p>
 
@@ -155,7 +161,7 @@ export default function SectionFormFields({
             mt-1
             text-lg
             font-semibold
-            text-slate-900
+            text-foreground
           "
         >
           {generatedName}

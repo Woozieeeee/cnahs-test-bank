@@ -12,14 +12,14 @@ export default function ActivityDetailItem({
     <div
       className="
         rounded-xl
-        bg-slate-50
+        bg-muted/30
         p-4
       "
     >
       <p
         className="
           text-sm
-          text-slate-500
+          text-muted-foreground
         "
       >
         {label}

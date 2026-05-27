@@ -4,7 +4,7 @@ export default function ActivityTimelineEmpty() {
       className="
         py-16
         text-center
-        text-slate-500
+        text-muted-foreground
       "
     >
       No activity logs found.

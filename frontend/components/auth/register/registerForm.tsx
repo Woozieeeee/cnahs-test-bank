@@ -19,8 +19,6 @@ import RegisterLinks from "./registerLinks";
 import StudentIdField from "../shared/studentIdField";
 
 export default function RegisterForm() {
-  const [name, setName] = useState("");
-
   const [studentId, setStudentId] = useState("");
 
   const [password, setPassword] = useState("");
@@ -67,14 +65,11 @@ export default function RegisterForm() {
       setLoading(true);
 
       await registerUser({
-        name,
         studentId,
         password,
       });
 
       successToast("Registration submitted successfully.");
-
-      setName("");
 
       setStudentId("");
 
@@ -105,23 +100,6 @@ export default function RegisterForm() {
     >
       <RegisterHeader />
 
-      {/* FULL NAME */}
-
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="
-          mb-4
-          w-full
-          rounded
-          border
-          p-3
-        "
-        required
-      />
-
       {/* STUDENT ID */}
 
       <StudentIdField
@@ -131,11 +109,21 @@ export default function RegisterForm() {
 
       {/* PASSWORD */}
 
-      <div className="mb-4">
+      <div className="mb-4 ">
         <PasswordInput
           value={password}
           onChange={setPassword}
           placeholder="Password"
+          className="
+          rounded-xl
+          border
+          border-slate-300
+          bg-white
+          px-4
+          py-3
+          outline-none
+          transition
+          focus:border-slate-500"
         />
 
         <PasswordRules
@@ -154,6 +142,16 @@ export default function RegisterForm() {
           value={confirmPassword}
           onChange={setConfirmPassword}
           placeholder="Confirm Password"
+          className="
+          rounded-xl
+          border
+          border-slate-300
+          bg-white
+          px-4
+          py-3
+          outline-none
+          transition
+          focus:border-slate-500"
         />
 
         <PasswordMatchIndicator

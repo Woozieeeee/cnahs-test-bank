@@ -50,7 +50,7 @@ export default function SectionCardActions({
           rounded-lg
           p-2
           transition
-          hover:bg-slate-100
+          hover:bg-muted
         "
       >
         <MoreVertical size={18} />
@@ -66,8 +66,8 @@ export default function SectionCardActions({
             w-48
             rounded-xl
             border
-            border-slate-200
-            bg-white
+            border-border
+            bg-popover
             p-2
             shadow-lg
           "
@@ -92,7 +92,7 @@ export default function SectionCardActions({
               py-2
               text-sm
               transition
-              hover:bg-slate-100
+              hover:bg-muted
             "
           >
             <Pencil size={16} />

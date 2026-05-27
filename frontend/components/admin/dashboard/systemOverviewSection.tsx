@@ -26,7 +26,7 @@ export default function SystemOverviewSection({
           mb-4
           text-xl
           font-semibold
-          text-gray-800
+          text-foreground
         "
       >
         System Overview

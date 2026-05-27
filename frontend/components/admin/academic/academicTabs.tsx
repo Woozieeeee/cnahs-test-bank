@@ -28,14 +28,14 @@ export default function AcademicTabs({
             text-sm
             font-medium
             transition
-
+            
             ${
               activeTab === tab
-                ? "bg-slate-900 text-white"
+                ? "bg-primary text-primary-foreground"
                 : `
-                  bg-white
-                  text-slate-600
-                  hover:bg-slate-100
+                  bg-card
+                  text-muted-foreground
+                  hover:text-foreground
                 `
             }
           `}

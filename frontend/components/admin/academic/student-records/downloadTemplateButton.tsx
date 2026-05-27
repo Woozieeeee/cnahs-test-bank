@@ -37,20 +37,21 @@ export default function DownloadTemplateButton() {
     <button
       onClick={handleDownload}
       className="
-        w-full
-        rounded-lg
-        border
-        border-slate-200
-        bg-white
-        px-4
-        py-3
-        text-left
-        text-sm
-        font-medium
-        text-slate-700
-        transition
-        hover:bg-slate-50
-      "
+  w-full
+  rounded-lg
+  border
+  border-border
+  bg-muted
+  px-4
+  py-3
+  text-left
+  text-sm
+  font-medium
+  text-foreground
+  transition
+  hover:bg-muted/80
+  cursor-pointer
+"
     >
       Download Template
     </button>

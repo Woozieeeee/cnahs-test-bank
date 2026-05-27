@@ -37,7 +37,7 @@ export default function ActivityTimelineItem({
     <div className="grid grid-cols-[84px_28px_1fr] gap-4">
       {/* TIME */}
 
-      <div className="pt-5 text-right text-sm text-gray-400">
+      <div className="pt-5 text-right text-sm text-muted-foreground">
         {timeLabel}
       </div>
 
@@ -87,8 +87,8 @@ export default function ActivityTimelineItem({
                   `
                   : `
                     border-slate-200
-                    bg-slate-50/80
-                    hover:border-slate-300
+                    bg-muted/30
+                    hover:border-border/70
                   `
             }
           `}
@@ -110,7 +110,7 @@ export default function ActivityTimelineItem({
                     mt-3
                     text-sm
                     leading-6
-                    text-slate-600
+                    text-muted-foreground
                   "
                 >
                   {activity.description}

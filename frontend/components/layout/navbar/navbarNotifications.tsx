@@ -9,8 +9,9 @@ export default function NavbarNotifications() {
         relative
         rounded-full
         p-2
+        text-foreground
         transition
-        hover:bg-gray-100
+        hover:bg-muted
       "
     >
       <Bell size={20} />

@@ -30,7 +30,7 @@ export default function NavbarTitle() {
       className="
         text-2xl
         font-bold
-        text-gray-800
+        text-foreground
       "
     >
       {getPageTitle()}

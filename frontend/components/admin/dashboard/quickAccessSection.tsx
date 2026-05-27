@@ -17,7 +17,7 @@ export default function QuickAccessSection() {
           mb-4
           text-xl
           font-semibold
-          text-gray-800
+          text-foreground
         "
       >
         Quick Access
@@ -32,17 +32,17 @@ export default function QuickAccessSection() {
         "
       >
         <QuickAccessCard
-          title="Pending Accounts"
-          description="Review accounts awaiting approval"
+          title="Manage Students"
+          description="View and manage student accounts"
           href="/admin/users"
-          icon={<ClipboardList size={28} />}
+          icon={<Users size={28} />}
         />
 
         <QuickAccessCard
-          title="Manage Students"
-          description="View and manage student records"
-          href="/admin/users"
-          icon={<Users size={28} />}
+          title="Academic Management"
+          description="Manage sections, subjects, and assignments"
+          href="/admin/academic"
+          icon={<ClipboardList size={28} />}
         />
 
         <QuickAccessCard
@@ -53,9 +53,9 @@ export default function QuickAccessSection() {
         />
 
         <QuickAccessCard
-          title="Faculty Accounts"
-          description="Manage faculty members"
-          href="/admin/faculty"
+          title="Activity Logs"
+          description="View recent system activity"
+          href="/admin/activity-logs"
           icon={<GraduationCap size={28} />}
         />
       </MotionCard>

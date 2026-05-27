@@ -20,9 +20,15 @@ export default function StudentIdField({
         onChange={(e) => onChange(e.target.value)}
         className={`
           w-full
-          rounded
+          rounded-xl
           border
-          p-3
+          border-slate-300
+          bg-white
+          px-4
+          py-3
+          outline-none
+          transition
+          focus:border-slate-500
 
           ${
             studentId.length === 8 &&

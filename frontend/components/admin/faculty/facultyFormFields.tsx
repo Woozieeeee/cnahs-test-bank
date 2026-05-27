@@ -30,12 +30,13 @@ export default function FacultyFormFields({
           w-full
           rounded-xl
           border
-          border-slate-200
+          border-input
+          bg-background
           px-4
           py-3
           outline-none
           transition
-          focus:border-slate-400
+          focus:border-ring
         "
       />
 
@@ -50,12 +51,13 @@ export default function FacultyFormFields({
           w-full
           rounded-xl
           border
-          border-slate-200
+          border-input
+          bg-background
           px-4
           py-3
           outline-none
           transition
-          focus:border-slate-400
+          focus:border-ring
         "
       />
     </div>

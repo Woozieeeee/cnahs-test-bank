@@ -1,26 +1,31 @@
 import MotionButton from "@/components/motion/motionButton";
+import SortableTableHeader from "@/components/common/sortableTableHeader";
 
 interface StudentRecord {
   id: number;
-
   studentId: string;
-
-  fullName: string;
-
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  suffix?: string;
   program: string;
-
   section?: {
     name: string;
   } | null;
 }
-
 interface Props {
   records: StudentRecord[];
   onEdit: (record: StudentRecord) => void;
+  sortField: string;
+  sortOrder: "asc" | "desc";
+  onSort: (field: string, order: "asc" | "desc") => void;
 }
 
 export default function StudentRecordsTable({
   records,
+  sortField,
+  sortOrder,
+  onSort,
   onEdit,
 }: Props) {
   return (
@@ -29,30 +34,42 @@ export default function StudentRecordsTable({
         overflow-hidden
         rounded-2xl
         border
-        border-slate-200
-        bg-white
+        border-border
+        bg-card
       "
     >
       <table className="w-full">
-        <thead className="bg-slate-50">
+        <thead className="bg-muted">
           <tr>
-            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
-              Student ID
-            </th>
+            <SortableTableHeader
+              label="Student ID"
+              field="studentId"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
-            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
-              Full Name
-            </th>
+            <SortableTableHeader
+              label="Full Name"
+              field="lastName"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
-            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
-              Program
-            </th>
+            <SortableTableHeader
+              label="Program"
+              field="program"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
-            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+            <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">
               Section
             </th>
 
-            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+            <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">
               Actions
             </th>
           </tr>
@@ -69,7 +86,7 @@ export default function StudentRecordsTable({
                   text-center
                   align-middle
                   text-sm
-                  text-slate-500
+                  text-muted-foreground
                 "
               >
                 No student records found.
@@ -81,22 +98,29 @@ export default function StudentRecordsTable({
               key={record.id}
               className="
                 border-t
-                border-slate-100
+                border-border
               "
             >
-              <td className="px-6 py-4 text-sm text-slate-700">
+              <td className="px-6 py-4 text-sm text-foreground">
                 {record.studentId}
               </td>
 
-              <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                {record.fullName}
+              <td className="px-6 py-4 text-sm font-medium text-card-foreground">
+                {[
+                  record.lastName + ",",
+                  record.firstName,
+                  record.middleName,
+                  record.suffix,
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
               </td>
 
-              <td className="px-6 py-4 text-sm text-slate-700">
+              <td className="px-6 py-4 text-sm text-foreground">
                 {record.program}
               </td>
 
-              <td className="px-6 py-4 text-sm text-slate-700">
+              <td className="px-6 py-4 text-sm text-foreground">
                 {record.section?.name || "Unassigned"}
               </td>
 
@@ -106,14 +130,15 @@ export default function StudentRecordsTable({
                   className="
                   rounded-lg
                   border
-                  border-slate-200
+                  border-border
                   px-3
                   py-2
                   text-sm
                   font-medium
-                  text-slate-700
+                  text-foreground
                   transition
-                  hover:bg-slate-50
+                  hover:bg-muted
+                  cursor-pointer
                 "
                 >
                   Edit

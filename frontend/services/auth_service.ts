@@ -1,7 +1,6 @@
 import api from "@/lib/axios";
 
 export const registerUser = async (data: {
-  name: string;
   studentId: string;
   password: string;
 }) => {
@@ -11,7 +10,7 @@ export const registerUser = async (data: {
 };
 
 export const loginUser = async (data: {
-  login: string;
+  identifier: string;
   password: string;
 }) => {
   const response = await api.post("/auth/login", data);

@@ -1,3 +1,5 @@
+import MotionDropdown from "@/components/motion/motionDropdown";
+
 interface Props {
   value: string;
 
@@ -16,8 +18,18 @@ export default function UsersRoleFilter({
       className="
         rounded-xl
         border
+        border-border
+        bg-background
         px-4
         py-3
+        text-sm
+        text-foreground
+        outline-none
+        transition
+        focus:border-ring
+        focus:ring-2
+        focus:ring-ring/20
+        cursor-pointer
       "
     >
       <option value="ALL">All Roles</option>

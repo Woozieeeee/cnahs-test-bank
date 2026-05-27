@@ -18,11 +18,11 @@ export default function SectionCard({ section }: Props) {
           block
           rounded-2xl
           border
-          border-slate-200
-          bg-white
+          border-border
+          bg-card
           p-6
           transition
-          hover:border-slate-300
+          hover:border-ring
           hover:shadow-sm
         "
       >
@@ -34,13 +34,13 @@ export default function SectionCard({ section }: Props) {
               className="
         text-xl
         font-semibold
-        text-slate-900
+        text-foreground
       "
             >
               {section.name}
             </h2>
 
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               {section.program}
             </p>
           </div>
@@ -68,11 +68,11 @@ export default function SectionCard({ section }: Props) {
           <div
             className="
               rounded-xl
-              bg-slate-50
+              bg-muted
               p-4
             "
           >
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               Students
             </p>
 
@@ -81,7 +81,7 @@ export default function SectionCard({ section }: Props) {
                 mt-2
                 text-2xl
                 font-bold
-                text-slate-900
+                text-foreground
               "
             >
               {section.users.length}
@@ -91,18 +91,20 @@ export default function SectionCard({ section }: Props) {
           <div
             className="
               rounded-xl
-              bg-slate-50
+              bg-muted
               p-4
             "
           >
-            <p className="text-sm text-slate-500">Exams</p>
+            <p className="text-sm text-muted-foreground">
+              Exams
+            </p>
 
             <p
               className="
                 mt-2
                 text-2xl
                 font-bold
-                text-slate-900
+                text-foreground
               "
             >
               {section.exams.length}
@@ -119,11 +121,11 @@ export default function SectionCard({ section }: Props) {
             items-center
             justify-between
             border-t
-            border-slate-100
+            border-white
             pt-4
           "
         >
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             View section details
           </p>
 

@@ -27,7 +27,13 @@ export default function MotionCard({
       transition={{
         duration: 0.2,
       }}
-      className={className}
+      style={{
+        willChange: "transform",
+      }}
+      className={`
+        text-card-foreground
+        ${className}
+      `}
       {...props}
     >
       {children}

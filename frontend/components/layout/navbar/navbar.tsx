@@ -12,17 +12,19 @@ export default function Navbar() {
   return (
     <header
       className="
-        sticky
-        top-0
-        z-40
-        flex
-        items-center
-        justify-between
-        border-b
-        bg-white
-        px-6
-        py-4
-      "
+      sticky
+      top-0
+      z-40
+      flex
+      items-center
+      justify-between
+      border-b
+      border-border
+      bg-background/90
+      px-6
+      py-4
+      backdrop-blur
+    "
     >
       {/* PAGE TITLE */}
 

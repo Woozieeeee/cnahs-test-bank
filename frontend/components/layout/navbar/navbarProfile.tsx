@@ -22,8 +22,9 @@ export default function NavbarProfile() {
           rounded-xl
           px-3
           py-2
+          text-foreground
           transition
-          hover:bg-gray-100
+          hover:bg-muted
         "
       >
         <div className="text-right">
@@ -32,7 +33,7 @@ export default function NavbarProfile() {
           <p
             className="
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             Administrator

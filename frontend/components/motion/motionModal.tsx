@@ -65,7 +65,10 @@ export default function MotionModal({
               w-full
               max-w-md
               rounded-2xl
-              bg-white
+              border
+              border-border
+              bg-card
+              text-card-foreground
               shadow-xl
             "
           >

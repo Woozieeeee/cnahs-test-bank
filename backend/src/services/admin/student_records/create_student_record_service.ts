@@ -1,11 +1,15 @@
 import prisma from "../../../lib/prisma";
 
-import { ACADEMIC_PROGRAMS } from "../../../lib/constants/academic_programs";
-
 interface CreateStudentRecordData {
   studentId: string;
 
-  fullName: string;
+  firstName: string;
+
+  middleName?: string;
+
+  lastName: string;
+
+  suffix?: string;
 
   program: string;
 }
@@ -13,34 +17,16 @@ interface CreateStudentRecordData {
 export const createStudentRecordService = async ({
   studentId,
 
-  fullName,
+  firstName,
+
+  middleName,
+
+  lastName,
+
+  suffix,
 
   program,
 }: CreateStudentRecordData) => {
-  // =========================
-  // VALIDATION
-  // =========================
-
-  const studentIdRegex = /^\d{2}-\d{5}$/;
-
-  const fullNameRegex = /^[A-Za-z\s.-]+$/;
-
-  if (!studentIdRegex.test(studentId)) {
-    throw new Error("Invalid student ID format");
-  }
-
-  if (!fullNameRegex.test(fullName)) {
-    throw new Error("Invalid full name");
-  }
-
-  if (!ACADEMIC_PROGRAMS.includes(program)) {
-    throw new Error("Invalid academic program");
-  }
-
-  // =========================
-  // DUPLICATE CHECK
-  // =========================
-
   const existingRecord = await prisma.studentRecord.findUnique({
     where: {
       studentId,
@@ -48,22 +34,22 @@ export const createStudentRecordService = async ({
   });
 
   if (existingRecord) {
-    throw new Error("Student record already exists");
+    throw new Error("Student record already exists.");
   }
 
-  // =========================
-  // CREATE RECORD
-  // =========================
-
-  const record = await prisma.studentRecord.create({
+  return prisma.studentRecord.create({
     data: {
       studentId,
 
-      fullName,
+      firstName,
+
+      middleName,
+
+      lastName,
+
+      suffix,
 
       program,
     },
   });
-
-  return record;
 };

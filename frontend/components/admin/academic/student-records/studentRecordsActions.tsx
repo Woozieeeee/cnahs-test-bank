@@ -59,18 +59,21 @@ export default function StudentRecordsActions({
       <MotionButton
         onClick={onAddStudent}
         className="
-          flex
-          h-[50px]
-          items-center
-          rounded-xl
-          bg-slate-900
-          px-5
-          text-sm
-          font-medium
-          text-white
-          transition
-          hover:bg-slate-800
-        "
+            flex
+            h-[50px]
+            items-center
+            rounded-xl
+            border
+            border-border
+            bg-primary
+            px-5
+            text-sm
+            font-medium
+            text-card
+            transition
+            hover:bg-primary/80
+            cursor-pointer
+          "
       >
         <div className="flex items-center gap-2">
           <Plus size={16} />
@@ -97,14 +100,15 @@ export default function StudentRecordsActions({
             items-center
             rounded-xl
             border
-            border-slate-200
-            bg-white
+            border-border
+            bg-card
             px-5
             text-sm
             font-medium
-            text-slate-700
+            text-foreground
             transition
-            hover:bg-slate-50
+            hover:bg-muted
+            cursor-pointer
           "
         >
           <div className="flex items-center gap-2">
@@ -115,7 +119,6 @@ export default function StudentRecordsActions({
               className={`
                 transition-transform
                 duration-200
-
                 ${openTools ? "rotate-180" : ""}
               `}
             />
@@ -135,8 +138,8 @@ export default function StudentRecordsActions({
               origin-top-right
               rounded-xl
               border
-              border-slate-200
-              bg-white
+              border-border
+              bg-card
               p-2
               shadow-lg
               animate-in

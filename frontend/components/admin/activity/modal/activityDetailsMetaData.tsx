@@ -14,7 +14,7 @@ export default function ActivityDetailsMetadata({
           mt-2
           space-y-2
           rounded-xl
-          bg-slate-100
+          bg-muted
           p-4
         "
       >
@@ -27,7 +27,7 @@ export default function ActivityDetailsMetadata({
                 justify-between
                 gap-4
                 border-b
-                border-slate-200
+                border-border
                 pb-2
                 text-sm
                 last:border-0
@@ -38,13 +38,13 @@ export default function ActivityDetailsMetadata({
               className="
                   font-medium
                   capitalize
-                  text-slate-600
+                  text-muted-foreground
                 "
             >
               {key}
             </span>
 
-            <span className="text-slate-900">
+            <span className="text-foreground">
               {String(value)}
             </span>
           </div>

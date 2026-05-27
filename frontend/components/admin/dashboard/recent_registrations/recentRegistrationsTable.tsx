@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 
 import RegistrationTable from "./registrationTable";
 
-import RegistrationPagination from "./registrationPagination";
+import Pagination from "@/components/common/pagination";
 
 import RegistrationSearch from "./registrationSearch";
 
@@ -82,7 +82,7 @@ export default function RecentRegistrationsTable({
     <div
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-6
         shadow-sm
       "
@@ -110,7 +110,7 @@ export default function RecentRegistrationsTable({
             Recent Registrations
           </h2>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Recently registered student accounts
           </p>
         </div>
@@ -118,10 +118,17 @@ export default function RecentRegistrationsTable({
         <Link
           href="/admin/approvals"
           className="
-            text-sm
-            font-medium
-            text-black
-            hover:underline
+             rounded-lg
+             border
+             border-border
+             px-4
+             py-2
+             text-sm
+             font-medium
+             text-foreground
+             transition
+             hover:bg-muted
+             cursor-pointer
           "
         >
           View All
@@ -156,11 +163,10 @@ export default function RecentRegistrationsTable({
 
       {/* PAGINATION */}
 
-      <RegistrationPagination
+      <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPrevious={() => setCurrentPage(currentPage - 1)}
-        onNext={() => setCurrentPage(currentPage + 1)}
+        onPageChange={setCurrentPage}
       />
     </div>
   );

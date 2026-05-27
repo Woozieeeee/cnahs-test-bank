@@ -85,14 +85,34 @@ export default function RecentActivitySection({
   const groups = Object.entries(groupedActivities);
 
   return (
-    <section className="rounded-2xl bg-white p-6 shadow-sm">
+    <section
+      className="
+    rounded-2xl
+    border
+    border-border
+    bg-card
+    p-6
+    shadow-sm
+  "
+    >
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-slate-950">
+          <h2
+            className="
+          text-xl
+          font-semibold
+          text-card-foreground
+        "
+          >
             Recent Activity
           </h2>
 
-          <p className="text-sm text-slate-500">
+          <p
+            className="
+          text-sm
+          text-muted-foreground
+        "
+          >
             Latest meaningful administrative actions
           </p>
         </div>
@@ -100,18 +120,17 @@ export default function RecentActivitySection({
         <Link
           href="/admin/activity-logs"
           className="
-            rounded-lg
-            border
-            border-slate-200
-            px-4
-            py-2
-            text-sm
-            font-medium
-            text-slate-700
-            transition
-            hover:border-slate-300
-            hover:bg-slate-50
-          "
+        rounded-lg
+        border
+        border-border
+        px-4
+        py-2
+        text-sm
+        font-medium
+        text-foreground
+        transition
+        hover:bg-muted
+      "
         >
           View All
         </Link>
@@ -126,34 +145,40 @@ export default function RecentActivitySection({
 
                 <div
                   className="
-                    flex
-                    h-6
-                    w-6
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-slate-100
-                    text-slate-500
-                  "
+                flex
+                h-6
+                w-6
+                items-center
+                justify-center
+                rounded-full
+                bg-muted
+                text-muted-foreground
+              "
                 >
                   <ChevronDown size={16} />
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-slate-700">
+                  <h3
+                    className="
+                  text-sm
+                  font-semibold
+                  text-foreground
+                "
+                  >
                     {label}
                   </h3>
 
                   <span
                     className="
-                      rounded-full
-                      bg-slate-100
-                      px-3
-                      py-1
-                      text-xs
-                      font-semibold
-                      text-slate-500
-                    "
+                  rounded-full
+                  bg-muted
+                  px-3
+                  py-1
+                  text-xs
+                  font-semibold
+                  text-muted-foreground
+                "
                   >
                     {group.length}
                   </span>
@@ -178,16 +203,16 @@ export default function RecentActivitySection({
       ) : (
         <div
           className="
-            rounded-xl
-            border
-            border-dashed
-            border-slate-200
-            bg-slate-50
-            p-8
-            text-center
-            text-sm
-            text-slate-500
-          "
+        rounded-xl
+        border
+        border-dashed
+        border-border
+        bg-muted/40
+        p-8
+        text-center
+        text-sm
+        text-muted-foreground
+      "
         >
           No recent activity found.
         </div>

@@ -3,7 +3,7 @@ export default function AssignmentsDashboard() {
     <div
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-10
         shadow-sm
       "
@@ -12,13 +12,13 @@ export default function AssignmentsDashboard() {
         className="
           text-xl
           font-semibold
-          text-slate-900
+          text-foreground
         "
       >
         Assignments
       </h2>
 
-      <p className="mt-2 text-slate-500">
+      <p className="mt-2 text-muted-foreground">
         Academic assignment dashboard coming soon.
       </p>
     </div>

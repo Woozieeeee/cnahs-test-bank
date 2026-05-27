@@ -56,6 +56,16 @@ export default function FacultyPasswordFields({
           value={password}
           onChange={setPassword}
           placeholder="Password"
+          className=" w-full
+          rounded-xl
+          border
+          border-input
+          bg-background
+          px-4
+          py-3
+          outline-none
+          transition
+          focus:border-ring"
         />
 
         <PasswordRules
@@ -74,6 +84,16 @@ export default function FacultyPasswordFields({
           value={confirmPassword}
           onChange={setConfirmPassword}
           placeholder="Confirm Password"
+          className=" w-full
+          rounded-xl
+          border
+          border-input
+          bg-background
+          px-4
+          py-3
+          outline-none
+          transition
+          focus:border-ring"
         />
 
         <PasswordMatchIndicator

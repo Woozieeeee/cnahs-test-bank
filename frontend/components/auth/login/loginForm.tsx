@@ -22,7 +22,7 @@ import LoginLinks from "./loginLinks";
 export default function LoginForm() {
   const router = useRouter();
 
-  const [login, setLogin] = useState("");
+  const [identifier, setIdentifier] = useState("");
 
   const [password, setPassword] = useState("");
 
@@ -35,7 +35,7 @@ export default function LoginForm() {
       setLoading(true);
 
       const data = await loginUser({
-        login,
+        identifier,
         password,
       });
 
@@ -100,8 +100,8 @@ export default function LoginForm() {
       <input
         type="text"
         placeholder="Enter your Student ID"
-        value={login}
-        onChange={(e) => setLogin(e.target.value)}
+        value={identifier}
+        onChange={(e) => setIdentifier(e.target.value)}
         className="mb-4 w-full rounded border p-3"
       />
 

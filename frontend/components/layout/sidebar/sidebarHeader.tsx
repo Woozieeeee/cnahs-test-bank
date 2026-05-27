@@ -5,13 +5,13 @@ export default function SidebarHeader() {
         className="
           text-2xl
           font-bold
-          text-slate-900
+          text-foreground
         "
       >
         CNAHS Admin
       </h1>
 
-      <p className="mt-1 text-sm text-slate-500">
+      <p className="mt-1 text-sm text-muted-foreground">
         Monitoring & oversight panel
       </p>
     </div>

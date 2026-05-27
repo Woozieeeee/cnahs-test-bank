@@ -29,7 +29,7 @@ export default function ActivityTimelineHeader({
         items-center
         gap-2
         text-sm
-        text-slate-700
+        text-foreground
       "
     >
       {/* ICON */}
@@ -43,8 +43,8 @@ export default function ActivityTimelineHeader({
           items-center
           justify-center
           rounded-full
-          bg-slate-900
-          text-white
+          bg-primary
+          text-primary-foreground
         "
       >
         {PrimaryIcon ? (
@@ -58,7 +58,7 @@ export default function ActivityTimelineHeader({
 
       {/* USER */}
 
-      <span className="font-semibold text-slate-900">
+      <span className="font-semibold text-foreground">
         {activity.performedBy}
       </span>
 
@@ -76,11 +76,11 @@ export default function ActivityTimelineHeader({
         <span
           className="
             rounded-md
-            bg-slate-200
+            bg-muted
             px-2
             py-0.5
             font-medium
-            text-slate-700
+            text-foreground
           "
         >
           {activity.targetUser}

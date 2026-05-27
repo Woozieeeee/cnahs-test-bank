@@ -25,7 +25,7 @@ export default function RegistrationTable({
             className="
               border-b
               text-left
-              text-gray-500
+              text-muted-foreground
             "
           >
             <th className="p-3">Name</th>
@@ -51,7 +51,7 @@ export default function RegistrationTable({
                 className="
                   p-6
                   text-center
-                  text-gray-500
+                  text-muted-foreground
                 "
               >
                 No registrations found.

@@ -20,19 +20,19 @@ export default function OverviewCard({
       }}
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-6
         shadow-sm
       "
     >
-      <p className="text-gray-500">{title}</p>
+      <p className="text-muted-foreground">{title}</p>
 
       <h2
         className="
           mt-2
           text-3xl
           font-bold
-          text-gray-800
+          text-foreground
         "
       >
         {value}

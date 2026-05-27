@@ -18,8 +18,8 @@ export default function SectionsGrid({ sections }: Props) {
           rounded-2xl
           border
           border-dashed
-          border-slate-300
-          bg-white
+          border-border
+          bg-card
           p-10
           text-center
         "
@@ -28,13 +28,13 @@ export default function SectionsGrid({ sections }: Props) {
           className="
             text-lg
             font-semibold
-            text-slate-900
+            text-foreground
           "
         >
           No sections created
         </h3>
 
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-muted-foreground">
           Create your first academic section to get started.
         </p>
       </div>

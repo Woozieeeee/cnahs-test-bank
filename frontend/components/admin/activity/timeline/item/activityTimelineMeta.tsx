@@ -10,7 +10,7 @@ export default function ActivityTimelineMeta({
       className="
         mt-3
         text-xs
-        text-slate-500
+        text-muted-foreground
       "
     >
       {new Date(createdAt).toLocaleString()}

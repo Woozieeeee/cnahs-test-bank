@@ -4,10 +4,10 @@ import { loginService } from "../services/auth/login_service";
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { login: loginInput, password } = req.body;
+    const { identifier, password } = req.body;
 
     const { token, user } = await loginService({
-      login: loginInput,
+      identifier,
       password,
     });
 
@@ -20,22 +20,22 @@ export const login = async (req: Request, res: Response) => {
     res.cookie("token", token, {
       httpOnly: true,
 
-      secure: true,
+      secure: isProduction,
 
-      sameSite: "none",
+      sameSite: isProduction ? "none" : "lax",
 
       maxAge: 1000 * 60 * 60 * 24,
     });
 
     try {
       await logActivity({
-        action: "Admin signed in",
+        action: "User signed in",
 
         categories: ["AUTH", "SECURITY", "SYSTEM"],
 
         severity: "INFO",
 
-        description: "Secure session started successfully.",
+        description: `${user.name} signed it successfully.`,
 
         performedBy: user.name,
       });

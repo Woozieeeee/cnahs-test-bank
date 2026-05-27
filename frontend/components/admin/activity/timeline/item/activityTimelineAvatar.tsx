@@ -22,10 +22,10 @@ export default function ActivityTimelineAvatar({
         items-center
         justify-center
         rounded-full
-        bg-slate-900
+        bg-primary
         text-xs
         font-semibold
-        text-white
+        text-primary-foreground
       "
     >
       {initials || "A"}

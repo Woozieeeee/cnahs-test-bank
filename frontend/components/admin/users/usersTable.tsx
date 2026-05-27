@@ -1,4 +1,5 @@
 import UserTableRow from "./userTableRow";
+import SortableTableHeader from "@/components/common/sortableTableHeader";
 
 interface User {
   id: number;
@@ -26,6 +27,16 @@ interface Props {
   setSelectedUsers: React.Dispatch<
     React.SetStateAction<number[]>
   >;
+
+  sortField: string;
+
+  sortOrder: "asc" | "desc";
+
+  onSort: (
+    field: string,
+
+    order: "asc" | "desc"
+  ) => void;
 }
 
 export default function UsersTable({
@@ -38,6 +49,12 @@ export default function UsersTable({
   selectedUsers,
 
   setSelectedUsers,
+
+  sortField,
+
+  sortOrder,
+
+  onSort,
 }: Props) {
   // =========================
   // SELECT ALL
@@ -72,7 +89,7 @@ export default function UsersTable({
       className="
         overflow-x-auto
         rounded-2xl
-        bg-white
+        bg-card
         shadow-sm
       "
     >
@@ -82,7 +99,7 @@ export default function UsersTable({
             className="
               border-b
               text-left
-              text-gray-500
+              text-muted-foreground
             "
           >
             {/* CHECKBOX */}
@@ -96,20 +113,44 @@ export default function UsersTable({
                   h-4
                   w-4
                   rounded
-                  border-slate-300
+                  border-input
                 "
               />
             </th>
 
             {/* HEADERS */}
 
-            <th className="p-4">Name</th>
+            <SortableTableHeader
+              label="Name"
+              field="name"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
-            <th className="p-4">Student ID</th>
+            <SortableTableHeader
+              label="Student ID"
+              field="studentId"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
-            <th className="p-4">Role</th>
+            <SortableTableHeader
+              label="Role"
+              field="role"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
-            <th className="p-4">Status</th>
+            <SortableTableHeader
+              label="Status"
+              field="status"
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={onSort}
+            />
 
             <th className="p-4">Registered</th>
 
@@ -140,7 +181,7 @@ export default function UsersTable({
                 className="
                   p-6
                   text-center
-                  text-gray-500
+                  text-muted-foreground
                 "
               >
                 No users found.

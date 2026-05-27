@@ -7,7 +7,6 @@ import UsersLoader from "@/components/admin/users/usersLoader";
 import UsersStatsBar from "@/components/admin/users/usersStatsBar";
 import UsersTabs from "@/components/admin/users/usersTabs";
 import UsersManagementTable from "@/components/admin/users/usersManagementTable";
-import UsersPagination from "@/components/admin/users/usersPagination";
 import { useUserActions } from "@/hooks/admin/users/useUserActions";
 import AnimatedPage from "@/components/common/animatedPage";
 import AddFacultyModal from "@/components/admin/users/addFacultyModal";
@@ -35,6 +34,29 @@ export default function UsersPage() {
   const [selectedUsers, setSelectedUsers] = useState<
     number[]
   >([]);
+  const [sortField, setSortField] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState<
+    "asc" | "desc"
+  >("desc");
+  const fetchUsers = async () => {
+    try {
+      const data = await getUsers({
+        page,
+        limit: 10,
+        search,
+        role: roleFilter,
+        status: activeTab,
+      });
+
+      setUsers(data.users);
+
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // =========================
   // USER ACTIONS HOOK
@@ -51,30 +73,6 @@ export default function UsersPage() {
   // =========================
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await getUsers({
-          page,
-
-          limit: 10,
-
-          search,
-
-          role: roleFilter,
-
-          status: activeTab,
-        });
-
-        setUsers(data.users);
-
-        setTotalPages(data.totalPages);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, [page, search, roleFilter, activeTab]);
 
@@ -90,10 +88,32 @@ export default function UsersPage() {
   // FILTER USERS
   // =========================
 
-  const filteredUsers =
+  const filteredUsers = (
     activeTab === "ALL"
       ? users
-      : users.filter((user) => user.status === activeTab);
+      : users.filter((user) => user.status === activeTab)
+  )
+    .filter((user) =>
+      [user.name, user.studentId, user.role, user.status]
+        .join(" ")
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      const aValue = String(
+        a[sortField as keyof User] || ""
+      ).toLowerCase();
+
+      const bValue = String(
+        b[sortField as keyof User] || ""
+      ).toLowerCase();
+
+      if (sortOrder === "asc") {
+        return aValue.localeCompare(bValue);
+      }
+
+      return bValue.localeCompare(aValue);
+    });
 
   return (
     <AnimatedPage>
@@ -103,13 +123,13 @@ export default function UsersPage() {
             className="
             text-3xl
             font-bold
-            text-gray-800
+            text-foreground
           "
           >
             User Management
           </h1>
 
-          <p className="mt-2 text-gray-500">
+          <p className="mt-2 text-muted-foreground">
             Manage student and faculty accounts.
           </p>
         </div>
@@ -149,14 +169,18 @@ export default function UsersPage() {
           onOpenFacultyModal={() =>
             setOpenFacultyModal(true)
           }
+          sortField={sortField}
+          sortOrder={sortOrder}
+          onSort={(field, order) => {
+            setSortField(field);
+            setSortOrder(order);
+          }}
         />
       </div>
       <AddFacultyModal
         open={openFacultyModal}
         onOpenChange={setOpenFacultyModal}
-        onSuccess={() => {
-          window.location.reload();
-        }}
+        onSuccess={fetchUsers}
       />
     </AnimatedPage>
   );

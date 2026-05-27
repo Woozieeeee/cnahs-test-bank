@@ -3,7 +3,7 @@ export default function SubjectsDashboard() {
     <div
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-10
         shadow-sm
       "
@@ -12,13 +12,13 @@ export default function SubjectsDashboard() {
         className="
           text-xl
           font-semibold
-          text-slate-900
+          text-foreground
         "
       >
         Subjects
       </h2>
 
-      <p className="mt-2 text-slate-500">
+      <p className="mt-2 text-muted-foreground">
         Subject management dashboard coming soon.
       </p>
     </div>

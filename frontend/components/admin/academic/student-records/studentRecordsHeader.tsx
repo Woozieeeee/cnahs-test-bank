@@ -12,9 +12,9 @@ export default function StudentRecordsHeader() {
           items-center
           gap-2
           text-sm
-          text-slate-500
+          text-muted-foreground
           transition
-          hover:text-slate-900
+          hover:text-foreground
         "
       >
         <ArrowLeft size={16} />
@@ -26,13 +26,13 @@ export default function StudentRecordsHeader() {
           className="
             text-3xl
             font-bold
-            text-slate-900
+            text-foreground
           "
         >
           Student Records
         </h1>
 
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-muted-foreground">
           Manage official student verification records.
         </p>
       </div>

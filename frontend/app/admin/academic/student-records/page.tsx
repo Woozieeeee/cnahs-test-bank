@@ -14,7 +14,10 @@ import EditStudentRecordModal from "@/components/admin/academic/student-records/
 interface StudentRecord {
   id: number;
   studentId: string;
-  fullName: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  suffix?: string;
   program: string;
   section?: {
     name: string;
@@ -27,6 +30,10 @@ export default function StudentRecordsPage() {
   );
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [sortField, setSortField] = useState("lastName");
+  const [sortOrder, setSortOrder] = useState<
+    "asc" | "desc"
+  >("asc");
   const [openAddModal, setOpenAddModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
@@ -38,19 +45,19 @@ export default function StudentRecordsPage() {
   // FETCH RECORDS
   // =========================
 
+  const fetchRecords = async () => {
+    try {
+      const data = await getStudentRecords();
+
+      setRecords(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchRecords = async () => {
-      try {
-        const data = await getStudentRecords();
-
-        setRecords(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchRecords();
   }, []);
 
@@ -58,12 +65,38 @@ export default function StudentRecordsPage() {
   // FILTER RECORDS
   // =========================
 
-  const filteredRecords = records.filter((record) =>
-    [record.studentId, record.fullName]
-      .join(" ")
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  const filteredRecords = records
+    .filter((record) =>
+      [
+        record.studentId,
+
+        record.firstName,
+
+        record.middleName,
+
+        record.lastName,
+
+        record.suffix,
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      const aValue = String(
+        a[sortField as keyof StudentRecord] || ""
+      ).toLowerCase();
+
+      const bValue = String(
+        b[sortField as keyof StudentRecord] || ""
+      ).toLowerCase();
+
+      if (sortOrder === "asc") {
+        return aValue.localeCompare(bValue);
+      }
+
+      return bValue.localeCompare(aValue);
+    });
 
   // =========================
   // PAGINATION
@@ -85,7 +118,17 @@ export default function StudentRecordsPage() {
 
   if (loading) {
     return (
-      <div className="p-6">Loading student records...</div>
+      <div
+        className="
+        flex
+        min-h-screen
+        items-center
+        justify-center
+        text-muted-foreground
+      "
+      >
+        Loading student records...
+      </div>
     );
   }
 
@@ -116,19 +159,17 @@ export default function StudentRecordsPage() {
             w-full
             rounded-xl
             border
-            border-slate-300
+            border-muted
             px-4
             py-3
             outline-none
-            focus:border-slate-500
+            focus:border-muted-foreground
           "
         />
 
         <div className="flex items-center gap-3">
           <StudentRecordsActions
-            onUploadSuccess={() => {
-              window.location.reload();
-            }}
+            onUploadSuccess={fetchRecords}
             onAddStudent={() => {
               setOpenAddModal(true);
             }}
@@ -140,6 +181,13 @@ export default function StudentRecordsPage() {
 
       <StudentRecordsTable
         records={paginatedRecords}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        onSort={(field, order) => {
+          setSortField(field);
+
+          setSortOrder(order);
+        }}
         onEdit={(record) => {
           setSelectedRecord(record);
 
@@ -150,18 +198,14 @@ export default function StudentRecordsPage() {
       <AddStudentRecordModal
         open={openAddModal}
         onOpenChange={setOpenAddModal}
-        onSuccess={() => {
-          window.location.reload();
-        }}
+        onSuccess={fetchRecords}
       />
 
       <EditStudentRecordModal
         open={openEditModal}
         onOpenChange={setOpenEditModal}
         record={selectedRecord}
-        onSuccess={() => {
-          window.location.reload();
-        }}
+        onSuccess={fetchRecords}
       />
 
       <Pagination

@@ -26,7 +26,8 @@ export default function AdminLayout({
       className="
         flex
         min-h-screen
-        bg-gray-100
+        bg-background
+        text-foreground
       "
     >
       {/* SIDEBAR */}

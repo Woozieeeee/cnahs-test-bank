@@ -40,7 +40,7 @@ export default function UserTableRow({
       className="
         border-b
         transition
-        hover:bg-slate-50
+        hover:bg-muted/50
       "
     >
       {/* CHECKBOX */}
@@ -54,26 +54,28 @@ export default function UserTableRow({
             h-4
             w-4
             rounded
-            border-slate-300
+            border-input
           "
         />
       </td>
 
       {/* NAME */}
 
-      <td className="p-4 font-medium text-slate-800">
+      <td className="p-4 font-medium text-foreground">
         {user.name}
       </td>
 
       {/* STUDENT ID */}
 
-      <td className="p-4 text-slate-600">
+      <td className="p-4 text-muted-foreground">
         {user.studentId}
       </td>
 
       {/* ROLE */}
 
-      <td className="p-4 text-slate-600">{user.role}</td>
+      <td className="p-4 text-muted-foreground">
+        {user.role}
+      </td>
 
       {/* STATUS */}
 
@@ -101,48 +103,57 @@ export default function UserTableRow({
 
       {/* CREATED */}
 
-      <td className="p-4 text-slate-600">
+      <td className="p-4 text-muted-foreground">
         {new Date(user.createdAt).toLocaleDateString()}
       </td>
 
       {/* ACTIONS */}
 
       <td className="p-4">
-        <div className="flex gap-2">
-          <button
-            onClick={() => onApprove(user.id)}
-            className="
-              rounded-lg
-              bg-emerald-600
-              px-3
-              py-2
-              text-sm
-              font-medium
-              text-white
-              transition
-              hover:bg-emerald-700
-            "
-          >
-            Approve
-          </button>
+        {user.role === "STUDENT" &&
+        user.status === "PENDING" ? (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onApprove(user.id)}
+              className="
+          rounded-lg
+          bg-emerald-600
+          px-3
+          py-2
+          text-sm
+          font-medium
+          text-white
+          transition
+          hover:bg-emerald-700
+          cursor-pointer
+        "
+            >
+              Approve
+            </button>
 
-          <button
-            onClick={() => onReject(user.id)}
-            className="
-              rounded-lg
-              bg-red-600
-              px-3
-              py-2
-              text-sm
-              font-medium
-              text-white
-              transition
-              hover:bg-red-700
-            "
-          >
-            Reject
-          </button>
-        </div>
+            <button
+              onClick={() => onReject(user.id)}
+              className="
+          rounded-lg
+          bg-red-600
+          px-3
+          py-2
+          text-sm
+          font-medium
+          text-white
+          transition
+          hover:bg-red-700
+          cursor-pointer
+        "
+            >
+              Reject
+            </button>
+          </div>
+        ) : (
+          <span className="text-sm text-muted-foreground">
+            —
+          </span>
+        )}
       </td>
     </tr>
   );

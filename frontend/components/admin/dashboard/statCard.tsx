@@ -17,7 +17,7 @@ export default function StatCard({
     <MotionCard
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-6
         shadow-sm
       "
@@ -25,7 +25,7 @@ export default function StatCard({
       <p
         className="
           text-sm
-          text-gray-500
+          text-muted-foreground
         "
       >
         {title}
@@ -45,7 +45,7 @@ export default function StatCard({
         className="
           mt-1
           text-sm
-          text-gray-400
+          text-muted-foreground
         "
       >
         {description}

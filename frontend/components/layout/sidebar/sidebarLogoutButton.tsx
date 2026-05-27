@@ -30,7 +30,7 @@ export default function SidebarLogoutButton() {
         font-medium
         text-red-600
         transition
-        hover:bg-red-50
+        hover:bg-red-500/10
       "
     >
       Logout

@@ -15,9 +15,9 @@ export default function NavbarDarkMode() {
       className="
         rounded-full
         p-2
+        text-foreground
         transition
-        hover:bg-slate-100
-        dark:hover:bg-slate-800
+        hover:bg-muted
       "
     >
       {isDark ? <Sun size={20} /> : <Moon size={20} />}

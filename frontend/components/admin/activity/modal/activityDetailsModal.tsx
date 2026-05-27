@@ -36,7 +36,7 @@ export default function ActivityDetailsModal({
           w-full
           max-w-2xl
           rounded-2xl
-          bg-white
+          bg-card
           p-6
           shadow-xl
         "
@@ -58,7 +58,7 @@ export default function ActivityDetailsModal({
           <div className="mt-6">
             <h3 className="font-semibold">Description</h3>
 
-            <p className="mt-2 text-slate-600">
+            <p className="mt-2 text-muted-foreground">
               {activity.description}
             </p>
           </div>

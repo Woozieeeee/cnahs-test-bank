@@ -58,13 +58,13 @@ export default function SectionsDashboard() {
             className="
               text-2xl
               font-semibold
-              text-slate-900
+              text-foreground
             "
           >
             Sections
           </h2>
 
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-muted-foreground">
             Manage academic sections and student groupings.
           </p>
         </div>
@@ -73,14 +73,14 @@ export default function SectionsDashboard() {
           onClick={() => setOpenModal(true)}
           className="
             rounded-xl
-            bg-slate-900
+            bg-primary
             px-4
             py-2
             text-sm
             font-medium
-            text-white
+            text-primary-foreground
             transition
-            hover:bg-slate-800
+            hover:bg-primary/90
           "
         >
           Create Section
@@ -102,10 +102,10 @@ export default function SectionsDashboard() {
         <div
           className="
             rounded-2xl
-            bg-white
+            bg-card
             p-10
             text-center
-            text-slate-500
+            text-muted-foreground
           "
         >
           Loading sections...

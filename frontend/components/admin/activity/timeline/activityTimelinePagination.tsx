@@ -1,4 +1,4 @@
-import UsersPagination from "@/components/admin/users/usersPagination";
+import Pagination from "@/components/common/pagination";
 
 interface Props {
   page: number;
@@ -15,7 +15,7 @@ export default function ActivityTimelinePagination({
 }: Props) {
   return (
     <div className="mt-8">
-      <UsersPagination
+      <Pagination
         currentPage={page}
         totalPages={totalPages}
         onPageChange={onPageChange}

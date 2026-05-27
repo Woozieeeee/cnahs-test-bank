@@ -31,11 +31,12 @@ export default function UsersTabs({
             text-sm
             font-medium
             transition
-
+            cursor-pointer
+            
             ${
               activeTab === tab
-                ? "bg-black text-white"
-                : "bg-white text-gray-600 hover:bg-gray-100"
+                ? "bg-primary text-primary-foreground"
+                : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
             }
           `}
         >

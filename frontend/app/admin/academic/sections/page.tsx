@@ -24,23 +24,23 @@ export default function SectionsPage() {
   const [openCreateModal, setOpenCreateModal] =
     useState(false);
 
+  const fetchSections = async () => {
+    try {
+      const data = await getSections();
+
+      setSections(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // =========================
   // FETCH SECTIONS
   // =========================
 
   useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const data = await getSections();
-
-        setSections(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSections();
   }, []);
 
@@ -71,9 +71,9 @@ export default function SectionsPage() {
       items-center
       gap-2
       text-sm
-      text-slate-500
+      text-muted-foreground
       transition
-      hover:text-slate-900
+      hover:text-foreground
     "
           >
             <ArrowLeft size={16} />
@@ -85,13 +85,13 @@ export default function SectionsPage() {
               className="
         text-3xl
         font-bold
-        text-slate-900
+        text-foreground
       "
             >
               Sections
             </h1>
 
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-muted-foreground">
               Manage academic sections and classrooms.
             </p>
           </div>
@@ -101,14 +101,13 @@ export default function SectionsPage() {
           onClick={() => setOpenCreateModal(true)}
           className="
             rounded-xl
-            bg-slate-900
+            bg-card
             px-4
             py-2
-            text-sm
             font-medium
-            text-white
+            text-foreground
             transition
-            hover:bg-slate-800
+            hover:bg-foreground
           "
         >
           Create Section
@@ -171,16 +170,16 @@ export default function SectionsPage() {
         {sections.length === 0 ? (
           <div
             className="
-              col-span-full
-              rounded-2xl
-              border
-              border-dashed
-              border-slate-200
-              bg-white
-              p-10
-              text-center
-              text-slate-500
-            "
+    col-span-full
+    rounded-2xl
+    border
+    border-dashed
+    border-border
+    bg-card
+    p-10
+    text-center
+    text-muted-foreground
+  "
           >
             No sections created yet.
           </div>
@@ -199,9 +198,7 @@ export default function SectionsPage() {
       <CreateSectionModal
         open={openCreateModal}
         onOpenChange={setOpenCreateModal}
-        onSuccess={() => {
-          window.location.reload();
-        }}
+        onSuccess={fetchSections}
       />
     </div>
   );
@@ -225,19 +222,21 @@ function StatCard({
       className="
         rounded-2xl
         border
-        border-slate-200
-        bg-white
+        border-border
+        bg-card
         p-6
       "
     >
-      <p className="text-sm text-slate-500">{label}</p>
+      <p className="text-sm text-muted-foreground">
+        {label}
+      </p>
 
       <h2
         className="
           mt-2
           text-3xl
           font-bold
-          text-slate-900
+          text-foreground
         "
       >
         {value}

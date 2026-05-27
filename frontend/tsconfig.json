@@ -30,7 +30,8 @@
     ".next/dev/types/**/*.ts",
     "../backend/src/lib/constants/violationMessages.ts",
     "../backend/src/lib/constants/violations.ts",
-    "../backend/src/lib/constants/violationSeverity.ts"
+    "../backend/src/lib/constants/violationSeverity.ts",
+    "components/common/sortableTableHeader.txs"
   ],
   "exclude": ["node_modules"]
 }

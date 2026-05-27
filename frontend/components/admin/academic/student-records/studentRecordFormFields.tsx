@@ -3,9 +3,21 @@ interface Props {
 
   setStudentId: (value: string) => void;
 
-  fullName: string;
+  firstName: string;
 
-  setFullName: (value: string) => void;
+  setFirstName: (value: string) => void;
+
+  middleName: string;
+
+  setMiddleName: (value: string) => void;
+
+  lastName: string;
+
+  setLastName: (value: string) => void;
+
+  suffix: string;
+
+  setSuffix: (value: string) => void;
 
   program: string;
 
@@ -17,9 +29,21 @@ export default function StudentRecordFormFields({
 
   setStudentId,
 
-  fullName,
+  firstName,
 
-  setFullName,
+  setFirstName,
+
+  middleName,
+
+  setMiddleName,
+
+  lastName,
+
+  setLastName,
+
+  suffix,
+
+  setSuffix,
 
   program,
 
@@ -34,7 +58,7 @@ export default function StudentRecordFormFields({
           className="
             text-sm
             font-medium
-            text-slate-700
+            text-foreground
           "
         >
           Student ID
@@ -43,52 +67,169 @@ export default function StudentRecordFormFields({
         <input
           type="text"
           placeholder="22-03123"
+          maxLength={8}
           value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
+          onChange={(e) => {
+            // REMOVE NON-DIGITS
+
+            let value = e.target.value.replace(/\D/g, "");
+
+            // LIMIT TO 7 DIGITS
+
+            value = value.slice(0, 7);
+
+            // FORMAT NN-NNNNN
+
+            if (value.length > 2) {
+              value =
+                value.slice(0, 2) + "-" + value.slice(2);
+            }
+
+            setStudentId(value);
+          }}
           className="
             mt-2
             w-full
             rounded-xl
             border
-            border-slate-200
+            border-border
             px-4
             py-3
             outline-none
             transition
-            focus:border-slate-400
+            focus:border-ring
           "
         />
       </div>
 
-      {/* FULL NAME */}
+      {/* FIRST NAME */}
 
       <div>
         <label
           className="
             text-sm
             font-medium
-            text-slate-700
+            text-foreground
           "
         >
-          Full Name
+          First Name
         </label>
 
         <input
           type="text"
-          placeholder="Juan Dela Cruz"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
+          placeholder="Juan"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
           className="
             mt-2
             w-full
             rounded-xl
             border
-            border-slate-200
+            border-border
             px-4
             py-3
             outline-none
             transition
-            focus:border-slate-400
+            focus:border-ring
+          "
+        />
+      </div>
+
+      {/* MIDDLE NAME */}
+
+      <div>
+        <label
+          className="
+            text-sm
+            font-medium
+            text-foreground
+          "
+        >
+          Middle Name (Optional)
+        </label>
+
+        <input
+          type="text"
+          placeholder="Perez"
+          value={middleName}
+          onChange={(e) => setMiddleName(e.target.value)}
+          className="
+            mt-2
+            w-full
+            rounded-xl
+            border
+            border-border
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-ring
+          "
+        />
+      </div>
+
+      {/* LAST NAME */}
+
+      <div>
+        <label
+          className="
+            text-sm
+            font-medium
+            text-foreground
+          "
+        >
+          Last Name
+        </label>
+
+        <input
+          type="text"
+          placeholder="Dela Cruz"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          className="
+            mt-2
+            w-full
+            rounded-xl
+            border
+            border-border
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-ring
+          "
+        />
+      </div>
+
+      {/* SUFFIX */}
+
+      <div>
+        <label
+          className="
+            text-sm
+            font-medium
+            text-foreground
+          "
+        >
+          Suffix (Optional)
+        </label>
+
+        <input
+          type="text"
+          placeholder="Jr."
+          value={suffix}
+          onChange={(e) => setSuffix(e.target.value)}
+          className="
+            mt-2
+            w-full
+            rounded-xl
+            border
+            border-border
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-ring
           "
         />
       </div>
@@ -100,7 +241,7 @@ export default function StudentRecordFormFields({
           className="
             text-sm
             font-medium
-            text-slate-700
+            text-foreground
           "
         >
           Program
@@ -114,7 +255,8 @@ export default function StudentRecordFormFields({
             w-full
             rounded-xl
             border
-            border-slate-200
+            bg-card
+            border-border
             px-4
             py-3
           "

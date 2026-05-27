@@ -1,21 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import MotionModal from "@/components/motion/motionModal";
-
 import MotionButton from "@/components/motion/motionButton";
-
 import { successToast, errorToast } from "@/lib/swal";
-
 import StudentRecordFormFields from "./studentRecordFormFields";
+import { updateStudentRecord } from "@/services/academic_service";
+import { formatName } from "@/utils/format_name";
 
 interface StudentRecord {
   id: number;
 
   studentId: string;
 
-  fullName: string;
+  firstName: string;
+
+  middleName?: string;
+
+  lastName: string;
+
+  suffix?: string;
 
   program: string;
 }
@@ -41,7 +45,13 @@ export default function EditStudentRecordModal({
 }: Props) {
   const [studentId, setStudentId] = useState("");
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+
+  const [middleName, setMiddleName] = useState("");
+
+  const [lastName, setLastName] = useState("");
+
+  const [suffix, setSuffix] = useState("");
 
   const [program, setProgram] = useState("BSN");
 
@@ -55,7 +65,13 @@ export default function EditStudentRecordModal({
     if (record) {
       setStudentId(record.studentId);
 
-      setFullName(record.fullName);
+      setFirstName(record.firstName);
+
+      setMiddleName(record.middleName || "");
+
+      setLastName(record.lastName);
+
+      setSuffix(record.suffix || "");
 
       setProgram(record.program);
     }
@@ -66,20 +82,44 @@ export default function EditStudentRecordModal({
   // =========================
 
   const handleSubmit = async () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      errorToast("First name and last name are required.");
+
+      return;
+    }
+
+    const formattedFirstName = formatName(firstName);
+
+    const formattedMiddleName = formatName(middleName);
+
+    const formattedLastName = formatName(lastName);
+
+    const formattedSuffix = formatName(suffix);
+
     try {
       setLoading(true);
 
-      // TEMPORARY
+      if (!record) {
+        return;
+      }
 
-      console.log({
-        id: record?.id,
+      await updateStudentRecord(
+        record.id,
 
-        studentId,
+        {
+          studentId,
 
-        fullName,
+          firstName: formattedFirstName,
 
-        program,
-      });
+          middleName: formattedMiddleName,
+
+          lastName: formattedLastName,
+
+          suffix: formattedSuffix,
+
+          program,
+        }
+      );
 
       successToast("Student record updated successfully.");
 
@@ -113,7 +153,7 @@ export default function EditStudentRecordModal({
               className="
                 text-2xl
                 font-bold
-                text-slate-900
+                text-card-foregorund
               "
             >
               Edit Student Record
@@ -123,7 +163,7 @@ export default function EditStudentRecordModal({
               className="
                 mt-1
                 text-sm
-                text-slate-500
+                text-muted-foreground
               "
             >
               Update student information.
@@ -136,9 +176,9 @@ export default function EditStudentRecordModal({
               rounded-lg
               px-3
               py-1
-              text-slate-500
+              text-muted-foreground
               transition
-              hover:bg-slate-100
+              hover:bg-ring
             "
           >
             ✕
@@ -150,8 +190,14 @@ export default function EditStudentRecordModal({
         <StudentRecordFormFields
           studentId={studentId}
           setStudentId={setStudentId}
-          fullName={fullName}
-          setFullName={setFullName}
+          firstName={firstName}
+          setFirstName={setFirstName}
+          middleName={middleName}
+          setMiddleName={setMiddleName}
+          lastName={lastName}
+          setLastName={setLastName}
+          suffix={suffix}
+          setSuffix={setSuffix}
           program={program}
           setProgram={setProgram}
         />
@@ -171,12 +217,13 @@ export default function EditStudentRecordModal({
             className="
               rounded-xl
               border
-              border-slate-200
+              border-border
               px-4
               py-2
               text-sm
               font-medium
-              text-slate-700
+              text-foreground
+              cursor-pointer
             "
           >
             Cancel
@@ -187,15 +234,16 @@ export default function EditStudentRecordModal({
             disabled={loading}
             className="
               rounded-xl
-              bg-slate-900
+              bg-primary
               px-4
               py-2
               text-sm
               font-medium
-              text-white
+              text-primary-foreground
               transition
-              hover:bg-slate-800
+              hover:bg-primary/80
               disabled:opacity-70
+              cursor-pointer
             "
           >
             {loading ? "Saving..." : "Save Changes"}

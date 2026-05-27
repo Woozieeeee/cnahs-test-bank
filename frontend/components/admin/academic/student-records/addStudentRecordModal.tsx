@@ -5,6 +5,8 @@ import MotionButton from "@/components/motion/motionButton";
 import StudentRecordFormFields from "./studentRecordFormFields";
 import { successToast, errorToast } from "@/lib/swal";
 import MotionModal from "@/components/motion/motionModal";
+import { createStudentRecord } from "@/services/academic_service";
+import { formatName } from "@/utils/format_name";
 
 interface Props {
   open: boolean;
@@ -23,7 +25,13 @@ export default function AddStudentRecordModal({
 }: Props) {
   const [studentId, setStudentId] = useState("");
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+
+  const [middleName, setMiddleName] = useState("");
+
+  const [lastName, setLastName] = useState("");
+
+  const [suffix, setSuffix] = useState("");
 
   const [program, setProgram] = useState("BSN");
 
@@ -36,15 +44,32 @@ export default function AddStudentRecordModal({
   // =========================
 
   const handleSubmit = async () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      errorToast("First name and last name are required.");
+
+      return;
+    }
+    const formattedFirstName = formatName(firstName);
+
+    const formattedMiddleName = formatName(middleName);
+
+    const formattedLastName = formatName(lastName);
+
+    const formattedSuffix = formatName(suffix);
+
     try {
       setLoading(true);
 
-      // TEMPORARY
-
-      console.log({
+      await createStudentRecord({
         studentId,
 
-        fullName,
+        firstName: formattedFirstName,
+
+        middleName: formattedMiddleName,
+
+        lastName: formattedLastName,
+
+        suffix: formattedSuffix,
 
         program,
       });
@@ -59,7 +84,13 @@ export default function AddStudentRecordModal({
 
       setStudentId("");
 
-      setFullName("");
+      setFirstName("");
+
+      setMiddleName("");
+
+      setLastName("");
+
+      setSuffix("");
 
       setProgram("BSN");
     } catch (error: any) {
@@ -89,7 +120,7 @@ export default function AddStudentRecordModal({
               className="
               text-2xl
               font-bold
-              text-slate-900
+              text-card-foreground
             "
             >
               Add Student Record
@@ -99,7 +130,7 @@ export default function AddStudentRecordModal({
               className="
               mt-1
               text-sm
-              text-slate-500
+              text-muted-foreground
             "
             >
               Create a student verification record.
@@ -112,9 +143,9 @@ export default function AddStudentRecordModal({
             rounded-lg
             px-3
             py-1
-            text-slate-500
+            text-muted-foreground
             transition
-            hover:bg-slate-100
+            hover:bg-muted
           "
           >
             ✕
@@ -126,8 +157,14 @@ export default function AddStudentRecordModal({
         <StudentRecordFormFields
           studentId={studentId}
           setStudentId={setStudentId}
-          fullName={fullName}
-          setFullName={setFullName}
+          firstName={firstName}
+          setFirstName={setFirstName}
+          middleName={middleName}
+          setMiddleName={setMiddleName}
+          lastName={lastName}
+          setLastName={setLastName}
+          suffix={suffix}
+          setSuffix={setSuffix}
           program={program}
           setProgram={setProgram}
         />
@@ -147,12 +184,12 @@ export default function AddStudentRecordModal({
             className="
             rounded-xl
             border
-            border-slate-200
+            border-border
             px-4
             py-2
             text-sm
             font-medium
-            text-slate-700
+            text-foreground
           "
           >
             Cancel
@@ -162,14 +199,14 @@ export default function AddStudentRecordModal({
             onClick={handleSubmit}
             className="
             rounded-xl
-            bg-slate-900
+            bg-primary
             px-4
             py-2
             text-sm
             font-medium
-            text-white
+            text-primary-foreground
             transition
-            hover:bg-slate-800
+            hover:bg-primary/90
           "
           >
             {loading ? "Creating..." : "Create Record"}

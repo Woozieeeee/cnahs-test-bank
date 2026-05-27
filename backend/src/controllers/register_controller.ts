@@ -4,10 +4,9 @@ import { registerService } from "../services/auth/register_service";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, studentId, password } = req.body;
+    const { studentId, password } = req.body;
 
     const user = await registerService({
-      name,
       studentId,
       password,
     });

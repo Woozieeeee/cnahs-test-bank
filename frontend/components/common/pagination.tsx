@@ -8,9 +8,7 @@ interface Props {
 
 export default function Pagination({
   currentPage,
-
   totalPages,
-
   onPageChange,
 }: Props) {
   if (totalPages <= 1) return null;
@@ -32,10 +30,15 @@ export default function Pagination({
         className="
           rounded-lg
           border
-          border-slate-200
+          border-border
+          bg-card
           px-3
           py-2
           text-sm
+          text-foreground
+          transition
+          hover:bg-muted
+          disabled:cursor-not-allowed
           disabled:opacity-50
         "
       >
@@ -59,16 +62,20 @@ export default function Pagination({
                 px-3
                 py-2
                 text-sm
+                transition
 
                 ${
                   currentPage === page
                     ? `
-                      bg-slate-900
-                      text-white
+                      bg-primary
+                      text-primary-foreground
                     `
                     : `
                       border
-                      border-slate-200
+                      border-border
+                      bg-card
+                      text-foreground
+                      hover:bg-muted
                     `
                 }
               `}
@@ -87,10 +94,15 @@ export default function Pagination({
         className="
           rounded-lg
           border
-          border-slate-200
+          border-border
+          bg-card
           px-3
           py-2
           text-sm
+          text-foreground
+          transition
+          hover:bg-muted
+          disabled:cursor-not-allowed
           disabled:opacity-50
         "
       >

@@ -4,7 +4,7 @@ import UsersTabs from "./usersTabs";
 import UsersTable from "./usersTable";
 import UsersSearch from "./usersSearch";
 import UsersRoleFilter from "./usersRoleFilter";
-import UsersPagination from "./usersPagination";
+import Pagination from "@/components/common/pagination";
 import MotionButton from "@/components/motion/motionButton";
 import UsersBulkActions from "./usersBulkActions";
 
@@ -36,6 +36,9 @@ interface Props {
   setSelectedUsers: React.Dispatch<
     React.SetStateAction<number[]>
   >;
+  sortField: string;
+  sortOrder: "asc" | "desc";
+  onSort: (field: string, order: "asc" | "desc") => void;
 }
 
 export default function UsersManagementTable({
@@ -54,12 +57,15 @@ export default function UsersManagementTable({
   setRoleFilter,
   selectedUsers,
   setSelectedUsers,
+  sortField,
+  sortOrder,
+  onSort,
 }: Props) {
   return (
     <div
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-6
         shadow-sm
       "
@@ -80,13 +86,13 @@ export default function UsersManagementTable({
             className="
         text-xl
         font-semibold
-        text-slate-900
+        text-foreground
       "
           >
             Users
           </h2>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Manage student and faculty accounts
           </p>
         </div>
@@ -95,14 +101,15 @@ export default function UsersManagementTable({
           onClick={onOpenFacultyModal}
           className="
       rounded-xl
-      bg-slate-900
+      bg-primary
       px-4
       py-2
       text-sm
       font-medium
-      text-white
+      text-primary-foreground
       transition
-      hover:bg-slate-800
+      hover:bg-primary/90
+      cursor-pointer
     "
         >
           Add Faculty
@@ -159,13 +166,16 @@ export default function UsersManagementTable({
           onReject={onReject}
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}
+          sortField={sortField}
+          sortOrder={sortOrder}
+          onSort={onSort}
         />
       </div>
 
       {/* PAGINATION */}
 
       <div className="mt-6">
-        <UsersPagination
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

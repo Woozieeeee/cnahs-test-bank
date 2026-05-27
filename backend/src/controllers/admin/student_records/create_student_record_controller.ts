@@ -11,7 +11,13 @@ export const createStudentRecord = async (
     const {
       studentId,
 
-      fullName,
+      firstName,
+
+      middleName,
+
+      lastName,
+
+      suffix,
 
       program,
     } = req.body;
@@ -19,7 +25,13 @@ export const createStudentRecord = async (
     const record = await createStudentRecordService({
       studentId,
 
-      fullName,
+      firstName,
+
+      middleName,
+
+      lastName,
+
+      suffix,
 
       program,
     });
@@ -28,7 +40,7 @@ export const createStudentRecord = async (
   } catch (error: any) {
     console.log(error);
 
-    return res.status(400).json({
+    return res.status(500).json({
       message: error.message || "Failed to create student record",
     });
   }

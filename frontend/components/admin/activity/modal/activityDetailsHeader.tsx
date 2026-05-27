@@ -23,12 +23,12 @@ export default function ActivityDetailsHeader({
           <span
             className="
               rounded-md
-              bg-slate-100
+              bg-muted
               px-2
               py-1
               text-xs
               font-medium
-              text-slate-600
+              text-muted-foreground
             "
           >
             {activity.categories}
@@ -39,7 +39,7 @@ export default function ActivityDetailsHeader({
           {activity.action}
         </h2>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           {new Date(activity.createdAt).toLocaleString()}
         </p>
       </div>
@@ -50,10 +50,10 @@ export default function ActivityDetailsHeader({
           rounded-lg
           px-3
           py-1
-          text-slate-500
+          text-muted-foreground
           transition
-          hover:bg-slate-100
-          hover:text-slate-900
+          hover:bg-muted
+          hover:text-foreground
         "
       >
         ✕

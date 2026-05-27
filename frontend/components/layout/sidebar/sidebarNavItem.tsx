@@ -33,12 +33,13 @@ export default function SidebarNavItem({
         ${
           isActive
             ? `
-              bg-slate-900
-              text-white
+              bg-primary
+              text-primary-foreground
             `
             : `
-              text-slate-600
-              hover:bg-slate-100
+              text-muted-foreground
+              hover:bg-muted
+              hover:text-foreground
             `
         }
       `}

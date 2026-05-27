@@ -12,12 +12,12 @@ export default function ActivityTimelineCategories({
           key={category}
           className="
             rounded-md
-            bg-slate-100
+            bg-muted
             px-2
             py-1
             text-[11px]
             font-medium
-            text-slate-600
+            text-muted-foreground
           "
         >
           {category.replaceAll("_", " ")}

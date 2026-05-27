@@ -6,6 +6,7 @@ export default function DashboardLoader() {
         min-h-screen
         items-center
         justify-center
+        text-muted-foreground
       "
     >
       Loading dashboard...

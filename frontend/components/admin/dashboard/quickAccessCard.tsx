@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import MotionCard from "../../motion/motionCard";
 
 interface Props {
@@ -17,38 +19,49 @@ export default function QuickAccessCard({
   icon,
 }: Props) {
   return (
-    <MotionCard
-      className="
-        rounded-2xl
-        bg-white
-        p-6
-        shadow-sm
-        transition
-        hover:-translate-y-1
-        hover:bg-gray-50
-      "
-    >
-      <div className="mb-4 text-black">{icon}</div>
-
-      <h3
+    <Link href={href} className="block">
+      <MotionCard
         className="
-          text-lg
-          font-semibold
-          text-gray-800
+          rounded-2xl
+          border
+          border-border
+          bg-card
+          p-6
+          transition
+          hover:border-ring
+          hover:bg-muted/40
+          hover:shadow-sm
         "
       >
-        {title}
-      </h3>
+        <div
+          className="
+            mb-4
+            text-foreground
+          "
+        >
+          {icon}
+        </div>
 
-      <p
-        className="
-          mt-2
-          text-sm
-          text-gray-500
-        "
-      >
-        {description}
-      </p>
-    </MotionCard>
+        <h3
+          className="
+            text-lg
+            font-semibold
+            text-card-foreground
+          "
+        >
+          {title}
+        </h3>
+
+        <p
+          className="
+            mt-2
+            text-sm
+            text-muted-foreground
+          "
+        >
+          {description}
+        </p>
+      </MotionCard>
+    </Link>
   );
 }

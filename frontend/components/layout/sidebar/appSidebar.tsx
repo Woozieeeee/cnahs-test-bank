@@ -6,15 +6,15 @@ export default function AppSidebar() {
   return (
     <aside
       className="
-        sticky
-        top-0
-        h-screen
-        w-64
-        border-r
-        border-slate-200
-        bg-white
-        p-5
-      "
+      sticky
+      top-0
+      h-screen
+      w-64
+      border-r
+      border-border
+      bg-card
+      p-5
+    "
     >
       <SidebarHeader />
 

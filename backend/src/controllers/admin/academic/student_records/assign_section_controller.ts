@@ -16,6 +16,18 @@ export const assignSection = async (req: Request, res: Response) => {
       sectionId,
     });
 
+    const displayName = [
+      updatedRecord.firstName,
+
+      updatedRecord.middleName,
+
+      updatedRecord.lastName,
+
+      updatedRecord.suffix,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     // =========================
     // ACTIVITY LOG
     // =========================
@@ -28,11 +40,11 @@ export const assignSection = async (req: Request, res: Response) => {
 
         severity: "INFO",
 
-        description: `${updatedRecord.fullName} was assigned to ${updatedRecord.section?.name}.`,
+        description: `${displayName} was assigned to ${updatedRecord.section?.name}.`,
 
         performedBy: "ADMIN",
 
-        targetUser: updatedRecord.fullName,
+        targetUser: displayName,
       },
     });
 

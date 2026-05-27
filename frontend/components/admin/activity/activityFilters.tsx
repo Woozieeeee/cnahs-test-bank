@@ -37,7 +37,7 @@ export default function ActivityFilters({
           flex-col
           gap-4
           rounded-2xl
-          bg-white
+          bg-card
           p-4
           shadow-sm
           md:flex-row
@@ -52,12 +52,12 @@ export default function ActivityFilters({
             flex-1
             rounded-xl
             border
-            border-slate-200
+            border-input
             px-4
             py-3
             outline-none
             transition
-            focus:border-slate-400
+            focus:border-ring
           "
         />
 
@@ -67,7 +67,8 @@ export default function ActivityFilters({
           className="
             rounded-xl
             border
-            border-slate-200
+            border-input
+            bg-background
             px-4
             py-3
           "
@@ -85,7 +86,8 @@ export default function ActivityFilters({
           className="
             rounded-xl
             border
-            border-slate-200
+            border-input
+            bg-background
             px-4
             py-3
           "

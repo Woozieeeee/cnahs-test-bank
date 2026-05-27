@@ -29,7 +29,7 @@ export default function ActivityTimeline({
     <MotionCard
       className="
         rounded-2xl
-        bg-white
+        bg-card
         p-6
         shadow-sm
       "

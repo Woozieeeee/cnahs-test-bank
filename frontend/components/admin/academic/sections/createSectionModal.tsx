@@ -94,7 +94,7 @@ export default function CreateSectionModal({
               className="
                 text-2xl
                 font-bold
-                text-slate-900
+                text-foreground
               "
             >
               Create Section
@@ -104,7 +104,7 @@ export default function CreateSectionModal({
               className="
                 mt-1
                 text-sm
-                text-slate-500
+                text-muted-foreground
               "
             >
               Create a structured academic section.
@@ -117,9 +117,9 @@ export default function CreateSectionModal({
               rounded-lg
               px-3
               py-1
-              text-slate-500
+              text-muted-foreground
               transition
-              hover:bg-slate-100
+              hover:bg-muted
             "
           >
             ✕
@@ -152,12 +152,13 @@ export default function CreateSectionModal({
             className="
               rounded-xl
               border
-              border-slate-200
+              border-border
+              bg-card
               px-4
               py-2
               text-sm
               font-medium
-              text-slate-700
+              text-muted-foreground
             "
           >
             Cancel
@@ -167,14 +168,14 @@ export default function CreateSectionModal({
             onClick={handleSubmit}
             className="
               rounded-xl
-              bg-slate-900
+              bg-muted-foreground
               px-4
               py-2
               text-sm
               font-medium
-              text-white
+              text-black
               transition
-              hover:bg-slate-800
+              hover:bg-foreground
             "
           >
             {loading ? "Creating..." : "Create Section"}

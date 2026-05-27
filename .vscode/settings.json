@@ -1,5 +1,17 @@
 {
   "workbench.settings.useSplitJSON": true,
+
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+
+  "editor.formatOnSave": true,
+
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/node_modules/**": true
+  },
+
+  "search.exclude": {
+    "**/.next": true,
+    "**/node_modules": true
+  }
 }

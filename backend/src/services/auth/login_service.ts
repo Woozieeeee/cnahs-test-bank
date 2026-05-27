@@ -5,12 +5,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 interface LoginData {
-  login: string;
+  identifier: string;
 
   password: string;
 }
 
-export const loginService = async ({ login, password }: LoginData) => {
+export const loginService = async ({ identifier, password }: LoginData) => {
   // =========================
   // FIND USER
   // =========================
@@ -19,11 +19,11 @@ export const loginService = async ({ login, password }: LoginData) => {
     where: {
       OR: [
         {
-          studentId: login,
+          studentId: identifier,
         },
 
         {
-          username: login,
+          username: identifier,
         },
       ],
     },
