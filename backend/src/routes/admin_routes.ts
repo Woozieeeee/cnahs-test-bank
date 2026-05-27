@@ -28,7 +28,7 @@ import { assignFacultyToSubject } from "../controllers/admin/academic/subjects/a
 
 const router = express.Router();
 
-//router.use(authMiddleware, authorizeRoles("ADMIN"));
+router.use(authMiddleware, authorizeRoles("ADMIN"));
 router.use(adminActivityLogger);
 
 // DASHBOARD
