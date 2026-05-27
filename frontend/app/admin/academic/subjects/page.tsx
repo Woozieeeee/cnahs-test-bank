@@ -5,6 +5,7 @@ import SubjectsGrid from "@/components/admin/academic/subjects/subjectsGrid";
 import SubjectsFilters from "@/components/admin/academic/subjects/subjectsFilters";
 import CreateSubjectModal from "@/components/admin/academic/subjects/createSubjectModal";
 import AssignFacultyModal from "@/components/admin/academic/subjects/assignFacultyModal";
+import AssignSectionsModal from "@/components/admin/academic/subjects/assignSubjectModal";
 
 import { useMemo, useState } from "react";
 
@@ -22,6 +23,9 @@ export default function SubjectsPage() {
 
   const [assignmentFilter, setAssignmentFilter] =
     useState("ALL");
+
+  const [openAssignSections, setOpenAssignSections] =
+    useState(false);
 
   const subjects = [
     {
@@ -70,6 +74,23 @@ export default function SubjectsPage() {
     {
       id: 3,
       name: "Prof. Angela Cruz",
+    },
+  ];
+
+  const sections = [
+    {
+      id: 1,
+      name: "BSN 1A",
+    },
+
+    {
+      id: 2,
+      name: "BSN 1B",
+    },
+
+    {
+      id: 3,
+      name: "BSN 2A",
     },
   ];
 
@@ -169,6 +190,11 @@ export default function SubjectsPage() {
 
           setOpenAssignFaculty(true);
         }}
+        onAssignSections={(subject) => {
+          setSelectedSubject(subject);
+
+          setOpenAssignSections(true);
+        }}
       />
 
       <CreateSubjectModal
@@ -188,6 +214,21 @@ export default function SubjectsPage() {
           console.log(
             "Assign faculty",
             facultyId,
+            "to",
+            selectedSubject
+          );
+        }}
+      />
+
+      <AssignSectionsModal
+        open={openAssignSections}
+        onOpenChange={setOpenAssignSections}
+        sections={sections}
+        subjectName={selectedSubject?.name || ""}
+        onAssign={(sectionIds) => {
+          console.log(
+            "Assign sections",
+            sectionIds,
             "to",
             selectedSubject
           );

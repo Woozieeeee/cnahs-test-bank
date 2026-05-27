@@ -28,11 +28,13 @@ interface Subject {
 interface Props {
   subject: Subject;
   onAssignFaculty: () => void;
+  onAssignSections: () => void;
 }
 
 export default function SubjectCard({
   subject,
   onAssignFaculty,
+  onAssignSections,
 }: Props) {
   return (
     <MotionCard>
@@ -93,9 +95,7 @@ export default function SubjectCard({
                 console.log("Edit subject");
               }}
               onAssignFaculty={onAssignFaculty}
-              onAssignSections={() => {
-                console.log("Assign sections");
-              }}
+              onAssignSections={onAssignSections}
               onArchive={() => {
                 console.log("Archive subject");
               }}

@@ -25,11 +25,13 @@ interface Subject {
 interface Props {
   subjects: Subject[];
   onAssignFaculty: (subject: Subject) => void;
+  onAssignSections: (subject: Subject) => void;
 }
 
 export default function SubjectsGrid({
   subjects,
   onAssignFaculty,
+  onAssignSections,
 }: Props) {
   if (subjects.length === 0) {
     return (
@@ -64,6 +66,7 @@ export default function SubjectsGrid({
           key={subject.id}
           subject={subject}
           onAssignFaculty={() => onAssignFaculty(subject)}
+          onAssignSections={() => onAssignSections(subject)}
         />
       ))}
     </div>
