@@ -69,6 +69,7 @@ model Section {
   yearLevel        Int
   program          String
   createdAt        DateTime @default(now())
+  isArchived       Boolean @default(false)
   updatedAt        DateTime @updatedAt
   users            User[]
   studentRecords   StudentRecord[]
@@ -112,8 +113,9 @@ model Exam {
   id            Int      @id @default(autoincrement())
   title         String
   description   String?
+  difficulty ExamDifficulty
   duration      Int
-  status        String   @default("DRAFT")
+  status ExamStatus @default(SCHEDULED)
   startsAt      DateTime?
   endsAt        DateTime?
   createdAt     DateTime @default(now())
@@ -127,6 +129,30 @@ model Exam {
   @@index([subjectId])
   @@index([sectionId])
   @@index([isArchived])
+}
+
+model StudentProgress {
+  id Int @id @default(autoincrement())
+  studentId Int
+  currentDifficulty ExamDifficulty
+    @default(EASY)
+  easyPassed Boolean @default(false)
+  mediumPassed Boolean @default(false)
+  hardPassed Boolean @default(false)
+  expertPassed Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // =========================
+  // RELATION
+  // =========================
+
+  student User
+    @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId])
+
+  @@index([studentId])
 }
 
 model ActivityLog {
@@ -150,3 +176,16 @@ enum Role {
   STUDENT
 }
 
+enum ExamStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  ARCHIVED
+}
+
+enum ExamDifficulty {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
+}

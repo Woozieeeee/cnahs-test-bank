@@ -1,10 +1,11 @@
 export default function ChangePasswordHeader() {
   return (
-    <div className="mb-6">
+    <div className="mb-8 space-y-2">
       <h1
         className="
           text-3xl
           font-bold
+          tracking-tight
           text-slate-900
         "
       >
@@ -13,13 +14,12 @@ export default function ChangePasswordHeader() {
 
       <p
         className="
-          mt-2
           text-sm
+          leading-relaxed
           text-slate-500
         "
       >
-        Please change your temporary password before
-        continuing.
+        Update your account password to continue securely.
       </p>
     </div>
   );

@@ -1,28 +1,20 @@
 import BackButton from "@/components/common/backButton";
+import PageHeader from "@/components/layout/pages/pageHeader";
+import PageTitle from "@/components/layout/pages/pageTitle";
 
 export default function SubjectsHeader() {
   return (
-    <div>
-      <BackButton
-        href="/admin/academic"
-        label="Back to Academic Management"
-      />
-
-      <h1
-        className="
-          mt-4
-          text-3xl
-          font-bold
-          text-foreground
-        "
+    <PageHeader>
+      <PageTitle
+        title="Subjects"
+        description="Manage academic subjects, faculty assignments, and
+        section allocations."
       >
-        Subjects
-      </h1>
-
-      <p className="mt-2 text-muted-foreground">
-        Manage academic subjects, faculty assignments, and
-        section allocations.
-      </p>
-    </div>
+        <BackButton
+          href="/admin/academic"
+          label="Back to Academic Management"
+        />
+      </PageTitle>
+    </PageHeader>
   );
 }

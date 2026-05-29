@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 
 import MotionPage from "@/components/motion/motionPage";
 
+import PageContainer from "@/components/layout/pages/pageContainer";
+
+import ActivityHeader from "@/components/admin/academic/activityHeader";
+
 import ActivityTabs from "@/components/admin/activity/activityTabs";
+
 import ActivityFilters from "@/components/admin/activity/activityFilters";
 
 import ActivityTimeline from "@/components/admin/activity/timeline/activityTimeline";
@@ -68,27 +73,8 @@ export default function ActivityLogsPage() {
 
   return (
     <MotionPage>
-      <div className="space-y-6">
-        {/* HEADER */}
-
-        <div>
-          <h1
-            className="
-              text-3xl
-              font-bold
-              text-foreground
-            "
-          >
-            Activity Logs
-          </h1>
-
-          <p className="mt-2 text-muted-foreground">
-            Monitor recent administrative actions,
-            violations, approvals, and system events.
-          </p>
-        </div>
-
-        {/* TABS */}
+      <PageContainer>
+        <ActivityHeader />
 
         <ActivityTabs
           activeTab={category}
@@ -98,8 +84,6 @@ export default function ActivityLogsPage() {
             setPage(1);
           }}
         />
-
-        {/* FILTERS */}
 
         <ActivityFilters
           search={search}
@@ -122,8 +106,6 @@ export default function ActivityLogsPage() {
           }}
         />
 
-        {/* TIMELINE */}
-
         <ActivityTimeline
           logs={logs}
           loading={loading}
@@ -132,9 +114,7 @@ export default function ActivityLogsPage() {
           onPageChange={setPage}
           onSelectActivity={setSelectedActivity}
         />
-      </div>
-
-      {/* DETAILS MODAL */}
+      </PageContainer>
 
       <ActivityDetailsModal
         activity={selectedActivity}

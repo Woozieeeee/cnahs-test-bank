@@ -21,6 +21,7 @@ import { assignSubjectSections } from "@/services/academic_service";
 import { successToast, errorToast } from "@/lib/swal";
 import { getSubjects } from "@/services/academic_service";
 import type { Subject } from "@/types/subject";
+import PageContainer from "@/components/layout/pages/pageContainer";
 
 export default function SubjectsPage() {
   // =========================
@@ -110,7 +111,7 @@ export default function SubjectsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <PageContainer>
       {/* HEADER */}
 
       <SubjectsHeader />
@@ -280,6 +281,6 @@ export default function SubjectsPage() {
           }
         }}
       />
-    </div>
+    </PageContainer>
   );
 }

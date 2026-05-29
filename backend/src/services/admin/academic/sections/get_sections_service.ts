@@ -2,9 +2,15 @@ import prisma from "../../../../lib/prisma";
 
 export const getSectionsService = async () => {
   return prisma.section.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: [
+      {
+        isArchived: "asc",
+      },
+
+      {
+        updatedAt: "desc",
+      },
+    ],
 
     include: {
       users: true,

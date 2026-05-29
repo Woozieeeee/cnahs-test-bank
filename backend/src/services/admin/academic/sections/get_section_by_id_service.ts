@@ -13,7 +13,11 @@ export const getSectionByIdService = async (id: number) => {
 
       sectionSubjects: {
         include: {
-          subject: true,
+          subject: {
+            include: {
+              faculty: true,
+            },
+          },
         },
       },
     },

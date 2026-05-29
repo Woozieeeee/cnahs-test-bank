@@ -1,24 +1,17 @@
 "use client";
 
-import AnimatedPage from "@/components/common/animatedPage";
+import AuthLayout from "@/components/auth/layout/authLayout";
+
+import AuthCard from "@/components/auth/layout/authCard";
 
 import TrackStatusForm from "@/components/auth/track-status/trackStatusForm";
 
 export default function TrackStatusPage() {
   return (
-    <AnimatedPage>
-      <div
-        className="
-          flex
-          min-h-screen
-          items-center
-          justify-center
-          bg-slate-50
-          px-4
-        "
-      >
+    <AuthLayout>
+      <AuthCard>
         <TrackStatusForm />
-      </div>
-    </AnimatedPage>
+      </AuthCard>
+    </AuthLayout>
   );
 }

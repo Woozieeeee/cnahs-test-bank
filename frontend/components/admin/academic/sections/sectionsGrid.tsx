@@ -4,13 +4,15 @@ import type { Section } from "@/types/section";
 
 interface Props {
   sections: Section[];
+  onRefresh: () => void;
+  onEdit: (section: Section) => void;
 }
 
-export default function SectionsGrid({ sections }: Props) {
-  // =========================
-  // EMPTY STATE
-  // =========================
-
+export default function SectionsGrid({
+  sections,
+  onRefresh,
+  onEdit,
+}: Props) {
   if (sections.length === 0) {
     return (
       <div
@@ -22,28 +24,13 @@ export default function SectionsGrid({ sections }: Props) {
           bg-card
           p-10
           text-center
+          text-muted-foreground
         "
       >
-        <h3
-          className="
-            text-lg
-            font-semibold
-            text-foreground
-          "
-        >
-          No sections created
-        </h3>
-
-        <p className="mt-2 text-sm text-muted-foreground">
-          Create your first academic section to get started.
-        </p>
+        No sections found.
       </div>
     );
   }
-
-  // =========================
-  // GRID
-  // =========================
 
   return (
     <div
@@ -55,7 +42,12 @@ export default function SectionsGrid({ sections }: Props) {
       "
     >
       {sections.map((section) => (
-        <SectionCard key={section.id} section={section} />
+        <SectionCard
+          key={section.id}
+          section={section}
+          onRefresh={onRefresh}
+          onEdit={() => onEdit(section)}
+        />
       ))}
     </div>
   );

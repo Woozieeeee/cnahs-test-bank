@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { Eye, EyeOff } from "lucide-react";
 
+import { authInputClass } from "@/components/auth/shared/authInputClass";
+
 interface Props {
   value: string;
 
@@ -32,14 +34,7 @@ export default function PasswordInput({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`
-          w-full
-          rounded
-          border
-          p-3
-          pr-12
-          ${className}
-        `}
+        className={`${authInputClass} ${className || ""}`}
       />
 
       <button

@@ -1,3 +1,4 @@
+import { authInputClass } from "@/components/auth/shared/authInputClass";
 interface Props {
   studentId: string;
 
@@ -19,17 +20,7 @@ export default function StudentIdField({
         value={studentId}
         onChange={(e) => onChange(e.target.value)}
         className={`
-          w-full
-          rounded-xl
-          border
-          border-slate-300
-          bg-white
-          px-4
-          py-3
-          outline-none
-          transition
-          focus:border-slate-500
-
+          ${authInputClass}
           ${
             studentId.length === 8 &&
             !studentIdRegex.test(studentId)

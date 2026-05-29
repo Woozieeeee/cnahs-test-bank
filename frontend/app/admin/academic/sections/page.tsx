@@ -1,30 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { getSections } from "@/services/academic_service";
-
-import Link from "next/link";
-
-import { ArrowLeft } from "lucide-react";
-
 import SectionCard from "@/components/admin/academic/sections/sectionCard";
-
 import CreateSectionModal from "@/components/admin/academic/sections/createSectionModal";
-
 import MotionButton from "@/components/motion/motionButton";
-
 import type { Section } from "@/types/section";
-
 import BackButton from "@/components/common/backButton";
+import SectionsHeader from "@/components/admin/academic/sections/sectionsHeader";
+import SectionsTabs from "@/components/admin/academic/sections/sectionTabs";
+import SectionsStats from "@/components/admin/academic/sections/sectionsStats";
+import SectionsGrid from "@/components/admin/academic/sections/sectionsGrid";
+import EditSectionModal from "@/components/admin/academic/sections/edit/editSectionModal";
+import PageContainer from "@/components/layout/pages/pageContainer";
 
 export default function SectionsPage() {
   const [sections, setSections] = useState<Section[]>([]);
 
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] =
+    useState(true);
 
   const [openCreateModal, setOpenCreateModal] =
     useState(false);
+
+  const [openEditModal, setOpenEditModal] = useState(false);
+
+  const [selectedSection, setSelectedSection] =
+    useState<Section | null>(null);
+
+  const [activeTab, setActiveTab] = useState("ALL");
 
   const fetchSections = async () => {
     try {
@@ -34,9 +38,16 @@ export default function SectionsPage() {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
     }
   };
+
+  const filteredSections =
+    activeTab === "ACTIVE"
+      ? sections.filter((section) => !section.isArchived)
+      : activeTab === "ARCHIVED"
+        ? sections.filter((section) => section.isArchived)
+        : sections;
 
   // =========================
   // FETCH SECTIONS
@@ -50,148 +61,46 @@ export default function SectionsPage() {
   // LOADING
   // =========================
 
-  if (loading) {
+  if (initialLoading) {
     return <div>Loading sections...</div>;
   }
 
   return (
-    <div className="space-y-6">
-      {/* ACTIONS */}
+    <PageContainer>
+      <SectionsHeader
+        onCreate={() => setOpenCreateModal(true)}
+      />
 
-      <div
-        className="
-          flex
-          items-center
-          justify-between
-        "
-      >
-        <div className="space-y-4">
-          <BackButton
-            href="/admin/academic"
-            label="Back to Academic Management"
-          />
+      <SectionsTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
 
-          <div>
-            <h1
-              className="
-        text-3xl
-        font-bold
-        text-foreground
-      "
-            >
-              Sections
-            </h1>
+      <SectionsStats sections={sections} />
 
-            <p className="mt-2 text-muted-foreground">
-              Manage academic sections and classrooms.
-            </p>
-          </div>
-        </div>
+      <SectionsGrid
+        sections={filteredSections}
+        onRefresh={fetchSections}
+        onEdit={(section) => {
+          setSelectedSection(section);
 
-        <MotionButton
-          onClick={() => setOpenCreateModal(true)}
-          className="
-            rounded-xl
-            bg-card
-            px-4
-            py-2
-            font-medium
-            text-foreground
-            transition
-            hover:bg-foreground
-          "
-        >
-          Create Section
-        </MotionButton>
-      </div>
-
-      {/* STATS */}
-
-      <div
-        className="
-          grid
-          gap-4
-          md:grid-cols-2
-          xl:grid-cols-4
-        "
-      >
-        <StatCard
-          label="Total Sections"
-          value={sections.length}
-        />
-
-        <StatCard
-          label="Total Students"
-          value={sections.reduce(
-            (total, section) =>
-              total + section.users.length,
-            0
-          )}
-        />
-
-        <StatCard
-          label="Total Exams"
-          value={sections.reduce(
-            (total, section) =>
-              total + section.exams.length,
-            0
-          )}
-        />
-
-        <StatCard
-          label="Programs"
-          value={
-            new Set(
-              sections.map((section) => section.program)
-            ).size
-          }
-        />
-      </div>
-
-      {/* GRID */}
-
-      <div
-        className="
-          grid
-          gap-6
-          md:grid-cols-2
-          xl:grid-cols-3
-        "
-      >
-        {sections.length === 0 ? (
-          <div
-            className="
-    col-span-full
-    rounded-2xl
-    border
-    border-dashed
-    border-border
-    bg-card
-    p-10
-    text-center
-    text-muted-foreground
-  "
-          >
-            No sections created yet.
-          </div>
-        ) : (
-          sections.map((section) => (
-            <SectionCard
-              key={section.id}
-              section={section}
-            />
-          ))
-        )}
-      </div>
-
-      {/* MODAL */}
+          setOpenEditModal(true);
+        }}
+      />
 
       <CreateSectionModal
         open={openCreateModal}
         onOpenChange={setOpenCreateModal}
         onSuccess={fetchSections}
       />
-    </div>
+
+      <EditSectionModal
+        open={openEditModal}
+        onOpenChange={setOpenEditModal}
+        section={selectedSection}
+        onSuccess={fetchSections}
+      />
+    </PageContainer>
   );
 }
 

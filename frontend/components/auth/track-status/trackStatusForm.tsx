@@ -1,15 +1,11 @@
 "use client";
 
 import { useState } from "react";
-
 import Link from "next/link";
-
 import { checkStatus } from "@/services/auth_service";
-
 import StudentIdField from "@/components/auth/shared/studentIdField";
-
 import TrackStatusHeader from "./trackStatusHeader";
-
+import { authLinkClass } from "../shared/authLinkClass";
 import TrackStatusResult from "./trackStatusResult";
 
 export default function TrackStatusForm() {
@@ -69,19 +65,7 @@ export default function TrackStatusForm() {
   };
 
   return (
-    <form
-      onSubmit={handleCheck}
-      className="
-        w-full
-        max-w-md
-        rounded-2xl
-        border
-        border-slate-200
-        bg-white
-        p-6
-        shadow-sm
-      "
-    >
+    <form onSubmit={handleCheck} className="w-full">
       <TrackStatusHeader />
 
       <StudentIdField
@@ -109,13 +93,7 @@ export default function TrackStatusForm() {
       </button>
 
       <div className="mt-6 text-center text-sm">
-        <Link
-          href="/login"
-          className="
-            text-slate-500
-            hover:underline
-          "
-        >
+        <Link href="/login" className={authLinkClass}>
           Back to Login
         </Link>
       </div>

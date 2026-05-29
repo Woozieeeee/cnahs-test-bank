@@ -8,6 +8,16 @@ import { getSectionById } from "@/services/academic_service";
 
 import type { Section } from "@/types/section";
 
+import SectionDetailsHeader from "@/components/admin/academic/sections/details/sectionDetailsHeader";
+
+import SectionSubjectsPreview from "@/components/admin/academic/sections/details/sectionSubjectsPreview";
+
+import SectionStudentsPreview from "@/components/admin/academic/sections/details/sectionStudentsPreview";
+
+import SectionExamsPreview from "@/components/admin/academic/sections/details/sectionExamsPreview";
+
+import PageContainer from "@/components/layout/pages/pageContainer";
+
 export default function SectionDetailsPage() {
   const params = useParams();
 
@@ -54,105 +64,23 @@ export default function SectionDetailsPage() {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      {/* HEADER */}
-
-      <div>
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-foreground
-          "
-        >
-          {section.name}
-        </h1>
-
-        <p className="mt-2 text-muted-foreground">
-          {section.program} • Year {section.yearLevel}
-        </p>
-      </div>
-
-      {/* STATS */}
+    <PageContainer>
+      <SectionDetailsHeader section={section} />
 
       <div
         className="
           grid
-          gap-4
-          md:grid-cols-2
-          xl:grid-cols-4
+          gap-6
+          xl:grid-cols-3
+          items-stretch
         "
       >
-        <StatCard
-          label="Students"
-          value={section.users.length}
-        />
+        <SectionSubjectsPreview section={section} />
 
-        <StatCard
-          label="Subjects"
-          value={section.sectionSubjects.length}
-        />
+        <SectionStudentsPreview section={section} />
 
-        <StatCard
-          label="Exams"
-          value={section.exams.length}
-        />
-
-        <StatCard label="Violations" value={0} />
+        <SectionExamsPreview section={section} />
       </div>
-
-      {/* TABS PLACEHOLDER */}
-
-      <div
-        className="
-          rounded-2xl
-          border
-          border-border
-          bg-card
-          p-10
-          text-center
-          text-muted-foreground
-        "
-      >
-        Section monitoring tabs coming soon.
-      </div>
-    </div>
-  );
-}
-
-function StatCard({
-  label,
-
-  value,
-}: {
-  label: string;
-
-  value: number;
-}) {
-  return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <p className="text-sm text-muted-foreground">
-        {label}
-      </p>
-
-      <h2
-        className="
-          mt-2
-          text-3xl
-          font-bold
-          text-foreground
-        "
-      >
-        {value}
-      </h2>
-    </div>
+    </PageContainer>
   );
 }

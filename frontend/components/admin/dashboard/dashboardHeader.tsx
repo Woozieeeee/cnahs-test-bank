@@ -1,20 +1,14 @@
+import PageHeader from "@/components/layout/pages/pageHeader";
+import PageTitle from "@/components/layout/pages/pageTitle";
+
 export default function DashboardHeader() {
   return (
-    <div>
-      <h1
-        className="
-          text-3xl
-          font-bold
-          text-foreground
-        "
-      >
-        Welcome back, Admin
-      </h1>
-
-      <p className="mt-2 text-muted-foreground">
-        Manage students, approvals, faculty, and
-        examinations easily.
-      </p>
-    </div>
+    <PageHeader>
+      <PageTitle
+        title="Welcome back, Admin"
+        description="Manage students, approvals, faculty, and
+        examinations easily."
+      />
+    </PageHeader>
   );
 }

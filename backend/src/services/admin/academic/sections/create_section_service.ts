@@ -25,7 +25,7 @@ export const createSectionService = async ({
   // GENERATE SECTION NAME
   // =========================
 
-  const name = `${program} ${yearLevel}${normalizedCode}`;
+  const name = `${program}-${yearLevel}${normalizedCode}`;
 
   // =========================
   // CHECK DUPLICATE

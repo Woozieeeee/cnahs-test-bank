@@ -7,7 +7,6 @@ import { getSections } from "@/services/academic_service";
 import CreateSectionModal from "./createSectionModal";
 import type { Section } from "@/types/section";
 import Pagination from "@/components/common/pagination";
-import BackButton from "@/components/common/backButton";
 
 export default function SectionsDashboard() {
   const [sections, setSections] = useState<Section[]>([]);
@@ -113,7 +112,17 @@ export default function SectionsDashboard() {
         </div>
       ) : (
         <>
-          <SectionsGrid sections={paginatedSections} />
+          <SectionsGrid
+            sections={paginatedSections}
+            onRefresh={async () => {
+              const data = await getSections();
+
+              setSections(data);
+            }}
+            onEdit={(section) => {
+              console.log("Edit:", section);
+            }}
+          />
 
           <Pagination
             currentPage={currentPage}

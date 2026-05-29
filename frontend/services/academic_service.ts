@@ -249,3 +249,49 @@ export const assignFacultyToSubject = async (
 
   return response.data;
 };
+
+// =========================
+// ARCHIVE SECTION
+// =========================
+
+export const archiveSection = async (id: number) => {
+  const response = await api.patch(
+    `/admin/academic/sections/${id}/archive`
+  );
+
+  return response.data;
+};
+
+// =========================
+// RESTORE SECTION
+// =========================
+
+export const restoreSection = async (id: number) => {
+  const response = await api.patch(
+    `/admin/academic/sections/${id}/restore`
+  );
+
+  return response.data;
+};
+
+// =========================
+// UPDATE SECTION
+// =========================
+
+export const updateSection = async (
+  id: number,
+  data: {
+    sectionCode: string;
+
+    yearLevel: number;
+
+    program: string;
+  }
+) => {
+  const response = await api.patch(
+    `/admin/academic/sections/${id}`,
+    data
+  );
+
+  return response.data;
+};

@@ -1,10 +1,12 @@
 "use client";
 
-import AnimatedPage from "@/components/common/animatedPage";
+import useGuestGuard from "@/hooks/useGuestGuard";
+
+import AuthLayout from "@/components/auth/layout/authLayout";
+
+import AuthCard from "@/components/auth/layout/authCard";
 
 import LoginForm from "@/components/auth/login/loginForm";
-
-import useGuestGuard from "@/hooks/useGuestGuard";
 
 export default function LoginPage() {
   const { loading } = useGuestGuard();
@@ -14,17 +16,10 @@ export default function LoginPage() {
   }
 
   return (
-    <AnimatedPage>
-      <div
-        className="
-          flex
-          min-h-screen
-          items-center
-          justify-center
-        "
-      >
+    <AuthLayout>
+      <AuthCard>
         <LoginForm />
-      </div>
-    </AnimatedPage>
+      </AuthCard>
+    </AuthLayout>
   );
 }

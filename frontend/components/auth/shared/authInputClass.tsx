@@ -1,0 +1,19 @@
+export const authInputClass = `
+  w-full
+  rounded-2xl
+  border
+  border-slate-200
+  bg-white
+  px-4
+  py-3.5
+  text-[15px]
+  text-slate-900
+  outline-none
+  transition-all
+  duration-200
+  placeholder:text-slate-400
+  hover:border-slate-300
+  focus:border-slate-900
+  focus:ring-4
+  focus:ring-slate-200/50
+`;

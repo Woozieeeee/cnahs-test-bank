@@ -1,4 +1,5 @@
 import prisma from "../../../lib/prisma";
+
 import { PROGRAMS } from "../../../lib/constants/programs";
 
 interface StudentRecordData {
@@ -43,6 +44,38 @@ export const uploadStudentRecordsService = async (
   let skipped = 0;
 
   const errors: string[] = [];
+
+  // =========================
+  // FETCH EXISTING RECORDS
+  // =========================
+
+  const studentIds = records
+    .map((record) => record.studentId?.trim())
+    .filter(Boolean);
+
+  const existingRecords = await prisma.studentRecord.findMany({
+    where: {
+      studentId: {
+        in: studentIds,
+      },
+    },
+
+    select: {
+      studentId: true,
+    },
+  });
+
+  const existingMap = new Set(
+    existingRecords.map((record) => record.studentId),
+  );
+
+  // =========================
+  // PREPARE BATCHES
+  // =========================
+
+  const createData: StudentRecordData[] = [];
+
+  const updateData: StudentRecordData[] = [];
 
   // =========================
   // PROCESS RECORDS
@@ -146,64 +179,76 @@ export const uploadStudentRecordsService = async (
     }
 
     // =========================
-    // CHECK EXISTING
+    // NORMALIZED DATA
     // =========================
 
-    const existingRecord = await prisma.studentRecord.findUnique({
-      where: {
-        studentId,
-      },
-    });
+    const studentData = {
+      studentId,
+
+      firstName,
+
+      middleName,
+
+      lastName,
+
+      suffix,
+
+      program,
+    };
 
     // =========================
-    // UPDATE EXISTING
+    // EXISTING RECORD
     // =========================
 
-    if (existingRecord) {
-      await prisma.studentRecord.update({
-        where: {
-          studentId,
-        },
-
-        data: {
-          firstName,
-
-          middleName,
-
-          lastName,
-
-          suffix,
-
-          program,
-        },
-      });
+    if (existingMap.has(studentId)) {
+      updateData.push(studentData);
 
       updated++;
+    } else {
+      createData.push(studentData);
 
-      continue;
+      inserted++;
     }
+  }
 
-    // =========================
-    // CREATE NEW RECORD
-    // =========================
+  // =========================
+  // BULK CREATE
+  // =========================
 
-    await prisma.studentRecord.create({
-      data: {
-        studentId,
+  if (createData.length > 0) {
+    await prisma.studentRecord.createMany({
+      data: createData,
 
-        firstName,
-
-        middleName,
-
-        lastName,
-
-        suffix,
-
-        program,
-      },
+      skipDuplicates: true,
     });
+  }
 
-    inserted++;
+  // =========================
+  // BULK UPDATE
+  // =========================
+
+  if (updateData.length > 0) {
+    await prisma.$transaction(
+      updateData.map((record) =>
+        prisma.studentRecord.update({
+          where: {
+            studentId: record.studentId,
+          },
+
+          data: {
+            firstName: record.firstName,
+
+            middleName: record.middleName,
+
+            lastName: record.lastName,
+
+            suffix: record.suffix,
+
+            program: record.program,
+          },
+        }),
+      ),
+    );
   }
 
   // =========================

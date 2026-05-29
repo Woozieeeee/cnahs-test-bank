@@ -12,6 +12,8 @@ import PasswordRules from "@/components/auth/shared/passwordRules";
 
 import PasswordMatchIndicator from "@/components/auth/shared/passwordMatchIndicator";
 
+import { authButtonClass } from "../shared/authButtonClass";
+
 import RegisterHeader from "./registerHeader";
 
 import RegisterLinks from "./registerLinks";
@@ -87,17 +89,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="
-        w-full
-        max-w-md
-        rounded-lg
-        border
-        p-6
-        shadow
-      "
-    >
+    <form onSubmit={handleSubmit} className="w-full">
       <RegisterHeader />
 
       {/* STUDENT ID */}
@@ -109,21 +101,11 @@ export default function RegisterForm() {
 
       {/* PASSWORD */}
 
-      <div className="mb-4 ">
+      <div className="mb-5 ">
         <PasswordInput
           value={password}
           onChange={setPassword}
           placeholder="Password"
-          className="
-          rounded-xl
-          border
-          border-slate-300
-          bg-white
-          px-4
-          py-3
-          outline-none
-          transition
-          focus:border-slate-500"
         />
 
         <PasswordRules
@@ -137,21 +119,11 @@ export default function RegisterForm() {
 
       {/* CONFIRM PASSWORD */}
 
-      <div className="mb-4">
+      <div className="mb-5">
         <PasswordInput
           value={confirmPassword}
           onChange={setConfirmPassword}
           placeholder="Confirm Password"
-          className="
-          rounded-xl
-          border
-          border-slate-300
-          bg-white
-          px-4
-          py-3
-          outline-none
-          transition
-          focus:border-slate-500"
         />
 
         <PasswordMatchIndicator
@@ -165,16 +137,7 @@ export default function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className="
-          w-full
-          rounded
-          bg-black
-          p-3
-          text-white
-          transition
-          hover:bg-slate-800
-          disabled:opacity-70
-        "
+        className={authButtonClass}
       >
         {loading ? "Registering..." : "Register"}
       </button>

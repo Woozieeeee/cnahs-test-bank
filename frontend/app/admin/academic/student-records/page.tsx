@@ -10,6 +10,7 @@ import Pagination from "@/components/common/pagination";
 import StudentRecordsActions from "@/components/admin/academic/student-records/studentRecordsActions";
 import AddStudentRecordModal from "@/components/admin/academic/student-records/addStudentRecordModal";
 import EditStudentRecordModal from "@/components/admin/academic/student-records/editStudentRecordModal";
+import PageContainer from "@/components/layout/pages/pageContainer";
 
 interface StudentRecord {
   id: number;
@@ -133,7 +134,7 @@ export default function StudentRecordsPage() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <PageContainer>
       {/* HEADER */}
 
       <StudentRecordsHeader />
@@ -213,6 +214,6 @@ export default function StudentRecordsPage() {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
-    </div>
+    </PageContainer>
   );
 }

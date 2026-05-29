@@ -23,6 +23,8 @@ import DashboardLoader from "@/components/admin/dashboard/dashboardLoader";
 
 import { getRecentActivity } from "@/services/admin_service";
 
+import PageContainer from "@/components/layout/pages/pageContainer";
+
 interface DashboardStats {
   totalStudents: number;
 
@@ -90,7 +92,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AnimatedPage>
-      <div className="space-y-8">
+      <PageContainer>
         <DashboardHeader />
 
         <QuickAccessSection />
@@ -102,7 +104,7 @@ export default function AdminDashboardPage() {
         />
 
         <RecentActivitySection activities={activities} />
-      </div>
+      </PageContainer>
     </AnimatedPage>
   );
 }

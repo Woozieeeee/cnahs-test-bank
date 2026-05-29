@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../middleware/upload_middleware";
 import { getPendingStudents } from "../controllers/admin/approvals/get_pending_students_controller";
 import { approveStudent } from "../controllers/admin/approvals/approve_student_controller";
 import { rejectStudent } from "../controllers/admin/approvals/reject_student_controller";
@@ -6,7 +7,6 @@ import { getDashboardStats } from "../controllers/admin/dashboard/getDashboardSt
 import { getRecentRegistrations } from "../controllers/admin/dashboard/getRecentRegistrations";
 import { getRecentActivity } from "../controllers/admin/get_recent_activity_controller";
 import { getUsers } from "../controllers/admin/get_users_controller";
-import upload from "../middleware/upload_middleware";
 import { uploadStudentRecords } from "../controllers/admin/student_records/upload_student_records_controller";
 import { createFaculty } from "../controllers/admin/users/create_faculty_controller";
 import { getActivityLogs } from "../controllers/admin/activity/get_activity_log_controller";
@@ -25,6 +25,9 @@ import { assignSubjectSections } from "../controllers/admin/academic/subjects/as
 import { createSubject } from "../controllers/admin/academic/subjects/create_subject_controller";
 import { updateSubject } from "../controllers/admin/academic/subjects/update_subject_controller";
 import { assignFacultyToSubject } from "../controllers/admin/academic/subjects/assign_faculty_to_subject_controller";
+import { archiveSection } from "../controllers/admin/academic/sections/archive_section_controller";
+import { restoreSection } from "../controllers/admin/academic/sections/restore_section_controller";
+import { updateSection } from "../controllers/admin/academic/sections/update_section_controller";
 
 const router = express.Router();
 
@@ -51,11 +54,14 @@ router.post("/faculty", createFaculty);
 // Create Faculty
 router.post("/faculty", createFaculty);
 
-// Academic Management
+// Sections
 router.get("/academic/sections", getSections);
 router.post("/academic/sections", createSection);
 router.get("/academic/sections/:id", getSectionById);
 router.get("/academic/student-records", getStudentRecords);
+router.patch("/academic/sections/:id/archive", archiveSection);
+router.patch("/academic/sections/:id/restore", restoreSection);
+router.patch("/academic/sections/:id", updateSection);
 
 // Student Records
 router.patch("/academic/student-records/:id/assign-section", assignSection);

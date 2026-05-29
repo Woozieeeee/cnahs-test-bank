@@ -25,7 +25,7 @@ export default function SectionFormFields({
 
   setProgram,
 }: Props) {
-  const generatedName = `${program} ${yearLevel}${sectionCode}`;
+  const generatedName = `${program}-${yearLevel}${sectionCode}`;
 
   return (
     <div className="mt-6 space-y-4">

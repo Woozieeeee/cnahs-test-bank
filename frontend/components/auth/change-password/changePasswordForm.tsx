@@ -77,19 +77,7 @@ export default function ChangePasswordForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="
-        w-full
-        max-w-md
-        rounded-2xl
-        border
-        border-slate-200
-        bg-white
-        p-8
-        shadow-sm
-      "
-    >
+    <form onSubmit={handleSubmit} className="w-full">
       <ChangePasswordHeader />
 
       {/* CURRENT PASSWORD */}

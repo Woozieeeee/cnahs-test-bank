@@ -1,24 +1,17 @@
 "use client";
 
-import AnimatedPage from "@/components/common/animatedPage";
+import AuthLayout from "@/components/auth/layout/authLayout";
+
+import AuthCard from "@/components/auth/layout/authCard";
 
 import ChangePasswordForm from "@/components/auth/change-password/changePasswordForm";
 
 export default function ChangePasswordPage() {
   return (
-    <AnimatedPage>
-      <div
-        className="
-          flex
-          min-h-screen
-          items-center
-          justify-center
-          bg-slate-50
-          px-4
-        "
-      >
+    <AuthLayout>
+      <AuthCard>
         <ChangePasswordForm />
-      </div>
-    </AnimatedPage>
+      </AuthCard>
+    </AuthLayout>
   );
 }

@@ -10,6 +10,8 @@ import UsersManagementTable from "@/components/admin/users/usersManagementTable"
 import { useUserActions } from "@/hooks/admin/users/useUserActions";
 import AnimatedPage from "@/components/common/animatedPage";
 import AddFacultyModal from "@/components/admin/users/addFacultyModal";
+import PageContainer from "@/components/layout/pages/pageContainer";
+import UsersHeader from "@/components/admin/users/usersHeader";
 
 interface User {
   id: number;
@@ -117,22 +119,8 @@ export default function UsersPage() {
 
   return (
     <AnimatedPage>
-      <div className="space-y-6">
-        <div>
-          <h1
-            className="
-            text-3xl
-            font-bold
-            text-foreground
-          "
-          >
-            User Management
-          </h1>
-
-          <p className="mt-2 text-muted-foreground">
-            Manage student and faculty accounts.
-          </p>
-        </div>
+      <PageContainer>
+        <UsersHeader />
 
         {/* STATS */}
 
@@ -151,6 +139,9 @@ export default function UsersPage() {
               .length
           }
         />
+
+        {/* TABLE */}
+
         <UsersManagementTable
           users={filteredUsers}
           activeTab={activeTab}
@@ -173,10 +164,14 @@ export default function UsersPage() {
           sortOrder={sortOrder}
           onSort={(field, order) => {
             setSortField(field);
+
             setSortOrder(order);
           }}
         />
-      </div>
+      </PageContainer>
+
+      {/* MODAL */}
+
       <AddFacultyModal
         open={openFacultyModal}
         onOpenChange={setOpenFacultyModal}

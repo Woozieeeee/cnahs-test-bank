@@ -13,6 +13,10 @@ import {
 
 import { loginUser } from "@/services/auth_service";
 
+import { authInputClass } from "../shared/authInputClass";
+
+import { authButtonClass } from "../shared/authButtonClass";
+
 import PasswordInput from "@/components/common/passwordInput";
 
 import LoginHeader from "./loginHeader";
@@ -91,10 +95,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-md rounded-lg border p-6 shadow"
-    >
+    <form onSubmit={handleSubmit} className="w-full">
       <LoginHeader />
 
       <input
@@ -102,7 +103,7 @@ export default function LoginForm() {
         placeholder="Enter your Student ID"
         value={identifier}
         onChange={(e) => setIdentifier(e.target.value)}
-        className="mb-4 w-full rounded border p-3"
+        className={`${authInputClass} mb-4`}
       />
 
       <div className="mb-4">
@@ -116,13 +117,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="
-          w-full
-          rounded
-          bg-black
-          p-3
-          text-white
-        "
+        className={authButtonClass}
       >
         {loading ? "Signing in..." : "Login"}
       </button>
