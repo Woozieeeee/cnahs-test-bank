@@ -1,4 +1,8 @@
+import { memo } from "react";
+
 import Link from "next/link";
+
+import StatusBadge from "@/components/common/badges/statusBadge";
 
 import { mockExamStudents } from "../data/mockExamStudents";
 
@@ -8,141 +12,81 @@ interface Props {
   examId: string;
 }
 
-export default function ExamStudentsMonitoring({
+function ExamStudentsMonitoring({
   sectionId,
   examId,
 }: Props) {
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <div
-        className="
-          flex
-          items-center
-          justify-between
-        "
-      >
-        <h2
-          className="
-            text-lg
-            font-semibold
-          "
-        >
+    <div className="border-border bg-card rounded-2xl border p-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">
           Live Student Monitoring
         </h2>
 
         <Link
           href={`/admin/academic/sections/${sectionId}/exams/${examId}/students`}
-          className="
-            text-sm
-            font-medium
-            text-primary
-          "
+          className="text-primary text-sm font-medium"
         >
           View All →
         </Link>
       </div>
 
-      <div
-        className="
-          mt-5
-          space-y-3
-        "
-      >
+      <div className="mt-5 space-y-3">
         {mockExamStudents.map((student) => (
           <Link
             key={student.id}
             href={`/admin/academic/sections/${sectionId}/exams/${examId}/students/${student.id}`}
-            className="
-              block
-              rounded-xl
-              border
-              border-border
-              p-4
-              transition
-              hover:border-ring
-            "
+            className="border-border hover:border-ring block rounded-xl border p-4 transition-all duration-200 hover:-translate-y-0.5"
           >
-            <div
-              className="
-                flex
-                items-start
-                justify-between
-              "
-            >
+            <div className="flex items-start justify-between">
               <div>
-                <h3
-                  className="
-                    font-medium
-                  "
-                >
+                <h3 className="font-medium">
                   {student.name}
                 </h3>
 
-                <p
-                  className="
-                    text-sm
-                    text-muted-foreground
-                  "
-                >
+                <p className="text-muted-foreground text-sm">
                   {student.studentId}
                 </p>
               </div>
 
-              <span
-                className="
-                  rounded-full
-                  bg-green-100
-                  px-3
-                  py-1
-                  text-xs
-                  font-medium
-                  text-green-700
-                "
-              >
+              <StatusBadge variant="success">
                 {student.status}
-              </span>
+              </StatusBadge>
             </div>
 
-            <div
-              className="
-                mt-3
-                flex
-                gap-2
-              "
-            >
-              <span
-                className="
-                  rounded-full
-                  bg-blue-100
-                  px-3
-                  py-1
-                  text-xs
-                  text-blue-700
-                "
-              >
-                {student.progress}%
-              </span>
+            <div className="mt-4 space-y-3">
+              <div>
+                <div className="text-muted-foreground mb-1 flex items-center justify-between text-xs">
+                  <span>Progress</span>
 
-              <span
-                className="
-                  rounded-full
-                  bg-orange-100
-                  px-3
-                  py-1
-                  text-xs
-                  text-orange-700
-                "
-              >
-                {student.warnings} Warnings
-              </span>
+                  <span>{student.progress}%</span>
+                </div>
+
+                <div className="bg-muted h-2 overflow-hidden rounded-full">
+                  <div
+                    className="bg-primary h-full"
+                    style={{
+                      width: `${student.progress}%`,
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">
+                  Violations
+                </span>
+
+                <StatusBadge
+                  variant={
+                    student.violations > 0
+                      ? "warning"
+                      : "success"
+                  }
+                >
+                  {student.violations}
+                </StatusBadge>
+              </div>
             </div>
           </Link>
         ))}
@@ -150,3 +94,5 @@ export default function ExamStudentsMonitoring({
     </div>
   );
 }
+
+export default memo(ExamStudentsMonitoring);

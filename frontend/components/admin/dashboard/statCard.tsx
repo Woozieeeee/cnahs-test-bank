@@ -14,40 +14,14 @@ export default function StatCard({
   description,
 }: StatCardProps) {
   return (
-    <MotionCard
-      className="
-        rounded-2xl
-        bg-card
-        p-6
-        shadow-sm
-      "
-    >
-      <p
-        className="
-          text-sm
-          text-muted-foreground
-        "
-      >
+    <MotionCard className="bg-card rounded-2xl p-6 shadow-sm">
+      <p className="text-muted-foreground text-sm">
         {title}
       </p>
 
-      <h3
-        className="
-          mt-2
-          text-3xl
-          font-bold
-        "
-      >
-        {value}
-      </h3>
+      <h3 className="mt-2 text-3xl font-bold">{value}</h3>
 
-      <p
-        className="
-          mt-1
-          text-sm
-          text-muted-foreground
-        "
-      >
+      <p className="text-muted-foreground mt-1 text-sm">
         {description}
       </p>
     </MotionCard>

@@ -9,19 +9,8 @@ export default function ActivityDetailItem({
   value,
 }: Props) {
   return (
-    <div
-      className="
-        rounded-xl
-        bg-muted/30
-        p-4
-      "
-    >
-      <p
-        className="
-          text-sm
-          text-muted-foreground
-        "
-      >
+    <div className="bg-muted/30 rounded-xl p-4">
+      <p className="text-muted-foreground text-sm">
         {label}
       </p>
 

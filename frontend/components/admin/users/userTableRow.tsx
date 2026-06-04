@@ -36,13 +36,7 @@ export default function UserTableRow({
   onSelect,
 }: Props) {
   return (
-    <tr
-      className="
-        border-b
-        transition
-        hover:bg-muted/50
-      "
-    >
+    <tr className="hover:bg-muted/50 border-b transition">
       {/* CHECKBOX */}
 
       <td className="p-4">
@@ -50,30 +44,25 @@ export default function UserTableRow({
           type="checkbox"
           checked={selected}
           onChange={onSelect}
-          className="
-            h-4
-            w-4
-            rounded
-            border-input
-          "
+          className="border-input h-4 w-4 rounded"
         />
       </td>
 
       {/* NAME */}
 
-      <td className="p-4 font-medium text-foreground">
+      <td className="text-foreground p-4 font-medium">
         {user.name}
       </td>
 
       {/* STUDENT ID */}
 
-      <td className="p-4 text-muted-foreground">
+      <td className="text-muted-foreground p-4">
         {user.studentId}
       </td>
 
       {/* ROLE */}
 
-      <td className="p-4 text-muted-foreground">
+      <td className="text-muted-foreground p-4">
         {user.role}
       </td>
 
@@ -81,21 +70,13 @@ export default function UserTableRow({
 
       <td className="p-4">
         <span
-          className={`
-            rounded-full
-            px-3
-            py-1
-            text-xs
-            font-medium
-
-            ${
-              user.status === "APPROVED"
-                ? "bg-emerald-100 text-emerald-700"
-                : user.status === "PENDING"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-red-100 text-red-700"
-            }
-          `}
+          className={`rounded-full px-3 py-1 text-xs font-medium ${
+            user.status === "APPROVED"
+              ? "bg-emerald-100 text-emerald-700"
+              : user.status === "PENDING"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-red-100 text-red-700"
+          } `}
         >
           {user.status}
         </span>
@@ -103,7 +84,7 @@ export default function UserTableRow({
 
       {/* CREATED */}
 
-      <td className="p-4 text-muted-foreground">
+      <td className="text-muted-foreground p-4">
         {new Date(user.createdAt).toLocaleDateString()}
       </td>
 
@@ -115,42 +96,20 @@ export default function UserTableRow({
           <div className="flex gap-2">
             <button
               onClick={() => onApprove(user.id)}
-              className="
-          rounded-lg
-          bg-emerald-600
-          px-3
-          py-2
-          text-sm
-          font-medium
-          text-white
-          transition
-          hover:bg-emerald-700
-          cursor-pointer
-        "
+              className="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
             >
               Approve
             </button>
 
             <button
               onClick={() => onReject(user.id)}
-              className="
-          rounded-lg
-          bg-red-600
-          px-3
-          py-2
-          text-sm
-          font-medium
-          text-white
-          transition
-          hover:bg-red-700
-          cursor-pointer
-        "
+              className="cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700"
             >
               Reject
             </button>
           </div>
         ) : (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             —
           </span>
         )}

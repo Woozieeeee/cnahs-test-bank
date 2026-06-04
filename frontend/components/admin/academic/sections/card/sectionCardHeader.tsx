@@ -17,44 +17,16 @@ export default function SectionCardHeader({
   return (
     <div className="flex items-start justify-between">
       <div>
-        <h2
-          className="
-            text-xl
-            font-semibold
-            text-foreground
-          "
-        >
+        <h2 className="text-foreground text-xl font-semibold">
           {section.name}
         </h2>
 
-        <p
-          className="
-            mt-1
-            text-sm
-            text-muted-foreground
-          "
-        >
+        <p className="text-muted-foreground mt-1 text-sm">
           {section.program}
         </p>
 
         {section.isArchived && (
-          <span
-            className="
-              mt-2
-              inline-flex
-              rounded-full
-              border
-              border-border
-              bg-muted
-              px-2
-              py-0.5
-              text-[10px]
-              font-semibold
-              uppercase
-              tracking-wide
-              text-muted-foreground
-            "
-          >
+          <span className="border-border bg-muted text-muted-foreground mt-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase">
             Archived
           </span>
         )}

@@ -19,15 +19,12 @@ export default function StudentIdField({
         placeholder="Student ID (22-03213)"
         value={studentId}
         onChange={(e) => onChange(e.target.value)}
-        className={`
-          ${authInputClass}
-          ${
-            studentId.length === 8 &&
-            !studentIdRegex.test(studentId)
-              ? "border-red-500"
-              : "border-gray-300"
-          }
-        `}
+        className={` ${authInputClass} ${
+          studentId.length === 8 &&
+          !studentIdRegex.test(studentId)
+            ? "border-red-500"
+            : "border-gray-300"
+        } `}
         required
       />
 

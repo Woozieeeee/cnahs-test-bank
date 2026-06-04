@@ -17,17 +17,10 @@ export default function ActivitySeverityBadge({
 
   return (
     <span
-      className={`
-        rounded-full
-        px-3
-        py-1
-        text-xs
-        font-medium
-        ${
-          styles[severity as keyof typeof styles] ||
-          styles.INFO
-        }
-      `}
+      className={`rounded-full px-3 py-1 text-xs font-medium ${
+        styles[severity as keyof typeof styles] ||
+        styles.INFO
+      } `}
     >
       {severity}
     </span>

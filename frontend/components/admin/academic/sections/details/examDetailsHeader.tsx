@@ -27,17 +27,7 @@ export default function ExamDetailsHeader({
         />
       </PageTitle>
 
-      <div
-        className="
-          rounded-full
-          bg-green-100
-          px-4
-          py-2
-          text-sm
-          font-medium
-          text-green-700
-        "
-      >
+      <div className="rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
         {status}
       </div>
     </PageHeader>

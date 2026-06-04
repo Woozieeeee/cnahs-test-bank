@@ -1,3 +1,5 @@
+import { memo, useCallback } from "react";
+
 import SectionDropdownItem from "./sectionDropdownItem";
 
 interface Props {
@@ -12,69 +14,49 @@ interface Props {
   onClose: () => void;
 }
 
-export default function SectionActionsDropdown({
+function SectionActionsDropdown({
   isArchived,
   onEdit,
   onArchive,
   onRestore,
   onClose,
 }: Props) {
+  const handleAction = useCallback(
+    (e: React.MouseEvent, action: () => void) => {
+      e.preventDefault();
+
+      e.stopPropagation();
+
+      action();
+
+      onClose();
+    },
+    [onClose]
+  );
+
   return (
-    <div
-      className="
-        absolute
-        right-0
-        top-12
-        z-50
-        w-48
-        rounded-xl
-        border
-        border-border
-        bg-popover
-        p-2
-        shadow-lg
-      "
-    >
+    <div className="border-border bg-popover absolute top-12 right-0 z-50 w-48 rounded-xl border p-2 shadow-lg">
       {!isArchived ? (
         <>
           <SectionDropdownItem
             label="Edit Section"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onEdit();
-              onClose();
-            }}
+            onClick={(e) => handleAction(e, onEdit)}
           />
 
           <SectionDropdownItem
             label="Archive Section"
             danger
-            onClick={(e) => {
-              e.preventDefault();
-
-              e.stopPropagation();
-
-              onArchive();
-
-              onClose();
-            }}
+            onClick={(e) => handleAction(e, onArchive)}
           />
         </>
       ) : (
         <SectionDropdownItem
           label="Restore Section"
-          onClick={(e) => {
-            e.preventDefault();
-
-            e.stopPropagation();
-
-            onRestore();
-
-            onClose();
-          }}
+          onClick={(e) => handleAction(e, onRestore)}
         />
       )}
     </div>
   );
 }
+
+export default memo(SectionActionsDropdown);

@@ -14,15 +14,7 @@ export default function RegistrationSearch({
       placeholder="Search student..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="
-        w-full
-        rounded-lg
-        border
-        p-3
-        outline-none
-        focus:ring-2
-        focus:ring-black
-      "
+      className="w-full rounded-lg border p-3 outline-none focus:ring-2 focus:ring-black"
     />
   );
 }

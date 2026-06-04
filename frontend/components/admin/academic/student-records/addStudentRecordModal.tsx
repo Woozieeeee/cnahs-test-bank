@@ -1,11 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
+
 import MotionButton from "@/components/motion/motionButton";
+
 import StudentRecordFormFields from "./studentRecordFormFields";
+
 import { successToast, errorToast } from "@/lib/swal";
+
 import MotionModal from "@/components/motion/motionModal";
+
 import { createStudentRecord } from "@/services/academic_service";
+
 import { formatName } from "@/utils/format_name";
 
 interface Props {
@@ -16,11 +22,9 @@ interface Props {
   onSuccess: () => void;
 }
 
-export default function AddStudentRecordModal({
+function AddStudentRecordModal({
   open,
-
   onOpenChange,
-
   onSuccess,
 }: Props) {
   const [studentId, setStudentId] = useState("");
@@ -37,18 +41,17 @@ export default function AddStudentRecordModal({
 
   const [loading, setLoading] = useState(false);
 
-  if (!open) return null;
-
   // =========================
-  // HANDLE SUBMIT
+  // SUBMIT
   // =========================
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!firstName.trim() || !lastName.trim()) {
       errorToast("First name and last name are required.");
 
       return;
     }
+
     const formattedFirstName = formatName(firstName);
 
     const formattedMiddleName = formatName(middleName);
@@ -80,7 +83,7 @@ export default function AddStudentRecordModal({
 
       onOpenChange(false);
 
-      // RESET FORM
+      // RESET
 
       setStudentId("");
 
@@ -101,52 +104,36 @@ export default function AddStudentRecordModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    studentId,
+    firstName,
+    middleName,
+    lastName,
+    suffix,
+    program,
+    onSuccess,
+    onOpenChange,
+  ]);
 
   return (
     <MotionModal open={open}>
       <div className="p-6">
         {/* HEADER */}
 
-        <div
-          className="
-          flex
-          items-start
-          justify-between
-        "
-        >
+        <div className="flex items-start justify-between">
           <div>
-            <h2
-              className="
-              text-2xl
-              font-bold
-              text-card-foreground
-            "
-            >
+            <h2 className="text-card-foreground text-2xl font-bold">
               Add Student Record
             </h2>
 
-            <p
-              className="
-              mt-1
-              text-sm
-              text-muted-foreground
-            "
-            >
+            <p className="text-muted-foreground mt-1 text-sm">
               Create a student verification record.
             </p>
           </div>
 
           <button
             onClick={() => onOpenChange(false)}
-            className="
-            rounded-lg
-            px-3
-            py-1
-            text-muted-foreground
-            transition
-            hover:bg-muted
-          "
+            className="text-muted-foreground hover:bg-muted rounded-lg px-3 py-1 transition-all duration-200"
           >
             ✕
           </button>
@@ -171,43 +158,17 @@ export default function AddStudentRecordModal({
 
         {/* ACTIONS */}
 
-        <div
-          className="
-          mt-6
-          flex
-          justify-end
-          gap-3
-        "
-        >
+        <div className="mt-6 flex justify-end gap-3">
           <MotionButton
             onClick={() => onOpenChange(false)}
-            className="
-            rounded-xl
-            border
-            border-border
-            px-4
-            py-2
-            text-sm
-            font-medium
-            text-foreground
-          "
+            className="border-border text-foreground rounded-xl border px-4 py-2 text-sm font-medium"
           >
             Cancel
           </MotionButton>
 
           <MotionButton
             onClick={handleSubmit}
-            className="
-            rounded-xl
-            bg-primary
-            px-4
-            py-2
-            text-sm
-            font-medium
-            text-primary-foreground
-            transition
-            hover:bg-primary/90
-          "
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200"
           >
             {loading ? "Creating..." : "Create Record"}
           </MotionButton>
@@ -216,3 +177,5 @@ export default function AddStudentRecordModal({
     </MotionModal>
   );
 }
+
+export default memo(AddStudentRecordModal);

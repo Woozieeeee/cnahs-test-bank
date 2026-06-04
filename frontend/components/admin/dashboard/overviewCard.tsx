@@ -18,23 +18,11 @@ export default function OverviewCard({
       transition={{
         duration: 0.2,
       }}
-      className="
-        rounded-2xl
-        bg-card
-        p-6
-        shadow-sm
-      "
+      className="bg-card rounded-2xl p-6 shadow-sm"
     >
       <p className="text-muted-foreground">{title}</p>
 
-      <h2
-        className="
-          mt-2
-          text-3xl
-          font-bold
-          text-foreground
-        "
-      >
+      <h2 className="text-foreground mt-2 text-3xl font-bold">
         {value}
       </h2>
     </motion.div>

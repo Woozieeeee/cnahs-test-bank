@@ -1,12 +1,6 @@
 export default function ActivityTimelineEmpty() {
   return (
-    <div
-      className="
-        py-16
-        text-center
-        text-muted-foreground
-      "
-    >
+    <div className="text-muted-foreground py-16 text-center">
       No activity logs found.
     </div>
   );

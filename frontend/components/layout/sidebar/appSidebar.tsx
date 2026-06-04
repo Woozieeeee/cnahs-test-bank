@@ -1,26 +1,44 @@
+"use client";
+
 import SidebarHeader from "./sidebarHeader";
 import SidebarNav from "./sidebarNav";
 import SidebarLogoutButton from "./sidebarLogoutButton";
+import SidebarToggle from "./sidebarToggle";
 
-export default function AppSidebar() {
+import { useSidebar } from "./sidebarContext";
+
+import type { NavItem } from "./sidebarNav";
+
+interface Props {
+  title: string;
+
+  subtitle: string;
+
+  navItems: NavItem[];
+}
+
+export default function AppSidebar({
+  title,
+  subtitle,
+  navItems,
+}: Props) {
+  const { collapsed } = useSidebar();
+
   return (
     <aside
-      className="
-      sticky
-      top-0
-      h-screen
-      w-64
-      border-r
-      border-border
-      bg-card
-      p-5
-    "
+      className={`border-border bg-card sticky top-0 z-99999 hidden h-screen border-r transition-[width] duration-300 ease-in-out lg:block ${
+        collapsed ? "w-20" : "w-64"
+      } `}
     >
-      <SidebarHeader />
+      <SidebarToggle />
 
-      <SidebarNav />
+      <div className="p-5">
+        <SidebarHeader title={title} subtitle={subtitle} />
 
-      <SidebarLogoutButton />
+        <SidebarNav items={navItems} />
+
+        <SidebarLogoutButton />
+      </div>
     </aside>
   );
 }

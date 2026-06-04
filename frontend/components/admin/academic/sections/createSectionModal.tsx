@@ -1,25 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import MotionButton from "@/components/motion/motionButton";
-import { successToast, errorToast } from "@/lib/swal";
-import { createSection } from "@/services/academic_service";
+import { memo, useState } from "react";
+
 import MotionModal from "@/components/motion/motionModal";
+
+import ModalHeader from "@/components/common/modal/modalHeader";
+
+import ModalActions from "@/components/common/modal/modalActions";
+
 import SectionFormFields from "./sectionFormFields";
+
+import { successToast, errorToast } from "@/lib/swal";
+
+import { createSection } from "@/services/academic_service";
 
 interface Props {
   open: boolean;
 
   onOpenChange: (open: boolean) => void;
 
-  onSuccess: () => void;
+  onSuccess: () => Promise<void> | void;
 }
 
-export default function CreateSectionModal({
+function CreateSectionModal({
   open,
-
   onOpenChange,
-
   onSuccess,
 }: Props) {
   const [sectionCode, setSectionCode] = useState("");
@@ -30,43 +35,47 @@ export default function CreateSectionModal({
 
   const [loading, setLoading] = useState(false);
 
-  if (!open) return null;
+  const resetForm = () => {
+    setSectionCode("");
 
-  // =========================
-  // HANDLE SUBMIT
-  // =========================
+    setYearLevel(1);
+
+    setProgram("BSN");
+  };
+
+  const handleClose = () => {
+    if (loading) return;
+
+    onOpenChange(false);
+  };
 
   const handleSubmit = async () => {
+    if (loading) return;
+
+    const trimmedSectionCode = sectionCode.trim();
+
+    if (!trimmedSectionCode) {
+      errorToast("Section code is required.");
+
+      return;
+    }
+
     try {
-      if (!sectionCode) {
-        errorToast("Section code is required.");
-
-        return;
-      }
-
       setLoading(true);
 
       await createSection({
-        sectionCode,
-
+        sectionCode: trimmedSectionCode,
         yearLevel,
-
         program,
       });
 
       successToast("Section created successfully.");
 
-      onSuccess();
+      await onSuccess();
+
+      resetForm();
 
       onOpenChange(false);
-
-      // RESET FORM
-
-      setSectionCode("");
-
-      setYearLevel(1);
-
-      setProgram("BSN");
     } catch (error: any) {
       errorToast(
         error?.response?.data?.message ||
@@ -77,56 +86,16 @@ export default function CreateSectionModal({
     }
   };
 
+  if (!open) return null;
+
   return (
     <MotionModal open={open}>
       <div className="p-6">
-        {/* HEADER */}
-
-        <div
-          className="
-            flex
-            items-start
-            justify-between
-          "
-        >
-          <div>
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-foreground
-              "
-            >
-              Create Section
-            </h2>
-
-            <p
-              className="
-                mt-1
-                text-sm
-                text-muted-foreground
-              "
-            >
-              Create a structured academic section.
-            </p>
-          </div>
-
-          <button
-            onClick={() => onOpenChange(false)}
-            className="
-              rounded-lg
-              px-3
-              py-1
-              text-muted-foreground
-              transition
-              hover:bg-muted
-            "
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* FORM */}
+        <ModalHeader
+          title="Create Section"
+          description="Create a structured academic section."
+          onClose={handleClose}
+        />
 
         <SectionFormFields
           sectionCode={sectionCode}
@@ -137,51 +106,17 @@ export default function CreateSectionModal({
           setProgram={setProgram}
         />
 
-        {/* ACTIONS */}
-
-        <div
-          className="
-            mt-6
-            flex
-            justify-end
-            gap-3
-          "
-        >
-          <MotionButton
-            onClick={() => onOpenChange(false)}
-            className="
-              rounded-xl
-              border
-              border-border
-              bg-card
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-muted-foreground
-            "
-          >
-            Cancel
-          </MotionButton>
-
-          <MotionButton
-            onClick={handleSubmit}
-            className="
-              rounded-xl
-              bg-muted-foreground
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-black
-              transition
-              hover:bg-foreground
-            "
-          >
-            {loading ? "Creating..." : "Create Section"}
-          </MotionButton>
-        </div>
+        <ModalActions
+          submitLabel={
+            loading ? "Creating..." : "Create Section"
+          }
+          submitDisabled={loading || !sectionCode.trim()}
+          onCancel={handleClose}
+          onSubmit={handleSubmit}
+        />
       </div>
     </MotionModal>
   );
 }
+
+export default memo(CreateSectionModal);

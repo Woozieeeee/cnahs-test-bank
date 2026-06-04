@@ -37,16 +37,7 @@ export default function SortableTableHeader({
             isActive && sortOrder === "asc" ? "desc" : "asc"
           )
         }
-        className="
-          flex
-          items-center
-          gap-2
-          text-sm
-          font-semibold
-          text-muted-foreground
-          transition
-          hover:text-foreground
-        "
+        className="text-muted-foreground hover:text-foreground flex items-center gap-2 text-sm font-semibold transition"
       >
         {label}
 

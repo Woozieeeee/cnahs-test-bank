@@ -1,47 +1,28 @@
+import { memo } from "react";
+
 interface Props {
   severityColor: string;
 
   isLast?: boolean;
 }
 
-export default function StudentSessionTimelineDot({
+function StudentSessionTimelineDot({
   severityColor,
   isLast = false,
 }: Props) {
   return (
     <div className="relative flex justify-center">
       {!isLast && (
-        <div
-          className="
-            absolute
-            left-1/2
-            top-7
-            h-full
-            w-px
-            -translate-x-1/2
-            bg-slate-200
-          "
-        />
+        <div className="bg-border absolute top-7 left-1/2 h-full w-px -translate-x-1/2" />
       )}
 
-      <div
-        className="
-          relative
-          z-10
-          mt-5
-          flex
-          h-5
-          w-5
-          items-center
-          justify-center
-          rounded-full
-          bg-sky-50
-        "
-      >
+      <div className="bg-muted relative z-10 mt-5 flex h-5 w-5 items-center justify-center rounded-full">
         <div
-          className={`h-2 w-2 rounded-full ${severityColor}`}
+          className={`h-2 w-2 rounded-full ${severityColor} `}
         />
       </div>
     </div>
   );
 }
+
+export default memo(StudentSessionTimelineDot);

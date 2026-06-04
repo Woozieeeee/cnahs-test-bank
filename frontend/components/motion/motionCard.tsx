@@ -30,10 +30,7 @@ export default function MotionCard({
       style={{
         willChange: "transform",
       }}
-      className={`
-        text-card-foreground
-        ${className}
-      `}
+      className={`text-card-foreground ${className} `}
       {...props}
     >
       {children}

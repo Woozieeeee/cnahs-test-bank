@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { getStudentRecords } from "@/services/academic_service";
 import StudentRecordsHeader from "@/components/admin/academic/student-records/studentRecordsHeader";
 import StudentRecordsTable from "@/components/admin/academic/student-records/studentRecordsTable";
-import UploadCsvButton from "@/components/admin/academic/student-records/uploadCsvButton";
-import DownloadTemplateButton from "@/components/admin/academic/student-records/downloadTemplateButton";
+import UploadCsvButton from "@/components/admin/academic/student-records/tools/uploadCsvButton";
+import DownloadTemplateButton from "@/components/admin/academic/student-records/tools/downloadTemplateButton";
 import Pagination from "@/components/common/pagination";
 import StudentRecordsActions from "@/components/admin/academic/student-records/studentRecordsActions";
 import AddStudentRecordModal from "@/components/admin/academic/student-records/addStudentRecordModal";
@@ -119,15 +119,7 @@ export default function StudentRecordsPage() {
 
   if (loading) {
     return (
-      <div
-        className="
-        flex
-        min-h-screen
-        items-center
-        justify-center
-        text-muted-foreground
-      "
-      >
+      <div className="text-muted-foreground flex min-h-screen items-center justify-center">
         Loading student records...
       </div>
     );
@@ -141,31 +133,13 @@ export default function StudentRecordsPage() {
 
       {/* FILTERS */}
 
-      <div
-        className="
-          flex
-          flex-col
-          gap-4
-          md:flex-row
-          md:items-center
-          md:justify-between
-        "
-      >
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <input
           type="text"
           placeholder="Search student..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="
-            w-full
-            rounded-xl
-            border
-            border-muted
-            px-4
-            py-3
-            outline-none
-            focus:border-muted-foreground
-          "
+          className="border-muted focus:border-muted-foreground w-full rounded-xl border px-4 py-3 outline-none"
         />
 
         <div className="flex items-center gap-3">

@@ -8,30 +8,21 @@ interface Props {
   href?: string;
 
   label?: string;
+
+  className?: string;
 }
 
 export default function BackButton({
   href = "/admin/academic",
 
-  label = "Back to Academic Management page",
+  label = "Back to Academic Management",
+
+  className = "",
 }: Props) {
   return (
     <Link
       href={href}
-      className="
-        inline-flex
-        items-center
-        gap-2
-        rounded-lg
-        px-3
-        py-2
-        text-sm
-        font-medium
-        text-muted-foreground
-        transition
-        hover:bg-muted
-        hover:text-foreground
-      "
+      className={`text-muted-foreground hover:bg-muted hover:text-foreground inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${className} `}
     >
       <ArrowLeft size={16} />
 

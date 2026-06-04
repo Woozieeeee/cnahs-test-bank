@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import MotionButton from "@/components/motion/motionButton";
 
-import UploadCsvButton from "./uploadCsvButton";
+import UploadCsvButton from "./tools/uploadCsvButton";
 
-import DownloadTemplateButton from "./downloadTemplateButton";
+import DownloadTemplateButton from "./tools/downloadTemplateButton";
 
 import { ChevronDown, Plus } from "lucide-react";
 
@@ -16,14 +22,43 @@ interface Props {
   onAddStudent: () => void;
 }
 
-export default function StudentRecordsActions({
-  onUploadSuccess,
+const baseButtonClassName = `
+  flex
+  h-[50px]
+  items-center
+  rounded-xl
+  border
+  px-5
+  text-sm
+  font-medium
+  transition-all
+  duration-200
+  cursor-pointer
+`;
 
+function StudentRecordsActions({
+  onUploadSuccess,
   onAddStudent,
 }: Props) {
   const [openTools, setOpenTools] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // =========================
+  // TOGGLE DROPDOWN
+  // =========================
+
+  const toggleTools = useCallback(() => {
+    setOpenTools((prev) => !prev);
+  }, []);
+
+  // =========================
+  // CLOSE DROPDOWN
+  // =========================
+
+  const closeTools = useCallback(() => {
+    setOpenTools(false);
+  }, []);
 
   // =========================
   // CLICK OUTSIDE
@@ -35,7 +70,7 @@ export default function StudentRecordsActions({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setOpenTools(false);
+        closeTools();
       }
     };
 
@@ -50,7 +85,7 @@ export default function StudentRecordsActions({
         handleClickOutside
       );
     };
-  }, []);
+  }, [closeTools]);
 
   return (
     <div className="flex items-center gap-3">
@@ -58,22 +93,7 @@ export default function StudentRecordsActions({
 
       <MotionButton
         onClick={onAddStudent}
-        className="
-            flex
-            h-[50px]
-            items-center
-            rounded-xl
-            border
-            border-border
-            bg-primary
-            px-5
-            text-sm
-            font-medium
-            text-card
-            transition
-            hover:bg-primary/80
-            cursor-pointer
-          "
+        className={` ${baseButtonClassName} border-border bg-primary text-primary-foreground hover:bg-primary/80`}
       >
         <div className="flex items-center gap-2">
           <Plus size={16} />
@@ -86,41 +106,22 @@ export default function StudentRecordsActions({
 
       <div ref={dropdownRef} className="relative">
         <MotionButton
-          onClick={() => setOpenTools(!openTools)}
+          onClick={toggleTools}
           onKeyDown={(e) => {
             if (e.key === "Escape") {
-              setOpenTools(false);
+              closeTools();
             }
           }}
           aria-expanded={openTools}
           aria-haspopup="menu"
-          className="
-            flex
-            h-[50px]
-            items-center
-            rounded-xl
-            border
-            border-border
-            bg-card
-            px-5
-            text-sm
-            font-medium
-            text-foreground
-            transition
-            hover:bg-muted
-            cursor-pointer
-          "
+          className={` ${baseButtonClassName} border-border bg-card text-foreground hover:bg-muted`}
         >
           <div className="flex items-center gap-2">
             <span>Tools</span>
 
             <ChevronDown
               size={16}
-              className={`
-                transition-transform
-                duration-200
-                ${openTools ? "rotate-180" : ""}
-              `}
+              className={`transition-transform duration-200 ${openTools ? "rotate-180" : ""} `}
             />
           </div>
         </MotionButton>
@@ -128,26 +129,7 @@ export default function StudentRecordsActions({
         {/* DROPDOWN */}
 
         {openTools && (
-          <div
-            className="
-              absolute
-              right-0
-              z-20
-              mt-1
-              w-56
-              origin-top-right
-              rounded-xl
-              border
-              border-border
-              bg-card
-              p-2
-              shadow-lg
-              animate-in
-              fade-in
-              zoom-in-95
-              duration-150
-            "
-          >
+          <div className="border-border bg-card animate-in fade-in zoom-in-95 absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-xl border p-2 shadow-lg duration-200">
             <div className="space-y-1">
               <DownloadTemplateButton />
 
@@ -161,3 +143,5 @@ export default function StudentRecordsActions({
     </div>
   );
 }
+
+export default memo(StudentRecordsActions);

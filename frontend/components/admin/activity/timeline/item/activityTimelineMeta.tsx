@@ -6,13 +6,7 @@ export default function ActivityTimelineMeta({
   createdAt,
 }: Props) {
   return (
-    <div
-      className="
-        mt-3
-        text-xs
-        text-muted-foreground
-      "
-    >
+    <div className="text-muted-foreground mt-3 text-xs">
       {new Date(createdAt).toLocaleString()}
     </div>
   );

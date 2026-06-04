@@ -10,14 +10,7 @@ export default function ActivityDetailsGrid({
   activity,
 }: Props) {
   return (
-    <div
-      className="
-        mt-6
-        grid
-        gap-4
-        md:grid-cols-2
-      "
-    >
+    <div className="mt-6 grid gap-4 md:grid-cols-2">
       <ActivityDetailItem
         label="Category"
         value={activity.categories.join(", ")}

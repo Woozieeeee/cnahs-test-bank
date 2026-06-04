@@ -21,25 +21,11 @@ export default function SystemOverviewSection({
 }: Props) {
   return (
     <div>
-      <h2
-        className="
-          mb-4
-          text-xl
-          font-semibold
-          text-foreground
-        "
-      >
+      <h2 className="text-foreground mb-4 text-xl font-semibold">
         System Overview
       </h2>
 
-      <div
-        className="
-          grid
-          gap-6
-          md:grid-cols-2
-          xl:grid-cols-4
-        "
-      >
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <OverviewCard
           title="Total Students"
           value={stats.totalStudents}

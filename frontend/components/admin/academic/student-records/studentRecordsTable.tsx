@@ -1,5 +1,6 @@
-import MotionButton from "@/components/motion/motionButton";
 import SortableTableHeader from "@/components/common/sortableTableHeader";
+
+import StudentRecordsTableRow from "./studentRecordsTableRow";
 
 interface StudentRecord {
   id: number;
@@ -13,13 +14,27 @@ interface StudentRecord {
     name: string;
   } | null;
 }
+
 interface Props {
   records: StudentRecord[];
+
   onEdit: (record: StudentRecord) => void;
+
   sortField: string;
+
   sortOrder: "asc" | "desc";
+
   onSort: (field: string, order: "asc" | "desc") => void;
 }
+
+const headerClassName = `
+  px-6
+  py-4
+  text-left
+  text-sm
+  font-semibold
+  text-muted-foreground
+`;
 
 export default function StudentRecordsTable({
   records,
@@ -29,15 +44,7 @@ export default function StudentRecordsTable({
   onEdit,
 }: Props) {
   return (
-    <div
-      className="
-        overflow-hidden
-        rounded-2xl
-        border
-        border-border
-        bg-card
-      "
-    >
+    <div className="border-border bg-card overflow-hidden rounded-2xl border">
       <table className="w-full">
         <thead className="bg-muted">
           <tr>
@@ -65,87 +72,31 @@ export default function StudentRecordsTable({
               onSort={onSort}
             />
 
-            <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">
-              Section
-            </th>
+            <th className={headerClassName}>Section</th>
 
-            <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">
-              Actions
-            </th>
+            <th className={headerClassName}>Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          {records.length === 0 && (
+          {records.length === 0 ? (
             <tr>
               <td
-                colSpan={4}
-                className="
-                  px-6
-                  py-10
-                  text-center
-                  align-middle
-                  text-sm
-                  text-muted-foreground
-                "
+                colSpan={5}
+                className="text-muted-foreground px-6 py-10 text-center text-sm"
               >
                 No student records found.
               </td>
             </tr>
+          ) : (
+            records.map((record) => (
+              <StudentRecordsTableRow
+                key={record.id}
+                record={record}
+                onEdit={onEdit}
+              />
+            ))
           )}
-          {records.map((record) => (
-            <tr
-              key={record.id}
-              className="
-                border-t
-                border-border
-              "
-            >
-              <td className="px-6 py-4 text-sm text-foreground">
-                {record.studentId}
-              </td>
-
-              <td className="px-6 py-4 text-sm font-medium text-card-foreground">
-                {[
-                  record.lastName + ",",
-                  record.firstName,
-                  record.middleName,
-                  record.suffix,
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-              </td>
-
-              <td className="px-6 py-4 text-sm text-foreground">
-                {record.program}
-              </td>
-
-              <td className="px-6 py-4 text-sm text-foreground">
-                {record.section?.name || "Unassigned"}
-              </td>
-
-              <td className="px-6 py-4">
-                <MotionButton
-                  onClick={() => onEdit(record)}
-                  className="
-                  rounded-lg
-                  border
-                  border-border
-                  px-3
-                  py-2
-                  text-sm
-                  font-medium
-                  text-foreground
-                  transition
-                  hover:bg-muted
-                  cursor-pointer
-                "
-                >
-                  Edit
-                </MotionButton>
-              </td>
-            </tr>
-          ))}
         </tbody>
       </table>
     </div>

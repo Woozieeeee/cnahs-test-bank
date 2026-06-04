@@ -12,25 +12,11 @@ import QuickAccessCard from "./quickAccessCard";
 export default function QuickAccessSection() {
   return (
     <div>
-      <h2
-        className="
-          mb-4
-          text-xl
-          font-semibold
-          text-foreground
-        "
-      >
+      <h2 className="text-foreground mb-4 text-xl font-semibold">
         Quick Access
       </h2>
 
-      <MotionCard
-        className="
-          grid
-          gap-6
-          md:grid-cols-2
-          xl:grid-cols-4
-        "
-      >
+      <MotionCard className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <QuickAccessCard
           title="Manage Students"
           description="View and manage student accounts"

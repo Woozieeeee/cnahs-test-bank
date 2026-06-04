@@ -1,0 +1,3 @@
+import { PROGRAM_OPTIONS as ACADEMIC_PROGRAM_OPTIONS } from "@/constant/academic";
+
+export const PROGRAM_OPTIONS = ACADEMIC_PROGRAM_OPTIONS;

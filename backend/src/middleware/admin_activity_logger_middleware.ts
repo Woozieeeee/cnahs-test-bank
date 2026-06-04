@@ -21,6 +21,10 @@ const EXCLUDED_PATHS = new Set([
 // =========================
 
 const getCategoryFromPath = (path: string) => {
+  if (path.startsWith("/academic")) {
+    return "ACADEMIC";
+  }
+
   if (path.startsWith("/users") || path.startsWith("/faculty")) {
     return "USER_MANAGEMENT";
   }
@@ -49,6 +53,58 @@ const getCategoryFromPath = (path: string) => {
 // =========================
 
 const getActionLabel = (method: string, path: string) => {
+  // =========================
+  // ACADEMIC
+  // =========================
+
+  if (method === "POST" && path === "/academic/sections") {
+    return "Created academic section";
+  }
+
+  if (method === "PATCH" && path.includes("/academic/sections/")) {
+    if (path.endsWith("/archive")) {
+      return "Archived academic section";
+    }
+
+    if (path.endsWith("/restore")) {
+      return "Restored academic section";
+    }
+
+    return "Updated academic section";
+  }
+
+  if (
+    method === "PATCH" &&
+    path.includes("/academic/student-records/") &&
+    path.endsWith("/assign-section")
+  ) {
+    return "Assigned student to section";
+  }
+
+  if (method === "POST" && path === "/academic/subjects") {
+    return "Created academic subject";
+  }
+
+  if (method === "PATCH" && path.includes("/academic/subjects/")) {
+    if (path.endsWith("/archive")) {
+      return "Archived academic subject";
+    }
+
+    if (path.endsWith("/restore")) {
+      return "Restored academic subject";
+    }
+
+    if (path.endsWith("/assign-sections")) {
+      return "Updated subject section assignments";
+    }
+
+    if (path.endsWith("/assign-faculties")) {
+      return "Updated subject faculty pool";
+    }
+
+    return "Updated academic subject";
+  }
+
   // =========================
   // DASHBOARD
   // =========================
@@ -160,6 +216,8 @@ export const adminActivityLogger = (
           params: req.params,
 
           query: req.query,
+
+          body: req.body,
         },
       });
     } catch (error) {

@@ -40,7 +40,6 @@ export const getMe = async () => {
 
 export const changePassword = async (data: {
   currentPassword: string;
-
   newPassword: string;
 }) => {
   const response = await api.patch(

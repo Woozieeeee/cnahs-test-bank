@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import MotionModal from "@/components/motion/motionModal";
 
-import MotionButton from "@/components/motion/motionButton";
+import ModalHeader from "@/components/common/modal/modalHeader";
+
+import ModalActions from "@/components/common/modal/modalActions";
 
 interface Subject {
   id: number;
@@ -32,7 +39,25 @@ interface Props {
   }) => void;
 }
 
-export default function EditSubjectModal({
+const fieldClassName = `
+  w-full
+  rounded-xl
+  border
+  border-input
+  bg-background
+  px-4
+  py-3
+  text-foreground
+
+  outline-none
+
+  transition-all
+  duration-200
+
+  focus:border-ring
+`;
+
+function EditSubjectModal({
   open,
   onOpenChange,
   subject,
@@ -58,61 +83,61 @@ export default function EditSubjectModal({
     setDescription(subject.description || "");
   }, [subject]);
 
-  if (!open || !subject) return null;
+  // =========================
+  // CLOSE
+  // =========================
+
+  const handleClose = useCallback(() => {
+    onOpenChange(false);
+  }, [onOpenChange]);
+
+  // =========================
+  // SAVE
+  // =========================
+
+  const handleSave = useCallback(() => {
+    const trimmedName = name.trim();
+
+    const trimmedCode = code.trim();
+
+    if (!trimmedName || !trimmedCode) {
+      return;
+    }
+
+    onSave({
+      name: trimmedName,
+
+      code: trimmedCode,
+
+      description: description.trim(),
+    });
+
+    handleClose();
+  }, [name, code, description, onSave, handleClose]);
+
+  if (!open || !subject) {
+    return null;
+  }
 
   return (
     <MotionModal open={open}>
       <div className="p-6">
-        {/* HEADER */}
-
-        <div>
-          <h2
-            className="
-              text-2xl
-              font-bold
-              text-foreground
-            "
-          >
-            Edit Subject
-          </h2>
-
-          <p
-            className="
-              mt-1
-              text-sm
-              text-muted-foreground
-            "
-          >
-            Update subject information.
-          </p>
-        </div>
+        <ModalHeader
+          title="Edit Subject"
+          description="Update subject information."
+          onClose={handleClose}
+        />
 
         {/* FORM */}
 
         <div className="mt-6 space-y-4">
-          {/* NAME */}
-
           <input
             type="text"
             placeholder="Subject Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
+            className={fieldClassName}
           />
-
-          {/* CODE */}
 
           <input
             type="text"
@@ -121,97 +146,28 @@ export default function EditSubjectModal({
             onChange={(e) =>
               setCode(e.target.value.toUpperCase())
             }
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
+            maxLength={10}
+            className={fieldClassName}
           />
-
-          {/* DESCRIPTION */}
 
           <textarea
             placeholder="Description..."
             rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
+            className={fieldClassName}
           />
         </div>
 
-        {/* ACTIONS */}
-
-        <div
-          className="
-            mt-6
-            flex
-            justify-end
-            gap-3
-          "
-        >
-          <MotionButton
-            onClick={() => onOpenChange(false)}
-            className="
-              rounded-xl
-              border
-              border-border
-              bg-card
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-muted-foreground
-            "
-          >
-            Cancel
-          </MotionButton>
-
-          <MotionButton
-            onClick={() => {
-              onSave({
-                name,
-                code,
-                description,
-              });
-
-              onOpenChange(false);
-            }}
-            className="
-              rounded-xl
-              bg-primary
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-primary-foreground
-              transition
-              hover:bg-primary/90
-            "
-          >
-            Save Changes
-          </MotionButton>
-        </div>
+        <ModalActions
+          submitLabel="Save Changes"
+          submitDisabled={!name.trim() || !code.trim()}
+          onCancel={handleClose}
+          onSubmit={handleSave}
+        />
       </div>
     </MotionModal>
   );
 }
+
+export default memo(EditSubjectModal);

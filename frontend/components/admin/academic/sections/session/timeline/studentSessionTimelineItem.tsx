@@ -1,8 +1,15 @@
+import { memo, useMemo } from "react";
+
 import MotionCard from "@/components/motion/motionCard";
 
 import StudentSessionTimelineDot from "./studentSessionTimelineDot";
 import StudentSessionTimelineCategories from "./studentSessionTimelineCategories";
 import StudentSessionTimelineHeader from "./studentSessionTimelineHeader";
+
+import {
+  getSeverityDotColor,
+  getTimelineBorder,
+} from "@/lib/timeline";
 
 interface Props {
   event: {
@@ -22,45 +29,52 @@ interface Props {
   isLast?: boolean;
 }
 
-export default function StudentSessionTimelineItem({
+function StudentSessionTimelineItem({
   event,
   isLast = false,
 }: Props) {
-  const severityColor =
-    event.severity === "ERROR"
-      ? "bg-red-500"
-      : event.severity === "WARNING"
-        ? "bg-yellow-500"
-        : "bg-green-500";
+  // =========================
+  // STATE STYLES
+  // =========================
 
-  const isViolation =
-    event.categories.includes("VIOLATION");
+  const severityColor = useMemo(
+    () => getSeverityDotColor(event.severity),
+    [event.severity]
+  );
 
-  const isHighSeverity = event.severity === "ERROR";
+  const borderClass = useMemo(() => {
+    const isViolation =
+      event.categories.includes("VIOLATION");
+
+    const isHighSeverity = event.severity === "ERROR";
+
+    return getTimelineBorder(isViolation, isHighSeverity);
+  }, [event.categories, event.severity]);
+
+  // =========================
+  // TIME
+  // =========================
+
+  const formattedTime = useMemo(() => {
+    return new Date(event.createdAt).toLocaleTimeString(
+      [],
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
+  }, [event.createdAt]);
+
+  const formattedDate = useMemo(() => {
+    return new Date(event.createdAt).toLocaleString();
+  }, [event.createdAt]);
 
   return (
-    <div
-      className="
-      grid
-      grid-cols-[84px_28px_1fr]
-      gap-4
-      pb-6
-    "
-    >
+    <div className="grid grid-cols-[84px_28px_1fr] gap-4 pb-6">
       {/* TIME */}
 
-      <div
-        className="
-        pt-5
-        text-right
-        text-sm
-        text-muted-foreground
-      "
-      >
-        {new Date(event.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
+      <div className="text-muted-foreground pt-5 text-right text-sm">
+        {formattedTime}
       </div>
 
       {/* TIMELINE DOT */}
@@ -74,23 +88,7 @@ export default function StudentSessionTimelineItem({
 
       <MotionCard>
         <div
-          className={`
-          rounded-2xl
-          border
-          bg-card
-          p-5
-          transition-all
-          hover:-translate-y-0.5
-          hover:shadow-sm
-
-          ${
-            isViolation
-              ? "border-red-200/70"
-              : isHighSeverity
-                ? "border-amber-200/70"
-                : "border-border/60"
-          }
-        `}
+          className={`bg-card rounded-2xl border p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${borderClass} `}
         >
           <div className="min-w-0 flex-1">
             {/* HEADER */}
@@ -102,14 +100,7 @@ export default function StudentSessionTimelineItem({
 
             {/* DESCRIPTION */}
 
-            <p
-              className="
-              mt-3
-              text-sm
-              leading-6
-              text-muted-foreground
-            "
-            >
+            <p className="text-muted-foreground mt-3 text-sm leading-6">
               {event.description}
             </p>
 
@@ -121,17 +112,8 @@ export default function StudentSessionTimelineItem({
 
             {/* META */}
 
-            <div
-              className="
-              mt-4
-              border-t
-              border-border/50
-              pt-3
-              text-xs
-              text-muted-foreground
-            "
-            >
-              {new Date(event.createdAt).toLocaleString()}
+            <div className="border-border/50 text-muted-foreground mt-4 border-t pt-3 text-xs">
+              {formattedDate}
             </div>
           </div>
         </div>
@@ -139,3 +121,5 @@ export default function StudentSessionTimelineItem({
     </div>
   );
 }
+
+export default memo(StudentSessionTimelineItem);

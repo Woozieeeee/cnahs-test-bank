@@ -1,24 +1,11 @@
 export default function AssignmentsDashboard() {
   return (
-    <div
-      className="
-        rounded-2xl
-        bg-card
-        p-10
-        shadow-sm
-      "
-    >
-      <h2
-        className="
-          text-xl
-          font-semibold
-          text-foreground
-        "
-      >
+    <div className="bg-card rounded-2xl p-10 shadow-sm">
+      <h2 className="text-foreground text-xl font-semibold">
         Assignments
       </h2>
 
-      <p className="mt-2 text-muted-foreground">
+      <p className="text-muted-foreground mt-2">
         Academic assignment dashboard coming soon.
       </p>
     </div>

@@ -1,51 +1,30 @@
+"use client";
+
+import { memo } from "react";
+
 import type { Exam } from "@/types/exam";
 
-import ExamStatusBadge from "@/components/admin/exams/examStatusBadge";
+import StatCard from "@/components/common/cards/statCard";
+import CardFooterLink from "@/components/common/cards/cardFooterLink";
 
-import SectionExamMetrics from "./sectionExamMetrics";
+import ExamStatusBadge from "@/components/admin/exams/examStatusBadge";
 
 interface Props {
   exam: Exam;
 }
 
-export default function SectionExamCard({ exam }: Props) {
+function SectionExamCard({ exam }: Props) {
   return (
-    <div
-      className="
-        rounded-xl
-        border
-        border-border
-        p-5
-        transition
-        hover:border-ring
-      "
-    >
-      <div
-        className="
-          flex
-          items-start
-          justify-between
-          gap-4
-        "
-      >
+    <div className="border-border bg-card hover:border-ring flex h-full flex-col rounded-2xl border p-5 transition-all duration-200 hover:-translate-y-0.5">
+      {/* HEADER */}
+
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h2
-            className="
-              text-lg
-              font-semibold
-              text-foreground
-            "
-          >
+          <h2 className="text-foreground text-lg font-semibold">
             {exam.title}
           </h2>
 
-          <p
-            className="
-              mt-1
-              text-sm
-              text-muted-foreground
-            "
-          >
+          <p className="text-muted-foreground mt-1 line-clamp-2 text-sm">
             {exam.description}
           </p>
         </div>
@@ -53,47 +32,33 @@ export default function SectionExamCard({ exam }: Props) {
         <ExamStatusBadge status={exam.status} />
       </div>
 
-      <div
-        className="
-          mt-4
-          flex
-          flex-wrap
-          gap-2
-        "
-      >
-        <span
-          className="
-            rounded-full
-            bg-blue-100
-            px-3
-            py-1
-            text-xs
-            font-medium
-            text-blue-700
-          "
-        >
-          {exam.difficulty}
-        </span>
+      {/* STATS */}
 
-        <span
-          className="
-            rounded-full
-            bg-muted
-            px-3
-            py-1
-            text-xs
-            font-medium
-          "
-        >
-          {exam.duration} mins
-        </span>
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        <StatCard
+          compact
+          label="Difficulty"
+          value={exam.difficulty}
+        />
+
+        <StatCard
+          compact
+          label="Duration"
+          value={`${exam.duration}m`}
+        />
+
+        <StatCard compact label="Students" value={18} />
+
+        <StatCard compact label="Violations" value={3} />
       </div>
 
-      <SectionExamMetrics
-        activeStudents={18}
-        completionRate={72}
-        violations={3}
-      />
+      {/* FOOTER */}
+
+      <div className="mt-auto">
+        <CardFooterLink label="View Exam Details" />
+      </div>
     </div>
   );
 }
+
+export default memo(SectionExamCard);

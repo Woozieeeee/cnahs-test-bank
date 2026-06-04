@@ -1,43 +1,68 @@
+"use client";
+
+import { memo, useState } from "react";
+
+import dynamic from "next/dynamic";
+
 import { mockSessionViolations } from "@/components/admin/academic/sections/data/mockSessionViolations";
 
-export default function StudentSessionViolations() {
+import ViolationItem from "./violations/violationItem";
+
+import type { Violation } from "@/types/violation";
+
+const ViolationDetailsModal = dynamic(
+  () => import("./violations/violationDetailsModal"),
+  {
+    ssr: false,
+  }
+);
+
+function StudentSessionViolations() {
+  const [selectedViolation, setSelectedViolation] =
+    useState<Violation | null>(null);
+
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <h2 className="text-lg font-semibold">Violations</h2>
+    <>
+      <div className="border-border bg-card rounded-2xl border p-6">
+        {/* HEADER */}
 
-      <div className="mt-5 space-y-3">
-        {mockSessionViolations.map((violation) => (
-          <div
-            key={violation.id}
-            className="
-                rounded-xl
-                border
-                border-border
-                p-4
-              "
-          >
-            <p className="font-medium">{violation.type}</p>
+        <div>
+          <h2 className="text-lg font-semibold">
+            Violations
+          </h2>
 
-            <p
-              className="
-                  mt-1
-                  text-xs
-                  text-muted-foreground
-                "
-            >
-              {violation.time}
-            </p>
-          </div>
-        ))}
+          <p className="text-muted-foreground mt-1 text-sm">
+            Integrity-related incidents detected during
+            examination monitoring.
+          </p>
+        </div>
+
+        {/* TIMELINE */}
+
+        <div className="mt-6 space-y-6">
+          {mockSessionViolations.map((violation, index) => (
+            <ViolationItem
+              key={violation.id}
+              violation={violation}
+              isLast={
+                index === mockSessionViolations.length - 1
+              }
+              onClick={() =>
+                setSelectedViolation(violation)
+              }
+            />
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* MODAL */}
+
+      <ViolationDetailsModal
+        violation={selectedViolation}
+        onClose={() => setSelectedViolation(null)}
+      />
+    </>
   );
 }
+
+export default memo(StudentSessionViolations);

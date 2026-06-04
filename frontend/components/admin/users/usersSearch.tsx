@@ -15,15 +15,7 @@ export default function UsersSearch({
       placeholder="Search users..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="
-        w-full
-        rounded-xl
-        border
-        px-4
-        py-3
-        transition
-        focus:border-black
-      "
+      className="w-full rounded-xl border px-4 py-3 transition focus:border-black"
     />
   );
 }

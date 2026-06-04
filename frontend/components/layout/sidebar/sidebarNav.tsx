@@ -1,52 +1,39 @@
+"use client";
+
 import SidebarNavItem from "./sidebarNavItem";
 
-const navItems = [
-  {
-    href: "/admin/dashboard",
+import type { LucideIcon } from "lucide-react";
 
-    label: "Dashboard",
-  },
+export interface NavItem {
+  href: string;
 
-  {
-    href: "/admin/users",
+  label: string;
 
-    label: "Users",
-  },
+  icon: LucideIcon;
 
-  {
-    href: "/admin/academic",
+  nested?: boolean;
+}
 
-    label: "Academic Management",
+interface Props {
+  items: NavItem[];
 
-    nested: true,
-  },
+  forceExpanded?: boolean;
+}
 
-  {
-    href: "/admin/exams",
-
-    label: "Exams",
-
-    nested: true,
-  },
-
-  {
-    href: "/admin/activity-logs",
-
-    label: "Activity Logs",
-
-    nested: true,
-  },
-];
-
-export default function SidebarNav() {
+export default function SidebarNav({
+  items,
+  forceExpanded = false,
+}: Props) {
   return (
     <nav className="space-y-2">
-      {navItems.map((item) => (
+      {items.map((item) => (
         <SidebarNavItem
           key={item.href}
           href={item.href}
           label={item.label}
+          icon={item.icon}
           nested={item.nested}
+          forceExpanded={forceExpanded}
         />
       ))}
     </nav>

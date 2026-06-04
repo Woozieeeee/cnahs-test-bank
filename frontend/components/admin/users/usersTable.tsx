@@ -85,23 +85,10 @@ export default function UsersTable({
   };
 
   return (
-    <div
-      className="
-        overflow-x-auto
-        rounded-2xl
-        bg-card
-        shadow-sm
-      "
-    >
+    <div className="bg-card overflow-x-auto rounded-2xl shadow-sm">
       <table className="w-full">
         <thead>
-          <tr
-            className="
-              border-b
-              text-left
-              text-muted-foreground
-            "
-          >
+          <tr className="text-muted-foreground border-b text-left">
             {/* CHECKBOX */}
 
             <th className="p-4">
@@ -109,12 +96,7 @@ export default function UsersTable({
                 type="checkbox"
                 checked={allSelected}
                 onChange={handleSelectAll}
-                className="
-                  h-4
-                  w-4
-                  rounded
-                  border-input
-                "
+                className="border-input h-4 w-4 rounded"
               />
             </th>
 
@@ -178,11 +160,7 @@ export default function UsersTable({
             <tr>
               <td
                 colSpan={7}
-                className="
-                  p-6
-                  text-center
-                  text-muted-foreground
-                "
+                className="text-muted-foreground p-6 text-center"
               >
                 No users found.
               </td>

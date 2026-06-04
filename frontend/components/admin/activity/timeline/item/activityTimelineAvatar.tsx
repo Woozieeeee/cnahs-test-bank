@@ -13,21 +13,7 @@ export default function ActivityTimelineAvatar({
     .toUpperCase();
 
   return (
-    <div
-      className="
-        flex
-        h-7
-        w-7
-        shrink-0
-        items-center
-        justify-center
-        rounded-full
-        bg-primary
-        text-xs
-        font-semibold
-        text-primary-foreground
-      "
-    >
+    <div className="bg-primary text-primary-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
       {initials || "A"}
     </div>
   );

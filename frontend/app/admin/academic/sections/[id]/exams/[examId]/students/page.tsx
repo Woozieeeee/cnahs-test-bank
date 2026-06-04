@@ -12,7 +12,7 @@ import ExamStudentsStats from "@/components/admin/academic/sections/students/exa
 
 import ExamStudentsTabs from "@/components/admin/academic/sections/students/examStudentsTabs";
 
-import ExamStudentsList from "@/components/admin/academic/sections/students/examStudentsList";
+import ExamStudentRoster from "@/components/admin/academic/sections/students/examStudentRoster";
 
 import { mockExamStudents } from "@/components/admin/academic/sections/data/mockExamStudents";
 
@@ -30,7 +30,7 @@ export default function ExamStudentsPage() {
       return mockExamStudents.filter(
         (student) =>
           student.status === "FLAGGED" ||
-          student.warnings > 0
+          student.violations > 0
       );
     }
 
@@ -60,7 +60,8 @@ export default function ExamStudentsPage() {
         }
         flagged={
           mockExamStudents.filter(
-            (s) => s.status === "FLAGGED" || s.warnings > 0
+            (s) =>
+              s.status === "FLAGGED" || s.violations > 0
           ).length
         }
       />
@@ -70,7 +71,7 @@ export default function ExamStudentsPage() {
         setActiveTab={setActiveTab}
       />
 
-      <ExamStudentsList
+      <ExamStudentRoster
         students={filteredStudents}
         sectionId={String(params.id)}
         examId={String(params.examId)}

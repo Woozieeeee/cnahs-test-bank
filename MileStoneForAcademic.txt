@@ -1,0 +1,533 @@
+# Academic Backend Gap Documentary
+
+## Milestone 1 — Academic Foundation
+
+### Status
+
+COMPLETED
+
+### Frontend Files Completed
+
+#### Subjects
+
+```txt
+frontend/app/admin/academic/subjects/page.tsx
+frontend/components/admin/academic/subjects/*
+frontend/hooks/useSubjects.ts
+frontend/services/academic_service.ts
+```
+
+#### Sections
+
+```txt
+frontend/app/admin/academic/sections/page.tsx
+frontend/app/admin/academic/sections/[id]/page.tsx
+frontend/components/admin/academic/sections/*
+```
+
+#### Student Records
+
+```txt
+frontend/components/admin/academic/student-records/*
+```
+
+### Backend Files Completed
+
+#### Subjects
+
+```txt
+backend/src/controllers/admin/academic/subjects/*
+backend/src/services/admin/academic/subjects/*
+```
+
+Completed Features:
+
+* Create Subject
+* Update Subject
+* Archive Subject
+* Restore Subject
+* Assign Faculty Pool
+* Assign Sections
+
+#### Sections
+
+```txt
+backend/src/controllers/admin/academic/sections/*
+backend/src/services/admin/academic/sections/*
+```
+
+Completed Features:
+
+* Create Section
+* Update Section
+* Archive Section
+* Restore Section
+
+---
+
+# Milestone 2 — Subject Intelligence Layer
+
+## Status
+
+NEXT PRIORITY
+
+## Frontend Files Still Mocked
+
+### Subject Dashboard
+
+```txt
+frontend/app/admin/academic/subjects/[subjectId]/page.tsx
+```
+
+Current Mock Source:
+
+```txt
+frontend/components/admin/academic/subjects/data/mockSubjectDetails.ts
+```
+
+Needs:
+
+* Subject dashboard endpoint
+* Subject analytics endpoint
+
+### Subject Question Bank
+
+```txt
+frontend/app/admin/academic/subjects/[subjectId]/question-bank/page.tsx
+```
+
+Needs:
+
+* Question bank list endpoint
+* Question bank statistics endpoint
+* Search endpoint
+* Filter endpoint
+
+### Subject Question Details
+
+```txt
+frontend/app/admin/academic/subjects/[subjectId]/question-bank/[questionId]/page.tsx
+```
+
+Needs:
+
+* Question details endpoint
+* Performance analytics endpoint
+* Answer distribution endpoint
+
+### Subject Assessments
+
+```txt
+frontend/app/admin/academic/subjects/[subjectId]/assessments/page.tsx
+```
+
+Needs:
+
+* Assessment list endpoint
+* Assessment statistics endpoint
+
+### Subject Assessment Details
+
+```txt
+frontend/app/admin/academic/subjects/[subjectId]/assessments/[assessmentId]/page.tsx
+```
+
+Needs:
+
+* Assessment detail endpoint
+* Section performance endpoint
+* Student performance endpoint
+
+## Backend Files To Create
+
+### Subject Dashboard
+
+```txt
+backend/src/controllers/admin/academic/subjects/get_subject_by_id_controller.ts
+
+backend/src/services/admin/academic/subjects/get_subject_by_id_service.ts
+```
+
+Route:
+
+```txt
+GET /admin/academic/subjects/:id
+```
+
+### Subject Question Bank
+
+```txt
+backend/src/controllers/admin/academic/questions/
+
+backend/src/services/admin/academic/questions/
+```
+
+### Subject Assessments
+
+```txt
+backend/src/controllers/admin/academic/assessments/
+
+backend/src/services/admin/academic/assessments/
+```
+
+
+Remaining Mock Analytics
+
+File:
+frontend/components/admin/academic/subjects/subjectCard.tsx
+
+Fields:
+- totalStudents
+- totalQuestions
+- totalExams
+
+Replacement:
+Backend Subject Analytics Endpoint
+
+GET /admin/academic/subjects
+
+---
+
+# Milestone 3 — Section Intelligence Layer
+
+## Frontend Files Still Mocked
+
+### Section Subjects
+
+```txt
+frontend/app/admin/academic/sections/[id]/subjects/page.tsx
+```
+
+### Section Subject Dashboard
+
+```txt
+frontend/app/admin/academic/sections/[id]/subjects/[subjectId]/page.tsx
+```
+
+### Section Assessments
+
+```txt
+frontend/app/admin/academic/sections/[id]/subjects/[subjectId]/assessment/page.tsx
+```
+
+### Section Assessment Details
+
+```txt
+frontend/app/admin/academic/sections/[id]/subjects/[subjectId]/assessment/[assessmentId]/page.tsx
+```
+
+### Section Students
+
+```txt
+frontend/app/admin/academic/sections/[id]/students/page.tsx
+```
+
+### Section Question Bank
+
+```txt
+frontend/app/admin/academic/sections/[id]/question-bank/page.tsx
+```
+
+### Question Details
+
+```txt
+frontend/app/admin/academic/sections/[id]/question-bank/[questionId]/page.tsx
+```
+
+### Section Exams
+
+```txt
+frontend/app/admin/academic/sections/[id]/exams/page.tsx
+```
+
+## Backend Files To Create
+
+```txt
+backend/src/controllers/admin/academic/section-subjects/
+backend/src/services/admin/academic/section-subjects/
+
+backend/src/controllers/admin/academic/section-students/
+backend/src/services/admin/academic/section-students/
+
+backend/src/controllers/admin/academic/exams/
+backend/src/services/admin/academic/exams/
+```
+
+---
+
+# Milestone 4 — Exam Monitoring & Violations
+
+## Frontend Files
+
+```txt
+frontend/app/admin/academic/sections/[id]/exams/[examId]/students/page.tsx
+
+frontend/app/admin/academic/sections/[id]/exams/[examId]/violations/page.tsx
+```
+
+## Backend Files To Create
+
+```txt
+backend/src/controllers/admin/exam-monitoring/
+
+backend/src/services/admin/exam-monitoring/
+```
+
+Features:
+
+* Student Sessions
+* Exam Attempts
+* Violations
+* Activity Log Integration
+* Exam Monitoring Dashboard
+* Violation Analytics
+
+---
+
+# Immediate Next File
+
+Current Build Target:
+
+```txt
+frontend/app/admin/academic/subjects/[subjectId]/page.tsx
+```
+
+Backend Required:
+
+```txt
+backend/src/controllers/admin/academic/subjects/get_subject_by_id_controller.ts
+
+backend/src/services/admin/academic/subjects/get_subject_by_id_service.ts
+```
+
+Route:
+
+```txt
+GET /admin/academic/subjects/:id
+```
+
+Purpose:
+
+Remove dependency on:
+
+```txt
+frontend/components/admin/academic/subjects/data/mockSubjectDetails.ts
+```
+
+
+
+
+
+
+
+STRICT RULES(MUST BE FOLLOW): 
+1. Update Documentary
+2. Design Endpoint
+3. Create Prisma Service
+4. Create Controller
+5. Register Route
+6. Create Frontend Service
+7. Update Hook
+8. Replace Mock Data
+9. Verify UI
+10. Update Documentary Again
+
+
+========== MILESTONE PROGRESS =================
+
+# MILESTONE 1 ===== COMPLETE
+
+========== MILESTONE 2 START ============
+
+# CNAHS Milestone 2 Progress Report
+
+## Academic Management Module
+
+### Sections
+
+Status: Complete
+
+Completed:
+
+* Section List
+* Create Section
+* Update Section
+* Archive Section
+* Restore Section
+* Section Details
+* Assign Students to Sections
+* Student Count Analytics
+
+Backend:
+
+* GET /academic/sections
+* GET /academic/sections/:id
+* POST /academic/sections
+* PATCH /academic/sections/:id
+* PATCH /academic/sections/:id/archive
+* PATCH /academic/sections/:id/restore
+* PATCH /academic/student-records/:id/assign-section
+
+---
+
+### Subjects
+
+Status: Complete
+
+Completed:
+
+* Subject List
+* Create Subject
+* Update Subject
+* Archive Subject
+* Restore Subject
+* Assign Sections
+* Assign Faculty
+* Subject Details
+* Faculty Pool Analytics
+* Section Count Analytics
+* Student Count Analytics
+
+Backend:
+
+* GET /academic/subjects
+* GET /academic/subjects/:id
+* POST /academic/subjects
+* PATCH /academic/subjects/:id
+* PATCH /academic/subjects/:id/archive
+* PATCH /academic/subjects/:id/restore
+* PATCH /academic/subjects/:id/assign-sections
+* PATCH /academic/subjects/:id/assign-faculties
+
+---
+
+### Subject Question Bank
+
+Status: Complete
+
+Completed:
+
+* Question List
+* Question Filters
+* Question Search
+* Question Pagination
+* Question Statistics
+* Question Details
+* Answer Distribution Analytics
+* Success Rate Analytics
+* Assessment Usage Analytics
+* Average Time Analytics
+
+Backend:
+
+* GET /academic/subjects/:id/questions
+* GET /academic/subjects/:id/questions/stats
+* GET /academic/questions/:questionId
+
+Frontend:
+
+* useSubjectQuestions
+* useSubjectQuestionStats
+* useQuestionDetails
+
+Removed Mock Data:
+
+* mockQuestionBank
+* mockQuestionAnalytics
+* mockQuestionDetails
+
+---
+
+### Database Upgrades Completed
+
+Question Bank Foundation
+
+Question
+
+* topic
+* question
+* correctAnswer
+* explanation
+* difficulty
+
+QuestionOption
+
+* optionText
+* isCorrect
+
+StudentAnswer
+
+* selectedOptionId
+* isCorrect
+* timeSpentSeconds
+
+ExamQuestion
+
+* examId
+* questionId
+
+ExamAttempt
+
+* score
+* startedAt
+* submittedAt
+
+Capabilities Enabled:
+
+* Question Analytics
+* Answer Distribution
+* Common Mistake Analysis
+* Assessment Usage Tracking
+* Average Question Time
+* Future Readiness Analytics
+
+---
+
+## Remaining Milestone 2 Work
+
+### Subject Assessment Module
+
+Pending:
+
+* Assessment List Backend
+* Assessment Statistics
+* Assessment Details Page
+* Assessment Analytics
+* Exam Attempt Analytics
+
+Estimated Remaining: Medium
+
+---
+
+### Readiness Analytics
+
+Pending:
+
+* Subject Readiness Analytics
+* Student Progression Analytics
+* Difficulty Progress Tracking
+* At-Risk Student Analytics
+* Expert Ready Analytics
+
+Estimated Remaining: Large
+
+---
+
+## Milestone 2 Completion
+
+Completed: ~95%
+
+Remaining:
+
+1. Assessment Module
+2. Readiness Analytics
+
+Milestone 2 is now primarily focused on analytics rather than CRUD functionality.
+
+
+Next
+
+Question Bank Statistics Endpoint
+
+GET /admin/academic/subjects//questions/stats
+

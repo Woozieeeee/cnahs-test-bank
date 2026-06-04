@@ -21,13 +21,7 @@ export default function RegistrationTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr
-            className="
-              border-b
-              text-left
-              text-muted-foreground
-            "
-          >
+          <tr className="text-muted-foreground border-b text-left">
             <th className="p-3">Name</th>
 
             <th className="p-3">Student ID</th>
@@ -48,11 +42,7 @@ export default function RegistrationTable({
             <tr>
               <td
                 colSpan={3}
-                className="
-                  p-6
-                  text-center
-                  text-muted-foreground
-                "
+                className="text-muted-foreground p-6 text-center"
               >
                 No registrations found.
               </td>

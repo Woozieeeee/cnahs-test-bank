@@ -1,3 +1,7 @@
+"use client";
+
+import { memo, useCallback } from "react";
+
 import SubjectsFilters from "../subjectsFilters";
 
 interface Props {
@@ -12,27 +16,19 @@ interface Props {
   onCreate: () => void;
 }
 
-export default function SubjectsActions({
+function SubjectsActions({
   search,
-
   setSearch,
-
   assignmentFilter,
-
   setAssignmentFilter,
-
   onCreate,
 }: Props) {
+  const handleCreate = useCallback(() => {
+    onCreate();
+  }, [onCreate]);
+
   return (
-    <div
-      className="
-        flex
-        flex-col
-        gap-4
-        md:flex-row
-        md:items-center
-      "
-    >
+    <div className="flex flex-col gap-4 md:flex-row md:items-center">
       <div className="flex-1">
         <SubjectsFilters
           search={search}
@@ -43,21 +39,13 @@ export default function SubjectsActions({
       </div>
 
       <button
-        onClick={onCreate}
-        className="
-          rounded-xl
-          bg-primary
-          px-4
-          py-3
-          text-sm
-          font-medium
-          text-primary-foreground
-          transition
-          hover:bg-primary/90
-        "
+        onClick={handleCreate}
+        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200"
       >
         Create Subject
       </button>
     </div>
   );
 }
+
+export default memo(SubjectsActions);

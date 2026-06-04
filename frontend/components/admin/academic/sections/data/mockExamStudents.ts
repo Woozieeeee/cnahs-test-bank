@@ -1,58 +1,55 @@
-// components/admin/academic/sections/mock/mockExamStudents.ts
-
 export const mockExamStudents = [
   {
     id: 1,
-    studentId: 101,
-    name: "Juan Dela Cruz",
-    studentNumber: "22-03213",
-    status: "ACTIVE",
-    progress: 72,
-    risk: "LOW",
-    warnings: 0,
+
+    studentId: "2021-00123",
+
+    name: "John Cruz",
+
+    status: "ONGOING",
+
+    progress: 76,
+
+    currentDifficulty: "MEDIUM",
+
+    violations: 3,
+
+    riskLevel: "HIGH",
   },
 
   {
     id: 2,
-    studentId: 102,
+
+    studentId: "2021-00452",
+
     name: "Maria Santos",
-    studentNumber: "22-01845",
+
     status: "FLAGGED",
-    progress: 58,
-    risk: "MEDIUM",
-    warnings: 2,
+
+    progress: 52,
+
+    currentDifficulty: "HARD",
+
+    violations: 2,
+
+    riskLevel: "MEDIUM",
   },
 
   {
     id: 3,
-    studentId: 103,
-    name: "Carlo Reyes",
-    studentNumber: "22-01567",
-    status: "FINISHED",
+
+    studentId: "2021-00891",
+
+    name: "Kevin Reyes",
+
+    status: "COMPLETED",
+
     progress: 100,
-    risk: "LOW",
-    warnings: 0,
-  },
 
-  {
-    id: 4,
-    studentId: 104,
-    name: "Ana Cruz",
-    studentNumber: "22-01111",
-    status: "ABSENT",
-    progress: 0,
-    risk: "LOW",
-    warnings: 0,
-  },
+    currentDifficulty: "EXPERT",
 
-  {
-    id: 5,
-    studentId: 105,
-    name: "John Garcia",
-    studentNumber: "22-02222",
-    status: "TERMINATED",
-    progress: 34,
-    risk: "HIGH",
-    warnings: 5,
+    violations: 0,
+
+    riskLevel: "LOW",
   },
 ];

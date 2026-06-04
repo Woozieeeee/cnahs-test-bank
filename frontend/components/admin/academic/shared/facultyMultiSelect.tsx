@@ -1,6 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 
 interface Faculty {
   id: number;
@@ -11,29 +16,74 @@ interface Faculty {
 interface Props {
   facultyList: Faculty[];
 
-  selectedFaculty: number | null;
+  selectedFaculties: number[];
 
-  setSelectedFaculty: (value: number | null) => void;
+  setSelectedFaculties: (value: number[]) => void;
 }
 
-export default function FacultySelect({
+function FacultySelect({
   facultyList,
-  selectedFaculty,
-  setSelectedFaculty,
+  selectedFaculties,
+  setSelectedFaculties,
 }: Props) {
   const [search, setSearch] = useState("");
+
+  // =========================
+  // SEARCH
+  // =========================
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.target.value);
+    },
+    []
+  );
 
   // =========================
   // FILTER FACULTY
   // =========================
 
   const filteredFaculty = useMemo(() => {
+    const query = search.toLowerCase();
+
     return facultyList.filter((faculty) =>
-      faculty.name
-        .toLowerCase()
-        .includes(search.toLowerCase())
+      faculty.name.toLowerCase().includes(query)
     );
   }, [facultyList, search]);
+
+  // =========================
+  // SELECTED FACULTY DATA
+  // =========================
+
+  const selectedFacultyData = useMemo(() => {
+    return facultyList.filter((faculty) =>
+      selectedFaculties.includes(faculty.id)
+    );
+  }, [facultyList, selectedFaculties]);
+
+  // =========================
+  // TOGGLE FACULTY
+  // =========================
+
+  const toggleFaculty = useCallback(
+    (facultyId: number) => {
+      const exists = selectedFaculties.includes(facultyId);
+
+      if (exists) {
+        setSelectedFaculties(
+          selectedFaculties.filter((id) => id !== facultyId)
+        );
+
+        return;
+      }
+
+      setSelectedFaculties([
+        ...selectedFaculties,
+        facultyId,
+      ]);
+    },
+    [selectedFaculties, setSelectedFaculties]
+  );
 
   return (
     <div className="space-y-4">
@@ -43,142 +93,61 @@ export default function FacultySelect({
         type="text"
         placeholder="Search faculty..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="
-          w-full
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-4
-          py-3
-          text-sm
-          text-foreground
-          outline-none
-          transition
-          focus:border-ring
-          focus:ring-2
-          focus:ring-ring/20
-        "
+        onChange={handleSearchChange}
+        className="border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 outline-none focus:ring-2"
       />
 
       {/* SELECTED */}
 
-      {selectedFaculty && (
-        <div>
-          {facultyList
-            .filter(
-              (faculty) => faculty.id === selectedFaculty
-            )
-            .map((faculty) => (
-              <button
-                key={faculty.id}
-                onClick={() => setSelectedFaculty(null)}
-                className="
-                  rounded-full
-                  bg-primary
-                  px-3
-                  py-1
-                  text-xs
-                  font-medium
-                  text-primary-foreground
-                "
-              >
-                {faculty.name} ✕
-              </button>
-            ))}
+      {selectedFacultyData.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {selectedFacultyData.map((faculty) => (
+            <button
+              key={faculty.id}
+              onClick={() => toggleFaculty(faculty.id)}
+              className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-xs font-medium"
+            >
+              {faculty.name} ✕
+            </button>
+          ))}
         </div>
       )}
 
       {/* LIST */}
 
-      <div
-        className="
-          max-h-72
-          space-y-2
-          overflow-y-auto
-        "
-      >
+      <div className="max-h-72 space-y-2 overflow-y-auto">
         {filteredFaculty.map((faculty) => {
-          const selected = selectedFaculty === faculty.id;
+          const selected = selectedFaculties.includes(
+            faculty.id
+          );
 
           return (
             <button
               key={faculty.id}
-              onClick={() => setSelectedFaculty(faculty.id)}
-              className={`
-                flex
-                w-full
-                items-center
-                justify-between
-                rounded-xl
-                border
-                px-4
-                py-3
-                text-left
-                transition
-
-                ${
-                  selected
-                    ? `
-                      border-primary
-                      bg-primary/10
-                    `
-                    : `
-                      border-border
-                      bg-card
-                      hover:bg-muted
-                    `
-                }
-              `}
+              onClick={() => toggleFaculty(faculty.id)}
+              className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
+                selected
+                  ? `border-primary bg-primary/10`
+                  : `border-border bg-card hover:bg-muted`
+              } `}
             >
-              <span
-                className="
-                  text-sm
-                  font-medium
-                  text-foreground
-                "
-              >
+              <span className="text-foreground text-sm font-medium">
                 {faculty.name}
               </span>
 
               <div
-                className={`
-                  h-5
-                  w-5
-                  rounded-full
-                  border
-
-                  ${
-                    selected
-                      ? `
-                        border-primary
-                        bg-primary
-                      `
-                      : `
-                        border-border
-                      `
-                  }
-                `}
+                className={`h-5 w-5 rounded-full border ${
+                  selected
+                    ? `border-primary bg-primary`
+                    : `border-border`
+                } `}
               />
             </button>
           );
         })}
 
         {filteredFaculty.length === 0 && (
-          <div
-            className="
-              rounded-xl
-              border
-              border-dashed
-              border-border
-              bg-muted/40
-              p-6
-              text-center
-              text-sm
-              text-muted-foreground
-            "
-          >
+          <div className="border-border bg-muted/40 text-muted-foreground rounded-xl border border-dashed p-6 text-center text-sm">
             No faculty found.
           </div>
         )}
@@ -186,3 +155,5 @@ export default function FacultySelect({
     </div>
   );
 }
+
+export default memo(FacultySelect);

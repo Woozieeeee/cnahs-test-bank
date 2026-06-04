@@ -27,6 +27,8 @@ export default function ChangePasswordForm() {
   const [confirmPassword, setConfirmPassword] =
     useState("");
 
+  const [capsLockOn, setCapsLockOn] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   // =========================
@@ -83,14 +85,7 @@ export default function ChangePasswordForm() {
       {/* CURRENT PASSWORD */}
 
       <div className="mb-4">
-        <label
-          className="
-            mb-2
-            block
-            text-sm
-            font-medium
-          "
-        >
+        <label className="mb-2 block text-sm font-medium">
           Current Password
         </label>
 
@@ -104,14 +99,7 @@ export default function ChangePasswordForm() {
       {/* NEW PASSWORD */}
 
       <div className="mb-4">
-        <label
-          className="
-            mb-2
-            block
-            text-sm
-            font-medium
-          "
-        >
+        <label className="mb-2 block text-sm font-medium">
           New Password
         </label>
 
@@ -133,14 +121,7 @@ export default function ChangePasswordForm() {
       {/* CONFIRM PASSWORD */}
 
       <div className="mb-6">
-        <label
-          className="
-            mb-2
-            block
-            text-sm
-            font-medium
-          "
-        >
+        <label className="mb-2 block text-sm font-medium">
           Confirm Password
         </label>
 
@@ -161,17 +142,7 @@ export default function ChangePasswordForm() {
       <button
         type="submit"
         disabled={loading}
-        className="
-          w-full
-          rounded-xl
-          bg-slate-900
-          p-3
-          font-medium
-          text-white
-          transition
-          hover:bg-slate-800
-          disabled:opacity-70
-        "
+        className="w-full rounded-xl bg-slate-900 p-3 font-medium text-white transition hover:bg-slate-800 disabled:opacity-70"
       >
         {loading
           ? "Changing Password..."

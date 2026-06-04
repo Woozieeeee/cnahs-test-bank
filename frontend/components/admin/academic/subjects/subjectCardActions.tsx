@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MoreVertical } from "lucide-react";
-import SubjectDropdownItem from "./actions/subjectDropdownItem";
 import SubjectActionsDropdown from "./actions/subjectActionsDropdown";
 import {
   archiveSubject,
@@ -16,26 +15,23 @@ import {
 } from "@/lib/swal";
 
 interface Props {
-  hasFacultyAssigned: boolean;
-  hasSectionsAssigned: boolean;
-  onEdit: () => void;
-  onAssignFaculty: () => void;
-  onUnassignFaculty: () => void;
-  onAssignSections: () => void;
-  onUnassignSections: () => void;
   subjectId: number;
+
   isArchived?: boolean;
+
+  onEdit: () => void;
+
+  onManageFaculty: () => void;
+
+  onManageSections: () => void;
+
   onRefresh: () => void;
 }
 
 export default function SubjectCardActions({
-  hasFacultyAssigned,
-  hasSectionsAssigned,
   onEdit,
-  onAssignFaculty,
-  onUnassignFaculty,
-  onAssignSections,
-  onUnassignSections,
+  onManageFaculty,
+  onManageSections,
   subjectId,
   isArchived,
   onRefresh,
@@ -152,14 +148,7 @@ export default function SubjectCardActions({
 
       <button
         onClick={() => setOpen(!open)}
-        className="
-          rounded-lg
-          p-2
-          text-muted-foreground
-          transition
-          hover:bg-muted
-          hover:text-foreground
-        "
+        className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg p-2 transition"
       >
         <MoreVertical size={18} />
       </button>
@@ -168,14 +157,10 @@ export default function SubjectCardActions({
 
       {open && (
         <SubjectActionsDropdown
-          hasFacultyAssigned={hasFacultyAssigned}
-          hasSectionsAssigned={hasSectionsAssigned}
           isArchived={isArchived}
           onEdit={onEdit}
-          onAssignFaculty={onAssignFaculty}
-          onUnassignFaculty={onUnassignFaculty}
-          onAssignSections={onAssignSections}
-          onUnassignSections={onUnassignSections}
+          onManageFaculty={onManageFaculty}
+          onManageSection={onManageSections}
           onArchive={handleArchive}
           onRestore={handleRestore}
           onConfirmAction={handleConfirmAction}

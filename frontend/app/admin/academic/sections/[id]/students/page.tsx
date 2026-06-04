@@ -1,52 +1,96 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { useParams } from "next/navigation";
-
-import { getSectionById } from "@/services/academic_service";
-
-import type { Section } from "@/types/section";
+import useSectionId from "@/hooks/useSectionId";
+import useSection from "@/hooks/useSection";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
 import BackButton from "@/components/common/backButton";
+import Pagination from "@/components/common/pagination";
+
+import LoadingState from "@/components/common/states/loadingState";
+import ErrorState from "@/components/common/states/errorState";
+import EmptyState from "@/components/common/states/emptyState";
+import NotFoundState from "@/components/common/states/notFoundState";
+
+import SectionStudentsStats from "@/components/admin/academic/sections/students/sectionStudentsStats";
+import SectionStudentsSearch from "@/components/admin/academic/sections/students/sectionStudentsSearch";
+import SectionStudentRoster from "@/components/admin/academic/sections/students/sectionStudentRoster";
+import SectionStudentsTabs from "@/components/admin/academic/sections/students/sectionStudentsTabs";
+
+import { mockSectionStudents } from "@/components/admin/academic/sections/data/mockSectionStudents";
 
 export default function SectionStudentsPage() {
-  const params = useParams();
+  const id = useSectionId();
 
-  const id = Number(params.id);
+  const { section, loading, error, refresh } =
+    useSection(id);
 
-  const [section, setSection] = useState<Section | null>(
-    null
+  const [activeTab, setActiveTab] = useState("ALL");
+
+  const [search, setSearch] = useState("");
+
+  const [page, setPage] = useState(1);
+
+  const PAGE_SIZE = 12;
+
+  const filteredStudents = useMemo(() => {
+    return mockSectionStudents.filter((student) => {
+      const matchesSearch =
+        student.name
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        student.studentId
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+      const matchesTab =
+        activeTab === "ALL"
+          ? true
+          : student.status === activeTab;
+
+      return matchesSearch && matchesTab;
+    });
+  }, [search, activeTab]);
+
+  const startIndex = (page - 1) * PAGE_SIZE;
+
+  const paginatedStudents = filteredStudents.slice(
+    startIndex,
+    startIndex + PAGE_SIZE
   );
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchSection = async () => {
-      try {
-        const data = await getSectionById(id);
-
-        setSection(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSection();
-  }, [id]);
 
   // =========================
   // LOADING
   // =========================
 
   if (loading) {
-    return <div className="p-6">Loading students...</div>;
+    return (
+      <PageContainer>
+        <LoadingState
+          title="Loading students..."
+          description="Please wait while we retrieve enrolled students."
+        />
+      </PageContainer>
+    );
+  }
+
+  // =========================
+  // ERROR
+  // =========================
+
+  if (error) {
+    return (
+      <PageContainer>
+        <ErrorState
+          title="Failed to load students."
+          description={error}
+          onRetry={refresh}
+        />
+      </PageContainer>
+    );
   }
 
   // =========================
@@ -54,7 +98,14 @@ export default function SectionStudentsPage() {
   // =========================
 
   if (!section) {
-    return <div className="p-6">Section not found.</div>;
+    return (
+      <PageContainer>
+        <NotFoundState
+          title="Section not found."
+          description="The requested section may have been removed."
+        />
+      </PageContainer>
+    );
   }
 
   return (
@@ -68,127 +119,81 @@ export default function SectionStudentsPage() {
         />
 
         <div>
-          <h1
-            className="
-              text-3xl
-              font-bold
-              text-foreground
-            "
-          >
+          <h1 className="text-foreground text-3xl font-bold">
             Section Students
           </h1>
 
-          <p
-            className="
-              mt-2
-              text-muted-foreground
-            "
-          >
+          <p className="text-muted-foreground mt-2">
             Students enrolled in {section.name}.
           </p>
         </div>
       </div>
 
-      {/* STUDENTS LIST */}
+      {/* STATS */}
 
-      <div
-        className="
-          rounded-2xl
-          border
-          border-border
-          bg-card
-          p-6
-        "
-      >
-        <div className="space-y-3">
-          {section.users.map((student) => {
-            const initials =
-              student.name
-                ?.split(" ")
-                .map((n: string) => n[0])
-                .join("")
-                .slice(0, 2)
-                .toUpperCase() || "ST";
+      <SectionStudentsStats
+        total={mockSectionStudents.length}
+        regular={
+          mockSectionStudents.filter(
+            (student) => student.status === "REGULAR"
+          ).length
+        }
+        irregular={
+          mockSectionStudents.filter(
+            (student) => student.status === "IRREGULAR"
+          ).length
+        }
+        atRisk={
+          mockSectionStudents.filter(
+            (student) => student.status === "AT_RISK"
+          ).length
+        }
+      />
 
-            return (
-              <div
-                key={student.id}
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  rounded-xl
-                  border
-                  border-border
-                  bg-background
-                  p-4
-                "
-              >
-                <div className="flex items-center gap-3">
-                  {/* AVATAR */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <SectionStudentsTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
 
-                  <div
-                    className="
-                      flex
-                      h-11
-                      w-11
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-muted
-                      text-sm
-                      font-semibold
-                      text-foreground
-                    "
-                  >
-                    {initials}
-                  </div>
-
-                  {/* INFO */}
-
-                  <div>
-                    <p
-                      className="
-                        text-sm
-                        font-medium
-                        text-foreground
-                      "
-                    >
-                      {student.name}
-                    </p>
-
-                    <p
-                      className="
-                        mt-1
-                        text-xs
-                        text-muted-foreground
-                      "
-                    >
-                      {student.studentId}
-                    </p>
-                  </div>
-                </div>
-
-                {/* STATUS */}
-
-                <div
-                  className="
-                    rounded-full
-                    bg-green-100
-                    px-2.5
-                    py-1
-                    text-xs
-                    font-medium
-                    text-green-700
-                  "
-                >
-                  Active
-                </div>
-              </div>
-            );
-          })}
+        <div className="w-full lg:w-80">
+          <SectionStudentsSearch
+            value={search}
+            onChange={(value) => {
+              setSearch(value);
+              setPage(1);
+            }}
+          />
         </div>
       </div>
+
+      {/* EMPTY */}
+
+      {filteredStudents.length === 0 ? (
+        <EmptyState
+          title="No students found."
+          description="Try adjusting your search."
+        />
+      ) : (
+        <>
+          {/* ROSTER */}
+
+          <SectionStudentRoster
+            sectionId={section.id}
+            students={paginatedStudents}
+          />
+
+          {/* PAGINATION */}
+
+          <Pagination
+            currentPage={page}
+            totalPages={Math.ceil(
+              filteredStudents.length / PAGE_SIZE
+            )}
+            onPageChange={setPage}
+          />
+        </>
+      )}
     </PageContainer>
   );
 }

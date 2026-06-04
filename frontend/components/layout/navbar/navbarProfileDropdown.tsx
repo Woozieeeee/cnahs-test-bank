@@ -9,60 +9,18 @@ export default function NavbarProfileDropdown({
   onLogout,
 }: Props) {
   return (
-    <MotionDropdown
-      className="
-        absolute
-        right-0
-        mt-2
-        w-48
-        rounded-xl
-        border
-        border-border
-        bg-popover
-        p-2
-        shadow-lg
-      "
-    >
-      <MotionButton
-        className="
-          w-full
-          rounded-lg
-          px-4
-          py-2
-          text-left
-          transition
-          hover:bg-muted
-        "
-      >
+    <MotionDropdown className="border-border bg-popover absolute right-0 mt-2 w-48 rounded-xl border p-2 shadow-lg">
+      <MotionButton className="hover:bg-muted w-full rounded-lg px-4 py-2 text-left transition">
         Profile
       </MotionButton>
 
-      <MotionButton
-        className="
-          w-full
-          rounded-lg
-          px-4
-          py-2
-          text-left
-          transition
-          hover:bg-muted
-        "
-      >
+      <MotionButton className="hover:bg-muted w-full rounded-lg px-4 py-2 text-left transition">
         Settings
       </MotionButton>
 
       <MotionButton
         onClick={onLogout}
-        className="
-          w-full
-          rounded-lg
-          px-4
-          py-2
-          text-left
-          text-red-500
-          transition
-          hover:bg-red-500/10
-        "
+        className="w-full rounded-lg px-4 py-2 text-left text-red-500 transition hover:bg-red-500/10"
       >
         Logout
       </MotionButton>

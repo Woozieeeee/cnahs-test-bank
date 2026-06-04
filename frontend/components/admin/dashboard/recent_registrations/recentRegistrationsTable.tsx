@@ -79,57 +79,23 @@ export default function RecentRegistrationsTable({
   );
 
   return (
-    <div
-      className="
-        rounded-2xl
-        bg-card
-        p-6
-        shadow-sm
-      "
-    >
+    <div className="bg-card rounded-2xl p-6 shadow-sm">
       {/* HEADER */}
 
-      <div
-        className="
-          mb-6
-          flex
-          flex-col
-          gap-4
-          md:flex-row
-          md:items-center
-          md:justify-between
-        "
-      >
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2
-            className="
-              text-xl
-              font-semibold
-            "
-          >
+          <h2 className="text-xl font-semibold">
             Recent Registrations
           </h2>
 
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Recently registered student accounts
           </p>
         </div>
 
         <Link
           href="/admin/approvals"
-          className="
-             rounded-lg
-             border
-             border-border
-             px-4
-             py-2
-             text-sm
-             font-medium
-             text-foreground
-             transition
-             hover:bg-muted
-             cursor-pointer
-          "
+          className="border-border text-foreground hover:bg-muted cursor-pointer rounded-lg border px-4 py-2 text-sm font-medium transition"
         >
           View All
         </Link>
@@ -137,15 +103,7 @@ export default function RecentRegistrationsTable({
 
       {/* FILTERS */}
 
-      <div
-        className="
-    mb-6
-    flex
-    flex-col
-    gap-4
-    md:flex-row
-  "
-      >
+      <div className="mb-6 flex flex-col gap-4 md:flex-row">
         <RegistrationSearch
           value={search}
           onChange={setSearch}

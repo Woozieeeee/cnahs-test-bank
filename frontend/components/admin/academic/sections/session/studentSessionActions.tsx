@@ -4,15 +4,7 @@ import StudentSessionTimelineItem from "./timeline/studentSessionTimelineItem";
 
 export default function StudentSessionTimeline() {
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
+    <div className="border-border bg-card rounded-2xl border p-6">
       <h2 className="text-lg font-semibold">
         Session Timeline
       </h2>

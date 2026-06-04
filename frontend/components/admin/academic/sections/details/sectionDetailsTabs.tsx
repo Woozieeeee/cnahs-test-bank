@@ -1,6 +1,6 @@
-"use client";
+import { memo } from "react";
 
-import MotionButton from "@/components/motion/motionButton";
+import TabSelector from "@/components/common/navigation/tabSelector";
 
 const tabs = [
   "STUDENTS",
@@ -15,48 +15,17 @@ interface Props {
   setActiveTab: (tab: string) => void;
 }
 
-export default function SectionDetailsTabs({
+function SectionDetailsTabs({
   activeTab,
-
   setActiveTab,
 }: Props) {
   return (
-    <div className="flex flex-wrap gap-2">
-      {tabs.map((tab) => {
-        const active = activeTab === tab;
-
-        return (
-          <MotionButton
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`
-              rounded-xl
-              px-4
-              py-2
-              text-sm
-              font-medium
-              transition
-
-              ${
-                active
-                  ? `
-                    bg-primary
-                    text-primary-foreground
-                  `
-                  : `
-                    border
-                    border-border
-                    bg-card
-                    text-muted-foreground
-                    hover:bg-muted
-                  `
-              }
-            `}
-          >
-            {tab}
-          </MotionButton>
-        );
-      })}
-    </div>
+    <TabSelector
+      tabs={tabs}
+      activeTab={activeTab}
+      onChange={setActiveTab}
+    />
   );
 }
+
+export default memo(SectionDetailsTabs);

@@ -1,73 +1,32 @@
+import { memo } from "react";
+
+import SeverityBadge from "@/components/common/badges/severityBadge";
+
 interface Props {
   title: string;
 
   severity: string;
 }
 
-export default function StudentSessionTimelineHeader({
+function StudentSessionTimelineHeader({
   title,
   severity,
 }: Props) {
   return (
-    <div
-      className="
-        flex
-        items-center
-        justify-between
-        gap-3
-      "
-    >
-      {/* TITLE */}
-
+    <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3">
-        <div
-          className="
-            flex
-            h-8
-            w-8
-            items-center
-            justify-center
-            rounded-full
-            bg-primary
-            text-xs
-            font-bold
-            text-primary-foreground
-          "
-        >
+        <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold">
           !
         </div>
 
-        <h4
-          className="
-            font-semibold
-            text-foreground
-          "
-        >
+        <h4 className="text-foreground font-semibold">
           {title}
         </h4>
       </div>
 
-      {/* SEVERITY */}
-
-      <div
-        className={`
-          rounded-full
-          px-3
-          py-1
-          text-xs
-          font-semibold
-
-          ${
-            severity === "ERROR"
-              ? "bg-red-100 text-red-700"
-              : severity === "WARNING"
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-green-100 text-green-700"
-          }
-        `}
-      >
-        {severity}
-      </div>
+      <SeverityBadge severity={severity} />
     </div>
   );
 }
+
+export default memo(StudentSessionTimelineHeader);

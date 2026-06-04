@@ -24,10 +24,18 @@ import { getSubjects } from "../controllers/admin/academic/subjects/get_subjects
 import { assignSubjectSections } from "../controllers/admin/academic/subjects/assign_subject_section_controller";
 import { createSubject } from "../controllers/admin/academic/subjects/create_subject_controller";
 import { updateSubject } from "../controllers/admin/academic/subjects/update_subject_controller";
-import { assignFacultyToSubject } from "../controllers/admin/academic/subjects/assign_faculty_to_subject_controller";
+import { assignFacultiesToSubject } from "../controllers/admin/academic/subjects/assign_faculties_to_subject_controller";
 import { archiveSection } from "../controllers/admin/academic/sections/archive_section_controller";
 import { restoreSection } from "../controllers/admin/academic/sections/restore_section_controller";
 import { updateSection } from "../controllers/admin/academic/sections/update_section_controller";
+import { getSubjectByIdController } from "../controllers/admin/academic/subjects/get_subject_by_id_controller";
+import { getSubjectAssessmentsController } from "../controllers/admin/academic/assessments/get_subject_assessments_controller";
+import { getSubjectQuestionsController } from "../controllers/admin/academic/questions/get_subject_questions_controller";
+import { getSubjectQuestionStatsController } from "../controllers/admin/academic/questions/get_subject_question_stats_controller";
+import { getQuestionDetailsController } from "../controllers/admin/academic/questions/get_question_details_controller";
+import { getAssessmentDetailsController } from "../controllers/admin/academic/assessments/get_assessment_details_controller";
+import { getSubjectAssessmentSummaryController } from "../controllers/admin/academic/assessments/get_subject_assessment_summary_controller";
+import { getSectionQuestionBankStatsController } from "../controllers/admin/academic/sections/get_section_question_bank_stats_controller";
 
 const router = express.Router();
 
@@ -62,6 +70,10 @@ router.get("/academic/student-records", getStudentRecords);
 router.patch("/academic/sections/:id/archive", archiveSection);
 router.patch("/academic/sections/:id/restore", restoreSection);
 router.patch("/academic/sections/:id", updateSection);
+router.get(
+  "/academic/sections/:id/question-bank/stats",
+  getSectionQuestionBankStatsController,
+);
 
 // Student Records
 router.patch("/academic/student-records/:id/assign-section", assignSection);
@@ -74,12 +86,34 @@ router.post(
 );
 
 // Subjects
+router.get("/academic/subjects/:id", getSubjectByIdController);
 router.patch("/academic/subjects/:id/archive", archiveSubject);
 router.patch("/academic/subjects/:id/restore", restoreSubject);
 router.patch("/academic/subjects/:id/assign-sections", assignSubjectSections);
 router.patch("/academic/subjects/:id", updateSubject);
-router.patch("/academic/subjects/:id/assign-faculty", assignFacultyToSubject);
+router.patch(
+  "/academic/subjects/:id/assign-faculties",
+  assignFacultiesToSubject,
+);
 router.get("/academic/subjects", getSubjects);
 router.post("/academic/subjects", createSubject);
+router.get(
+  "/academic/subjects/:id/assessments",
+  getSubjectAssessmentsController,
+);
+router.get("/academic/subjects/:id/questions", getSubjectQuestionsController);
+router.get(
+  "/academic/subjects/:id/questions/stats",
+  getSubjectQuestionStatsController,
+);
+router.get("/academic/questions/:questionId", getQuestionDetailsController);
+router.get(
+  "/academic/assessments/:assessmentId",
+  getAssessmentDetailsController,
+);
+router.get(
+  "/academic/subjects/:id/assessments/summary",
+  getSubjectAssessmentSummaryController,
+);
 
 export default router;

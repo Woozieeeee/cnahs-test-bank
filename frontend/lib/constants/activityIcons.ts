@@ -6,9 +6,11 @@ import {
   User,
   Monitor,
   FileText,
+  GraduationCap,
 } from "lucide-react";
 
 export const ACTIVITY_ICONS = {
+  ACADEMIC: GraduationCap,
   APPROVALS: UserCheck,
   REJECTIONS: UserX,
   USER_MANAGEMENT: User,

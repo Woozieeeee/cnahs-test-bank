@@ -85,6 +85,26 @@ export const getUsers = async ({
 };
 
 // =========================
+// GET FACULTY USERS
+// =========================
+
+export const getFacultyUsers = async () => {
+  const response = await api.get("/admin/users", {
+    params: {
+      page: 1,
+
+      limit: 1000,
+
+      role: "FACULTY",
+
+      status: "ALL",
+    },
+  });
+
+  return response.data.users;
+};
+
+// =========================
 // CREATE FACULTY
 // =========================
 

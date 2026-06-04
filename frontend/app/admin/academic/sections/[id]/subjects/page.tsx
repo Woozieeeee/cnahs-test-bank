@@ -1,52 +1,127 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { useParams } from "next/navigation";
-
-import { getSectionById } from "@/services/academic_service";
-
-import type { Section } from "@/types/section";
+import useSectionId from "@/hooks/useSectionId";
+import useSection from "@/hooks/useSection";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
-import BackButton from "@/components/common/backButton";
+import LoadingState from "@/components/common/states/loadingState";
+import ErrorState from "@/components/common/states/errorState";
+import EmptyState from "@/components/common/states/emptyState";
+import NotFoundState from "@/components/common/states/notFoundState";
+
+import Pagination from "@/components/common/pagination";
+
+import SectionSubjectsHeader from "@/components/admin/academic/sections/subjects/sectionSubjectsHeader";
+import SectionSubjectsList from "@/components/admin/academic/sections/subjects/sectionSubjectsList";
+
+import SectionSubjectsStats from "@/components/admin/academic/sections/subjects/sectionSubjectsStats";
+import SectionSubjectsTabs from "@/components/admin/academic/sections/subjects/sectionSubjectsTabs";
+import SectionSubjectsSearch from "@/components/admin/academic/sections/subjects/sectionSubjectsSearch";
+
+import { mockSectionSubjects } from "@/components/admin/academic/sections/data/mockSectionSubjects";
+
+const ITEMS_PER_PAGE = 9;
 
 export default function SectionSubjectsPage() {
-  const params = useParams();
+  const id = useSectionId();
 
-  const id = Number(params.id);
+  const { section, loading, error, refresh } =
+    useSection(id);
 
-  const [section, setSection] = useState<Section | null>(
-    null
-  );
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("ALL");
 
-  useEffect(() => {
-    if (!id) return;
+  const [search, setSearch] = useState("");
 
-    const fetchSection = async () => {
-      try {
-        const data = await getSectionById(id);
+  // =========================
+  // SUBJECTS
+  // =========================
 
-        setSection(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const subjects = useMemo(() => {
+    if (!section) return [];
 
-    fetchSection();
-  }, [id]);
+    return section.sectionSubjects.length > 0
+      ? section.sectionSubjects
+      : mockSectionSubjects;
+  }, [section]);
+
+  // =========================
+  // FILTERS
+  // =========================
+
+  const filteredSubjects = useMemo(() => {
+    const searchTerm = search.toLowerCase();
+
+    return subjects.filter((item) => {
+      const subject = item.subject;
+
+      const matchesSearch =
+        subject.name.toLowerCase().includes(searchTerm) ||
+        subject.code.toLowerCase().includes(searchTerm);
+
+      const matchesTab =
+        activeTab === "ALL"
+          ? true
+          : activeTab === "WITH FACULTY"
+            ? !!subject.faculty
+            : !subject.faculty;
+
+      return matchesSearch && matchesTab;
+    });
+  }, [subjects, search, activeTab]);
+
+  // =========================
+  // PAGINATION
+  // =========================
+
+  const totalPages = useMemo(() => {
+    return Math.ceil(
+      filteredSubjects.length / ITEMS_PER_PAGE
+    );
+  }, [filteredSubjects]);
+
+  const paginatedSubjects = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    return filteredSubjects.slice(
+      start,
+      start + ITEMS_PER_PAGE
+    );
+  }, [filteredSubjects, currentPage]);
 
   // =========================
   // LOADING
   // =========================
 
   if (loading) {
-    return <div className="p-6">Loading subjects...</div>;
+    return (
+      <PageContainer>
+        <LoadingState
+          title="Loading subjects..."
+          description="Please wait while we retrieve assigned subjects."
+        />
+      </PageContainer>
+    );
+  }
+
+  // =========================
+  // ERROR
+  // =========================
+
+  if (error) {
+    return (
+      <PageContainer>
+        <ErrorState
+          title="Failed to load subjects."
+          description={error}
+          onRetry={refresh}
+        />
+      </PageContainer>
+    );
   }
 
   // =========================
@@ -54,154 +129,83 @@ export default function SectionSubjectsPage() {
   // =========================
 
   if (!section) {
-    return <div className="p-6">Section not found.</div>;
+    return (
+      <PageContainer>
+        <NotFoundState
+          title="Section not found."
+          description="The requested section may have been removed."
+        />
+      </PageContainer>
+    );
   }
 
   return (
     <PageContainer>
-      {/* HEADER */}
+      <SectionSubjectsHeader
+        sectionId={id}
+        sectionName={section.name}
+      />
 
-      <div className="space-y-4">
-        <BackButton
-          href={`/admin/academic/sections/${section.id}`}
-          label="Back to Section Overview"
+      {/* STATS */}
+
+      <SectionSubjectsStats
+        totalSubjects={subjects.length}
+        assignedFaculty={
+          subjects.filter((item) => item.subject.faculty)
+            .length
+        }
+        withExams={subjects.length}
+        withoutFaculty={
+          subjects.filter((item) => !item.subject.faculty)
+            .length
+        }
+      />
+
+      {/* FILTERS */}
+
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <SectionSubjectsTabs
+          activeTab={activeTab}
+          setActiveTab={(tab) => {
+            setActiveTab(tab);
+            setCurrentPage(1);
+          }}
         />
 
-        <div>
-          <h1
-            className="
-              text-3xl
-              font-bold
-              text-foreground
-            "
-          >
-            Section Subjects
-          </h1>
-
-          <p
-            className="
-              mt-2
-              text-muted-foreground
-            "
-          >
-            Subjects assigned to {section.name}.
-          </p>
+        <div className="w-full lg:w-80">
+          <SectionSubjectsSearch
+            value={search}
+            onChange={(value) => {
+              setSearch(value);
+              setCurrentPage(1);
+            }}
+          />
         </div>
       </div>
 
-      {/* SUBJECTS LIST */}
+      {/* CONTENT */}
 
-      <div
-        className="
-          rounded-2xl
-          border
-          border-border
-          bg-card
-          p-6
-        "
-      >
-        <div className="space-y-3">
-          {section.sectionSubjects.map((sectionSubject) => {
-            const subject = sectionSubject.subject;
+      {filteredSubjects.length === 0 ? (
+        <EmptyState
+          title="No subjects found."
+          description="Try adjusting your filters."
+        />
+      ) : (
+        <>
+          <SectionSubjectsList
+            subjects={paginatedSubjects}
+            sectionId={id}
+          />
 
-            return (
-              <div
-                key={sectionSubject.id}
-                className="
-                    rounded-xl
-                    border
-                    border-border
-                    bg-background
-                    p-4
-                  "
-              >
-                <div
-                  className="
-                      flex
-                      items-start
-                      justify-between
-                      gap-4
-                    "
-                >
-                  <div>
-                    <p
-                      className="
-                          text-xs
-                          font-medium
-                          uppercase
-                          tracking-wide
-                          text-muted-foreground
-                        "
-                    >
-                      {subject.code}
-                    </p>
-
-                    <h2
-                      className="
-                          mt-1
-                          text-lg
-                          font-semibold
-                          text-foreground
-                        "
-                    >
-                      {subject.name}
-                    </h2>
-                  </div>
-
-                  <div
-                    className="
-                        rounded-full
-                        bg-blue-100
-                        px-2.5
-                        py-1
-                        text-xs
-                        font-medium
-                        text-blue-700
-                      "
-                  >
-                    Active
-                  </div>
-                </div>
-
-                {/* FACULTY */}
-
-                <div
-                  className="
-                      mt-4
-                      rounded-xl
-                      bg-muted
-                      px-4
-                      py-3
-                    "
-                >
-                  <p
-                    className="
-                        text-xs
-                        uppercase
-                        tracking-wide
-                        text-muted-foreground
-                      "
-                  >
-                    Assigned Faculty
-                  </p>
-
-                  <p
-                    className="
-                        mt-1
-                        text-sm
-                        font-medium
-                        text-foreground
-                      "
-                  >
-                    {subject.faculty?.name ||
-                      "No faculty assigned"}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
+        </>
+      )}
     </PageContainer>
   );
 }

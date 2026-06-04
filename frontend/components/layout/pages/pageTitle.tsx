@@ -16,22 +16,11 @@ export default function PageTitle({
       {children}
 
       <div>
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-foreground
-          "
-        >
+        <h1 className="text-foreground text-3xl font-bold">
           {title}
         </h1>
 
-        <p
-          className="
-            mt-2
-            text-muted-foreground
-          "
-        >
+        <p className="text-muted-foreground mt-2">
           {description}
         </p>
       </div>

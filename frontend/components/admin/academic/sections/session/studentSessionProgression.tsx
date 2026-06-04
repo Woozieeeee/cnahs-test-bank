@@ -1,38 +1,21 @@
 import { mockStudentSession } from "@/components/admin/academic/sections/data/mockStudentSession";
-
+import { memo } from "react";
 const levels = ["EASY", "MEDIUM", "HARD", "EXPERT"];
+const currentLevelIndex = levels.indexOf(
+  mockStudentSession.currentDifficulty
+);
 
-export default function StudentSessionProgression() {
+function StudentSessionProgression() {
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
+    <div className="border-border bg-card rounded-2xl border p-6">
       {/* HEADER */}
 
       <div>
-        <h2
-          className="
-            text-lg
-            font-semibold
-            text-foreground
-          "
-        >
+        <h2 className="text-foreground text-lg font-semibold">
           Progression Status
         </h2>
 
-        <p
-          className="
-            mt-1
-            text-sm
-            text-muted-foreground
-          "
-        >
+        <p className="text-muted-foreground mt-1 text-sm">
           Monitor the student's progression across exam
           difficulty levels.
         </p>
@@ -40,90 +23,35 @@ export default function StudentSessionProgression() {
 
       {/* SCORE */}
 
-      <div
-        className="
-          mt-6
-          rounded-2xl
-          border
-          border-border/60
-          bg-muted/30
-          p-5
-        "
-      >
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-          "
-        >
+      <div className="border-border/60 bg-muted/30 mt-6 rounded-2xl border p-5">
+        <div className="flex items-center justify-between">
           <div>
-            <p
-              className="
-                text-sm
-                text-muted-foreground
-              "
-            >
+            <p className="text-muted-foreground text-sm">
               Current Score
             </p>
 
-            <h3
-              className="
-                mt-1
-                text-3xl
-                font-bold
-                text-foreground
-              "
-            >
+            <h3 className="text-foreground mt-1 text-3xl font-bold">
               {mockStudentSession.currentScore}%
             </h3>
           </div>
 
-          <div
-            className="
-              rounded-full
-              bg-primary/10
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-primary
-            "
-          >
+          <div className="bg-primary/10 text-primary rounded-full px-4 py-2 text-sm font-medium">
             {mockStudentSession.currentDifficulty}
           </div>
         </div>
 
         {/* PROGRESS BAR */}
 
-        <div
-          className="
-            mt-5
-            h-3
-            overflow-hidden
-            rounded-full
-            bg-muted
-          "
-        >
+        <div className="bg-muted mt-5 h-3 overflow-hidden rounded-full">
           <div
-            className="
-              h-full
-              rounded-full
-              bg-primary
-            "
+            className="bg-primary h-full rounded-full transition-all duration-300"
             style={{
               width: `${mockStudentSession.currentScore}%`,
             }}
           />
         </div>
 
-        <p
-          className="
-            mt-3
-            text-sm
-            text-muted-foreground
-          "
-        >
+        <p className="text-muted-foreground mt-3 text-sm">
           Required: {mockStudentSession.requiredScore}% to
           unlock {mockStudentSession.nextUnlock}
         </p>
@@ -136,64 +64,26 @@ export default function StudentSessionProgression() {
           const isCurrent =
             level === mockStudentSession.currentDifficulty;
 
-          const isCompleted =
-            index <
-            levels.indexOf(
-              mockStudentSession.currentDifficulty
-            );
+          const isCompleted = index < currentLevelIndex;
 
-          const isLocked =
-            index >
-            levels.indexOf(
-              mockStudentSession.currentDifficulty
-            );
+          const isLocked = index > currentLevelIndex;
 
           return (
             <div
               key={level}
-              className="
-                flex
-                items-center
-                justify-between
-                rounded-xl
-                border
-                border-border/60
-                bg-muted/20
-                px-4
-                py-4
-              "
+              className="border-border/60 bg-muted/20 flex items-center justify-between rounded-xl border px-4 py-4"
             >
               <div className="flex items-center gap-3">
                 {/* ICON */}
 
                 <div
-                  className={`
-                    flex
-                    h-8
-                    w-8
-                    items-center
-                    justify-center
-                    rounded-full
-                    text-sm
-                    font-bold
-
-                    ${
-                      isCompleted
-                        ? `
-                          bg-green-100
-                          text-green-700
-                        `
-                        : isCurrent
-                          ? `
-                            bg-primary
-                            text-primary-foreground
-                          `
-                          : `
-                            bg-muted
-                            text-muted-foreground
-                          `
-                    }
-                  `}
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
+                    isCompleted
+                      ? `bg-green-100 text-green-700`
+                      : isCurrent
+                        ? `bg-primary text-primary-foreground`
+                        : `bg-muted text-muted-foreground`
+                  } `}
                 >
                   {isCompleted
                     ? "✓"
@@ -205,21 +95,11 @@ export default function StudentSessionProgression() {
                 {/* LABEL */}
 
                 <div>
-                  <p
-                    className="
-                      font-medium
-                      text-foreground
-                    "
-                  >
+                  <p className="text-foreground font-medium">
                     {level}
                   </p>
 
-                  <p
-                    className="
-                      text-xs
-                      text-muted-foreground
-                    "
-                  >
+                  <p className="text-muted-foreground text-xs">
                     {isCompleted
                       ? "Completed"
                       : isCurrent
@@ -232,17 +112,7 @@ export default function StudentSessionProgression() {
               {/* CURRENT BADGE */}
 
               {isCurrent && (
-                <div
-                  className="
-                    rounded-full
-                    bg-primary/10
-                    px-3
-                    py-1
-                    text-xs
-                    font-semibold
-                    text-primary
-                  "
-                >
+                <div className="bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-semibold">
                   ACTIVE
                 </div>
               )}
@@ -253,3 +123,5 @@ export default function StudentSessionProgression() {
     </div>
   );
 }
+
+export default memo(StudentSessionProgression);

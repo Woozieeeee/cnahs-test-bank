@@ -1,13 +1,18 @@
 "use client";
 
 import {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import { useEffect, useState } from "react";
 
 import {
   assignStudentSection,
@@ -18,18 +23,23 @@ import { successToast, errorToast } from "@/lib/swal";
 
 interface Section {
   id: number;
+
   name: string;
 }
 
 interface Props {
   open: boolean;
+
   onOpenChange: (open: boolean) => void;
+
   studentRecordId: number;
+
   studentName: string;
+
   onSuccess: () => void;
 }
 
-export default function AssignSectionModal({
+function AssignSectionModal({
   open,
   onOpenChange,
   studentRecordId,
@@ -43,34 +53,33 @@ export default function AssignSectionModal({
   const [loading, setLoading] = useState(false);
 
   // =========================
-  // FETCH SECTIONS
+  // FETCH
   // =========================
 
-  useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const data = await getSections();
+  const fetchSections = useCallback(async () => {
+    try {
+      const data = await getSections();
 
-        setSections(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchSections();
+      setSections(data);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
+  useEffect(() => {
+    fetchSections();
+  }, [fetchSections]);
+
   // =========================
-  // ASSIGN SECTION
+  // ASSIGN
   // =========================
 
-  const handleAssign = async () => {
+  const handleAssign = useCallback(async () => {
     try {
       setLoading(true);
 
       await assignStudentSection(
         studentRecordId,
-
         Number(sectionId)
       );
 
@@ -86,7 +95,7 @@ export default function AssignSectionModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [studentRecordId, sectionId, onSuccess, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -97,22 +106,11 @@ export default function AssignSectionModal({
 
         <div className="space-y-4">
           <div>
-            <p
-              className="
-                text-sm
-                text-slate-500
-              "
-            >
+            <p className="text-sm text-slate-500">
               Student
             </p>
 
-            <p
-              className="
-                mt-1
-                font-medium
-                text-slate-900
-              "
-            >
+            <p className="mt-1 font-medium text-slate-900">
               {studentName}
             </p>
           </div>
@@ -120,16 +118,7 @@ export default function AssignSectionModal({
           <select
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
-            className="
-              w-full
-              rounded-xl
-              border
-              border-slate-300
-              px-4
-              py-3
-              outline-none
-              focus:border-slate-500
-            "
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 transition-all duration-200 outline-none focus:border-slate-500"
           >
             <option value="">Select section</option>
 
@@ -143,18 +132,7 @@ export default function AssignSectionModal({
           <button
             onClick={handleAssign}
             disabled={loading || !sectionId}
-            className="
-              w-full
-              rounded-xl
-              bg-slate-900
-              px-4
-              py-3
-              font-medium
-              text-white
-              transition
-              hover:bg-slate-800
-              disabled:opacity-50
-            "
+            className="w-full rounded-xl bg-slate-900 px-4 py-3 font-medium text-white transition-all duration-200 hover:bg-slate-800 disabled:opacity-50"
           >
             {loading ? "Assigning..." : "Assign Section"}
           </button>
@@ -163,3 +141,5 @@ export default function AssignSectionModal({
     </Dialog>
   );
 }
+
+export default memo(AssignSectionModal);

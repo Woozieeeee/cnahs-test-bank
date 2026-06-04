@@ -31,16 +31,7 @@ export default function MotionModal({
           transition={{
             duration: 0.15,
           }}
-          className="
-            fixed
-            inset-0
-            z-50
-            flex
-            items-center
-            justify-center
-            bg-black/40
-            p-4
-          "
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
         >
           <motion.div
             initial={{
@@ -61,16 +52,7 @@ export default function MotionModal({
             transition={{
               duration: 0.18,
             }}
-            className="
-              w-full
-              max-w-md
-              rounded-2xl
-              border
-              border-border
-              bg-card
-              text-card-foreground
-              shadow-xl
-            "
+            className="border-border bg-card text-card-foreground w-full max-w-md rounded-2xl border shadow-xl"
           >
             {children}
           </motion.div>

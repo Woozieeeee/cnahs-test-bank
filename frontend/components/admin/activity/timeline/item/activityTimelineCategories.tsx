@@ -10,15 +10,7 @@ export default function ActivityTimelineCategories({
       {categories.map((category) => (
         <span
           key={category}
-          className="
-            rounded-md
-            bg-muted
-            px-2
-            py-1
-            text-[11px]
-            font-medium
-            text-muted-foreground
-          "
+          className="bg-muted text-muted-foreground rounded-md px-2 py-1 text-[11px] font-medium"
         >
           {category.replaceAll("_", " ")}
         </span>

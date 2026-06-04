@@ -8,25 +8,12 @@ export default function SubjectsDashboard() {
         label="Back to Academic Management"
       />
 
-      <div
-        className="
-          rounded-2xl
-          bg-card
-          p-10
-          shadow-sm
-        "
-      >
-        <h2
-          className="
-            text-xl
-            font-semibold
-            text-foreground
-          "
-        >
+      <div className="bg-card rounded-2xl p-10 shadow-sm">
+        <h2 className="text-foreground text-xl font-semibold">
           Subjects
         </h2>
 
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           Subject management dashboard coming soon.
         </p>
       </div>

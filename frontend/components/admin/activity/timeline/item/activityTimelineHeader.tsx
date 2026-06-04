@@ -22,31 +22,10 @@ export default function ActivityTimelineHeader({
     ];
 
   return (
-    <div
-      className="
-        flex
-        flex-wrap
-        items-center
-        gap-2
-        text-sm
-        text-foreground
-      "
-    >
+    <div className="text-foreground flex flex-wrap items-center gap-2 text-sm">
       {/* ICON */}
 
-      <div
-        className="
-          flex
-          h-8
-          w-8
-          shrink-0
-          items-center
-          justify-center
-          rounded-full
-          bg-primary
-          text-primary-foreground
-        "
-      >
+      <div className="bg-primary text-primary-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
         {PrimaryIcon ? (
           <PrimaryIcon size={16} />
         ) : (
@@ -58,7 +37,7 @@ export default function ActivityTimelineHeader({
 
       {/* USER */}
 
-      <span className="font-semibold text-foreground">
+      <span className="text-foreground font-semibold">
         {activity.performedBy}
       </span>
 
@@ -73,16 +52,7 @@ export default function ActivityTimelineHeader({
       {/* TARGET */}
 
       {activity.targetUser && (
-        <span
-          className="
-            rounded-md
-            bg-muted
-            px-2
-            py-0.5
-            font-medium
-            text-foreground
-          "
-        >
+        <span className="bg-muted text-foreground rounded-md px-2 py-0.5 font-medium">
           {activity.targetUser}
         </span>
       )}

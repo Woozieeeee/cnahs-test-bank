@@ -1,28 +1,23 @@
+import { memo } from "react";
+
+import CategoryBadge from "@/components/common/badges/categoryBadge";
+
 interface Props {
   categories: string[];
 }
 
-export default function StudentSessionTimelineCategories({
+function StudentSessionTimelineCategories({
   categories,
 }: Props) {
   return (
     <div className="mt-3 flex flex-wrap gap-2">
       {categories.map((category) => (
-        <span
-          key={category}
-          className="
-            rounded-md
-            bg-muted
-            px-2
-            py-1
-            text-[11px]
-            font-medium
-            text-muted-foreground
-          "
-        >
+        <CategoryBadge key={category}>
           {category}
-        </span>
+        </CategoryBadge>
       ))}
     </div>
   );
 }
+
+export default memo(StudentSessionTimelineCategories);

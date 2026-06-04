@@ -1,46 +1,25 @@
+"use client";
+
+import { memo } from "react";
+
+import Tabs from "@/components/common/tabs/tabs";
+
+import { SECTION_NAVIGATION_TABS } from "@/constant/tabs";
+
 interface Props {
   activeTab: string;
 
   setActiveTab: (tab: string) => void;
 }
 
-const tabs = ["ALL", "ACTIVE", "ARCHIVED"];
-
-export default function SectionsTabs({
-  activeTab,
-  setActiveTab,
-}: Props) {
+function SectionTabs({ activeTab, setActiveTab }: Props) {
   return (
-    <div className="flex gap-2">
-      {tabs.map((tab) => (
-        <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
-          className={`
-            rounded-xl
-            px-4
-            py-2
-            text-sm
-            font-medium
-            transition
-
-            ${
-              activeTab === tab
-                ? `
-                  bg-primary
-                  text-primary-foreground
-                `
-                : `
-                  bg-card
-                  text-muted-foreground
-                  hover:bg-muted
-                `
-            }
-          `}
-        >
-          {tab}
-        </button>
-      ))}
-    </div>
+    <Tabs
+      tabs={SECTION_NAVIGATION_TABS}
+      activeTab={activeTab}
+      onChange={setActiveTab}
+    />
   );
 }
+
+export default memo(SectionTabs);

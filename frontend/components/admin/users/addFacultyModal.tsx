@@ -127,45 +127,20 @@ export default function AddFacultyModal({
       <div className="p-6">
         {/* HEADER */}
 
-        <div
-          className="
-          flex
-          items-start
-          justify-between
-        "
-        >
+        <div className="flex items-start justify-between">
           <div>
-            <h2
-              className="
-              text-2xl
-              font-bold
-              text-foreground
-            "
-            >
+            <h2 className="text-foreground text-2xl font-bold">
               Add Faculty
             </h2>
 
-            <p
-              className="
-              mt-1
-              text-sm
-              text-muted-foreground
-            "
-            >
+            <p className="text-muted-foreground mt-1 text-sm">
               Create a new faculty account.
             </p>
           </div>
 
           <button
             onClick={() => onOpenChange(false)}
-            className="
-            rounded-lg
-            px-3
-            py-1
-            text-muted-foreground
-            transition
-            hover:bg-muted
-          "
+            className="text-muted-foreground hover:bg-muted rounded-lg px-3 py-1 transition"
           >
             ✕
           </button>
@@ -197,26 +172,10 @@ export default function AddFacultyModal({
 
         {/* ACTIONS */}
 
-        <div
-          className="
-    mt-6
-    flex
-    justify-end
-    gap-3
-  "
-        >
+        <div className="mt-6 flex justify-end gap-3">
           <MotionButton
             onClick={() => onOpenChange(false)}
-            className="
-      rounded-xl
-      border
-      border-border
-      px-4
-      py-2
-      text-sm
-      font-medium
-      text-foreground
-    "
+            className="border-border text-foreground rounded-xl border px-4 py-2 text-sm font-medium"
           >
             Cancel
           </MotionButton>
@@ -224,22 +183,7 @@ export default function AddFacultyModal({
           <MotionButton
             onClick={handleSubmit}
             disabled={loading}
-            className="
-      flex
-      items-center
-      justify-center
-      gap-2
-      rounded-xl
-      bg-primary
-      px-4
-      py-2
-      text-sm
-      font-medium
-      text-primary-foreground
-      transition
-      hover:bg-primary/90
-      disabled:opacity-70
-    "
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition disabled:opacity-70"
           >
             {loading && (
               <Loader2 size={18} className="animate-spin" />

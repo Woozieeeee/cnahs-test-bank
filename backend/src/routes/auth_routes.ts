@@ -9,6 +9,7 @@ import { AuthRequest } from "../middleware/auth_middleware";
 import { logout } from "../controllers/logout_controller";
 import { loginRateLimiter } from "../middleware/rate_limit_middleware";
 import { hashPassword } from "../controllers/dev/hash_password_controller";
+import { changePasswordController } from "../controllers/auth/change_password_controller";
 
 const router = express.Router();
 
@@ -25,5 +26,6 @@ router.get("/", (req, res) => {
 
 router.get("/status/:studentId", trackStatus);
 router.post("/hash-password", hashPassword);
+router.patch("/change-password", authMiddleware, changePasswordController);
 
 export default router;

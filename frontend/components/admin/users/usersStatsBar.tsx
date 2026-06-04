@@ -41,39 +41,17 @@ export default function UsersStatsBar({
   ];
 
   return (
-    <div
-      className="
-        grid
-        gap-4
-        md:grid-cols-2
-        xl:grid-cols-4
-      "
-    >
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="
-             rounded-2xl
-             bg-card
-             p-6
-             shadow-sm
-             transition
-             hover:-translate-y-1
-             hover:bg-muted/60
-          "
+          className="bg-card hover:bg-muted/60 rounded-2xl p-6 shadow-sm transition hover:-translate-y-1"
         >
           <p className="text-muted-foreground">
             {stat.label}
           </p>
 
-          <h2
-            className="
-              mt-2
-              text-3xl
-              font-bold
-              text-foreground
-            "
-          >
+          <h2 className="text-foreground mt-2 text-3xl font-bold">
             {stat.value}
           </h2>
         </div>

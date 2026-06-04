@@ -37,7 +37,7 @@ export default function ActivityTimelineItem({
     <div className="grid grid-cols-[84px_28px_1fr] gap-4">
       {/* TIME */}
 
-      <div className="pt-5 text-right text-sm text-muted-foreground">
+      <div className="text-muted-foreground pt-5 text-right text-sm">
         {timeLabel}
       </div>
 
@@ -60,38 +60,13 @@ export default function ActivityTimelineItem({
               onClick?.();
             }
           }}
-          className={`
-            w-full
-            cursor-pointer
-            rounded-xl
-            border
-            p-5
-            text-left
-            transition-all
-            hover:-translate-y-0.5
-            hover:shadow-sm
-
-            ${
-              isViolation
-                ? `
-                  border-red-200
-                  bg-red-50/50
-                  hover:border-red-300
-                  hover:bg-red-50
-                `
-                : isHighSeverity
-                  ? `
-                    border-amber-200
-                    bg-amber-50/40
-                    hover:border-amber-300
-                  `
-                  : `
-                    border-slate-200
-                    bg-muted/30
-                    hover:border-border/70
-                  `
-            }
-          `}
+          className={`w-full cursor-pointer rounded-xl border p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-sm ${
+            isViolation
+              ? `border-red-200 bg-red-50/50 hover:border-red-300 hover:bg-red-50`
+              : isHighSeverity
+                ? `border-amber-200 bg-amber-50/40 hover:border-amber-300`
+                : `bg-muted/30 hover:border-border/70 border-slate-200`
+          } `}
         >
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0 flex-1">
@@ -105,14 +80,7 @@ export default function ActivityTimelineItem({
               {/* DESCRIPTION */}
 
               {activity.description && (
-                <p
-                  className="
-                    mt-3
-                    text-sm
-                    leading-6
-                    text-muted-foreground
-                  "
-                >
+                <p className="text-muted-foreground mt-3 text-sm leading-6">
                   {activity.description}
                 </p>
               )}

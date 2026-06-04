@@ -1,4 +1,6 @@
-import ExamStatCard from "./examStatCard";
+import { memo } from "react";
+
+import StatCard from "@/components/common/cards/statCard";
 
 interface Props {
   difficulty: string;
@@ -10,33 +12,29 @@ interface Props {
   violations: number;
 }
 
-export default function ExamDetailsStats({
+function ExamDetailsStats({
   difficulty,
   duration,
   activeStudents,
   violations,
 }: Props) {
   return (
-    <div
-      className="
-        grid
-        gap-4
-        md:grid-cols-4
-      "
-    >
-      <ExamStatCard label="Difficulty" value={difficulty} />
+    <div className="grid gap-4 md:grid-cols-4">
+      <StatCard label="Difficulty" value={difficulty} />
 
-      <ExamStatCard
+      <StatCard
         label="Duration"
         value={`${duration} mins`}
       />
 
-      <ExamStatCard
+      <StatCard
         label="Active Students"
         value={activeStudents}
       />
 
-      <ExamStatCard label="Violations" value={violations} />
+      <StatCard label="Violations" value={violations} />
     </div>
   );
 }
+
+export default memo(ExamDetailsStats);

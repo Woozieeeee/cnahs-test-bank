@@ -169,6 +169,10 @@ export const restoreSubject = async (id: number) => {
   return response.data;
 };
 
+// =========================
+// GET SUBJECTS
+// =========================
+
 export const getSubjects = async (tab: string) => {
   const response = await api.get(
     `/admin/academic/subjects?tab=${tab}`
@@ -236,14 +240,17 @@ export const updateSubject = async (
   return response.data;
 };
 
-export const assignFacultyToSubject = async (
+// =========================
+// ASSIGN FACULTY TO SUBJECT
+// =========================
+export const assignFacultiesToSubject = async (
   subjectId: number,
-  facultyId: number
+  facultyIds: number[]
 ) => {
   const response = await api.patch(
-    `/admin/academic/subjects/${subjectId}/assign-faculty`,
+    `/admin/academic/subjects/${subjectId}/assign-faculties`,
     {
-      facultyId,
+      facultyIds,
     }
   );
 
@@ -291,6 +298,116 @@ export const updateSection = async (
   const response = await api.patch(
     `/admin/academic/sections/${id}`,
     data
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET SUBJECT BY ID
+// =========================
+
+export const getSubjectById = async (id: number) => {
+  const response = await api.get(
+    `/admin/academic/subjects/${id}`
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET SUBJECT QUESTION
+// =========================
+
+export const getSubjectQuestions = async (
+  subjectId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/subjects/${subjectId}/questions`
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET SUBJECT QUESTION STATS
+// =========================
+
+export const getSubjectQuestionStats = async (
+  subjectId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/subjects/${subjectId}/questions/stats`
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET QUESTION DETAILS
+// =========================
+
+export const getQuestionDetails = async (
+  questionId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/questions/${questionId}`
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET QUESTION DETAILS
+// =========================
+
+export const getSubjectAssessments = async (
+  subjectId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/subjects/${subjectId}/assessments`
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET ASSESSMENT DETAILS
+// =========================
+
+export const getAssessmentDetails = async (
+  assessmentId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/assessments/${assessmentId}`
+  );
+
+  return response.data;
+};
+
+// ==============================
+// GET SUBJECT ASSESSMENT SUMMARY
+// ==============================
+
+export const getSubjectAssessmentSummary = async (
+  subjectId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/subjects/${subjectId}/assessments/summary`
+  );
+
+  return response.data;
+};
+
+// ==============================
+// GET SECTION QUESTION BANK STATS
+// ==============================
+
+export const getSectionQuestionBankStats = async (
+  sectionId: number
+) => {
+  const response = await api.get(
+    `/admin/academic/sections/${sectionId}/question-bank/stats`
   );
 
   return response.data;

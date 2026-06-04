@@ -4,31 +4,12 @@ import StudentSessionTimelineItem from "./timeline/studentSessionTimelineItem";
 
 export default function StudentSessionTimeline() {
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <h2
-        className="
-          text-lg
-          font-semibold
-        "
-      >
+    <div className="border-border bg-card rounded-2xl border p-6">
+      <h2 className="text-lg font-semibold">
         Session Timeline
       </h2>
 
-      <p
-        className="
-          mt-1
-          text-sm
-          text-muted-foreground
-        "
-      >
+      <p className="text-muted-foreground mt-1 text-sm">
         Complete chronological audit trail of the student's
         examination session.
       </p>

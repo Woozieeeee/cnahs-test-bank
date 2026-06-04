@@ -78,16 +78,7 @@ export default function TrackStatusForm() {
       <button
         type="submit"
         disabled={loading}
-        className="
-          w-full
-          rounded-xl
-          bg-slate-900
-          p-3
-          text-white
-          transition
-          hover:bg-slate-800
-          disabled:opacity-70
-        "
+        className="w-full rounded-xl bg-slate-900 p-3 text-white transition hover:bg-slate-800 disabled:opacity-70"
       >
         {loading ? "Checking..." : "Check Status"}
       </button>

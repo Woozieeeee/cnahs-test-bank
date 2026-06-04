@@ -1,7 +1,7 @@
 import prisma from "../../../../lib/prisma";
 
 export const getSubjectsService = async (tab: string) => {
-  return prisma.subject.findMany({
+  const subjects = await prisma.subject.findMany({
     where: {
       ...(tab === "ACTIVE" && {
         isArchived: false,
@@ -13,16 +13,9 @@ export const getSubjectsService = async (tab: string) => {
     },
 
     include: {
-      faculty: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-
-      sectionSubjects: {
+      faculties: {
         include: {
-          section: {
+          faculty: {
             select: {
               id: true,
               name: true,
@@ -31,7 +24,32 @@ export const getSubjectsService = async (tab: string) => {
         },
       },
 
-      exams: true,
+      sectionSubjects: {
+        include: {
+          section: {
+            include: {
+              users: {
+                select: {
+                  id: true,
+                  role: true,
+                },
+              },
+            },
+          },
+        },
+      },
+
+      exams: {
+        select: {
+          id: true,
+        },
+      },
+
+      questions: {
+        select: {
+          id: true,
+        },
+      },
     },
 
     orderBy: [
@@ -43,5 +61,25 @@ export const getSubjectsService = async (tab: string) => {
         updatedAt: "desc",
       },
     ],
+  });
+
+  return subjects.map((subject) => {
+    const totalStudents = subject.sectionSubjects.reduce(
+      (total, assignment) =>
+        total +
+        assignment.section.users.filter((user) => user.role === "STUDENT")
+          .length,
+      0,
+    );
+
+    return {
+      ...subject,
+
+      totalStudents,
+
+      totalQuestions: subject.questions.length,
+
+      totalExams: subject.exams.length,
+    };
   });
 };

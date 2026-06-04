@@ -1,3 +1,16 @@
+"use client";
+
+import { memo, useMemo } from "react";
+
+import FormField from "@/components/common/form/formField";
+import FormInput from "@/components/common/form/formInput";
+import FormSelect from "@/components/common/form/formSelect";
+
+import {
+  PROGRAM_OPTIONS,
+  YEAR_LEVEL_OPTIONS,
+} from "@/constant/academic";
+
 interface Props {
   sectionCode: string;
 
@@ -12,161 +25,65 @@ interface Props {
   setProgram: (value: string) => void;
 }
 
-export default function SectionFormFields({
+function SectionFormFields({
   sectionCode,
-
   setSectionCode,
-
   yearLevel,
-
   setYearLevel,
-
   program,
-
   setProgram,
 }: Props) {
-  const generatedName = `${program}-${yearLevel}${sectionCode}`;
+  const generatedName = useMemo(
+    () => `${program}-${yearLevel}${sectionCode}`,
+    [program, yearLevel, sectionCode]
+  );
 
   return (
     <div className="mt-6 space-y-4">
-      {/* PROGRAM */}
-
-      <div>
-        <label
-          className="
-            text-sm
-            font-medium
-            text-muted-foreground
-          "
-        >
-          Program
-        </label>
-
-        <select
+      <FormField label="Program">
+        <FormSelect
           value={program}
+          options={PROGRAM_OPTIONS}
           onChange={(e) => setProgram(e.target.value)}
-          className="
-            mt-2
-            w-full
-            rounded-xl
-            border
-            bg-card
-            border-border
-            px-4
-            py-3
-          "
-        >
-          <option value="BSN">BSN</option>
-        </select>
-      </div>
+        />
+      </FormField>
 
-      {/* YEAR LEVEL */}
-
-      <div>
-        <label
-          className="
-            text-sm
-            font-medium
-            text-muted-foreground
-          "
-        >
-          Year Level
-        </label>
-
-        <select
+      <FormField label="Year Level">
+        <FormSelect
           value={yearLevel}
+          options={YEAR_LEVEL_OPTIONS}
           onChange={(e) =>
             setYearLevel(Number(e.target.value))
           }
-          className="
-            mt-2
-            w-full
-            rounded-xl
-            bg-card
-            border
-            border-border
-            px-4
-            py-3
-          "
-        >
-          <option value={1}>1st Year</option>
-
-          <option value={2}>2nd Year</option>
-
-          <option value={3}>3rd Year</option>
-
-          <option value={4}>4th Year</option>
-        </select>
-      </div>
-
-      {/* SECTION CODE */}
-
-      <div>
-        <label
-          className="
-            text-sm
-            font-medium
-            text-muted-foreground
-          "
-        >
-          Section Code
-        </label>
-
-        <input
-          type="text"
-          placeholder="A"
-          value={sectionCode}
-          onChange={(e) => {
-            const value = e.target.value
-              .replace(/[^A-Za-z]/g, "")
-              .toUpperCase();
-
-            setSectionCode(value);
-          }}
-          maxLength={3}
-          className="
-            mt-2
-            w-full
-            rounded-xl
-            border
-            border-border
-            px-4
-            py-3
-            uppercase
-            outline-none
-            transition
-            focus:border-ring
-          "
         />
-      </div>
+      </FormField>
 
-      {/* GENERATED NAME */}
+      <FormField label="Section Code">
+        <FormInput
+          value={sectionCode}
+          placeholder="A"
+          maxLength={3}
+          onChange={(e) =>
+            setSectionCode(
+              e.target.value
+                .replace(/[^A-Za-z]/g, "")
+                .toUpperCase()
+            )
+          }
+        />
+      </FormField>
 
-      <div
-        className="
-          rounded-xl
-          border
-          border-dashed
-          border-border
-          bg-muted
-          p-4
-        "
-      >
-        <p className="text-sm muted-foreground">
+      <div className="border-border bg-muted rounded-xl border border-dashed p-4">
+        <p className="text-muted-foreground text-sm">
           Generated Section Name
         </p>
 
-        <h3
-          className="
-            mt-1
-            text-lg
-            font-semibold
-            text-foreground
-          "
-        >
+        <h3 className="text-foreground mt-1 text-lg font-semibold">
           {generatedName}
         </h3>
       </div>
     </div>
   );
 }
+
+export default memo(SectionFormFields);

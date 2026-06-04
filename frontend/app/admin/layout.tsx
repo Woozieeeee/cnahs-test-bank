@@ -4,7 +4,11 @@ import AppSidebar from "@/components/layout/sidebar/appSidebar";
 
 import Navbar from "@/components/layout/navbar/navbar";
 
+import { SidebarProvider } from "@/components/layout/sidebar/sidebarContext";
+
 import useProtectedRoute from "@/hooks/useProtectedRoute";
+
+import { adminNav } from "@/config/navigation/adminNav";
 
 export default function AdminLayout({
   children,
@@ -22,29 +26,28 @@ export default function AdminLayout({
   }
 
   return (
-    <div
-      className="
-        flex
-        min-h-screen
-        bg-background
-        text-foreground
-      "
-    >
-      {/* SIDEBAR */}
+    <SidebarProvider>
+      <div className="bg-background text-foreground flex min-h-screen">
+        {/* SIDEBAR */}
 
-      <AppSidebar />
+        <AppSidebar
+          title="CNAHS Admin"
+          subtitle="Monitoring & oversight panel"
+          navItems={adminNav}
+        />
 
-      {/* MAIN CONTENT */}
+        {/* MAIN CONTENT */}
 
-      <div className="flex-1">
-        {/* NAVBAR */}
+        <div className="flex-1">
+          {/* NAVBAR */}
 
-        <Navbar />
+          <Navbar userName="Administrator" role="Admin" />
 
-        {/* PAGE CONTENT */}
+          {/* PAGE CONTENT */}
 
-        <main className="p-6">{children}</main>
+          <main className="p-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

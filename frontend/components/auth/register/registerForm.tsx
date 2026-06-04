@@ -101,7 +101,7 @@ export default function RegisterForm() {
 
       {/* PASSWORD */}
 
-      <div className="mb-5 ">
+      <div className="mb-5">
         <PasswordInput
           value={password}
           onChange={setPassword}

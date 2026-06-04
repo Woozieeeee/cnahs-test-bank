@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import MotionModal from "@/components/motion/motionModal";
-import FacultySelect from "../shared/facultyMultiSelect";
 import MotionButton from "@/components/motion/motionButton";
+
+import FacultySelect from "../shared/facultyMultiSelect";
 
 interface Faculty {
   id: number;
-
   name: string;
 }
 
@@ -21,19 +26,37 @@ interface Props {
 
   subjectName: string;
 
-  onAssign: (facultyId: number) => void;
+  initialFacultyIds: number[];
+
+  onAssign: (facultyIds: number[]) => void;
 }
 
-export default function AssignFacultyModal({
+function AssignFacultyModal({
   open,
   onOpenChange,
   facultyList,
   subjectName,
+  initialFacultyIds,
   onAssign,
 }: Props) {
-  const [selectedFaculty, setSelectedFaculty] = useState<
-    number | null
-  >(null);
+  const [selectedFaculties, setSelectedFaculties] =
+    useState<number[]>([]);
+
+  useEffect(() => {
+    if (open) {
+      setSelectedFaculties(initialFacultyIds);
+    }
+  }, [open, initialFacultyIds]);
+
+  const handleClose = useCallback(() => {
+    onOpenChange(false);
+  }, [onOpenChange]);
+
+  const handleAssign = useCallback(() => {
+    onAssign(selectedFaculties);
+
+    handleClose();
+  }, [selectedFaculties, onAssign, handleClose]);
 
   if (!open) return null;
 
@@ -43,91 +66,56 @@ export default function AssignFacultyModal({
         {/* HEADER */}
 
         <div>
-          <h2
-            className="
-              text-2xl
-              font-bold
-              text-foreground
-            "
-          >
-            Assign Faculty
+          <h2 className="text-2xl font-bold">
+            Manage Faculty Pool
           </h2>
 
-          <p
-            className="
-              mt-1
-              text-sm
-              text-muted-foreground
-            "
-          >
-            Assign faculty to{" "}
+          <p className="text-muted-foreground mt-1 text-sm">
+            Select faculty members authorized to teach{" "}
             <span className="font-medium">
               {subjectName}
             </span>
+            .
           </p>
         </div>
 
-        {/* SELECT */}
+        {/* FACULTY SELECT */}
 
         <div className="mt-6">
           <FacultySelect
             facultyList={facultyList}
-            selectedFaculty={selectedFaculty}
-            setSelectedFaculty={setSelectedFaculty}
+            selectedFaculties={selectedFaculties}
+            setSelectedFaculties={setSelectedFaculties}
           />
         </div>
 
-        {/* ACTIONS */}
+        {/* FOOTER */}
 
-        <div
-          className="
-            mt-6
-            flex
-            justify-end
-            gap-3
-          "
-        >
-          <MotionButton
-            onClick={() => onOpenChange(false)}
-            className="
-              rounded-xl
-              border
-              border-border
-              bg-card
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-muted-foreground
-            "
-          >
-            Cancel
-          </MotionButton>
+        <div className="mt-6 flex items-center justify-between">
+          <p className="text-muted-foreground text-sm">
+            {selectedFaculties.length} faculty selected
+          </p>
 
-          <MotionButton
-            onClick={() => {
-              if (!selectedFaculty) return;
+          <div className="flex gap-3">
+            <MotionButton
+              onClick={handleClose}
+              className="border-border bg-card text-muted-foreground rounded-xl border px-4 py-2 text-sm font-medium"
+            >
+              Cancel
+            </MotionButton>
 
-              onAssign(selectedFaculty);
-
-              onOpenChange(false);
-            }}
-            className="
-              rounded-xl
-              bg-primary
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-primary-foreground
-              transition
-              hover:bg-primary/90
-            "
-          >
-            Assign Faculty
-          </MotionButton>
+            <MotionButton
+              disabled={false}
+              onClick={handleAssign}
+              className="bg-primary text-primary-foreground rounded-xl px-4 py-2 text-sm font-medium disabled:opacity-50"
+            >
+              Save Faculty Pool
+            </MotionButton>
+          </div>
         </div>
       </div>
     </MotionModal>
   );
 }
+
+export default memo(AssignFacultyModal);

@@ -22,13 +22,7 @@ export default function PasswordRules({
   hasSymbol,
 }: Props) {
   return (
-    <div
-      className="
-        mt-3
-        space-y-1
-        text-sm
-      "
-    >
+    <div className="mt-3 space-y-1 text-sm">
       <PasswordRule
         valid={hasMinLength}
         label="At least 8 characters"

@@ -89,7 +89,7 @@ export const loginService = async ({ identifier, password }: LoginData) => {
 
       isFirstLogin: user.isFirstLogin,
 
-      mustChangePassword: user.isFirstLogin && user.role !== "STUDENT",
+      mustChangePassword: user.role !== "STUDENT" && user.isFirstLogin,
     },
   };
 };

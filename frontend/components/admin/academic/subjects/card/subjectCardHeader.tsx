@@ -29,45 +29,22 @@ export default function SubjectCardHeader({
 
   onRefresh,
 }: Props) {
+  const hasFacultyAssigned =
+    (subject.faculties?.length ?? 0) > 0;
   return (
     <div className="flex items-start justify-between">
       <div>
-        <h2
-          className="
-            text-xl
-            font-semibold
-            text-foreground
-          "
-        >
+        <h2 className="text-foreground text-xl font-semibold">
           {subject.name}
         </h2>
 
         <div className="mt-1 flex items-center gap-2">
-          <p
-            className="
-      text-sm
-      text-muted-foreground
-    "
-          >
+          <p className="text-muted-foreground text-sm">
             {subject.code}
           </p>
 
           {subject.isArchived && (
-            <span
-              className="
-        rounded-full
-        border
-        border-border
-        bg-muted
-        px-2
-        py-0.5
-        text-[10px]
-        font-semibold
-        uppercase
-        tracking-wide
-        text-muted-foreground
-      "
-            >
+            <span className="border-border bg-muted text-muted-foreground rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase">
               Archived
             </span>
           )}
@@ -77,17 +54,9 @@ export default function SubjectCardHeader({
       <SubjectCardActions
         subjectId={subject.id}
         isArchived={subject.isArchived}
-        hasFacultyAssigned={!!subject.faculty}
-        hasSectionsAssigned={sectionSubjects.length > 0}
         onEdit={onEdit}
-        onAssignFaculty={onAssignFaculty}
-        onUnassignFaculty={() => {
-          console.log("Unassign faculty");
-        }}
-        onAssignSections={onAssignSections}
-        onUnassignSections={() => {
-          console.log("Unassign sections");
-        }}
+        onManageFaculty={onAssignFaculty}
+        onManageSections={onAssignSections}
         onRefresh={onRefresh}
       />
     </div>

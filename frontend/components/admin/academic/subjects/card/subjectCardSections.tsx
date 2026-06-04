@@ -9,15 +9,7 @@ export default function SubjectCardSections({
 }: Props) {
   return (
     <div className="mt-6">
-      <p
-        className="
-          text-xs
-          font-medium
-          uppercase
-          tracking-wide
-          text-muted-foreground
-        "
-      >
+      <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
         Assigned Sections
       </p>
 
@@ -26,26 +18,13 @@ export default function SubjectCardSections({
           sectionSubjects.map((sectionSubject) => (
             <div
               key={sectionSubject.id}
-              className="
-                  rounded-full
-                  bg-muted
-                  px-3
-                  py-1
-                  text-xs
-                  font-medium
-                  text-foreground
-                "
+              className="bg-muted text-foreground rounded-full px-3 py-1 text-xs font-medium"
             >
               {sectionSubject.section.name}
             </div>
           ))
         ) : (
-          <p
-            className="
-              text-sm
-              text-muted-foreground
-            "
-          >
+          <p className="text-muted-foreground text-sm">
             No sections assigned
           </p>
         )}

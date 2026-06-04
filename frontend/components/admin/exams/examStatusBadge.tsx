@@ -17,14 +17,7 @@ export default function ExamStatusBadge({ status }: Props) {
 
   return (
     <div
-      className={`
-        rounded-full
-        px-2.5
-        py-1
-        text-xs
-        font-medium
-        ${styles[status]}
-      `}
+      className={`rounded-full px-2.5 py-1 text-xs font-medium ${styles[status]} `}
     >
       {status}
     </div>

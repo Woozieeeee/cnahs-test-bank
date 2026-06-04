@@ -1,24 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getSections } from "@/services/academic_service";
-import SectionCard from "@/components/admin/academic/sections/sectionCard";
-import CreateSectionModal from "@/components/admin/academic/sections/createSectionModal";
-import MotionButton from "@/components/motion/motionButton";
+import { useMemo, useState } from "react";
+
+import dynamic from "next/dynamic";
+
 import type { Section } from "@/types/section";
-import BackButton from "@/components/common/backButton";
-import SectionsHeader from "@/components/admin/academic/sections/sectionsHeader";
-import SectionsTabs from "@/components/admin/academic/sections/sectionTabs";
-import SectionsStats from "@/components/admin/academic/sections/sectionsStats";
-import SectionsGrid from "@/components/admin/academic/sections/sectionsGrid";
-import EditSectionModal from "@/components/admin/academic/sections/edit/editSectionModal";
+
+import useSections from "@/hooks/useSections";
+
 import PageContainer from "@/components/layout/pages/pageContainer";
 
-export default function SectionsPage() {
-  const [sections, setSections] = useState<Section[]>([]);
+import LoadingState from "@/components/common/states/loadingState";
 
-  const [initialLoading, setInitialLoading] =
-    useState(true);
+import ErrorState from "@/components/common/states/errorState";
+
+import SectionsHeader from "@/components/admin/academic/sections/sectionsHeader";
+
+import SectionsTabs from "@/components/admin/academic/sections/sectionTabs";
+
+import SectionsStats from "@/components/admin/academic/sections/sectionsStats";
+
+import SectionsGrid from "@/components/admin/academic/sections/sectionsGrid";
+
+import EditSectionModal from "@/components/admin/academic/sections/edit/editSectionModal";
+
+const CreateSectionModal = dynamic(
+  () =>
+    import("@/components/admin/academic/sections/createSectionModal"),
+  {
+    ssr: false,
+  }
+);
+
+export default function SectionsPage() {
+  const { sections, loading, error, refresh } =
+    useSections();
+
+  const [activeTab, setActiveTab] = useState("ALL");
 
   const [openCreateModal, setOpenCreateModal] =
     useState(false);
@@ -28,59 +46,82 @@ export default function SectionsPage() {
   const [selectedSection, setSelectedSection] =
     useState<Section | null>(null);
 
-  const [activeTab, setActiveTab] = useState("ALL");
+  // =========================
+  // FILTERS
+  // =========================
 
-  const fetchSections = async () => {
-    try {
-      const data = await getSections();
+  const filteredSections = useMemo(() => {
+    switch (activeTab) {
+      case "ACTIVE":
+        return sections.filter(
+          (section) => !section.isArchived
+        );
 
-      setSections(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setInitialLoading(false);
+      case "ARCHIVED":
+        return sections.filter(
+          (section) => section.isArchived
+        );
+
+      default:
+        return sections;
     }
-  };
-
-  const filteredSections =
-    activeTab === "ACTIVE"
-      ? sections.filter((section) => !section.isArchived)
-      : activeTab === "ARCHIVED"
-        ? sections.filter((section) => section.isArchived)
-        : sections;
-
-  // =========================
-  // FETCH SECTIONS
-  // =========================
-
-  useEffect(() => {
-    fetchSections();
-  }, []);
+  }, [sections, activeTab]);
 
   // =========================
   // LOADING
   // =========================
 
-  if (initialLoading) {
-    return <div>Loading sections...</div>;
+  if (loading) {
+    return (
+      <PageContainer>
+        <LoadingState
+          title="Loading sections..."
+          description="Please wait while we retrieve section data."
+        />
+      </PageContainer>
+    );
+  }
+
+  // =========================
+  // ERROR
+  // =========================
+
+  if (error) {
+    return (
+      <PageContainer>
+        <ErrorState
+          title="Failed to load sections."
+          description={error}
+          onRetry={refresh}
+        />
+      </PageContainer>
+    );
   }
 
   return (
     <PageContainer>
+      {/* HEADER */}
+
       <SectionsHeader
         onCreate={() => setOpenCreateModal(true)}
       />
+
+      {/* FILTERS */}
 
       <SectionsTabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
 
+      {/* STATS */}
+
       <SectionsStats sections={sections} />
+
+      {/* GRID */}
 
       <SectionsGrid
         sections={filteredSections}
-        onRefresh={fetchSections}
+        onRefresh={refresh}
         onEdit={(section) => {
           setSelectedSection(section);
 
@@ -88,59 +129,22 @@ export default function SectionsPage() {
         }}
       />
 
+      {/* CREATE */}
+
       <CreateSectionModal
         open={openCreateModal}
         onOpenChange={setOpenCreateModal}
-        onSuccess={fetchSections}
+        onSuccess={refresh}
       />
+
+      {/* EDIT */}
 
       <EditSectionModal
         open={openEditModal}
         onOpenChange={setOpenEditModal}
         section={selectedSection}
-        onSuccess={fetchSections}
+        onSuccess={refresh}
       />
     </PageContainer>
-  );
-}
-
-// =========================
-// STAT CARD
-// =========================
-
-function StatCard({
-  label,
-
-  value,
-}: {
-  label: string;
-
-  value: number;
-}) {
-  return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <p className="text-sm text-muted-foreground">
-        {label}
-      </p>
-
-      <h2
-        className="
-          mt-2
-          text-3xl
-          font-bold
-          text-foreground
-        "
-      >
-        {value}
-      </h2>
-    </div>
   );
 }

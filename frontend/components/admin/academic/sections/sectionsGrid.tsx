@@ -1,46 +1,35 @@
-import SectionCard from "./sectionCard";
+"use client";
+
+import { memo } from "react";
 
 import type { Section } from "@/types/section";
 
+import EmptyState from "@/components/common/states/emptyState";
+
+import SectionCard from "./sectionCard";
+
 interface Props {
   sections: Section[];
+
   onRefresh: () => void;
+
   onEdit: (section: Section) => void;
 }
 
-export default function SectionsGrid({
+function SectionsGrid({
   sections,
   onRefresh,
   onEdit,
 }: Props) {
   if (sections.length === 0) {
-    return (
-      <div
-        className="
-          rounded-2xl
-          border
-          border-dashed
-          border-border
-          bg-card
-          p-10
-          text-center
-          text-muted-foreground
-        "
-      >
-        No sections found.
-      </div>
-    );
+    <EmptyState
+      title="No sections found."
+      description="Try creating a new section or adjusting your filters."
+    />;
   }
 
   return (
-    <div
-      className="
-        grid
-        gap-6
-        md:grid-cols-2
-        xl:grid-cols-3
-      "
-    >
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {sections.map((section) => (
         <SectionCard
           key={section.id}
@@ -52,3 +41,5 @@ export default function SectionsGrid({
     </div>
   );
 }
+
+export default memo(SectionsGrid);

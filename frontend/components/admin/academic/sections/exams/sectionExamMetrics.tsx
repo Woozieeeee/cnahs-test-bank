@@ -1,3 +1,7 @@
+import { memo } from "react";
+
+import StatCard from "@/components/common/cards/statCard";
+
 interface Props {
   activeStudents: number;
 
@@ -6,67 +10,32 @@ interface Props {
   violations: number;
 }
 
-export default function SectionExamMetrics({
+function SectionExamMetrics({
   activeStudents,
   completionRate,
   violations,
 }: Props) {
   return (
-    <div
-      className="
-        mt-4
-        grid
-        grid-cols-3
-        gap-3
-      "
-    >
-      <MetricCard label="Students" value={activeStudents} />
+    <div className="mt-4 grid grid-cols-3 gap-3">
+      <StatCard
+        compact
+        label="Students"
+        value={activeStudents}
+      />
 
-      <MetricCard
+      <StatCard
+        compact
         label="Completion"
         value={`${completionRate}%`}
       />
 
-      <MetricCard label="Violations" value={violations} />
+      <StatCard
+        compact
+        label="Violations"
+        value={violations}
+      />
     </div>
   );
 }
 
-function MetricCard({
-  label,
-  value,
-}: {
-  label: string;
-
-  value: string | number;
-}) {
-  return (
-    <div
-      className="
-        rounded-xl
-        bg-muted
-        p-3
-        text-center
-      "
-    >
-      <p
-        className="
-          text-xs
-          text-muted-foreground
-        "
-      >
-        {label}
-      </p>
-
-      <p
-        className="
-          mt-1
-          font-semibold
-          text-foreground
-        "
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
+export default memo(SectionExamMetrics);

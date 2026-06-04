@@ -1,5 +1,6 @@
 export const ACTIVITY_CATEGORIES = [
   "ALL",
+  "ACADEMIC",
   "AUTH",
   "APPROVALS",
   "EXAM",

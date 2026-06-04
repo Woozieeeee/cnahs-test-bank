@@ -21,28 +21,11 @@ export default function SubjectsTabs({
         <MotionButton
           key={tab}
           onClick={() => setActiveTab(tab)}
-          className={`
-            rounded-xl
-            px-4
-            py-2
-            text-sm
-            font-medium
-            transition
-
-            ${
-              activeTab === tab
-                ? `
-                  bg-primary
-                  text-primary-foreground
-                `
-                : `
-                  bg-card
-                  text-muted-foreground
-                  hover:bg-muted
-                  hover:text-foreground
-                `
-            }
-          `}
+          className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
+            activeTab === tab
+              ? `bg-primary text-primary-foreground`
+              : `bg-card text-muted-foreground hover:bg-muted hover:text-foreground`
+          } `}
         >
           {tab}
         </MotionButton>

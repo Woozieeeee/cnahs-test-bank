@@ -14,33 +14,13 @@ export default function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div
-      className="
-        flex
-        items-center
-        justify-center
-        gap-2
-      "
-    >
+    <div className="flex items-center justify-center gap-2">
       {/* PREVIOUS */}
 
       <button
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="
-          rounded-lg
-          border
-          border-border
-          bg-card
-          px-3
-          py-2
-          text-sm
-          text-foreground
-          transition
-          hover:bg-muted
-          disabled:cursor-not-allowed
-          disabled:opacity-50
-        "
+        className="border-border bg-card text-foreground hover:bg-muted rounded-lg border px-3 py-2 text-sm transition disabled:cursor-not-allowed disabled:opacity-50"
       >
         Previous
       </button>
@@ -57,28 +37,11 @@ export default function Pagination({
             <button
               key={page}
               onClick={() => onPageChange(page)}
-              className={`
-                rounded-lg
-                px-3
-                py-2
-                text-sm
-                transition
-
-                ${
-                  currentPage === page
-                    ? `
-                      bg-primary
-                      text-primary-foreground
-                    `
-                    : `
-                      border
-                      border-border
-                      bg-card
-                      text-foreground
-                      hover:bg-muted
-                    `
-                }
-              `}
+              className={`rounded-lg px-3 py-2 text-sm transition ${
+                currentPage === page
+                  ? `bg-primary text-primary-foreground`
+                  : `border-border bg-card text-foreground hover:bg-muted border`
+              } `}
             >
               {page}
             </button>
@@ -91,20 +54,7 @@ export default function Pagination({
       <button
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="
-          rounded-lg
-          border
-          border-border
-          bg-card
-          px-3
-          py-2
-          text-sm
-          text-foreground
-          transition
-          hover:bg-muted
-          disabled:cursor-not-allowed
-          disabled:opacity-50
-        "
+        className="border-border bg-card text-foreground hover:bg-muted rounded-lg border px-3 py-2 text-sm transition disabled:cursor-not-allowed disabled:opacity-50"
       >
         Next
       </button>

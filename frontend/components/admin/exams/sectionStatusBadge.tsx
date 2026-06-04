@@ -47,27 +47,10 @@ export default function SectionStatusBadge({
 
   return (
     <div
-      className={`
-        flex
-        items-center
-        gap-2
-        rounded-full
-        px-3
-        py-1
-        text-xs
-        font-semibold
-
-        ${statusStyles.badge}
-      `}
+      className={`flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${statusStyles.badge} `}
     >
       <div
-        className={`
-          h-2
-          w-2
-          rounded-full
-
-          ${statusStyles.dot}
-        `}
+        className={`h-2 w-2 rounded-full ${statusStyles.dot} `}
       />
 
       {statusStyles.label}

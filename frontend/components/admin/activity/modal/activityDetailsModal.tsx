@@ -19,28 +19,8 @@ export default function ActivityDetailsModal({
   if (!activity) return null;
 
   return (
-    <div
-      className="
-        fixed
-        inset-0
-        z-50
-        flex
-        items-center
-        justify-center
-        bg-black/40
-        p-4
-      "
-    >
-      <div
-        className="
-          w-full
-          max-w-2xl
-          rounded-2xl
-          bg-card
-          p-6
-          shadow-xl
-        "
-      >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className="bg-card w-full max-w-2xl rounded-2xl p-6 shadow-xl">
         {/* HEADER */}
 
         <ActivityDetailsHeader
@@ -58,7 +38,7 @@ export default function ActivityDetailsModal({
           <div className="mt-6">
             <h3 className="font-semibold">Description</h3>
 
-            <p className="mt-2 text-muted-foreground">
+            <p className="text-muted-foreground mt-2">
               {activity.description}
             </p>
           </div>

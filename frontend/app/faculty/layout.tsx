@@ -1,17 +1,49 @@
 "use client";
 
-import useProtectedRoute from "@/hooks/useProtectedRoute";
+import { useState } from "react";
+
+import AppSidebar from "@/components/layout/sidebar/appSidebar";
+
+import Navbar from "@/components/layout/navbar/navbar";
+
+import MobileSidebar from "@/components/layout/sidebar/mobileSidebar";
+
+import { SidebarProvider } from "@/components/layout/sidebar/sidebarContext";
+
+import { facultyNav } from "@/config/navigation/facultyNav";
 
 export default function FacultyLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { loading } = useProtectedRoute(["FACULTY"]);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  if (loading) {
-    return null;
-  }
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen">
+        <AppSidebar
+          title="CNAHS Faculty"
+          subtitle="Teaching & Assessment Portal"
+          navItems={facultyNav}
+        />
 
-  return <>{children}</>;
+        <MobileSidebar
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          navItems={facultyNav}
+        />
+
+        <div className="flex-1">
+          <Navbar
+            userName="Faculty User"
+            role="Faculty"
+            onMenuClick={() => setMobileOpen(true)}
+          />
+
+          {children}
+        </div>
+      </div>
+    </SidebarProvider>
+  );
 }

@@ -26,14 +26,7 @@ export default function ActivityTimeline({
   onSelectActivity,
 }: Props) {
   return (
-    <MotionCard
-      className="
-        rounded-2xl
-        bg-card
-        p-6
-        shadow-sm
-      "
-    >
+    <MotionCard className="bg-card rounded-2xl p-6 shadow-sm">
       {loading ? (
         <ActivityTimelineLoading />
       ) : logs.length > 0 ? (

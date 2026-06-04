@@ -62,55 +62,23 @@ export default function UsersManagementTable({
   onSort,
 }: Props) {
   return (
-    <div
-      className="
-        rounded-2xl
-        bg-card
-        p-6
-        shadow-sm
-      "
-    >
+    <div className="bg-card rounded-2xl p-6 shadow-sm">
       {/* HEADER */}
 
-      <div
-        className="
-    mb-6
-    flex
-    items-start
-    justify-between
-    gap-4
-  "
-      >
+      <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <h2
-            className="
-        text-xl
-        font-semibold
-        text-foreground
-      "
-          >
+          <h2 className="text-foreground text-xl font-semibold">
             Users
           </h2>
 
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             Manage student and faculty accounts
           </p>
         </div>
 
         <MotionButton
           onClick={onOpenFacultyModal}
-          className="
-      rounded-xl
-      bg-primary
-      px-4
-      py-2
-      text-sm
-      font-medium
-      text-primary-foreground
-      transition
-      hover:bg-primary/90
-      cursor-pointer
-    "
+          className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition"
         >
           Add Faculty
         </MotionButton>
@@ -125,15 +93,7 @@ export default function UsersManagementTable({
 
       {/* FILTERS */}
 
-      <div
-        className="
-          mt-6
-          flex
-          flex-col
-          gap-4
-          md:flex-row
-        "
-      >
+      <div className="mt-6 flex flex-col gap-4 md:flex-row">
         <UsersSearch value={search} onChange={setSearch} />
 
         <UsersRoleFilter

@@ -24,51 +24,17 @@ export default function AcademicCard({
     <MotionCard>
       <Link
         href={href}
-        className="
-          block
-          rounded-2xl
-          border
-          border-border
-          bg-card
-          p-6
-          transition
-          hover:border-ring
-          hover:shadow-md
-        "
+        className="border-border bg-card hover:border-ring block rounded-2xl border p-6 transition hover:shadow-md"
       >
-        <div
-          className="
-            flex
-            h-12
-            w-12
-            items-center
-            justify-center
-            rounded-xl
-            bg-muted
-          "
-        >
+        <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-xl">
           <Icon size={22} className="text-foreground" />
         </div>
 
-        <h2
-          className="
-            mt-5
-            text-xl
-            font-semibold
-            text-card-foreground
-          "
-        >
+        <h2 className="text-card-foreground mt-5 text-xl font-semibold">
           {title}
         </h2>
 
-        <p
-          className="
-            mt-2
-            text-sm
-            leading-relaxed
-            text-muted-foreground
-          "
-        >
+        <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
           {description}
         </p>
       </Link>

@@ -1,21 +1,15 @@
+import { memo, useCallback } from "react";
+
 import SubjectDropdownItem from "./subjectDropdownItem";
 
 interface Props {
-  hasFacultyAssigned: boolean;
-
-  hasSectionsAssigned: boolean;
-
   isArchived?: boolean;
 
   onEdit: () => void;
 
-  onAssignFaculty: () => void;
+  onManageFaculty: () => void;
 
-  onUnassignFaculty: () => void;
-
-  onAssignSections: () => void;
-
-  onUnassignSections: () => void;
+  onManageSection: () => void;
 
   onArchive: () => void;
 
@@ -23,122 +17,67 @@ interface Props {
 
   onConfirmAction: (props: {
     title: string;
-
     text: string;
-
     confirmText: string;
-
     action: () => void;
   }) => void;
 
   onClose: () => void;
 }
 
-export default function SubjectActionsDropdown({
-  hasFacultyAssigned,
-
-  hasSectionsAssigned,
-
+function SubjectActionsDropdown({
   isArchived,
-
   onEdit,
-
-  onAssignFaculty,
-
-  onUnassignFaculty,
-
-  onAssignSections,
-
-  onUnassignSections,
-
+  onManageFaculty,
+  onManageSection,
   onArchive,
-
   onRestore,
-
   onConfirmAction,
-
   onClose,
 }: Props) {
+  // =========================
+  // HELPERS
+  // =========================
+
+  const executeAndClose = useCallback(
+    (action: () => void) => {
+      action();
+
+      onClose();
+    },
+    [onClose]
+  );
+
+  const handleEdit = useCallback(() => {
+    executeAndClose(onEdit);
+  }, [executeAndClose, onEdit]);
+
+  const handleManageFaculty = useCallback(() => {
+    executeAndClose(onManageFaculty);
+  }, [executeAndClose, onManageFaculty]);
+
+  const handleManageSection = useCallback(() => {
+    executeAndClose(onManageSection);
+  }, [executeAndClose, onManageSection]);
+
   return (
-    <div
-      className="
-        absolute
-        right-0
-        z-50
-        mt-2
-        w-52
-        rounded-xl
-        border
-        border-border
-        bg-card
-        p-2
-        shadow-lg
-      "
-    >
+    <div className="border-border bg-card absolute right-0 z-50 mt-2 w-52 rounded-xl border p-2 shadow-lg">
       {!isArchived && (
         <>
           <SubjectDropdownItem
             label="Edit Subject"
-            onClick={() => {
-              onEdit();
-
-              onClose();
-            }}
+            onClick={handleEdit}
           />
 
-          {hasFacultyAssigned ? (
-            <SubjectDropdownItem
-              label="Unassign Faculty"
-              danger
-              onClick={() =>
-                onConfirmAction({
-                  title: "Remove Faculty Assignment?",
+          <SubjectDropdownItem
+            label="Manage Faculty Pool"
+            onClick={handleManageFaculty}
+          />
 
-                  text: "This will remove the assigned faculty from this subject.",
-
-                  confirmText: "Remove Faculty",
-
-                  action: onUnassignFaculty,
-                })
-              }
-            />
-          ) : (
-            <SubjectDropdownItem
-              label="Assign Faculty"
-              onClick={() => {
-                onAssignFaculty();
-
-                onClose();
-              }}
-            />
-          )}
-
-          {hasSectionsAssigned ? (
-            <SubjectDropdownItem
-              label="Unassign Sections"
-              danger
-              onClick={() =>
-                onConfirmAction({
-                  title: "Remove Section Assignments?",
-
-                  text: "This will remove all assigned sections from this subject.",
-
-                  confirmText: "Remove Sections",
-
-                  action: onUnassignSections,
-                })
-              }
-            />
-          ) : (
-            <SubjectDropdownItem
-              label="Assign Sections"
-              onClick={() => {
-                onAssignSections();
-
-                onClose();
-              }}
-            />
-          )}
+          <SubjectDropdownItem
+            label="Manage Sections"
+            onClick={handleManageSection}
+          />
         </>
       )}
 
@@ -157,3 +96,5 @@ export default function SubjectActionsDropdown({
     </div>
   );
 }
+
+export default memo(SubjectActionsDropdown);

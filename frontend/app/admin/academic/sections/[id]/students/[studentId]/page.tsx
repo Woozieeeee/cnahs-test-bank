@@ -1,64 +1,45 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
 import PageContainer from "@/components/layout/pages/pageContainer";
 
-import StudentSessionHeader from "@/components/admin/academic/sections/session/studentSessionHeader";
+import BackButton from "@/components/common/backButton";
 
-import StudentSessionOverview from "@/components/admin/academic/sections/session/studentSessionOverview";
+import useSectionId from "@/hooks/useSectionId";
 
-import StudentSessionProgression from "@/components/admin/academic/sections/session/studentSessionProgression";
+import StudentProfileHero from "@/components/admin/academic/sections/students/profile/studentProfileHero";
 
-import StudentSessionViolations from "@/components/admin/academic/sections/session/studentSessionViolations";
+import StudentPerformanceStats from "@/components/admin/academic/sections/students/profile/studentPerformanceStats";
 
-import StudentSessionTimeline from "@/components/admin/academic/sections/session/studentSessionTimeline";
+import StudentTopicStrengths from "@/components/admin/academic/sections/students/profile/studentTopicStrengths";
 
-import StudentSessionActions from "@/components/admin/academic/sections/session/studentSessionActions";
+import StudentTopicWeaknesses from "@/components/admin/academic/sections/students/profile/studentTopicWeaknesses";
 
-export default function StudentSessionPage() {
-  const params = useParams();
+import StudentIntegritySummary from "@/components/admin/academic/sections/students/profile/studentIntegritySummary";
+
+import StudentExamHistory from "@/components/admin/academic/sections/students/profile/studentExamHistory";
+
+export default function StudentProfilePage() {
+  const sectionId = useSectionId();
 
   return (
     <PageContainer>
-      {/* HEADER */}
-
-      <StudentSessionHeader
-        sectionId={String(params.id)}
-        examId={String(params.examId)}
+      <BackButton
+        href={`/admin/academic/sections/${sectionId}/students`}
+        label="Back to Students"
       />
 
-      {/* TOP GRID */}
+      <StudentProfileHero />
 
-      <div
-        className="
-          grid
-          gap-6
-          xl:grid-cols-2
-        "
-      >
-        <StudentSessionOverview />
+      <StudentPerformanceStats />
+      <div className="grid gap-6 xl:grid-cols-2">
+        <StudentTopicStrengths />
 
-        <StudentSessionProgression />
+        <StudentTopicWeaknesses />
       </div>
 
-      {/* TIMELINE + VIOLATIONS */}
+      <StudentIntegritySummary />
 
-      <div
-        className="
-          grid
-          gap-6
-          xl:grid-cols-[1.4fr_0.8fr]
-        "
-      >
-        <StudentSessionTimeline />
-
-        <StudentSessionViolations />
-      </div>
-
-      {/* ACTIONS */}
-
-      <StudentSessionActions />
+      <StudentExamHistory />
     </PageContainer>
   );
 }

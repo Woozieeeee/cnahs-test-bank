@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import useSectionId from "@/hooks/useSectionId";
 
-import { useParams } from "next/navigation";
+import useSection from "@/hooks/useSection";
 
-import { getSectionById } from "@/services/academic_service";
+import PageContainer from "@/components/layout/pages/pageContainer";
 
-import type { Section } from "@/types/section";
+import LoadingState from "@/components/common/states/loadingState";
+
+import ErrorState from "@/components/common/states/errorState";
+
+import NotFoundState from "@/components/common/states/notFoundState";
 
 import SectionDetailsHeader from "@/components/admin/academic/sections/details/sectionDetailsHeader";
 
@@ -14,45 +18,45 @@ import SectionSubjectsPreview from "@/components/admin/academic/sections/details
 
 import SectionStudentsPreview from "@/components/admin/academic/sections/details/sectionStudentsPreview";
 
+import SectionQuestionBankPreview from "@/components/admin/academic/sections/details/sectionQuestionBankPreview";
+
 import SectionExamsPreview from "@/components/admin/academic/sections/details/sectionExamsPreview";
 
-import PageContainer from "@/components/layout/pages/pageContainer";
-
 export default function SectionDetailsPage() {
-  const params = useParams();
+  const id = useSectionId();
 
-  const id = Number(params.id);
-
-  const [section, setSection] = useState<Section | null>(
-    null
-  );
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchSection = async () => {
-      try {
-        const data = await getSectionById(id);
-
-        setSection(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSection();
-  }, [id]);
+  const { section, loading, error, refresh } =
+    useSection(id);
 
   // =========================
   // LOADING
   // =========================
 
   if (loading) {
-    return <div className="p-6">Loading section...</div>;
+    return (
+      <PageContainer>
+        <LoadingState
+          title="Loading section..."
+          description="Please wait while we retrieve section information."
+        />
+      </PageContainer>
+    );
+  }
+
+  // =========================
+  // ERROR
+  // =========================
+
+  if (error) {
+    return (
+      <PageContainer>
+        <ErrorState
+          title="Failed to load section."
+          description={error}
+          onRetry={refresh}
+        />
+      </PageContainer>
+    );
   }
 
   // =========================
@@ -60,26 +64,43 @@ export default function SectionDetailsPage() {
   // =========================
 
   if (!section) {
-    return <div className="p-6">Section not found.</div>;
+    return (
+      <PageContainer>
+        <NotFoundState
+          title="Section not found."
+          description="The requested section may have been removed or is no longer available."
+        />
+      </PageContainer>
+    );
   }
 
   return (
     <PageContainer>
       <SectionDetailsHeader section={section} />
 
-      <div
-        className="
-          grid
-          gap-6
-          xl:grid-cols-3
-          items-stretch
-        "
-      >
-        <SectionSubjectsPreview section={section} />
+      {/* OVERVIEW */}
 
-        <SectionStudentsPreview section={section} />
+      <div className="space-y-3">
+        <div>
+          <h2 className="text-foreground text-lg font-semibold">
+            Academic Resources
+          </h2>
 
-        <SectionExamsPreview section={section} />
+          <p className="text-muted-foreground text-sm">
+            Manage subjects, students, and examinations
+            assigned to this section.
+          </p>
+        </div>
+
+        <div className="grid items-stretch gap-6 xl:grid-cols-4">
+          <SectionSubjectsPreview section={section} />
+
+          <SectionStudentsPreview section={section} />
+
+          <SectionExamsPreview section={section} />
+
+          <SectionQuestionBankPreview section={section} />
+        </div>
       </div>
     </PageContainer>
   );

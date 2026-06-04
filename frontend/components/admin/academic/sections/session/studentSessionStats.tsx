@@ -1,47 +1,69 @@
+import { memo } from "react";
+
 import { mockStudentSession } from "@/components/admin/academic/sections/data/mockStudentSession";
 
-import StudentSessionStatCard from "./studentSessionStatCard";
+import InfoCard from "@/components/common/cards/infoCard";
+import InfoCardHeader from "@/components/common/cards/infoCardHeader";
+import InfoCardValue from "@/components/common/cards/infoCardValue";
 
-export default function StudentSessionStats() {
+function StudentSessionStats() {
   return (
-    <div
-      className="
-        grid
-        gap-4
-        sm:grid-cols-2
-        xl:grid-cols-3
-      "
-    >
-      <StudentSessionStatCard
-        label="Student"
-        value={mockStudentSession.name}
-      />
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <InfoCard>
+        <InfoCardHeader label="Student" />
 
-      <StudentSessionStatCard
-        label="Student ID"
-        value={mockStudentSession.studentId}
-      />
+        <InfoCardValue>
+          {mockStudentSession.name}
+        </InfoCardValue>
+      </InfoCard>
 
-      <StudentSessionStatCard
-        label="Status"
-        value={mockStudentSession.status}
-        badge="LIVE"
-      />
+      <InfoCard>
+        <InfoCardHeader label="Student ID" />
 
-      <StudentSessionStatCard
-        label="Progress"
-        value={`${mockStudentSession.progress}%`}
-      />
+        <InfoCardValue>
+          {mockStudentSession.studentId}
+        </InfoCardValue>
+      </InfoCard>
 
-      <StudentSessionStatCard
-        label="Warnings"
-        value={String(mockStudentSession.warnings)}
-      />
+      <InfoCard>
+        <InfoCardHeader label="Status" />
 
-      <StudentSessionStatCard
-        label="Risk Level"
-        value={mockStudentSession.risk}
-      />
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <InfoCardValue className="mt-0">
+            {mockStudentSession.status}
+          </InfoCardValue>
+
+          <span className="bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-semibold">
+            LIVE
+          </span>
+        </div>
+      </InfoCard>
+
+      <InfoCard>
+        <InfoCardHeader label="Progress" />
+
+        <InfoCardValue>
+          {mockStudentSession.progress}%
+        </InfoCardValue>
+      </InfoCard>
+
+      <InfoCard>
+        <InfoCardHeader label="Warnings" />
+
+        <InfoCardValue>
+          {mockStudentSession.warnings}
+        </InfoCardValue>
+      </InfoCard>
+
+      <InfoCard>
+        <InfoCardHeader label="Risk Level" />
+
+        <InfoCardValue>
+          {mockStudentSession.risk}
+        </InfoCardValue>
+      </InfoCard>
     </div>
   );
 }
+
+export default memo(StudentSessionStats);

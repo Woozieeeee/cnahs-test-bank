@@ -51,7 +51,7 @@ export default function LoginForm() {
 
       if (data.user.role === "FACULTY") {
         if (data.user.mustChangePassword) {
-          router.push("/change-password");
+          router.push("/change_password");
 
           return;
         }

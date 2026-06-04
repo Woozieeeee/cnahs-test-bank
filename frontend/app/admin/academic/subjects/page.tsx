@@ -6,21 +6,24 @@ import SubjectsGrid from "@/components/admin/academic/subjects/subjectsGrid";
 import SubjectsTabs from "@/components/admin/academic/subjects/subjectTabs";
 import CreateSubjectModal from "@/components/admin/academic/subjects/createSubjectModal";
 import AssignFacultyModal from "@/components/admin/academic/subjects/assignFacultyModal";
-import AssignSectionsModal from "@/components/admin/academic/subjects/assignSubjectModal";
+import AssignSectionsModal from "@/components/admin/academic/subjects/assignSectionModal";
 import EditSubjectModal from "@/components/admin/academic/subjects/editSubjectModal";
 import SubjectsHeader from "@/components/admin/academic/subjects/sections/subjectsHeader";
 import SubjectsActions from "@/components/admin/academic/subjects/sections/subjectsActions";
 import {
   updateSubject,
-  assignFacultyToSubject,
+  assignFacultiesToSubject,
 } from "@/services/academic_service";
 import { createSubject } from "@/services/academic_service";
-import { mockFaculty } from "@/components/admin/academic/subjects/data/mockFaculty";
-import { mockSections } from "@/components/admin/academic/subjects/data/mockSections";
-import { assignSubjectSections } from "@/services/academic_service";
+import {
+  assignSubjectSections,
+  getSections,
+} from "@/services/academic_service";
+import { getFacultyUsers } from "@/services/admin_service";
 import { successToast, errorToast } from "@/lib/swal";
 import { getSubjects } from "@/services/academic_service";
 import type { Subject } from "@/types/subject";
+import type { Section } from "@/types/section";
 import PageContainer from "@/components/layout/pages/pageContainer";
 
 export default function SubjectsPage() {
@@ -29,6 +32,15 @@ export default function SubjectsPage() {
   // =========================
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
+
+  const [facultyUsers, setFacultyUsers] = useState<
+    {
+      id: number;
+      name: string;
+    }[]
+  >([]);
+
+  const [sections, setSections] = useState<Section[]>([]);
 
   const [initialLoading, setInitialLoading] =
     useState(true);
@@ -62,6 +74,21 @@ export default function SubjectsPage() {
   // FETCH SUBJECTS
   // =========================
 
+  const fetchDependencies = async () => {
+    try {
+      const [facultyData, sectionData] = await Promise.all([
+        getFacultyUsers(),
+        getSections(),
+      ]);
+
+      setFacultyUsers(facultyData);
+
+      setSections(sectionData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchSubjects = async () => {
     try {
       const data = await getSubjects(activeTab);
@@ -77,6 +104,10 @@ export default function SubjectsPage() {
     fetchSubjects();
   }, [activeTab]);
 
+  useEffect(() => {
+    fetchDependencies();
+  }, []);
+
   // =========================
   // FILTERING
   // =========================
@@ -91,12 +122,15 @@ export default function SubjectsPage() {
           .toLowerCase()
           .includes(search.toLowerCase());
 
+      const hasFaculty =
+        (subject.faculties?.length ?? 0) > 0;
+
       const matchesAssignment =
         assignmentFilter === "ALL"
           ? true
           : assignmentFilter === "ASSIGNED"
-            ? !!subject.faculty
-            : !subject.faculty;
+            ? hasFaculty
+            : !hasFaculty;
 
       return matchesSearch && matchesAssignment;
     });
@@ -128,12 +162,16 @@ export default function SubjectsPage() {
       <SubjectsStats
         totalSubjects={subjects.length}
         assignedFaculty={
-          subjects.filter((subject) => subject.faculty)
-            .length
+          subjects.filter(
+            (subject) =>
+              (subject.faculties?.length ?? 0) > 0
+          ).length
         }
         unassignedSubjects={
-          subjects.filter((subject) => !subject.faculty)
-            .length
+          subjects.filter(
+            (subject) =>
+              (subject.faculties?.length ?? 0) === 0
+          ).length
         }
         totalSections={subjects.reduce(
           (total, subject) =>
@@ -233,18 +271,25 @@ export default function SubjectsPage() {
       <AssignFacultyModal
         open={openAssignFaculty}
         onOpenChange={setOpenAssignFaculty}
-        facultyList={mockFaculty}
+        facultyList={facultyUsers}
         subjectName={selectedSubject?.name || ""}
-        onAssign={async (facultyId) => {
+        initialFacultyIds={
+          selectedSubject?.faculties?.map(
+            (faculty) => faculty.faculty.id
+          ) ?? []
+        }
+        onAssign={async (facultyIds) => {
           if (!selectedSubject) return;
 
           try {
-            await assignFacultyToSubject(
+            await assignFacultiesToSubject(
               selectedSubject.id,
-              facultyId
+              facultyIds
             );
 
-            successToast("Faculty assigned successfully.");
+            successToast(
+              "Faculty pool updated successfully."
+            );
 
             setOpenAssignFaculty(false);
 
@@ -252,7 +297,7 @@ export default function SubjectsPage() {
           } catch (error) {
             console.error(error);
 
-            errorToast("Failed to assign faculty.");
+            errorToast("Failed to update faculty pool.");
           }
         }}
       />
@@ -260,8 +305,13 @@ export default function SubjectsPage() {
       <AssignSectionsModal
         open={openAssignSections}
         onOpenChange={setOpenAssignSections}
-        sections={mockSections}
+        sections={sections}
         subjectName={selectedSubject?.name || ""}
+        initialSectionIds={
+          selectedSubject?.sectionSubjects?.map(
+            (item) => item.section.id
+          ) ?? []
+        }
         onAssign={async (sectionIds) => {
           if (!selectedSubject) return;
 

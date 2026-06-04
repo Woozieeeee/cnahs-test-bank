@@ -6,6 +6,14 @@ export interface SectionSubject {
 
     name: string;
   };
+
+  subject: Subject;
+
+  faculty?: {
+    id: number;
+
+    name: string;
+  } | null;
 }
 
 export interface Subject {
@@ -15,6 +23,12 @@ export interface Subject {
 
   code: string;
 
+  faculty?: {
+    id: number;
+
+    name: string;
+  } | null;
+
   description?: string;
 
   createdAt?: string;
@@ -23,11 +37,36 @@ export interface Subject {
 
   isArchived?: boolean;
 
-  faculty?: {
+  totalStudents?: number;
+
+  totalQuestions?: number;
+
+  totalExams?: number;
+
+  faculties?: {
     id: number;
 
-    name: string;
-  } | null;
+    facultyId: number;
 
-  sectionSubjects: SectionSubject[];
+    faculty: {
+      id: number;
+
+      name: string;
+    };
+  }[];
+
+  sectionSubjects?: SectionSubject[];
+}
+export interface SubjectPerformance {
+  exam: string;
+
+  score: number;
+}
+
+export interface SubjectStatistics {
+  students: number;
+
+  exams: number;
+
+  examStatus: "ONGOING" | "SCHEDULED" | "NO ACTIVE EXAM";
 }

@@ -10,5 +10,4 @@ export const EXAM_VIOLATIONS = [
   "SUSPICIOUS_ACTIVITY",
 ] as const;
 
-export type ExamViolation =
-  (typeof EXAM_VIOLATIONS)[number];
+export type ExamViolation = (typeof EXAM_VIOLATIONS)[number];

@@ -1,96 +1,120 @@
-import { mockStudentSession } from "@/components/admin/academic/sections/data/mockStudentSession";
+"use client";
 
-export default function StudentSessionOverview() {
+import { memo } from "react";
+
+import StatusBadge from "@/components/common/badges/statusBadge";
+
+import StatCard from "@/components/common/cards/statCard";
+
+function StudentSessionOverview() {
+  const student = {
+    name: "Juan Cruz",
+
+    studentId: "2024-001",
+
+    status: "ACTIVE",
+
+    riskLevel: "LOW",
+
+    exam: "Pharmacology Midterm",
+
+    progress: 72,
+
+    currentDifficulty: "Intermediate",
+
+    violations: 1,
+
+    timeRemaining: "32 mins",
+  };
+
+  const initials = student.name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <h2 className="text-lg font-semibold">
-        Session Overview
-      </h2>
+    <div className="border-border bg-card overflow-hidden rounded-2xl border">
+      {/* BANNER */}
 
-      <div
-        className="
-          mt-5
-          grid
-          gap-4
-          md:grid-cols-2
-        "
-      >
-        <InfoCard
-          label="Student"
-          value={mockStudentSession.name}
-        />
+      <div className="from-primary/15 via-primary/5 to-background relative h-32 bg-gradient-to-r" />
 
-        <InfoCard
-          label="Student Number"
-          value={mockStudentSession.studentId}
-        />
+      {/* CONTENT */}
 
-        <InfoCard
-          label="Section"
-          value={mockStudentSession.section}
-        />
+      <div className="relative px-6 pb-6">
+        {/* AVATAR */}
 
-        <InfoCard
-          label="Status"
-          value={mockStudentSession.status}
-        />
+        <div className="border-card bg-primary text-primary-foreground absolute -top-10 flex h-20 w-20 items-center justify-center rounded-full border-4 text-xl font-bold">
+          {initials}
+        </div>
 
-        <InfoCard
-          label="Progress"
-          value={`${mockStudentSession.progress}%`}
-        />
+        {/* PROFILE */}
 
-        <InfoCard
-          label="Warnings"
-          value={String(mockStudentSession.warnings)}
-        />
+        <div className="pt-14">
+          <h2 className="text-2xl font-bold">
+            {student.name}
+          </h2>
+
+          <p className="text-muted-foreground mt-1 text-sm">
+            Student ID: {student.studentId}
+          </p>
+
+          {/* BADGES */}
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <StatusBadge variant="success">
+              {student.status}
+            </StatusBadge>
+
+            <StatusBadge variant="info">
+              {student.riskLevel} RISK
+            </StatusBadge>
+          </div>
+
+          {/* EXAM */}
+
+          <div className="border-border mt-6 border-t pt-6">
+            <p className="text-muted-foreground text-xs tracking-wide uppercase">
+              Current Exam
+            </p>
+
+            <h3 className="mt-2 text-lg font-semibold">
+              {student.exam}
+            </h3>
+          </div>
+
+          {/* STATS */}
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <StatCard
+              compact
+              label="Progress"
+              value={`${student.progress}%`}
+            />
+
+            <StatCard
+              compact
+              label="Difficulty"
+              value={student.currentDifficulty}
+            />
+
+            <StatCard
+              compact
+              label="Violations"
+              value={student.violations}
+            />
+
+            <StatCard
+              compact
+              label="Time Left"
+              value={student.timeRemaining}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function InfoCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div
-      className="
-        rounded-xl
-        bg-muted
-        p-4
-      "
-    >
-      <p
-        className="
-          text-xs
-          uppercase
-          tracking-wide
-          text-muted-foreground
-        "
-      >
-        {label}
-      </p>
-
-      <p
-        className="
-          mt-1
-          font-medium
-        "
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
+export default memo(StudentSessionOverview);

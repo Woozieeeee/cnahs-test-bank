@@ -20,45 +20,14 @@ export default function QuickAccessCard({
 }: Props) {
   return (
     <Link href={href} className="block">
-      <MotionCard
-        className="
-          rounded-2xl
-          border
-          border-border
-          bg-card
-          p-6
-          transition
-          hover:border-ring
-          hover:bg-muted/40
-          hover:shadow-sm
-        "
-      >
-        <div
-          className="
-            mb-4
-            text-foreground
-          "
-        >
-          {icon}
-        </div>
+      <MotionCard className="border-border bg-card hover:border-ring hover:bg-muted/40 rounded-2xl border p-6 transition hover:shadow-sm">
+        <div className="text-foreground mb-4">{icon}</div>
 
-        <h3
-          className="
-            text-lg
-            font-semibold
-            text-card-foreground
-          "
-        >
+        <h3 className="text-card-foreground text-lg font-semibold">
           {title}
         </h3>
 
-        <p
-          className="
-            mt-2
-            text-sm
-            text-muted-foreground
-          "
-        >
+        <p className="text-muted-foreground mt-2 text-sm">
           {description}
         </p>
       </MotionCard>

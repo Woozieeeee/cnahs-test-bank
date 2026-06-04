@@ -1,4 +1,8 @@
-import ExamStudentStatCard from "./examStudentStatCard";
+import { memo } from "react";
+
+import InfoCard from "@/components/common/cards/infoCard";
+import InfoCardHeader from "@/components/common/cards/infoCardHeader";
+import InfoCardValue from "@/components/common/cards/infoCardValue";
 
 interface Props {
   total: number;
@@ -10,36 +14,47 @@ interface Props {
   flagged: number;
 }
 
-export default function ExamStudentsStats({
+function ExamStudentsStats({
   total,
   active,
   finished,
   flagged,
 }: Props) {
   return (
-    <div
-      className="
-        grid
-        gap-4
-        md:grid-cols-4
-      "
-    >
-      <ExamStudentStatCard
-        label="Total Sessions"
-        value={total}
-      />
+    <div className="grid gap-4 md:grid-cols-4">
+      <InfoCard>
+        <InfoCardHeader label="Total Sessions" />
 
-      <ExamStudentStatCard label="Active" value={active} />
+        <InfoCardValue className="text-3xl font-bold">
+          {total}
+        </InfoCardValue>
+      </InfoCard>
 
-      <ExamStudentStatCard
-        label="Finished"
-        value={finished}
-      />
+      <InfoCard>
+        <InfoCardHeader label="Active" />
 
-      <ExamStudentStatCard
-        label="Flagged"
-        value={flagged}
-      />
+        <InfoCardValue className="text-3xl font-bold">
+          {active}
+        </InfoCardValue>
+      </InfoCard>
+
+      <InfoCard>
+        <InfoCardHeader label="Finished" />
+
+        <InfoCardValue className="text-3xl font-bold">
+          {finished}
+        </InfoCardValue>
+      </InfoCard>
+
+      <InfoCard>
+        <InfoCardHeader label="Flagged" />
+
+        <InfoCardValue className="text-3xl font-bold">
+          {flagged}
+        </InfoCardValue>
+      </InfoCard>
     </div>
   );
 }
+
+export default memo(ExamStudentsStats);

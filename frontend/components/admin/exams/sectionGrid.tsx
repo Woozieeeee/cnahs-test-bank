@@ -52,14 +52,7 @@ const sections = [
 
 export default function SectionGrid() {
   return (
-    <div
-      className="
-        grid
-        gap-6
-        md:grid-cols-2
-        xl:grid-cols-3
-      "
-    >
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {sections.map((section) => (
         <SectionCard key={section.id} section={section} />
       ))}

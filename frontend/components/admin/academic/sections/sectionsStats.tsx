@@ -1,97 +1,75 @@
+"use client";
+
+import { memo, useMemo } from "react";
+
 import type { Section } from "@/types/section";
+
+import StatCard from "@/components/common/cards/statCard";
+import StatsGrid from "@/components/common/cards/statsGrid";
 
 interface Props {
   sections: Section[];
 }
 
-function StatCard({
-  label,
-  value,
-}: {
-  label: string;
+function SectionsStats({ sections }: Props) {
+  const stats = useMemo(() => {
+    return {
+      totalSections: sections.length,
 
-  value: number;
-}) {
+      totalStudents: sections.reduce(
+        (total, section) => total + section.users.length,
+        0
+      ),
+
+      totalExams: sections.reduce(
+        (total, section) => total + section.exams.length,
+        0
+      ),
+
+      archivedSections: sections.filter(
+        (section) => section.isArchived
+      ).length,
+
+      programs: new Set(
+        sections.map((section) => section.program)
+      ).size,
+    };
+  }, [sections]);
+
+  const statItems = [
+    {
+      label: "Total Sections",
+      value: stats.totalSections,
+    },
+    {
+      label: "Total Students",
+      value: stats.totalStudents,
+    },
+    {
+      label: "Total Exams",
+      value: stats.totalExams,
+    },
+    {
+      label: "Archived Sections",
+      value: stats.archivedSections,
+    },
+    {
+      label: "Programs",
+      value: stats.programs,
+    },
+  ];
+
   return (
-    <div
-      className="
-        rounded-2xl
-        border
-        border-border
-        bg-card
-        p-6
-      "
-    >
-      <p
-        className="
-          text-sm
-          text-muted-foreground
-        "
-      >
-        {label}
-      </p>
-
-      <h2
-        className="
-          mt-2
-          text-3xl
-          font-bold
-          text-foreground
-        "
-      >
-        {value}
-      </h2>
-    </div>
+    <StatsGrid columns="md:grid-cols-2 xl:grid-cols-5">
+      {statItems.map((stat) => (
+        <StatCard
+          key={stat.label}
+          label={stat.label}
+          value={stat.value}
+        />
+      ))}
+    </StatsGrid>
   );
 }
 
-export default function SectionsStats({ sections }: Props) {
-  return (
-    <div
-      className="
-        grid
-        gap-4
-        md:grid-cols-2
-        xl:grid-cols-5
-      "
-    >
-      <StatCard
-        label="Total Sections"
-        value={sections.length}
-      />
-
-      <StatCard
-        label="Total Students"
-        value={sections.reduce(
-          (total, section) => total + section.users.length,
-          0
-        )}
-      />
-
-      <StatCard
-        label="Total Exams"
-        value={sections.reduce(
-          (total, section) => total + section.exams.length,
-          0
-        )}
-      />
-
-      <StatCard
-        label="Archived Sections"
-        value={
-          sections.filter((section) => section.isArchived)
-            .length
-        }
-      />
-
-      <StatCard
-        label="Programs"
-        value={
-          new Set(
-            sections.map((section) => section.program)
-          ).size
-        }
-      />
-    </div>
-  );
-}
+export default memo(SectionsStats);

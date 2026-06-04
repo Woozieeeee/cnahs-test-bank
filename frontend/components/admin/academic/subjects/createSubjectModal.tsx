@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import MotionModal from "@/components/motion/motionModal";
 
-import MotionButton from "@/components/motion/motionButton";
+import ModalHeader from "@/components/common/modal/modalHeader";
+
+import ModalActions from "@/components/common/modal/modalActions";
 
 interface Props {
   open: boolean;
@@ -20,7 +27,24 @@ interface Props {
   }) => void;
 }
 
-export default function CreateSubjectModal({
+const fieldClassName = `
+  w-full
+  rounded-xl
+  border
+  border-input
+  bg-background
+  px-4
+  py-3
+  text-foreground
+  outline-none
+
+  transition-all
+  duration-200
+
+  focus:border-ring
+`;
+
+function CreateSubjectModal({
   open,
   onOpenChange,
   onCreate,
@@ -31,195 +55,111 @@ export default function CreateSubjectModal({
 
   const [description, setDescription] = useState("");
 
-  if (!open) return null;
+  // =========================
+  // RESET
+  // =========================
 
-  const handleSubmit = () => {
-    if (!name || !code) return;
-
-    onCreate({
-      name,
-      code,
-      description,
-    });
-
+  const resetForm = useCallback(() => {
     setName("");
 
     setCode("");
 
     setDescription("");
+  }, []);
 
+  // =========================
+  // RESET ON CLOSE
+  // =========================
+
+  useEffect(() => {
+    if (!open) {
+      resetForm();
+    }
+  }, [open, resetForm]);
+
+  // =========================
+  // CLOSE
+  // =========================
+
+  const handleClose = useCallback(() => {
     onOpenChange(false);
-  };
+  }, [onOpenChange]);
+
+  // =========================
+  // SUBMIT
+  // =========================
+
+  const handleSubmit = useCallback(() => {
+    const trimmedName = name.trim();
+
+    const trimmedCode = code.trim();
+
+    if (!trimmedName || !trimmedCode) {
+      return;
+    }
+
+    onCreate({
+      name: trimmedName,
+
+      code: trimmedCode,
+
+      description: description.trim(),
+    });
+
+    handleClose();
+  }, [name, code, description, onCreate, handleClose]);
+
+  if (!open) return null;
 
   return (
     <MotionModal open={open}>
       <div className="p-6">
-        {/* HEADER */}
-
-        <div
-          className="
-            flex
-            items-start
-            justify-between
-          "
-        >
-          <div>
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-foreground
-              "
-            >
-              Create Subject
-            </h2>
-
-            <p
-              className="
-                mt-1
-                text-sm
-                text-muted-foreground
-              "
-            >
-              Create a new academic subject.
-            </p>
-          </div>
-
-          <button
-            onClick={() => onOpenChange(false)}
-            className="
-              rounded-lg
-              px-3
-              py-1
-              text-muted-foreground
-              transition
-              hover:bg-muted
-            "
-          >
-            ✕
-          </button>
-        </div>
+        <ModalHeader
+          title="Create Subject"
+          description="Create a new academic subject."
+          onClose={handleClose}
+        />
 
         {/* FORM */}
 
         <div className="mt-6 space-y-4">
-          {/* SUBJECT NAME */}
-
           <input
             type="text"
             placeholder="Subject Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
+            className={fieldClassName}
           />
-
-          {/* SUBJECT CODE */}
 
           <input
             type="text"
             placeholder="NCM101"
             value={code}
-            onChange={(e) => {
-              const value = e.target.value.toUpperCase();
-
-              setCode(value);
-            }}
+            onChange={(e) =>
+              setCode(e.target.value.toUpperCase())
+            }
             maxLength={10}
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
+            className={fieldClassName}
           />
-
-          {/* DESCRIPTION */}
 
           <textarea
             placeholder="Subject description..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
-            className="
-              w-full
-              rounded-xl
-              border
-              border-input
-              bg-background
-              px-4
-              py-3
-              text-foreground
-              outline-none
-              transition
-              focus:border-ring
-            "
+            className={fieldClassName}
           />
         </div>
 
-        {/* ACTIONS */}
-
-        <div
-          className="
-            mt-6
-            flex
-            justify-end
-            gap-3
-          "
-        >
-          <MotionButton
-            onClick={() => onOpenChange(false)}
-            className="
-              rounded-xl
-              border
-              border-border
-              bg-card
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-muted-foreground
-            "
-          >
-            Cancel
-          </MotionButton>
-
-          <MotionButton
-            onClick={handleSubmit}
-            className="
-              rounded-xl
-              bg-primary
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-primary-foreground
-              transition
-              hover:bg-primary/90
-            "
-          >
-            Create Subject
-          </MotionButton>
-        </div>
+        <ModalActions
+          submitLabel="Create Subject"
+          submitDisabled={!name.trim() || !code.trim()}
+          onCancel={handleClose}
+          onSubmit={handleSubmit}
+        />
       </div>
     </MotionModal>
   );
 }
+
+export default memo(CreateSubjectModal);

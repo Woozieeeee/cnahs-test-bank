@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import MotionModal from "@/components/motion/motionModal";
+
 import MotionButton from "@/components/motion/motionButton";
+
 import { successToast, errorToast } from "@/lib/swal";
+
 import StudentRecordFormFields from "./studentRecordFormFields";
+
 import { updateStudentRecord } from "@/services/academic_service";
+
 import { formatName } from "@/utils/format_name";
 
 interface StudentRecord {
@@ -34,13 +45,10 @@ interface Props {
   record: StudentRecord | null;
 }
 
-export default function EditStudentRecordModal({
+function EditStudentRecordModal({
   open,
-
   onOpenChange,
-
   onSuccess,
-
   record,
 }: Props) {
   const [studentId, setStudentId] = useState("");
@@ -62,26 +70,28 @@ export default function EditStudentRecordModal({
   // =========================
 
   useEffect(() => {
-    if (record) {
-      setStudentId(record.studentId);
+    if (!record) return;
 
-      setFirstName(record.firstName);
+    setStudentId(record.studentId);
 
-      setMiddleName(record.middleName || "");
+    setFirstName(record.firstName);
 
-      setLastName(record.lastName);
+    setMiddleName(record.middleName || "");
 
-      setSuffix(record.suffix || "");
+    setLastName(record.lastName);
 
-      setProgram(record.program);
-    }
+    setSuffix(record.suffix || "");
+
+    setProgram(record.program);
   }, [record]);
 
   // =========================
   // SUBMIT
   // =========================
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
+    if (!record) return;
+
     if (!firstName.trim() || !lastName.trim()) {
       errorToast("First name and last name are required.");
 
@@ -99,27 +109,19 @@ export default function EditStudentRecordModal({
     try {
       setLoading(true);
 
-      if (!record) {
-        return;
-      }
+      await updateStudentRecord(record.id, {
+        studentId,
 
-      await updateStudentRecord(
-        record.id,
+        firstName: formattedFirstName,
 
-        {
-          studentId,
+        middleName: formattedMiddleName,
 
-          firstName: formattedFirstName,
+        lastName: formattedLastName,
 
-          middleName: formattedMiddleName,
+        suffix: formattedSuffix,
 
-          lastName: formattedLastName,
-
-          suffix: formattedSuffix,
-
-          program,
-        }
-      );
+        program,
+      });
 
       successToast("Student record updated successfully.");
 
@@ -134,52 +136,37 @@ export default function EditStudentRecordModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    record,
+    studentId,
+    firstName,
+    middleName,
+    lastName,
+    suffix,
+    program,
+    onSuccess,
+    onOpenChange,
+  ]);
 
   return (
     <MotionModal open={open}>
       <div className="p-6">
         {/* HEADER */}
 
-        <div
-          className="
-            flex
-            items-start
-            justify-between
-          "
-        >
+        <div className="flex items-start justify-between">
           <div>
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-card-foregorund
-              "
-            >
+            <h2 className="text-card-foreground text-2xl font-bold">
               Edit Student Record
             </h2>
 
-            <p
-              className="
-                mt-1
-                text-sm
-                text-muted-foreground
-              "
-            >
+            <p className="text-muted-foreground mt-1 text-sm">
               Update student information.
             </p>
           </div>
 
           <button
             onClick={() => onOpenChange(false)}
-            className="
-              rounded-lg
-              px-3
-              py-1
-              text-muted-foreground
-              transition
-              hover:bg-ring
-            "
+            className="text-muted-foreground hover:bg-muted rounded-lg px-3 py-1 transition-all duration-200"
           >
             ✕
           </button>
@@ -204,27 +191,10 @@ export default function EditStudentRecordModal({
 
         {/* ACTIONS */}
 
-        <div
-          className="
-            mt-6
-            flex
-            justify-end
-            gap-3
-          "
-        >
+        <div className="mt-6 flex justify-end gap-3">
           <MotionButton
             onClick={() => onOpenChange(false)}
-            className="
-              rounded-xl
-              border
-              border-border
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-foreground
-              cursor-pointer
-            "
+            className="border-border text-foreground cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium"
           >
             Cancel
           </MotionButton>
@@ -232,19 +202,7 @@ export default function EditStudentRecordModal({
           <MotionButton
             onClick={handleSubmit}
             disabled={loading}
-            className="
-              rounded-xl
-              bg-primary
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-primary-foreground
-              transition
-              hover:bg-primary/80
-              disabled:opacity-70
-              cursor-pointer
-            "
+            className="bg-primary text-primary-foreground hover:bg-primary/80 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 disabled:opacity-70"
           >
             {loading ? "Saving..." : "Save Changes"}
           </MotionButton>
@@ -253,3 +211,5 @@ export default function EditStudentRecordModal({
     </MotionModal>
   );
 }
+
+export default memo(EditStudentRecordModal);

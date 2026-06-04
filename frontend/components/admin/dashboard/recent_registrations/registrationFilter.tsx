@@ -12,22 +12,7 @@ export default function RegistrationFilter({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="
-        rounded-xl
-        border
-        border-border
-        bg-background
-        px-4
-        py-3
-        text-sm
-        text-foreground
-        outline-none
-        transition
-        focus:border-ring
-        focus:ring-2
-        focus:ring-ring/20
-        cursor-pointer
-      "
+      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring/20 cursor-pointer rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
     >
       <option value="ALL">All Status</option>
 

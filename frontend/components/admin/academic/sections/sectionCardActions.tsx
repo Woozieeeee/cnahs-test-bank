@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { MoreVertical } from "lucide-react";
 
@@ -27,7 +33,7 @@ interface Props {
   onRefresh: () => void;
 }
 
-export default function SectionCardActions({
+function SectionCardActions({
   sectionId,
   isArchived,
   onEdit,
@@ -68,11 +74,10 @@ export default function SectionCardActions({
   // ARCHIVE
   // =========================
 
-  const handleArchive = async () => {
+  const handleArchive = useCallback(async () => {
     const result = await confirmDialog({
       title: "Archive Section?",
       text: "This section will be hidden from active academic monitoring.",
-
       confirmText: "Archive",
     });
 
@@ -89,13 +94,13 @@ export default function SectionCardActions({
 
       errorToast("Failed to archive section.");
     }
-  };
+  }, [sectionId, onRefresh]);
 
   // =========================
   // RESTORE
   // =========================
 
-  const handleRestore = async () => {
+  const handleRestore = useCallback(async () => {
     try {
       await restoreSection(sectionId);
 
@@ -107,7 +112,7 @@ export default function SectionCardActions({
 
       errorToast("Failed to restore section.");
     }
-  };
+  }, [sectionId, onRefresh]);
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -117,14 +122,9 @@ export default function SectionCardActions({
 
           e.stopPropagation();
 
-          setOpen(!open);
+          setOpen((prev) => !prev);
         }}
-        className="
-          rounded-lg
-          p-2
-          transition
-          hover:bg-muted
-        "
+        className="hover:bg-muted rounded-lg p-2 transition-all duration-200"
       >
         <MoreVertical size={18} />
       </button>
@@ -141,3 +141,5 @@ export default function SectionCardActions({
     </div>
   );
 }
+
+export default memo(SectionCardActions);

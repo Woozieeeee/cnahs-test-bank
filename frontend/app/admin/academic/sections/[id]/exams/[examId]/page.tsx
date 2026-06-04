@@ -1,16 +1,30 @@
 "use client";
 
+import useSectionId from "@/hooks/useSectionId";
+
+import useExamId from "@/hooks/useExamId";
+
 import PageContainer from "@/components/layout/pages/pageContainer";
-import { useParams } from "next/navigation";
+
 import ExamDetailsHeader from "@/components/admin/academic/sections/details/examDetailsHeader";
+
 import ExamDetailsStats from "@/components/admin/academic/sections/details/examDetailsStats";
+
 import ExamStudentsMonitoring from "@/components/admin/academic/sections/details/examStudentsMonitoring";
+
 import ExamViolationsPreview from "@/components/admin/academic/sections/details/examViolationPreview";
 
 export default function ExamDetailsPage() {
-  const params = useParams();
+  const sectionId = useSectionId();
+
+  const examId = useExamId();
+
+  // TODO:
+  // Replace with useExam(examId)
+  // when exam backend endpoints are implemented.
+
   const exam = {
-    id: Number(params.examId),
+    id: examId,
 
     title: "Pharmacology Midterm",
 
@@ -24,7 +38,7 @@ export default function ExamDetailsPage() {
   return (
     <PageContainer>
       <ExamDetailsHeader
-        sectionId={String(params.id)}
+        sectionId={String(sectionId)}
         title={exam.title}
         status={exam.status}
       />
@@ -36,19 +50,16 @@ export default function ExamDetailsPage() {
         violations={3}
       />
 
-      <div
-        className="
-      grid
-      gap-6
-      xl:grid-cols-2
-    "
-      >
+      <div className="grid gap-6 xl:grid-cols-2">
         <ExamStudentsMonitoring
-          sectionId={String(params.id)}
-          examId={String(params.examId)}
+          sectionId={String(sectionId)}
+          examId={String(examId)}
         />
 
-        <ExamViolationsPreview />
+        <ExamViolationsPreview
+          sectionId={String(sectionId)}
+          examId={String(examId)}
+        />
       </div>
     </PageContainer>
   );

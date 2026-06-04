@@ -26,18 +26,7 @@ export default function FacultyFormFields({
         placeholder="Faculty Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="
-          w-full
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-4
-          py-3
-          outline-none
-          transition
-          focus:border-ring
-        "
+        className="border-input bg-background focus:border-ring w-full rounded-xl border px-4 py-3 transition outline-none"
       />
 
       {/* USERNAME */}
@@ -47,18 +36,7 @@ export default function FacultyFormFields({
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="
-          w-full
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-4
-          py-3
-          outline-none
-          transition
-          focus:border-ring
-        "
+        className="border-input bg-background focus:border-ring w-full rounded-xl border px-4 py-3 transition outline-none"
       />
     </div>
   );

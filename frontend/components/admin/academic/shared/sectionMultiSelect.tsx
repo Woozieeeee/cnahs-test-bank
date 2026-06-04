@@ -1,6 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 
 interface Section {
   id: number;
@@ -16,7 +21,7 @@ interface Props {
   setSelectedSections: (value: number[]) => void;
 }
 
-export default function SectionMultiSelect({
+function SectionMultiSelect({
   sections,
   selectedSections,
   setSelectedSections,
@@ -24,34 +29,58 @@ export default function SectionMultiSelect({
   const [search, setSearch] = useState("");
 
   // =========================
+  // SEARCH
+  // =========================
+
+  const normalizedSearch = search.toLowerCase();
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.target.value);
+    },
+    []
+  );
+
+  // =========================
+  // SECTION LOOKUP
+  // =========================
+
+  const sectionMap = useMemo(() => {
+    return new Map(
+      sections.map((section) => [section.id, section])
+    );
+  }, [sections]);
+
+  // =========================
   // FILTER SECTIONS
   // =========================
 
   const filteredSections = useMemo(() => {
     return sections.filter((section) =>
-      section.name
-        .toLowerCase()
-        .includes(search.toLowerCase())
+      section.name.toLowerCase().includes(normalizedSearch)
     );
-  }, [sections, search]);
+  }, [sections, normalizedSearch]);
 
   // =========================
   // TOGGLE SECTION
   // =========================
 
-  const toggleSection = (id: number) => {
-    if (selectedSections.includes(id)) {
-      setSelectedSections(
-        selectedSections.filter(
-          (sectionId) => sectionId !== id
-        )
-      );
+  const toggleSection = useCallback(
+    (id: number) => {
+      if (selectedSections.includes(id)) {
+        setSelectedSections(
+          selectedSections.filter(
+            (sectionId) => sectionId !== id
+          )
+        );
 
-      return;
-    }
+        return;
+      }
 
-    setSelectedSections([...selectedSections, id]);
-  };
+      setSelectedSections([...selectedSections, id]);
+    },
+    [selectedSections, setSelectedSections]
+  );
 
   return (
     <div className="space-y-4">
@@ -61,23 +90,8 @@ export default function SectionMultiSelect({
         type="text"
         placeholder="Search sections..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="
-          w-full
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-4
-          py-3
-          text-sm
-          text-foreground
-          outline-none
-          transition
-          focus:border-ring
-          focus:ring-2
-          focus:ring-ring/20
-        "
+        onChange={handleSearchChange}
+        className="border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 outline-none focus:ring-2"
       />
 
       {/* SELECTED */}
@@ -85,9 +99,7 @@ export default function SectionMultiSelect({
       {selectedSections.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {selectedSections.map((id) => {
-            const section = sections.find(
-              (s) => s.id === id
-            );
+            const section = sectionMap.get(id);
 
             if (!section) return null;
 
@@ -95,15 +107,7 @@ export default function SectionMultiSelect({
               <button
                 key={id}
                 onClick={() => toggleSection(id)}
-                className="
-                  rounded-full
-                  bg-primary
-                  px-3
-                  py-1
-                  text-xs
-                  font-medium
-                  text-primary-foreground
-                "
+                className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-xs font-medium"
               >
                 {section.name} ✕
               </button>
@@ -114,13 +118,7 @@ export default function SectionMultiSelect({
 
       {/* LIST */}
 
-      <div
-        className="
-          max-h-72
-          space-y-2
-          overflow-y-auto
-        "
-      >
+      <div className="max-h-72 space-y-2 overflow-y-auto">
         {filteredSections.map((section) => {
           const selected = selectedSections.includes(
             section.id
@@ -130,79 +128,29 @@ export default function SectionMultiSelect({
             <button
               key={section.id}
               onClick={() => toggleSection(section.id)}
-              className={`
-                flex
-                w-full
-                items-center
-                justify-between
-                rounded-xl
-                border
-                px-4
-                py-3
-                text-left
-                transition
-
-                ${
-                  selected
-                    ? `
-                      border-primary
-                      bg-primary/10
-                    `
-                    : `
-                      border-border
-                      bg-card
-                      hover:bg-muted
-                    `
-                }
-              `}
+              className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
+                selected
+                  ? `border-primary bg-primary/10`
+                  : `border-border bg-card hover:bg-muted`
+              } `}
             >
-              <span
-                className="
-                  text-sm
-                  font-medium
-                  text-foreground
-                "
-              >
+              <span className="text-foreground text-sm font-medium">
                 {section.name}
               </span>
 
               <div
-                className={`
-                  h-5
-                  w-5
-                  rounded-full
-                  border
-
-                  ${
-                    selected
-                      ? `
-                        border-primary
-                        bg-primary
-                      `
-                      : `
-                        border-border
-                      `
-                  }
-                `}
+                className={`h-5 w-5 rounded-full border ${
+                  selected
+                    ? `border-primary bg-primary`
+                    : `border-border`
+                } `}
               />
             </button>
           );
         })}
 
         {filteredSections.length === 0 && (
-          <div
-            className="
-              rounded-xl
-              border
-              border-dashed
-              border-border
-              bg-muted/40
-              p-6
-              text-center
-              text-sm
-              text-muted-foreground
-            "
-          >
+          <div className="border-border bg-muted/40 text-muted-foreground rounded-xl border border-dashed p-6 text-center text-sm">
             No sections found.
           </div>
         )}
@@ -210,3 +158,5 @@ export default function SectionMultiSelect({
     </div>
   );
 }
+
+export default memo(SectionMultiSelect);

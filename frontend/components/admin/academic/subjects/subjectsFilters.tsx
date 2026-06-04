@@ -15,15 +15,7 @@ export default function SubjectsFilters({
   setAssignmentFilter,
 }: Props) {
   return (
-    <div
-      className="
-        flex
-        flex-1
-        flex-col
-        gap-4
-        md:flex-row
-      "
-    >
+    <div className="flex flex-1 flex-col gap-4 md:flex-row">
       {/* SEARCH */}
 
       <input
@@ -31,22 +23,7 @@ export default function SubjectsFilters({
         placeholder="Search subject..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="
-          w-full
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-4
-          py-3
-          text-sm
-          text-foreground
-          outline-none
-          transition
-          focus:border-ring
-          focus:ring-2
-          focus:ring-ring/20
-        "
+        className="border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 w-full rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
       />
 
       {/* FILTER */}
@@ -56,21 +33,7 @@ export default function SubjectsFilters({
         onChange={(e) =>
           setAssignmentFilter(e.target.value)
         }
-        className="
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-4
-          py-3
-          text-sm
-          text-foreground
-          outline-none
-          transition
-          focus:border-ring
-          focus:ring-2
-          focus:ring-ring/20
-        "
+        className="border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
       >
         <option value="ALL">All Subjects</option>
 

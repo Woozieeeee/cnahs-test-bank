@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import MotionModal from "@/components/motion/motionModal";
+
+import ModalHeader from "@/components/common/modal/modalHeader";
+
+import ModalActions from "@/components/common/modal/modalActions";
 
 import { updateSection } from "@/services/academic_service";
 
@@ -12,8 +16,6 @@ import type { Section } from "@/types/section";
 
 import EditSectionForm from "./editSectionForm";
 
-import EditSectionActions from "./editSectionActions";
-
 interface Props {
   open: boolean;
 
@@ -21,10 +23,10 @@ interface Props {
 
   section: Section | null;
 
-  onSuccess: () => void;
+  onSuccess: () => Promise<void> | void;
 }
 
-export default function EditSectionModal({
+function EditSectionModal({
   open,
   onOpenChange,
   section,
@@ -53,33 +55,47 @@ export default function EditSectionModal({
   }, [section]);
 
   // =========================
+  // CLOSE
+  // =========================
+
+  const handleClose = () => {
+    if (loading) return;
+
+    onOpenChange(false);
+  };
+
+  // =========================
   // SUBMIT
   // =========================
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    if (!section || loading) return;
 
-    if (!section) return;
+    const trimmedSectionCode = sectionCode.trim();
+
+    if (!trimmedSectionCode) {
+      errorToast("Section code is required.");
+
+      return;
+    }
 
     try {
       setLoading(true);
 
       await updateSection(section.id, {
         program,
-
         yearLevel,
-
-        sectionCode,
+        sectionCode: trimmedSectionCode,
       });
 
       successToast("Section updated successfully.");
 
-      onSuccess();
+      await onSuccess();
 
       onOpenChange(false);
     } catch (error: any) {
       errorToast(
-        error.response?.data?.message ||
+        error?.response?.data?.message ||
           "Failed to update section."
       );
     } finally {
@@ -91,51 +107,33 @@ export default function EditSectionModal({
 
   return (
     <MotionModal open={open}>
-      <form onSubmit={handleSubmit}>
-        <div className="p-6">
-          {/* HEADER */}
+      <div className="p-6">
+        <ModalHeader
+          title="Edit Section"
+          description="Update section information."
+          onClose={handleClose}
+        />
 
-          <div>
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-foreground
-              "
-            >
-              Edit Section
-            </h2>
+        <EditSectionForm
+          sectionCode={sectionCode}
+          setSectionCode={setSectionCode}
+          yearLevel={yearLevel}
+          setYearLevel={setYearLevel}
+          program={program}
+          setProgram={setProgram}
+        />
 
-            <p
-              className="
-                mt-1
-                text-sm
-                text-muted-foreground
-              "
-            >
-              Update section information.
-            </p>
-          </div>
-
-          {/* FORM */}
-
-          <EditSectionForm
-            sectionCode={sectionCode}
-            setSectionCode={setSectionCode}
-            yearLevel={yearLevel}
-            setYearLevel={setYearLevel}
-            program={program}
-            setProgram={setProgram}
-          />
-
-          {/* ACTIONS */}
-
-          <EditSectionActions
-            loading={loading}
-            onCancel={() => onOpenChange(false)}
-          />
-        </div>
-      </form>
+        <ModalActions
+          submitLabel={
+            loading ? "Saving..." : "Save Changes"
+          }
+          submitDisabled={loading || !sectionCode.trim()}
+          onCancel={handleClose}
+          onSubmit={handleSubmit}
+        />
+      </div>
     </MotionModal>
   );
 }
+
+export default memo(EditSectionModal);

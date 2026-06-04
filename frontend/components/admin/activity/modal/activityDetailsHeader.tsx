@@ -20,17 +20,7 @@ export default function ActivityDetailsHeader({
             severity={activity.severity}
           />
 
-          <span
-            className="
-              rounded-md
-              bg-muted
-              px-2
-              py-1
-              text-xs
-              font-medium
-              text-muted-foreground
-            "
-          >
+          <span className="bg-muted text-muted-foreground rounded-md px-2 py-1 text-xs font-medium">
             {activity.categories}
           </span>
         </div>
@@ -39,22 +29,14 @@ export default function ActivityDetailsHeader({
           {activity.action}
         </h2>
 
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-1 text-sm">
           {new Date(activity.createdAt).toLocaleString()}
         </p>
       </div>
 
       <button
         onClick={onClose}
-        className="
-          rounded-lg
-          px-3
-          py-1
-          text-muted-foreground
-          transition
-          hover:bg-muted
-          hover:text-foreground
-        "
+        className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg px-3 py-1 transition"
       >
         ✕
       </button>
