@@ -3,8 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 import prisma from "../lib/prisma";
-
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 
 interface JwtPayload {
   userId: number;
@@ -18,7 +17,7 @@ export const authMiddleware = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     // =========================
     // GET TOKEN FROM COOKIE
@@ -27,9 +26,11 @@ export const authMiddleware = async (
     const token = req.cookies.token;
 
     if (!token) {
-      return res.status(401).json({
+      res.status(401).json({
         message: "Unauthorized",
       });
+
+      return;
     }
 
     // =========================
@@ -52,9 +53,11 @@ export const authMiddleware = async (
     });
 
     if (!user) {
-      return res.status(401).json({
+      res.status(401).json({
         message: "User not found",
       });
+
+      return;
     }
 
     // =========================
@@ -65,8 +68,10 @@ export const authMiddleware = async (
 
     next();
   } catch (error) {
-    return res.status(401).json({
+    res.status(401).json({
       message: "Invalid token",
     });
+
+    return;
   }
 };

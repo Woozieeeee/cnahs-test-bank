@@ -5,13 +5,16 @@ import type { Section } from "@/types/section";
 interface Props {
   section: Section;
 
-  onRefresh: () => void;
+  onArchiveSuccess: (sectionId: number) => void;
+
+  onRestoreSuccess: (sectionId: number) => void;
   onEdit: () => void;
 }
 
 export default function SectionCardHeader({
   section,
-  onRefresh,
+  onArchiveSuccess,
+  onRestoreSuccess,
   onEdit,
 }: Props) {
   return (
@@ -35,7 +38,8 @@ export default function SectionCardHeader({
       <SectionCardActions
         sectionId={section.id}
         isArchived={section.isArchived}
-        onRefresh={onRefresh}
+        onArchiveSuccess={onArchiveSuccess}
+        onRestoreSuccess={onRestoreSuccess}
         onEdit={onEdit}
       />
     </div>

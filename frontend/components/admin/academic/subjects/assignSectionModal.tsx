@@ -60,7 +60,7 @@ function AssignSectionsModal({
   if (!open) return null;
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-3xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         <div>
           <h2 className="text-2xl font-bold">

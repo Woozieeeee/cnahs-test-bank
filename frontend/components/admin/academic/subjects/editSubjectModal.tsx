@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { memo, useCallback, useState } from "react";
 
 import MotionModal from "@/components/motion/motionModal";
 
@@ -70,26 +65,18 @@ function EditSubjectModal({
   const [description, setDescription] = useState("");
 
   // =========================
-  // PREFILL
-  // =========================
-
-  useEffect(() => {
-    if (!subject) return;
-
-    setName(subject.name);
-
-    setCode(subject.code);
-
-    setDescription(subject.description || "");
-  }, [subject]);
-
-  // =========================
   // CLOSE
   // =========================
 
   const handleClose = useCallback(() => {
+    if (subject) {
+      setName(subject.name);
+      setCode(subject.code);
+      setDescription(subject.description || "");
+    }
+
     onOpenChange(false);
-  }, [onOpenChange]);
+  }, [onOpenChange, subject]);
 
   // =========================
   // SAVE
@@ -120,7 +107,7 @@ function EditSubjectModal({
   }
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-2xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         <ModalHeader
           title="Edit Subject"

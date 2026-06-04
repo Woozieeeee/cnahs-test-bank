@@ -8,12 +8,17 @@ interface Props {
   open: boolean;
 
   children: ReactNode;
+  maxWidth?: string;
+  contentClassName?: string;
 }
 
 export default function MotionModal({
   open,
 
   children,
+
+  maxWidth = "max-w-md",
+  contentClassName = "",
 }: Props) {
   return (
     <AnimatePresence>
@@ -52,7 +57,7 @@ export default function MotionModal({
             transition={{
               duration: 0.18,
             }}
-            className="border-border bg-card text-card-foreground w-full max-w-md rounded-2xl border shadow-xl"
+            className={`border-border bg-card text-card-foreground w-full ${maxWidth} rounded-2xl border shadow-xl ${contentClassName}`}
           >
             {children}
           </motion.div>

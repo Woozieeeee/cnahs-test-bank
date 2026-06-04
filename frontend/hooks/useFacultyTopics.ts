@@ -45,5 +45,6 @@ export default function useFacultyTopics(
     loading,
     error,
     refresh: fetchTopics,
+    setTopics,
   };
 }

@@ -96,9 +96,13 @@ function AddStudentRecordModal({
       setSuffix("");
 
       setProgram("BSN");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const responseError = error as {
+        response?: { data?: { message?: string } };
+      };
+
       errorToast(
-        error?.response?.data?.message ||
+        responseError.response?.data?.message ||
           "Failed to create student record."
       );
     } finally {
@@ -116,7 +120,7 @@ function AddStudentRecordModal({
   ]);
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-5xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         {/* HEADER */}
 

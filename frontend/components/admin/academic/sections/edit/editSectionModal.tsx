@@ -23,7 +23,7 @@ interface Props {
 
   section: Section | null;
 
-  onSuccess: () => Promise<void> | void;
+  onSuccess: (section: Section) => void;
 }
 
 function EditSectionModal({
@@ -82,7 +82,7 @@ function EditSectionModal({
     try {
       setLoading(true);
 
-      await updateSection(section.id, {
+      const updatedSection = await updateSection(section.id, {
         program,
         yearLevel,
         sectionCode: trimmedSectionCode,
@@ -90,7 +90,7 @@ function EditSectionModal({
 
       successToast("Section updated successfully.");
 
-      await onSuccess();
+      onSuccess(updatedSection);
 
       onOpenChange(false);
     } catch (error: any) {
@@ -106,7 +106,7 @@ function EditSectionModal({
   if (!open || !section) return null;
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-2xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         <ModalHeader
           title="Edit Section"

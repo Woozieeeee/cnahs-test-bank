@@ -33,7 +33,7 @@ const CreateSectionModal = dynamic(
 );
 
 export default function SectionsPage() {
-  const { sections, loading, error, refresh } =
+  const { sections, setSections, loading, error, refresh } =
     useSections();
 
   const [activeTab, setActiveTab] = useState("ALL");
@@ -45,6 +45,43 @@ export default function SectionsPage() {
 
   const [selectedSection, setSelectedSection] =
     useState<Section | null>(null);
+
+  const handleSectionCreated = (section: Section) => {
+    setSections((current) => [section, ...current]);
+    setOpenCreateModal(false);
+  };
+
+  const handleSectionUpdated = (updatedSection: Section) => {
+    setSections((current) =>
+      current.map((section) =>
+        section.id === updatedSection.id
+          ? updatedSection
+          : section
+      )
+    );
+    setSelectedSection(null);
+    setOpenEditModal(false);
+  };
+
+  const handleSectionArchiveSuccess = (sectionId: number) => {
+    setSections((current) =>
+      current.map((section) =>
+        section.id === sectionId
+          ? { ...section, isArchived: true }
+          : section
+      )
+    );
+  };
+
+  const handleSectionRestoreSuccess = (sectionId: number) => {
+    setSections((current) =>
+      current.map((section) =>
+        section.id === sectionId
+          ? { ...section, isArchived: false }
+          : section
+      )
+    );
+  };
 
   // =========================
   // FILTERS
@@ -121,7 +158,8 @@ export default function SectionsPage() {
 
       <SectionsGrid
         sections={filteredSections}
-        onRefresh={refresh}
+        onArchiveSuccess={handleSectionArchiveSuccess}
+        onRestoreSuccess={handleSectionRestoreSuccess}
         onEdit={(section) => {
           setSelectedSection(section);
 
@@ -134,7 +172,7 @@ export default function SectionsPage() {
       <CreateSectionModal
         open={openCreateModal}
         onOpenChange={setOpenCreateModal}
-        onSuccess={refresh}
+        onSuccess={handleSectionCreated}
       />
 
       {/* EDIT */}
@@ -143,7 +181,7 @@ export default function SectionsPage() {
         open={openEditModal}
         onOpenChange={setOpenEditModal}
         section={selectedSection}
-        onSuccess={refresh}
+        onSuccess={handleSectionUpdated}
       />
     </PageContainer>
   );

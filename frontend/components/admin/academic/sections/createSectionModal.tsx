@@ -14,12 +14,14 @@ import { successToast, errorToast } from "@/lib/swal";
 
 import { createSection } from "@/services/academic_service";
 
+import type { Section } from "@/types/section";
+
 interface Props {
   open: boolean;
 
   onOpenChange: (open: boolean) => void;
 
-  onSuccess: () => Promise<void> | void;
+  onSuccess: (section: Section) => void;
 }
 
 function CreateSectionModal({
@@ -63,7 +65,7 @@ function CreateSectionModal({
     try {
       setLoading(true);
 
-      await createSection({
+      const createdSection = await createSection({
         sectionCode: trimmedSectionCode,
         yearLevel,
         program,
@@ -71,14 +73,18 @@ function CreateSectionModal({
 
       successToast("Section created successfully.");
 
-      await onSuccess();
+      onSuccess(createdSection);
 
       resetForm();
 
       onOpenChange(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const responseError = error as {
+        response?: { data?: { message?: string } };
+      };
+
       errorToast(
-        error?.response?.data?.message ||
+        responseError.response?.data?.message ||
           "Failed to create section."
       );
     } finally {
@@ -89,7 +95,7 @@ function CreateSectionModal({
   if (!open) return null;
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-2xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         <ModalHeader
           title="Create Section"

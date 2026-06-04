@@ -26,7 +26,7 @@ export default function AppSidebar({
 
   return (
     <aside
-      className={`border-border bg-card sticky top-0 z-99999 hidden h-screen border-r transition-[width] duration-300 ease-in-out lg:block ${
+      className={`border-border bg-card sticky top-0 z-100 hidden h-screen border-r transition-[width] duration-300 ease-in-out lg:block ${
         collapsed ? "w-20" : "w-64"
       } `}
     >

@@ -5,7 +5,7 @@ import {
   ACTIVITY_SEVERITIES,
 } from "@/lib/constants/activity";
 
-import MotionDropdown from "@/components/motion/motionDropdown";
+import MotionCard from "@/components/motion/motionCard";
 
 interface Props {
   search: string;
@@ -30,8 +30,7 @@ export default function ActivityFilters({
   setSeverity,
 }: Props) {
   return (
-    <MotionDropdown>
-      <div className="bg-card flex flex-col gap-4 rounded-2xl p-4 shadow-sm md:flex-row">
+    <MotionCard className="bg-card flex flex-col gap-4 rounded-2xl p-4 shadow-sm md:flex-row">
         <input
           type="text"
           placeholder="Search activity..."
@@ -63,7 +62,6 @@ export default function ActivityFilters({
             </option>
           ))}
         </select>
-      </div>
-    </MotionDropdown>
+    </MotionCard>
   );
 }

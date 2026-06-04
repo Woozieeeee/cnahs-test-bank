@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
+import MotionModal from "@/components/motion/motionModal";
 
 import { successToast, errorToast } from "@/lib/swal";
 
@@ -16,7 +17,7 @@ interface Props {
 
   onClose: () => void;
 
-  onSuccess: () => void;
+  onSuccess: (topic: FacultyTopic) => void;
 
   topic: FacultyTopic | null;
 }
@@ -47,19 +48,23 @@ export default function EditTopicModal({
     try {
       setLoading(true);
 
-      await updateFacultyTopic(topic.id, {
+      const updatedTopic = await updateFacultyTopic(topic.id, {
         name,
         description,
       });
 
       successToast("Topic updated successfully.");
 
-      onSuccess();
+      onSuccess(updatedTopic);
 
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const responseError = error as {
+        response?: { data?: { message?: string } };
+      };
+
       errorToast(
-        error.response?.data?.message ||
+        responseError.response?.data?.message ||
           "Failed to update topic."
       );
     } finally {
@@ -72,8 +77,8 @@ export default function EditTopicModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-card border-border w-full max-w-lg rounded-2xl border p-6">
+    <MotionModal open={open} maxWidth="max-w-lg" contentClassName="max-h-[90vh] overflow-y-auto">
+      <div className="p-6">
         <ModalHeader
           title="Edit Topic"
           description="Update topic information."
@@ -118,6 +123,6 @@ export default function EditTopicModal({
           onCancel={onClose}
         />
       </div>
-    </div>
+    </MotionModal>
   );
 }

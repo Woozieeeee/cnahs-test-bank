@@ -30,14 +30,17 @@ interface Props {
 
   onEdit: () => void;
 
-  onRefresh: () => void;
+  onArchiveSuccess: (sectionId: number) => void;
+
+  onRestoreSuccess: (sectionId: number) => void;
 }
 
 function SectionCardActions({
   sectionId,
   isArchived,
   onEdit,
-  onRefresh,
+  onArchiveSuccess,
+  onRestoreSuccess,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -88,13 +91,13 @@ function SectionCardActions({
 
       successToast("Section archived successfully.");
 
-      onRefresh();
+      onArchiveSuccess(sectionId);
     } catch (error) {
       console.error(error);
 
       errorToast("Failed to archive section.");
     }
-  }, [sectionId, onRefresh]);
+  }, [sectionId, onArchiveSuccess]);
 
   // =========================
   // RESTORE
@@ -106,13 +109,13 @@ function SectionCardActions({
 
       successToast("Section restored successfully.");
 
-      onRefresh();
+      onRestoreSuccess(sectionId);
     } catch (error) {
       console.error(error);
 
       errorToast("Failed to restore section.");
     }
-  }, [sectionId, onRefresh]);
+  }, [sectionId, onRestoreSuccess]);
 
   return (
     <div ref={dropdownRef} className="relative">

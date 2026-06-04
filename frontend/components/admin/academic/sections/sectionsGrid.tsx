@@ -11,21 +11,26 @@ import SectionCard from "./sectionCard";
 interface Props {
   sections: Section[];
 
-  onRefresh: () => void;
+  onArchiveSuccess: (sectionId: number) => void;
+
+  onRestoreSuccess: (sectionId: number) => void;
 
   onEdit: (section: Section) => void;
 }
 
 function SectionsGrid({
   sections,
-  onRefresh,
+  onArchiveSuccess,
+  onRestoreSuccess,
   onEdit,
 }: Props) {
   if (sections.length === 0) {
-    <EmptyState
+    return (
+      <EmptyState
       title="No sections found."
       description="Try creating a new section or adjusting your filters."
-    />;
+      />
+    );
   }
 
   return (
@@ -34,7 +39,8 @@ function SectionsGrid({
         <SectionCard
           key={section.id}
           section={section}
-          onRefresh={onRefresh}
+          onArchiveSuccess={onArchiveSuccess}
+          onRestoreSuccess={onRestoreSuccess}
           onEdit={() => onEdit(section)}
         />
       ))}

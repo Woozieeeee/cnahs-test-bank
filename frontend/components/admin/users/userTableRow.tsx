@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface User {
   id: number;
 
@@ -24,7 +26,7 @@ interface Props {
   onSelect: () => void;
 }
 
-export default function UserTableRow({
+function UserTableRow({
   user,
 
   onApprove,
@@ -117,3 +119,5 @@ export default function UserTableRow({
     </tr>
   );
 }
+
+export default memo(UserTableRow);

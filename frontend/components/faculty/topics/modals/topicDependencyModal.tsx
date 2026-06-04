@@ -1,6 +1,7 @@
 "use client";
 
 import ModalHeader from "@/components/common/modal/modalHeader";
+import MotionModal from "@/components/motion/motionModal";
 
 interface Props {
   open: boolean;
@@ -32,8 +33,8 @@ export default function TopicDependencyModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-card border-border w-full max-w-xl rounded-2xl border p-6">
+    <MotionModal open={open} maxWidth="max-w-xl" contentClassName="max-h-[90vh] overflow-y-auto">
+      <div className="p-6">
         <ModalHeader
           title="Cannot Archive Topic"
           description="This topic is currently being used in the system."
@@ -82,6 +83,6 @@ export default function TopicDependencyModal({
           </div>
         </div>
       </div>
-    </div>
+    </MotionModal>
   );
 }

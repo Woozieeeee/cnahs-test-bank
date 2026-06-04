@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import RegistrationStatusBadge from "./registrationStatusBadge";
 
 interface Props {
@@ -12,7 +14,7 @@ interface Props {
   };
 }
 
-export default function RegistrationTableRow({
+function RegistrationTableRow({
   student,
 }: Props) {
   return (
@@ -27,3 +29,5 @@ export default function RegistrationTableRow({
     </tr>
   );
 }
+
+export default memo(RegistrationTableRow);

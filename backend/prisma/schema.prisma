@@ -13,23 +13,26 @@ datasource db {
 }
 
 model User {
-  id                 Int              @id @default(autoincrement())
-  name               String
-  username           String?          @unique
-  studentId          String?          @unique
-  studentRecord      StudentRecord?   @relation(fields: [studentId], references: [studentId])
-  password           String
-  role               Role
-  status             String           @default("PENDING")
-  sectionId          Int?
-  isFirstLogin       Boolean          @default(true)
-  examAttempts       ExamAttempt[]
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  section            Section?         @relation(fields: [sectionId], references: [id])
-  subjectAssignments SubjectFaculty[] @relation("FacultyPool")
-  sectionSubjects    SectionSubject[] @relation("SectionInstructor")
-  studentProgress    StudentProgress?
+  id                    Int                   @id @default(autoincrement())
+  name                  String
+  username              String?               @unique
+  studentId             String?               @unique
+  studentRecord         StudentRecord?        @relation(fields: [studentId], references: [studentId])
+  password              String
+  role                  Role
+  status                String                @default("PENDING")
+  sectionId             Int?
+  isFirstLogin          Boolean               @default(true)
+  examAttempts          ExamAttempt[]
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  section               Section?              @relation(fields: [sectionId], references: [id])
+  subjectAssignments    SubjectFaculty[]      @relation("FacultyPool")
+  sectionSubjects       SectionSubject[]      @relation("SectionInstructor")
+  studentProgress       StudentProgress?
+  createdQuestions      Question[]            @relation("QuestionCreator")
+  questionImportBatches QuestionImportBatch[] @relation("QuestionImportCreator")
+  importJobs            ImportJob[]
 
   @@index([role])
   @@index([status])
@@ -224,10 +227,15 @@ model Question {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  isArchived Boolean @default(false)
+  isArchived  Boolean @default(false)
+  createdById Int?
 
-  subject Subject @relation(fields: [subjectId], references: [id])
-  topic   Topic   @relation(fields: [topicId], references: [id])
+  createdBy   User?                @relation("QuestionCreator", fields: [createdById], references: [id])
+  subject     Subject              @relation(fields: [subjectId], references: [id])
+  topic       Topic                @relation(fields: [topicId], references: [id])
+  importBatch QuestionImportBatch? @relation(fields: [importBatchId], references: [id])
+
+  importBatchId Int?
 
   studentAnswers StudentAnswer[]
   options        QuestionOption[]
@@ -235,6 +243,10 @@ model Question {
 
   @@index([subjectId])
   @@index([topicId])
+  @@index([isArchived])
+  @@index([difficulty])
+  @@index([createdById])
+  @@index([importBatchId])
 }
 
 model ExamQuestion {
@@ -307,7 +319,8 @@ model Topic {
   name String
 
   description    String?
-  totalQuestions Int     @default(0)
+  totalQuestions Int         @default(0)
+  importJobs     ImportJob[]
 
   createdAt  DateTime @default(now())
   isArchived Boolean  @default(false)
@@ -319,6 +332,65 @@ model Topic {
 
   @@unique([subjectId, name])
   @@index([subjectId])
+  @@index([isArchived])
+}
+
+model ImportJob {
+  id Int @id @default(autoincrement())
+
+  filename String
+  filePath String
+  fileSize Int?
+  mimeType String?
+
+  totalRows    Int @default(0)
+  importedRows Int @default(0)
+  skippedRows  Int @default(0)
+
+  status ImportJobStatus @default(PROCESSING)
+
+  errorReport Json?
+  completedAt DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById Int
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  topicId Int
+  topic   Topic                 @relation(fields: [topicId], references: [id])
+  batches QuestionImportBatch[]
+
+  @@index([createdById])
+  @@index([topicId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model QuestionImportBatch {
+  id Int @id @default(autoincrement())
+
+  filename String
+
+  totalRows    Int
+  importedRows Int
+  skippedRows  Int
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  importJobId Int?
+
+  importJob   ImportJob? @relation(fields: [importJobId], references: [id])
+  createdById Int?
+
+  createdBy User?      @relation("QuestionImportCreator", fields: [createdById], references: [id])
+  questions Question[]
+
+  @@index([importJobId])
+  @@index([createdAt])
+  @@index([createdById])
 }
 
 enum Role {
@@ -346,4 +418,10 @@ enum AttemptStatus {
   IN_PROGRESS
   SUBMITTED
   AUTO_SUBMITTED
+}
+
+enum ImportJobStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
 }

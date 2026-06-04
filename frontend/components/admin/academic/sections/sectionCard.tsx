@@ -17,14 +17,17 @@ import CardFooterLink from "@/components/common/cards/cardFooterLink";
 interface Props {
   section: Section;
 
-  onRefresh: () => void;
+  onArchiveSuccess: (sectionId: number) => void;
+
+  onRestoreSuccess: (sectionId: number) => void;
 
   onEdit: () => void;
 }
 
 function SectionCard({
   section,
-  onRefresh,
+  onArchiveSuccess,
+  onRestoreSuccess,
   onEdit,
 }: Props) {
   return (
@@ -41,7 +44,8 @@ function SectionCard({
 
         <SectionCardHeader
           section={section}
-          onRefresh={onRefresh}
+          onArchiveSuccess={onArchiveSuccess}
+          onRestoreSuccess={onRestoreSuccess}
           onEdit={onEdit}
         />
 

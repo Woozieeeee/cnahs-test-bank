@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { memo, useCallback, useState } from "react";
 
 import MotionModal from "@/components/motion/motionModal";
 
@@ -68,22 +63,14 @@ function CreateSubjectModal({
   }, []);
 
   // =========================
-  // RESET ON CLOSE
-  // =========================
-
-  useEffect(() => {
-    if (!open) {
-      resetForm();
-    }
-  }, [open, resetForm]);
-
-  // =========================
   // CLOSE
   // =========================
 
   const handleClose = useCallback(() => {
+    resetForm();
+
     onOpenChange(false);
-  }, [onOpenChange]);
+  }, [onOpenChange, resetForm]);
 
   // =========================
   // SUBMIT
@@ -112,7 +99,7 @@ function CreateSubjectModal({
   if (!open) return null;
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-2xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         <ModalHeader
           title="Create Subject"

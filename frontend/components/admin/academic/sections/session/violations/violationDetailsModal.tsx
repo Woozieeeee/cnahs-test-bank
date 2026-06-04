@@ -31,7 +31,7 @@ function ViolationDetailsModal({
   if (!violation) return null;
 
   return (
-    <MotionModal open={!!violation}>
+    <MotionModal open={!!violation} maxWidth="max-w-4xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         <ModalHeader
           title={violation.type}

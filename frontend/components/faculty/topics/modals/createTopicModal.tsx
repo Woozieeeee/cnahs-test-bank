@@ -4,10 +4,13 @@ import { useState } from "react";
 
 import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
+import MotionModal from "@/components/motion/motionModal";
 
 import { successToast, errorToast } from "@/lib/swal";
 
 import { createFacultyTopic } from "@/services/faculty_service";
+
+import type { FacultyTopic } from "@/types/facultyTopic";
 
 interface Props {
   open: boolean;
@@ -16,7 +19,7 @@ interface Props {
 
   subjectId: number;
 
-  onSuccess: () => void;
+  onSuccess: (topic: FacultyTopic) => void;
 }
 
 export default function CreateTopicModal({
@@ -35,7 +38,7 @@ export default function CreateTopicModal({
     try {
       setLoading(true);
 
-      await createFacultyTopic(subjectId, {
+      const createdTopic = await createFacultyTopic(subjectId, {
         name,
         description,
       });
@@ -46,12 +49,16 @@ export default function CreateTopicModal({
 
       setDescription("");
 
-      onSuccess();
+      onSuccess(createdTopic);
 
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const responseError = error as {
+        response?: { data?: { message?: string } };
+      };
+
       errorToast(
-        error.response?.data?.message ||
+        responseError.response?.data?.message ||
           "Failed to create topic."
       );
     } finally {
@@ -62,8 +69,8 @@ export default function CreateTopicModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-card border-border w-full max-w-lg rounded-2xl border p-6">
+    <MotionModal open={open} maxWidth="max-w-lg" contentClassName="max-h-[90vh] overflow-y-auto">
+      <div className="p-6">
         <ModalHeader
           title="Create Topic"
           description="Create a new topic for organizing questions."
@@ -110,6 +117,6 @@ export default function CreateTopicModal({
           onCancel={onClose}
         />
       </div>
-    </div>
+    </MotionModal>
   );
 }

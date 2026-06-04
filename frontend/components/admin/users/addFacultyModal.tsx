@@ -112,9 +112,13 @@ export default function AddFacultyModal({
       setPassword("");
 
       setConfirmPassword("");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const responseError = error as {
+        response?: { data?: { message?: string } };
+      };
+
       errorToast(
-        error?.response?.data?.message ||
+        responseError.response?.data?.message ||
           "Failed to create faculty."
       );
     } finally {
@@ -123,7 +127,7 @@ export default function AddFacultyModal({
   };
 
   return (
-    <MotionModal open={open}>
+    <MotionModal open={open} maxWidth="max-w-4xl" contentClassName="max-h-[90vh] overflow-y-auto">
       <div className="p-6">
         {/* HEADER */}
 

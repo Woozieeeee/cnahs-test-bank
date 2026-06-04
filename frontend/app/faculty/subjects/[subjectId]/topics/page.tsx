@@ -26,18 +26,21 @@ import FacultyTopicStats from "@/components/faculty/topics/facultyTopicStats";
 import FacultyTopicFilters from "@/components/faculty/topics/facultyTopicFilters";
 import TopicDependencyModal from "@/components/faculty/topics/modals/topicDependencyModal";
 import FacultyTopicGrid from "../../../../../components/faculty/topics/facultyTopicGrid";
+import Pagination from "@/components/common/pagination";
 
 export default function FacultyTopicsPage() {
   const params = useParams();
 
   const subjectId = Number(params.subjectId);
 
-  const { topics, loading, error, refresh } =
+  const { topics, setTopics, loading, error, refresh } =
     useFacultyTopics(subjectId);
 
   const [search, setSearch] = useState("");
 
   const [status, setStatus] = useState("ALL");
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [showCreateModal, setShowCreateModal] =
     useState(false);
@@ -47,6 +50,43 @@ export default function FacultyTopicsPage() {
 
   const [selectedTopic, setSelectedTopic] =
     useState<FacultyTopic | null>(null);
+
+  const handleTopicCreated = (topic: FacultyTopic) => {
+    setTopics((current) => [topic, ...current]);
+    setShowCreateModal(false);
+    setCurrentPage(1);
+  };
+
+  const handleTopicUpdated = (
+    updatedTopic: FacultyTopic
+  ) => {
+    setTopics((current) =>
+      current.map((topic) =>
+        topic.id === updatedTopic.id ? updatedTopic : topic
+      )
+    );
+    setSelectedTopic(null);
+  };
+
+  const handleTopicArchiveSuccess = (topicId: number) => {
+    setTopics((current) =>
+      current.map((topic) =>
+        topic.id === topicId
+          ? { ...topic, isArchived: true }
+          : topic
+      )
+    );
+  };
+
+  const handleTopicRestoreSuccess = (topicId: number) => {
+    setTopics((current) =>
+      current.map((topic) =>
+        topic.id === topicId
+          ? { ...topic, isArchived: false }
+          : topic
+      )
+    );
+  };
 
   const filteredTopics = useMemo(() => {
     let result = [...topics];
@@ -70,6 +110,22 @@ export default function FacultyTopicsPage() {
     return result;
   }, [topics, search, status]);
 
+  const ITEMS_PER_PAGE = 6;
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredTopics.length / ITEMS_PER_PAGE)
+  );
+
+  const paginatedTopics = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    return filteredTopics.slice(
+      start,
+      start + ITEMS_PER_PAGE
+    );
+  }, [filteredTopics, currentPage]);
+
   if (loading) {
     return (
       <PageContainer>
@@ -86,7 +142,7 @@ export default function FacultyTopicsPage() {
 
       successToast("Topic archived successfully.");
 
-      refresh();
+      handleTopicArchiveSuccess(topicId);
     } catch (error: any) {
       const dependencies =
         error.response?.data?.dependencies;
@@ -110,7 +166,7 @@ export default function FacultyTopicsPage() {
 
       successToast("Topic restored successfully.");
 
-      refresh();
+      handleTopicRestoreSuccess(topicId);
     } catch (error: any) {
       errorToast(
         error.response?.data?.message ||
@@ -161,10 +217,16 @@ export default function FacultyTopicsPage() {
 
       <FacultyTopicGrid
         subjectId={subjectId}
-        topics={filteredTopics}
+        topics={paginatedTopics}
         onEdit={(topic) => setSelectedTopic(topic)}
         onArchive={handleArchive}
         onRestore={handleRestore}
+      />
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
       />
 
       {/* CreateTopicModal here */}
@@ -172,14 +234,14 @@ export default function FacultyTopicsPage() {
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         subjectId={subjectId}
-        onSuccess={refresh}
+        onSuccess={handleTopicCreated}
       />
 
       <EditTopicModal
         topic={selectedTopic}
         open={!!selectedTopic}
         onClose={() => setSelectedTopic(null)}
-        onSuccess={refresh}
+        onSuccess={handleTopicUpdated}
       />
 
       <TopicDependencyModal

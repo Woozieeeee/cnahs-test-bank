@@ -83,6 +83,36 @@ function SectionsDashboard() {
     setSections(data);
   }, []);
 
+  const handleSectionCreated = useCallback((section: Section) => {
+    setSections((current) => [section, ...current]);
+  }, []);
+
+  const handleSectionArchiveSuccess = useCallback(
+    (sectionId: number) => {
+      setSections((current) =>
+        current.map((section) =>
+          section.id === sectionId
+            ? { ...section, isArchived: true }
+            : section
+        )
+      );
+    },
+    []
+  );
+
+  const handleSectionRestoreSuccess = useCallback(
+    (sectionId: number) => {
+      setSections((current) =>
+        current.map((section) =>
+          section.id === sectionId
+            ? { ...section, isArchived: false }
+            : section
+        )
+      );
+    },
+    []
+  );
+
   return (
     <div className="space-y-6">
       {/* HEADER */}
@@ -111,7 +141,7 @@ function SectionsDashboard() {
       <CreateSectionModal
         open={openModal}
         onOpenChange={setOpenModal}
-        onSuccess={handleRefresh}
+        onSuccess={handleSectionCreated}
       />
 
       {/* CONTENT */}
@@ -124,7 +154,8 @@ function SectionsDashboard() {
         <>
           <SectionsGrid
             sections={paginatedSections}
-            onRefresh={handleRefresh}
+            onArchiveSuccess={handleSectionArchiveSuccess}
+            onRestoreSuccess={handleSectionRestoreSuccess}
             onEdit={(section) => {
               console.log("Edit:", section);
             }}
