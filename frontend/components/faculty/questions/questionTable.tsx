@@ -81,14 +81,20 @@ export default function QuestionTable({
                   key={question.id}
                   className="border-border hover:bg-muted/30 border-b transition"
                 >
-                  <td className="max-w-lg p-4">
+                  <td className="w-125 max-w-125 p-4">
                     <div>
-                      <p className="line-clamp-2 font-medium">
+                      <p
+                        className="line-clamp-2 font-medium"
+                        title={question.question}
+                      >
                         {question.question}
                       </p>
 
                       {question.explanation && (
-                        <p className="text-muted-foreground mt-1 line-clamp-1 text-xs">
+                        <p
+                          className="text-muted-foreground mt-1 line-clamp-1 text-xs"
+                          title={question.explanation}
+                        >
                           {question.explanation}
                         </p>
                       )}
@@ -102,7 +108,7 @@ export default function QuestionTable({
                   </td>
 
                   <td className="p-4">
-                    <div className="max-w-[200px] truncate font-medium">
+                    <div className="max-w-50 truncate font-medium">
                       {question.correctAnswer}
                     </div>
                   </td>

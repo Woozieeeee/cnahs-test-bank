@@ -5,7 +5,7 @@ export interface FacultyQuestion {
 
   correctAnswer: string;
 
-  explanation?: string;
+  explanation?: string | null;
 
   difficulty: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
 
@@ -14,6 +14,10 @@ export interface FacultyQuestion {
   totalAttempts: number;
 
   totalCorrect: number;
+
+  createdAt: string;
+
+  updatedAt: string;
 
   options: {
     id: number;

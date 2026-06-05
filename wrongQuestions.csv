@@ -1,0 +1,6 @@
+question,optionA,optionB,optionC,optionD,correctAnswer,difficulty,explanation
+What is the capital of France?,Paris,London,Berlin,Madrid,Rome,EASY,Correct answer does not exist in options.
+Which organ pumps blood throughout the body?,Liver,Heart,Lungs,Kidney,Heart,VERY_HARD,Invalid difficulty.
+,,,,,,,Missing required fields.
+What is the primary function of red blood cells?,Fight infection,Carry oxygen,Produce hormones,Digest nutrients,Carry oxygen,HARD,Valid row.
+What is the primary function of red blood cells?,Fight infection,Carry oxygen,Produce hormones,Digest nutrients,Carry oxygen,HARD,Duplicate question if previous row was imported.

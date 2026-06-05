@@ -22,9 +22,11 @@ import QuestionTable from "@/components/faculty/questions/questionTable";
 
 import CreateQuestionModal from "@/components/faculty/questions/modals/createQuestionModal";
 import UpdateQuestionModal from "@/components/faculty/questions/modals/updateQuestionModal";
-import QuestionUploadCsvModal from "@/components/faculty/questions/modals/questionUploadCsvModal";
+import UploadQuestionCsvModal from "@/components/faculty/questions/modals/uploadQuestionCsvModal";
 import ImportHistoryModal from "@/components/faculty/questions/modals/importHistoryModal";
 import { downloadQuestionTemplate } from "@/services/faculty_service";
+import useImportJobDetails from "@/hooks/useImportJobDetails";
+import ImportErrorsModal from "@/components/faculty/questions/modals/importErrorsModal";
 
 import DependencyModal from "@/components/common/modal/dependencyModal";
 
@@ -82,6 +84,13 @@ export default function FacultyQuestionBankPage() {
 
   const [selectedQuestion, setSelectedQuestion] =
     useState<FacultyQuestion | null>(null);
+
+  const [selectedImportJobId, setSelectedImportJobId] =
+    useState<number | null>(null);
+
+  const { details: importDetails } = useImportJobDetails(
+    selectedImportJobId
+  );
 
   const [dependencyData, setDependencyData] =
     useState<any>(null);
@@ -234,20 +243,14 @@ export default function FacultyQuestionBankPage() {
 
       <QuestionBankFilters
         search={search}
-        setSearch={(value) => {
-          setSearch(value);
-          setCurrentPage(1);
-        }}
+        setSearch={setSearch}
         difficulty={difficulty}
-        setDifficulty={(value) => {
-          setDifficulty(value);
-          setCurrentPage(1);
-        }}
+        setDifficulty={setDifficulty}
         status={status}
-        setStatus={(value) => {
-          setStatus(value);
-          setCurrentPage(1);
-        }}
+        setStatus={setStatus}
+        questions={questions.map(
+          (question) => question.question
+        )}
       />
 
       <QuestionTable
@@ -270,7 +273,7 @@ export default function FacultyQuestionBankPage() {
         onSuccess={addQuestion}
       />
 
-      <QuestionUploadCsvModal
+      <UploadQuestionCsvModal
         open={showUploadModal}
         topicId={topicId}
         onClose={() => setShowUploadModal(false)}
@@ -285,6 +288,15 @@ export default function FacultyQuestionBankPage() {
         open={showHistoryModal}
         history={history}
         onClose={() => setShowHistoryModal(false)}
+        onViewErrors={(jobId) =>
+          setSelectedImportJobId(jobId)
+        }
+      />
+
+      <ImportErrorsModal
+        open={!!selectedImportJobId}
+        details={importDetails}
+        onClose={() => setSelectedImportJobId(null)}
       />
 
       <UpdateQuestionModal

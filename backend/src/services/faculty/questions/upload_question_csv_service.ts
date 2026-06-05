@@ -127,6 +127,14 @@ export const uploadQuestionCsvService = async ({
         continue;
       }
 
+      if (!correctAnswer) {
+        skippedRows++;
+
+        errors.push(`Row ${index + 2}: Missing correct answer`);
+
+        continue;
+      }
+
       if (!options.includes(correctAnswer)) {
         skippedRows++;
 
@@ -197,6 +205,8 @@ export const uploadQuestionCsvService = async ({
     data: {
       importedRows,
       skippedRows,
+
+      completedAt: new Date(),
     },
   });
 
@@ -209,6 +219,8 @@ export const uploadQuestionCsvService = async ({
       totalRows: rows.length,
       importedRows,
       skippedRows,
+
+      completedAt: new Date(),
 
       errorReport: errors.length > 0 ? errors : Prisma.JsonNull,
 

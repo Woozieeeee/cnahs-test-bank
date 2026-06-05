@@ -55,8 +55,33 @@ export default function QuestionForm({
   explanation,
   setExplanation,
 }: Props) {
+  const options = [
+    {
+      label: "Option A",
+      value: optionA,
+      setter: setOptionA,
+    },
+    {
+      label: "Option C",
+      value: optionC,
+      setter: setOptionB,
+    },
+    {
+      label: "Option B",
+      value: optionB,
+      setter: setOptionC,
+    },
+    {
+      label: "Option D",
+      value: optionD,
+      setter: setOptionD,
+    },
+  ];
+
   return (
     <div className="mt-6 space-y-5">
+      {/* Question */}
+
       <div>
         <label className="mb-2 block text-sm font-medium">
           Question
@@ -66,57 +91,32 @@ export default function QuestionForm({
           rows={4}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          placeholder="Enter the question"
           className="border-border w-full rounded-xl border px-4 py-3"
         />
       </div>
 
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Option A
-        </label>
+      {/* Options */}
 
-        <input
-          value={optionA}
-          onChange={(e) => setOptionA(e.target.value)}
-          className="border-border w-full rounded-xl border px-4 py-3"
-        />
+      <div className="grid gap-4 md:grid-cols-2">
+        {options.map((option) => (
+          <div key={option.label}>
+            <label className="mb-2 block text-sm font-medium">
+              {option.label}
+            </label>
+
+            <input
+              value={option.value}
+              onChange={(e) =>
+                option.setter(e.target.value)
+              }
+              className="border-border w-full rounded-xl border px-4 py-3"
+            />
+          </div>
+        ))}
       </div>
 
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Option B
-        </label>
-
-        <input
-          value={optionB}
-          onChange={(e) => setOptionB(e.target.value)}
-          className="border-border w-full rounded-xl border px-4 py-3"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Option C
-        </label>
-
-        <input
-          value={optionC}
-          onChange={(e) => setOptionC(e.target.value)}
-          className="border-border w-full rounded-xl border px-4 py-3"
-        />
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Option D
-        </label>
-
-        <input
-          value={optionD}
-          onChange={(e) => setOptionD(e.target.value)}
-          className="border-border w-full rounded-xl border px-4 py-3"
-        />
-      </div>
+      {/* Correct Answer */}
 
       <div>
         <label className="mb-2 block text-sm font-medium">
@@ -130,23 +130,20 @@ export default function QuestionForm({
         >
           <option value="">Select Answer</option>
 
-          {optionA && (
-            <option value={optionA}>{optionA}</option>
-          )}
-
-          {optionB && (
-            <option value={optionB}>{optionB}</option>
-          )}
-
-          {optionC && (
-            <option value={optionC}>{optionC}</option>
-          )}
-
-          {optionD && (
-            <option value={optionD}>{optionD}</option>
-          )}
+          {options
+            .filter((option) => option.value.trim())
+            .map((option) => (
+              <option
+                key={option.label}
+                value={option.value}
+              >
+                {option.value}
+              </option>
+            ))}
         </select>
       </div>
+
+      {/* Difficulty */}
 
       <div>
         <label className="mb-2 block text-sm font-medium">
@@ -167,11 +164,16 @@ export default function QuestionForm({
           className="border-border bg-card w-full rounded-xl border px-4 py-3"
         >
           <option value="EASY">EASY</option>
+
           <option value="MEDIUM">MEDIUM</option>
+
           <option value="HARD">HARD</option>
+
           <option value="EXPERT">EXPERT</option>
         </select>
       </div>
+
+      {/* Explanation */}
 
       <div>
         <label className="mb-2 block text-sm font-medium">
@@ -182,6 +184,7 @@ export default function QuestionForm({
           rows={4}
           value={explanation}
           onChange={(e) => setExplanation(e.target.value)}
+          placeholder="Optional explanation"
           className="border-border w-full rounded-xl border px-4 py-3"
         />
       </div>

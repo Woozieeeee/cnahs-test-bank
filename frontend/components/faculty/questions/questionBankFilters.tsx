@@ -1,22 +1,23 @@
 "use client";
+import SearchAutocomplete from "@/components/common/search/searchAutocomplete";
 
 interface Props {
   search: string;
-
   setSearch: (value: string) => void;
 
   difficulty: string;
-
   setDifficulty: (value: string) => void;
 
   status: string;
-
   setStatus: (value: string) => void;
+
+  questions: string[];
 }
 
 export default function QuestionBankFilters({
   search,
   setSearch,
+  questions,
   difficulty,
   setDifficulty,
   status,
@@ -24,18 +25,18 @@ export default function QuestionBankFilters({
 }: Props) {
   return (
     <div className="border-border bg-card rounded-2xl border p-4">
-      <div className="grid gap-3 md:grid-cols-3">
-        <input
+      <div className="grid gap-3 md:grid-cols-[3fr_1fr_1fr]">
+        <SearchAutocomplete
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={setSearch}
+          suggestions={questions}
           placeholder="Search questions..."
-          className="border-border rounded-xl border px-4 py-2"
         />
 
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          className="border-border rounded-xl border px-4 py-2"
+          className="border-border bg-card rounded-xl border px-4 py-2"
         >
           <option value="ALL">All Difficulties</option>
 
@@ -51,7 +52,7 @@ export default function QuestionBankFilters({
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="border-border rounded-xl border px-4 py-2"
+          className="border-border bg-card rounded-xl border px-4 py-2"
         >
           <option value="ALL">All Status</option>
 

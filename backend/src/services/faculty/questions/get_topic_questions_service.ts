@@ -31,18 +31,45 @@ export const getTopicQuestionsService = async (
       options: {
         select: {
           id: true,
-
           optionText: true,
-
           isCorrect: true,
         },
       },
     },
-
-    orderBy: {
-      createdAt: "desc",
-    },
   });
 
-  return questions;
+  const difficultyOrder = {
+    EASY: 1,
+    MEDIUM: 2,
+    HARD: 3,
+    EXPERT: 4,
+  };
+
+  return questions.sort((a, b) => {
+    // =========================
+    // ACTIVE FIRST
+    // =========================
+
+    if (a.isArchived !== b.isArchived) {
+      return Number(a.isArchived) - Number(b.isArchived);
+    }
+
+    // =========================
+    // DIFFICULTY ORDER
+    // EASY -> MEDIUM -> HARD -> EXPERT
+    // =========================
+
+    const difficultyComparison =
+      difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+
+    if (difficultyComparison !== 0) {
+      return difficultyComparison;
+    }
+
+    // =========================
+    // NEWEST FIRST
+    // =========================
+
+    return b.createdAt.getTime() - a.createdAt.getTime();
+  });
 };

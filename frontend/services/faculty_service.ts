@@ -236,7 +236,7 @@ export const uploadQuestionCsv = async (
   formData.append("file", file);
 
   const response = await api.post(
-    `/faculty/questions/import/${topicId}`,
+    `/faculty/topics/${topicId}/uploads`,
     formData,
     {
       headers: {
@@ -256,7 +256,7 @@ export const downloadQuestionTemplate = async (
   topicId: number
 ) => {
   const response = await api.get(
-    `/faculty/topics/${topicId}/questions/template`,
+    `/faculty/topics/${topicId}/template`,
     {
       responseType: "blob",
     }
@@ -281,4 +281,18 @@ export const downloadQuestionTemplate = async (
   link.remove();
 
   window.URL.revokeObjectURL(url);
+};
+
+// ========================
+// GET IMPORT JOB DETAILS
+// ========================
+
+export const getImportJobDetails = async (
+  jobId: number
+) => {
+  const response = await api.get(
+    `/faculty/history/${jobId}`
+  );
+
+  return response.data;
 };

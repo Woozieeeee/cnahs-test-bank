@@ -17,44 +17,86 @@ export default function useFacultyQuestions(
 
   const [error, setError] = useState("");
 
+  const sortQuestions = (questions: FacultyQuestion[]) => {
+    const difficultyOrder = {
+      EASY: 1,
+      MEDIUM: 2,
+      HARD: 3,
+      EXPERT: 4,
+    };
+
+    return [...questions].sort((a, b) => {
+      // Active first
+
+      if (a.isArchived !== b.isArchived) {
+        return Number(a.isArchived) - Number(b.isArchived);
+      }
+
+      // Difficulty order
+
+      const difficultyComparison =
+        difficultyOrder[a.difficulty] -
+        difficultyOrder[b.difficulty];
+
+      if (difficultyComparison !== 0) {
+        return difficultyComparison;
+      }
+
+      // Newest first
+
+      return (
+        new Date(b.createdAt).getTime() -
+        new Date(a.createdAt).getTime()
+      );
+    });
+  };
+
   const addQuestion = (question: FacultyQuestion) => {
-    setQuestions((prev) => [question, ...prev]);
+    setQuestions((prev) =>
+      sortQuestions([...prev, question])
+    );
   };
 
   const updateQuestion = (
     updatedQuestion: FacultyQuestion
   ) => {
     setQuestions((prev) =>
-      prev.map((question) =>
-        question.id === updatedQuestion.id
-          ? updatedQuestion
-          : question
+      sortQuestions(
+        prev.map((question) =>
+          question.id === updatedQuestion.id
+            ? updatedQuestion
+            : question
+        )
       )
     );
   };
 
   const archiveQuestion = (questionId: number) => {
     setQuestions((prev) =>
-      prev.map((question) =>
-        question.id === questionId
-          ? {
-              ...question,
-              isArchived: true,
-            }
-          : question
+      sortQuestions(
+        prev.map((question) =>
+          question.id === questionId
+            ? {
+                ...question,
+                isArchived: true,
+              }
+            : question
+        )
       )
     );
   };
 
   const restoreQuestion = (questionId: number) => {
     setQuestions((prev) =>
-      prev.map((question) =>
-        question.id === questionId
-          ? {
-              ...question,
-              isArchived: false,
-            }
-          : question
+      sortQuestions(
+        prev.map((question) =>
+          question.id === questionId
+            ? {
+                ...question,
+                isArchived: false,
+              }
+            : question
+        )
       )
     );
   };
@@ -73,7 +115,7 @@ export default function useFacultyQuestions(
 
       const data = await getFacultyQuestions(topicId);
 
-      setQuestions(data);
+      setQuestions(sortQuestions(data));
     } catch (error: unknown) {
       const responseError = error as {
         response?: {

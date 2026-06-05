@@ -1,0 +1,61 @@
+question,optionA,optionB,optionC,optionD,correctAnswer,difficulty,explanation
+What is the capital of France?,Paris,London,Berlin,Madrid,Paris,EASY,Valid
+What is the capital of Germany?,Berlin,Paris,Rome,Madrid,Berlin,EASY,Valid
+What is the capital of Italy?,Rome,Paris,Berlin,Madrid,Rome,EASY,Valid
+What is the capital of Spain?,Madrid,Paris,Rome,Berlin,Madrid,EASY,Valid
+What is the largest planet in the solar system?,Earth,Mars,Jupiter,Venus,Jupiter,MEDIUM,Valid
+What is the smallest planet in the solar system?,Mercury,Earth,Mars,Venus,Mercury,MEDIUM,Valid
+What organ pumps blood through the body?,Liver,Heart,Kidney,Lungs,Heart,EASY,Valid
+What is the normal body temperature in Celsius?,35,36,37,38,37,EASY,Valid
+Which vitamin is produced by sunlight exposure?,Vitamin A,Vitamin B,Vitamin C,Vitamin D,Vitamin D,MEDIUM,Valid
+What is the chemical symbol for water?,H2O,CO2,O2,N2,H2O,EASY,Valid
+What is the largest organ of the human body?,Skin,Heart,Liver,Lung,Skin,MEDIUM,Valid
+Which blood cells carry oxygen?,Platelets,White Cells,Red Cells,Plasma,Red Cells,MEDIUM,Valid
+What is the basic unit of life?,Organ,Tissue,Cell,System,Cell,EASY,Valid
+How many chambers does the heart have?,2,3,4,5,4,EASY,Valid
+What is the powerhouse of the cell?,Nucleus,Ribosome,Mitochondria,Membrane,Mitochondria,MEDIUM,Valid
+Which system controls body functions?,Digestive,Respiratory,Nervous,Skeletal,Nervous,MEDIUM,Valid
+Which organ filters blood?,Heart,Liver,Kidney,Lung,Kidney,MEDIUM,Valid
+What mineral strengthens bones?,Iron,Sodium,Calcium,Potassium,Calcium,EASY,Valid
+What is the largest bone in the body?,Tibia,Femur,Radius,Ulna,Femur,MEDIUM,Valid
+Which gas do humans inhale for survival?,Carbon Dioxide,Nitrogen,Oxygen,Hydrogen,Oxygen,EASY,Valid
+What is the capital of France?,Paris,London,Berlin,Madrid,Paris,EASY,Duplicate
+What is the capital of Germany?,Berlin,Paris,Rome,Madrid,Berlin,EASY,Duplicate
+What is the capital of Italy?,Rome,Paris,Berlin,Madrid,Rome,EASY,Duplicate
+What is the capital of Spain?,Madrid,Paris,Rome,Berlin,Madrid,EASY,Duplicate
+What is the largest planet in the solar system?,Earth,Mars,Jupiter,Venus,Jupiter,MEDIUM,Duplicate
+What is the smallest planet in the solar system?,Mercury,Earth,Mars,Venus,Mercury,MEDIUM,Duplicate
+What organ pumps blood through the body?,Liver,Heart,Kidney,Lungs,Heart,EASY,Duplicate
+What is the normal body temperature in Celsius?,35,36,37,38,37,EASY,Duplicate
+Which vitamin is produced by sunlight exposure?,Vitamin A,Vitamin B,Vitamin C,Vitamin D,Vitamin D,MEDIUM,Duplicate
+What is the chemical symbol for water?,H2O,CO2,O2,N2,H2O,EASY,Duplicate
+What causes diabetes mellitus type 1?,Autoimmune,Infection,Trauma,Cancer,Autoimmune,MASTER,Invalid Difficulty
+What causes diabetes mellitus type 2?,Obesity,Trauma,Infection,Cancer,Obesity,MASTER,Invalid Difficulty
+What causes hypertension?,Stress,Salt,Sleep,Cancer,Stress,ADVANCED,Invalid Difficulty
+What causes asthma?,Dust,Water,Food,Stone,Dust,ADVANCED,Invalid Difficulty
+What causes anemia?,Iron Deficiency,Salt,Sugar,Fat,Iron Deficiency,SUPER,Invalid Difficulty
+Short?,A,B,C,D,A,EASY,Too Short
+Tiny?,A,B,C,D,A,EASY,Too Short
+Test?,A,B,C,D,A,EASY,Too Short
+Hello?,A,B,C,D,A,EASY,Too Short
+Small?,A,B,C,D,A,EASY,Too Short
+What is blood pressure?,120,130,,140,120,EASY,Missing Option
+What is heart rate?,50,60,,80,60,EASY,Missing Option
+What is respiration?,Fast,Slow,,Medium,Slow,EASY,Missing Option
+What is pulse rate?,70,80,,90,80,EASY,Missing Option
+What is oxygen saturation?,90,95,,100,95,EASY,Missing Option
+What is anatomy?,Body,Body,Cells,Tissue,Body,EASY,Duplicate Options
+What is physiology?,Function,Function,Cell,Tissue,Function,EASY,Duplicate Options
+What is pathology?,Disease,Disease,Cell,Tissue,Disease,EASY,Duplicate Options
+What is nursing?,Care,Care,Cell,Tissue,Care,EASY,Duplicate Options
+What is health?,Wellness,Wellness,Cell,Tissue,Wellness,EASY,Duplicate Options
+What is hydration?,Water,Fluid,Drink,Liquid,,EASY,Missing Correct Answer
+What is nutrition?,Food,Diet,Meal,Nutrients,,EASY,Missing Correct Answer
+What is exercise?,Walk,Run,Jog,Sprint,,EASY,Missing Correct Answer
+What is sleep?,Rest,Nap,Relax,Dream,,EASY,Missing Correct Answer
+What is wellness?,Health,Fitness,Balance,Peace,,EASY,Missing Correct Answer
+What is immunity?,Defense,Protection,Resistance,Barrier,Magic,EASY,Invalid Answer
+What is infection?,Virus,Bacteria,Fungus,Parasite,Disease,EASY,Invalid Answer
+What is fever?,37,38,39,40,41,EASY,Invalid Answer
+What is edema?,Swelling,Pain,Fever,Cough,Fluid,EASY,Invalid Answer
+What is pain?,Acute,Chronic,Mild,Severe,Extreme,EASY,Invalid Answer

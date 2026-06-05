@@ -167,7 +167,9 @@ Features
 - Update question
 - Archive question
 - Restore question
-- CSV Import (planned)
+- CSV Import
+- CSV Import History
+- CSV Import Error Tracking
 
 ### Assessment Management
 
@@ -366,7 +368,10 @@ Endpoints
 
 ### CSV
 
-- uploadQuestionsCsv() (planned)
+- uploadQuestionCsv()
+- downloadQuestionTemplate()
+- getQuestionImportHistory()
+- getImportJobDetails()
 
 ---
 
@@ -406,6 +411,8 @@ frontend/hooks
 - useFacultySubject
 - useFacultyTopics
 - useFacultyQuestions
+- useQuestionImportHistory
+- useImportJobDetails
 
 ---
 
@@ -471,17 +478,58 @@ Reusable UI components.
 
 ---
 
-## components/motion
+## Shared Frontend Architecture
 
-Reusable animation wrappers.
+### components/faculty/questions/forms
 
-- MotionPage
-- MotionCard
-- MotionButton
-- MotionDropdown
-- MotionModal
+- questionForm.tsx
+  - Shared reusable form for question creation and editing.
+  - Used by CreateQuestionModal and UpdateQuestionModal.
+  - Centralizes validation fields, options, difficulty selection, and explanation input.
+
+### `components/motion`
+
+This folder contains animation wrappers that standardize interaction behavior across the system.
+
+- `motionPage.tsx`
+  - Page transition wrapper.
+
+- `motionCard.tsx`
+  - Reusable animated card container.
+
+- `motionButton.tsx`
+  - Standardized hover and tap interactions.
+
+- `motionDropdown.tsx`
+  - Reusable animated dropdown wrapper.
+  - Provides consistent dropdown open/close animations across the system.
+
+- `motionModal.tsx`
+  - Standardized modal shell supporting:
+    - configurable width (`maxWidth`)
+    - custom content styling (`contentClassName`)
+    - overlay animation
+    - modal animation
+
+- `motionPopover.tsx`
+  - Autocomplete, date pickers, floating panels
+
+All newly created modals should use `MotionModal` rather than implementing custom modal containers.
 
 ---
+
+### components/common/modal
+
+- modalContainer.tsx
+  - Shared modal wrapper.
+  - Built on top of MotionModal.
+  - Standardized sizing, scrolling, spacing, and animations.
+
+- modalHeader.tsx
+  - Shared modal header.
+
+- modalActions.tsx
+  - Shared modal action footer.
 
 # Dependency Protection System
 
@@ -579,6 +627,28 @@ Backend
 
 ✅ Question Dependency Modal
 
+✅ Upload CSV
+
+✅ Template Download
+
+✅ Import Validation
+
+✅ Duplicate Detection
+
+✅ Import History
+
+✅ Import Details
+
+✅ Error Viewer
+
+✅ Import Jobs
+
+✅ Import Batches
+
+✅ Question Import Hooks
+
+✅ Question Import Modals
+
 ### Question Bank CSV Import
 
 Route Base:
@@ -606,15 +676,13 @@ Purpose:
 
 Provides bulk question creation with validation,
 error tracking, import history,
-and downloadable templates.\
+and downloadable templates.
 
 ## In Progress
 
-🚧 CSV Question Upload
+🚧 CSV Import Error Viewer
 
 🚧 Assessment Builder
-
----
 
 ## Planned
 
@@ -677,6 +745,319 @@ Then
 
 Remaining Admin Enhancements
 
+- UploadQuestionCsvModal
+  - CSV import workflow for faculty question banks.
+  - Supports template download and bulk question creation.
+
+- ImportHistoryModal
+  - Displays previous CSV import jobs.
+  - Shows import status, imported count, skipped count, and upload timestamps.
+
+# CSV Question Import System
+
+## Overview
+
+The CSV Question Import System allows faculty members to bulk upload questions into a topic using a CSV file.
+
+The system performs validation, duplicate detection, import tracking, error logging, and import history management.
+
+Questions imported through CSV are automatically linked to:
+
+- Subject
+- Topic
+- Faculty Creator
+- Import Batch
+- Import Job
+
+---
+
+# Database Models
+
+## ImportJob
+
+Tracks every CSV upload request.
+
+Purpose:
+
+- Upload history
+- Processing status
+- Error tracking
+- File metadata
+
+Fields:
+
+- filename
+- filePath
+- fileSize
+- mimeType
+- totalRows
+- importedRows
+- skippedRows
+- status
+- errorReport
+- createdAt
+- completedAt
+- createdById
+- topicId
+
+Relations:
+
+- User
+- Topic
+- QuestionImportBatch
+
+---
+
+## QuestionImportBatch
+
+Tracks the actual batch of imported questions.
+
+Purpose:
+
+- Connect imported questions
+- Track imported counts
+- Group imported records
+
+Fields:
+
+- filename
+- totalRows
+- importedRows
+- skippedRows
+- createdAt
+- completedAt
+- importJobId
+- createdById
+
+Relations:
+
+- ImportJob
+- User
+- Question
+
+---
+
+# Upload Flow
+
+Faculty uploads CSV
+
+↓
+
+uploadQuestionCsvController
+
+↓
+
+uploadQuestionCsvService
+
+↓
+
+ImportJob Created
+
+↓
+
+QuestionImportBatch Created
+
+↓
+
+CSV Validation
+
+↓
+
+Questions Imported
+
+↓
+
+ImportJob Updated
+
+↓
+
+Import History Available
+
+---
+
+# Backend Structure
+
+## Routes
+
+src/routes/faculty/question_import_routes.ts
+
+Endpoints:
+
+POST
+
+/topics/:topicId/upload
+
+Upload CSV file
+
+GET
+
+/topics/:topicId/template
+
+Download CSV template
+
+GET
+
+/topics/:topicId/import-history
+
+Get upload history
+
+GET
+
+/history/:jobId
+
+Get import details
+
+Returns:
+
+- Import metadata
+- Import batches
+- Error report
+- Completion status
+- File metadata
+
+---
+
+## Controllers
+
+src/controllers/faculty/questions/
+
+Files:
+
+upload_question_csv_controller.ts
+
+download_question_template_controller.ts
+
+get_import_history_controller.ts
+
+get_import_job_details_controller.ts
+
+---
+
+## Services
+
+src/services/faculty/questions/
+
+Files:
+
+upload_question_csv_service.ts
+
+get_import_history_service.ts
+
+get_import_job_details_service.ts
+
+---
+
+# Frontend Structure
+
+## Hooks
+
+src/hooks/
+
+useQuestionImportHistory.ts
+
+useImportJobDetails.ts
+
+---
+
+## Modals
+
+src/components/faculty/questions/modals/
+
+createQuestionModal.tsx
+
+updateQuestionModal.tsx
+
+questionUploadCsvModal.tsx
+
+importHistoryModal.tsx
+
+importErrorsModal.tsx
+
+---
+
+# Validation Rules
+
+Required Columns
+
+question
+
+optionA
+
+optionB
+
+optionC
+
+optionD
+
+correctAnswer
+
+difficulty
+
+Optional Columns
+
+explanation
+
+---
+
+# Difficulty Values
+
+Allowed:
+
+EASY
+
+MEDIUM
+
+HARD
+
+EXPERT
+
+Invalid values are skipped.
+
+---
+
+# Duplicate Detection
+
+A question is considered duplicate when:
+
+topicId matches
+
+AND
+
+question text matches
+
+Duplicates are skipped and logged.
+
+---
+
+# Error Logging
+
+Examples:
+
+Row 12: Duplicate question
+
+Row 15: Invalid difficulty
+
+Row 18: Correct answer does not match any option
+
+Errors are stored in:
+
+ImportJob.errorReport
+
+and displayed inside Import Errors Modal.
+
+---
+
+# Future Enhancements
+
+Planned:
+
+- Download error report CSV
+- Background queue processing
+- Cloud file storage (Blob/S3)
+- Import analytics dashboard
+- Batch rollback
+- Import notifications
+
 ---
 
 # Current Project Health
@@ -685,11 +1066,11 @@ Authentication: Stable
 
 Admin Module: ~90% Complete
 
-Faculty Module: ~75% Complete
-
 Student Module: ~15% Complete
 
-Question Bank System: ~70% Complete
+Faculty Module: ~88% Complete
+
+Question Bank System: ~95% Complete
 
 Assessment System: ~40% Complete
 

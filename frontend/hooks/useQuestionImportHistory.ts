@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { getQuestionImportHistory } from "../services/faculty_service";
+import { getQuestionImportHistory } from "@/services/faculty_service";
 
-import { ImportJob } from "../types/importJob";
+import { ImportJob } from "@/types/importJob";
 
 export default function useQuestionImportHistory(
   topicId: number
@@ -18,6 +18,13 @@ export default function useQuestionImportHistory(
   const fetchHistory = useCallback(async () => {
     try {
       setLoading(true);
+
+      setError("");
+
+      if (!topicId) {
+        setHistory([]);
+        return;
+      }
 
       const data = await getQuestionImportHistory(topicId);
 
@@ -33,7 +40,7 @@ export default function useQuestionImportHistory(
   }, [topicId]);
 
   useEffect(() => {
-    fetchHistory();
+    void fetchHistory();
   }, [fetchHistory]);
 
   return {

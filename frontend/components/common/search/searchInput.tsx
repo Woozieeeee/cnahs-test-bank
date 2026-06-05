@@ -1,27 +1,14 @@
 "use client";
 
-import { memo } from "react";
+import { memo, InputHTMLAttributes } from "react";
 
-interface Props {
-  value: string;
-
-  onChange: (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => void;
-
-  placeholder?: string;
-
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-function SearchInput({
-  value,
-  onChange,
-  placeholder = "Search...",
-  className = "",
-}: Props) {
+function SearchInput({ className = "", ...props }: Props) {
   return (
-    <div className={`relative w-full ${className} `}>
+    <div className={`relative w-full ${className}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -36,9 +23,7 @@ function SearchInput({
       </svg>
 
       <input
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
+        {...props}
         className="border-border bg-background focus:border-ring h-11 w-full rounded-xl border pr-4 pl-10 text-sm transition-colors outline-none"
       />
     </div>

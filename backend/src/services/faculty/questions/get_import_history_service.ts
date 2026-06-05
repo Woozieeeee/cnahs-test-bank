@@ -7,7 +7,6 @@ export const getImportHistoryService = async (
   return prisma.importJob.findMany({
     where: {
       topicId,
-
       createdById: facultyId,
     },
 
@@ -30,13 +29,21 @@ export const getImportHistoryService = async (
 
       createdAt: true,
 
-      questionImportBatches: {
+      completedAt: true,
+
+      fileSize: true,
+
+      mimeType: true,
+
+      batches: {
         select: {
           id: true,
 
           importedRows: true,
 
           skippedRows: true,
+
+          completedAt: true,
         },
       },
     },

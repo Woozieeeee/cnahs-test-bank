@@ -17,7 +17,7 @@ export default function FacultyTopicFilters({
   setStatus,
 }: Props) {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-[4fr_1fr]">
       <input
         value={search}
         onChange={(e) => setSearch(e.target.value)}
