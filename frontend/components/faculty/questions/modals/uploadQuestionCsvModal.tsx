@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { memo } from "react";
 import ModalContainer from "@/components/common/modal/modalContainer";
 import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
@@ -16,6 +16,7 @@ import {
 } from "@/services/faculty_service";
 
 import { formatFileSize } from "@/lib/formatFileSize";
+import UploadQuestionCsvModal from "@/components/faculty/questions/modals/uploadQuestionCsvModal";
 
 interface Props {
   open: boolean;
@@ -27,7 +28,7 @@ interface Props {
   onSuccess: () => void;
 }
 
-export default function QuestionUploadCsvModal({
+function QuestionUploadCsvModal({
   open,
   topicId,
   onClose,
@@ -177,3 +178,4 @@ export default function QuestionUploadCsvModal({
     </ModalContainer>
   );
 }
+export default memo(QuestionUploadCsvModal);

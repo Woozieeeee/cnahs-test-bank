@@ -6,6 +6,8 @@ import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
 import QuestionForm from "../forms/questionForm";
 import { successToast, errorToast } from "@/lib/swal";
+import ModalContainer from "@/components/common/modal/modalContainer";
+import { memo } from "react";
 
 import { FacultyQuestion } from "@/types/facultyQuestion";
 
@@ -21,7 +23,7 @@ interface Props {
   onSuccess: (question: FacultyQuestion) => void;
 }
 
-export default function UpdateQuestionModal({
+function UpdateQuestionModal({
   open,
   question,
   onClose,
@@ -119,46 +121,41 @@ export default function UpdateQuestionModal({
   if (!open || !question) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-card border-border max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-6">
-        <ModalHeader
-          title="Edit Question"
-          description="Update question details."
-          onClose={onClose}
-        />
+    <ModalContainer open={open} maxWidth="max-w-5xl">
+      <ModalHeader
+        title="Edit Question"
+        description="Update question details."
+        onClose={onClose}
+      />
 
-        <QuestionForm
-          question={questionText}
-          setQuestion={setQuestionText}
-          optionA={optionA}
-          setOptionA={setOptionA}
-          optionB={optionB}
-          setOptionB={setOptionB}
-          optionC={optionC}
-          setOptionC={setOptionC}
-          optionD={optionD}
-          setOptionD={setOptionD}
-          correctAnswer={correctAnswer}
-          setCorrectAnswer={setCorrectAnswer}
-          difficulty={difficulty}
-          setDifficulty={setDifficulty}
-          explanation={explanation}
-          setExplanation={setExplanation}
-        />
+      <QuestionForm
+        question={questionText}
+        setQuestion={setQuestionText}
+        optionA={optionA}
+        setOptionA={setOptionA}
+        optionB={optionB}
+        setOptionB={setOptionB}
+        optionC={optionC}
+        setOptionC={setOptionC}
+        optionD={optionD}
+        setOptionD={setOptionD}
+        correctAnswer={correctAnswer}
+        setCorrectAnswer={setCorrectAnswer}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        explanation={explanation}
+        setExplanation={setExplanation}
+      />
 
-        <ModalActions
-          submitLabel={
-            loading ? "Saving..." : "Save Changes"
-          }
-          submitDisabled={
-            loading ||
-            !questionText.trim() ||
-            !correctAnswer
-          }
-          onSubmit={handleSubmit}
-          onCancel={onClose}
-        />
-      </div>
-    </div>
+      <ModalActions
+        submitLabel={loading ? "Saving..." : "Save Changes"}
+        submitDisabled={
+          loading || !questionText.trim() || !correctAnswer
+        }
+        onSubmit={handleSubmit}
+        onCancel={onClose}
+      />
+    </ModalContainer>
   );
 }
+export default memo(UpdateQuestionModal);

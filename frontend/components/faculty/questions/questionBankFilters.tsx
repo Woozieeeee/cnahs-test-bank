@@ -1,5 +1,6 @@
 "use client";
 import SearchAutocomplete from "@/components/common/search/searchAutocomplete";
+import { memo } from "react";
 
 interface Props {
   search: string;
@@ -14,7 +15,7 @@ interface Props {
   questions: string[];
 }
 
-export default function QuestionBankFilters({
+function QuestionBankFilters({
   search,
   setSearch,
   questions,
@@ -64,3 +65,4 @@ export default function QuestionBankFilters({
     </div>
   );
 }
+export default memo(QuestionBankFilters);

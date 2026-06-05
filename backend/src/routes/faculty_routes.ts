@@ -16,6 +16,7 @@ import { restoreQuestionController } from "../controllers/faculty/questions/rest
 import { getTopicQuestionsController } from "../controllers/faculty/questions/get_topic_questions_controller";
 import { createQuestionController } from "../controllers/faculty/questions/create_question_controller";
 import { updateQuestionController } from "../controllers/faculty/questions/update_question_controller";
+import { getSubjectQuestionBankController } from "../controllers/faculty/questions/get_subject_question_bank_controller";
 
 const router = express.Router();
 
@@ -34,6 +35,10 @@ router.put("/topics/:topicId/restore", restoreTopicController);
 router.put("/questions/:questionId/archive", archiveQuestionController);
 router.put("/questions/:questionId/restore", restoreQuestionController);
 router.put("/questions/:questionId", updateQuestionController);
+router.get(
+  "/subjects/:subjectId/question-bank",
+  getSubjectQuestionBankController,
+);
 router.use("/", questionImportRoutes);
 
 export default router;

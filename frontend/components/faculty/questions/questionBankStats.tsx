@@ -1,5 +1,7 @@
 "use client";
 
+import { memo } from "react";
+
 interface Props {
   total: number;
 
@@ -12,7 +14,28 @@ interface Props {
   expert: number;
 }
 
-export default function QuestionBankStats({
+interface StatCardProps {
+  label: string;
+
+  value: number;
+}
+
+const StatCard = memo(function StatCard({
+  label,
+  value,
+}: StatCardProps) {
+  return (
+    <div className="border-border bg-card rounded-2xl border p-5">
+      <p className="text-muted-foreground text-sm">
+        {label}
+      </p>
+
+      <p className="mt-2 text-3xl font-bold">{value}</p>
+    </div>
+  );
+});
+
+function QuestionBankStats({
   total,
   easy,
   medium,
@@ -34,20 +57,4 @@ export default function QuestionBankStats({
   );
 }
 
-function StatCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: number;
-}) {
-  return (
-    <div className="border-border bg-card rounded-2xl border p-5">
-      <p className="text-muted-foreground text-sm">
-        {label}
-      </p>
-
-      <p className="mt-2 text-3xl font-bold">{value}</p>
-    </div>
-  );
-}
+export default memo(QuestionBankStats);

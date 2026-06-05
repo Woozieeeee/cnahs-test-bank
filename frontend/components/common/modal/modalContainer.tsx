@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-
+import { memo } from "react";
 import MotionModal from "@/components/motion/motionModal";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   contentClassName?: string;
 }
 
-export default function ModalContainer({
+function ModalContainer({
   open,
   children,
   maxWidth = "max-w-3xl",
@@ -30,3 +30,4 @@ export default function ModalContainer({
     </MotionModal>
   );
 }
+export default memo(ModalContainer);

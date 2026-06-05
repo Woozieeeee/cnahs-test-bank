@@ -1,7 +1,7 @@
 "use client";
 
 import ModalContainer from "@/components/common/modal/modalContainer";
-
+import { memo } from "react";
 import ModalHeader from "@/components/common/modal/modalHeader";
 
 import EmptyState from "@/components/common/states/emptyState";
@@ -14,7 +14,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default function ImportErrorsModal({
+function ImportErrorsModal({
   open,
   details,
   onClose,
@@ -68,7 +68,7 @@ export default function ImportErrorsModal({
             description="This import completed successfully."
           />
         ) : (
-          <div className="border-border max-h-[400px] overflow-auto rounded-xl border">
+          <div className="border-border max-h-100 overflow-auto rounded-xl border">
             {errors.map((error: string, index: number) => (
               <div
                 key={index}
@@ -83,3 +83,4 @@ export default function ImportErrorsModal({
     </ModalContainer>
   );
 }
+export default memo(ImportErrorsModal);

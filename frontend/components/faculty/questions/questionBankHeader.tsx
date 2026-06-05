@@ -2,6 +2,7 @@
 
 import MotionButton from "@/components/motion/motionButton";
 import MotionDropdown from "@/components/motion/motionDropdown";
+import { memo } from "react";
 
 import { ChevronDown } from "lucide-react";
 
@@ -15,7 +16,7 @@ interface Props {
   onDownloadTemplate: () => void;
 }
 
-export default function QuestionBankHeader({
+function QuestionBankHeader({
   onCreate,
   onUploadCsv,
   onHistory,
@@ -73,3 +74,4 @@ export default function QuestionBankHeader({
     </div>
   );
 }
+export default memo(QuestionBankHeader);

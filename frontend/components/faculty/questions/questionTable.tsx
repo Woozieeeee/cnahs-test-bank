@@ -8,6 +8,8 @@ import QuestionRowActions from "./questionRowActions";
 
 import DifficultyBadge from "@/components/common/badges/difficultyBadge";
 
+import { memo } from "react";
+
 interface Props {
   questions: FacultyQuestion[];
 
@@ -18,7 +20,7 @@ interface Props {
   onRestore: (questionId: number) => void;
 }
 
-export default function QuestionTable({
+function QuestionTable({
   questions,
   onEdit,
   onArchive,
@@ -160,3 +162,5 @@ export default function QuestionTable({
     </div>
   );
 }
+
+export default memo(QuestionTable);

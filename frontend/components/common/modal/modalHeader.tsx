@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface Props {
   title: string;
 
@@ -6,7 +8,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default function ModalHeader({
+function ModalHeader({
   title,
   description,
   onClose,
@@ -34,3 +36,4 @@ export default function ModalHeader({
     </div>
   );
 }
+export default memo(ModalHeader);

@@ -2,7 +2,7 @@
 
 import ModalContainer from "@/components/common/modal/modalContainer";
 import ModalHeader from "@/components/common/modal/modalHeader";
-
+import { memo } from "react";
 import EmptyState from "@/components/common/states/emptyState";
 
 import MotionButton from "@/components/motion/motionButton";
@@ -21,7 +21,7 @@ interface Props {
   onViewErrors?: (jobId: number) => void;
 }
 
-export default function ImportHistoryModal({
+function ImportHistoryModal({
   open,
   history,
   onClose,
@@ -43,7 +43,7 @@ export default function ImportHistoryModal({
           />
         </div>
       ) : (
-        <div className="mt-6 max-h-[650px] overflow-auto rounded-xl border">
+        <div className="mt-6 max-h-162.5 overflow-auto rounded-xl border">
           <table className="w-full text-sm">
             <thead className="bg-card sticky top-0 z-10">
               <tr className="border-border border-b">
@@ -162,3 +162,4 @@ export default function ImportHistoryModal({
     </ModalContainer>
   );
 }
+export default memo(ImportHistoryModal);

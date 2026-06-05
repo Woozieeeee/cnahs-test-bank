@@ -1,5 +1,7 @@
 "use client";
 
+import { memo } from "react";
+
 import MotionPopover from "@/components/motion/motionPopover";
 
 interface Props {
@@ -8,7 +10,7 @@ interface Props {
   onSelect: (value: string) => void;
 }
 
-export default function SearchSuggestions({
+function SearchSuggestions({
   suggestions,
   onSelect,
 }: Props) {
@@ -34,3 +36,5 @@ export default function SearchSuggestions({
     </MotionPopover>
   );
 }
+
+export default memo(SearchSuggestions);

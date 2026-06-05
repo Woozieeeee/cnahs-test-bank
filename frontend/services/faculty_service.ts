@@ -296,3 +296,17 @@ export const getImportJobDetails = async (
 
   return response.data;
 };
+
+// =========================
+// SUBJECT QUESTION BANK
+// =========================
+
+export const getSubjectQuestionBank = async (
+  subjectId: number
+) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/question-bank`
+  );
+
+  return response.data;
+};

@@ -2,6 +2,7 @@
 
 import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
+import { memo } from "react";
 
 interface DependencyExam {
   id: number;
@@ -29,7 +30,7 @@ interface Props {
   } | null;
 }
 
-export default function DependencyModal({
+function DependencyModal({
   open,
   onClose,
   dependencies,
@@ -97,3 +98,4 @@ export default function DependencyModal({
     </div>
   );
 }
+export default memo(DependencyModal);

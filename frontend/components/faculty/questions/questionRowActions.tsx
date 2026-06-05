@@ -3,6 +3,7 @@
 import MotionButton from "@/components/motion/motionButton";
 
 import { Pencil, Archive, RotateCcw } from "lucide-react";
+import { memo } from "react";
 
 interface Props {
   archived: boolean;
@@ -14,7 +15,7 @@ interface Props {
   onRestore: () => void;
 }
 
-export default function QuestionRowActions({
+function QuestionRowActions({
   archived,
   onEdit,
   onArchive,
@@ -50,3 +51,5 @@ export default function QuestionRowActions({
     </div>
   );
 }
+
+export default memo(QuestionRowActions);

@@ -6,8 +6,8 @@ import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
 import QuestionForm from "../forms/questionForm";
 import { successToast, errorToast } from "@/lib/swal";
-import MotionModal from "@/components/motion/motionModal";
-
+import ModalContainer from "@/components/common/modal/modalContainer";
+import { memo } from "react";
 import { createFacultyQuestion } from "@/services/faculty_service";
 
 import type { FacultyQuestion } from "@/types/facultyQuestion";
@@ -22,7 +22,7 @@ interface Props {
   onSuccess: (question: FacultyQuestion) => void;
 }
 
-export default function CreateQuestionModal({
+function CreateQuestionModal({
   open,
   onClose,
   topicId,
@@ -106,7 +106,7 @@ export default function CreateQuestionModal({
   if (!open) return null;
 
   return (
-    <MotionModal open={open} maxWidth="max-w-5xl" contentClassName="max-h-[90vh] overflow-y-auto">
+    <ModalContainer open={open} maxWidth="max-w-5xl">
       <div className="p-6">
         <ModalHeader
           title="Create Question"
@@ -144,6 +144,7 @@ export default function CreateQuestionModal({
           onCancel={onClose}
         />
       </div>
-    </MotionModal>
+    </ModalContainer>
   );
 }
+export default memo(CreateQuestionModal);
