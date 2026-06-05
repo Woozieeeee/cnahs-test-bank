@@ -1,27 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { getSubjectAssessments } from "@/services/academic_service";
+import { getSubjectAssessments } from "@/services/faculty_service";
+
+import { SubjectAssessmentsResponse } from "@/types/assessments/assessment";
 
 export default function useSubjectAssessments(
   subjectId: number
 ) {
-  const [assessments, setAssessments] = useState<any[]>([]);
+  const [data, setData] =
+    useState<SubjectAssessmentsResponse | null>(null);
 
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAssessments = async () => {
+  const fetchAssessments = useCallback(async () => {
     try {
       setLoading(true);
 
-      const data = await getSubjectAssessments(subjectId);
-
-      setAssessments(data);
-
       setError(null);
+
+      if (!subjectId) {
+        setData(null);
+
+        return;
+      }
+
+      const response =
+        await getSubjectAssessments(subjectId);
+
+      setData(response);
     } catch (err: any) {
       setError(
         err?.response?.data?.message ??
@@ -30,18 +40,19 @@ export default function useSubjectAssessments(
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    if (!subjectId) return;
-
-    fetchAssessments();
   }, [subjectId]);
 
+  useEffect(() => {
+    void fetchAssessments();
+  }, [fetchAssessments]);
+
   return {
-    assessments,
+    data,
+
     loading,
+
     error,
+
     refresh: fetchAssessments,
   };
 }

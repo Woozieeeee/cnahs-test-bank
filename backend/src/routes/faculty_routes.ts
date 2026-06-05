@@ -18,6 +18,10 @@ import { createQuestionController } from "../controllers/faculty/questions/creat
 import { updateQuestionController } from "../controllers/faculty/questions/update_question_controller";
 import { getSubjectQuestionBankController } from "../controllers/faculty/questions/get_subject_question_bank_controller";
 import { getSubjectAssessmentsController } from "../controllers/faculty/assessments/get_subject_assessments_controller";
+import { saveExamDraftController } from "../controllers/faculty/exams/save_exam_draft_controller";
+import { getExamDraftController } from "../controllers/faculty/exams/get_exam_draft_controller";
+import { deleteExamDraftController } from "../controllers/faculty/exams/delete_exam_draft_controller";
+import { getFacultyExamsController } from "../controllers/faculty/exams/get_faculty_exams_controller";
 
 const router = express.Router();
 
@@ -33,6 +37,10 @@ router.get(
   "/subjects/:subjectId/question-bank",
   getSubjectQuestionBankController,
 );
+router.get("/exams", getFacultyExamsController);
+router.get("/subjects/:subjectId/exams/draft", getExamDraftController);
+router.post("/subjects/:subjectId/exams/draft", saveExamDraftController);
+router.delete("/subjects/:subjectId/exams/draft", deleteExamDraftController);
 router.get("/subjects/:subjectId/assessments", getSubjectAssessmentsController);
 router.post("/topics/:topicId/questions", createQuestionController);
 router.put("/topics/:topicId", updateTopicController);
@@ -42,4 +50,5 @@ router.get("/topics/:topicId/questions", getTopicQuestionsController);
 router.put("/questions/:questionId/archive", archiveQuestionController);
 router.put("/questions/:questionId/restore", restoreQuestionController);
 router.put("/questions/:questionId", updateQuestionController);
+
 export default router;

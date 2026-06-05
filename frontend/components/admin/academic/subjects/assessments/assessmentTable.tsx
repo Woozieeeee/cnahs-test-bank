@@ -3,25 +3,11 @@
 import { memo } from "react";
 import { useRouter } from "next/navigation";
 import SearchEmptyState from "@/components/common/search/searchEmptyState";
-
-interface Assessment {
-  id: number;
-
-  title: string;
-
-  status: string;
-
-  difficulty: string;
-
-  sections: number;
-
-  students: number;
-
-  averageScore: number;
-}
+import { Assessment } from "@/types/assessments/assessment";
 
 interface Props {
   assessments: Assessment[];
+
   subjectId: number;
 }
 
@@ -84,15 +70,15 @@ function AssessmentTable({
                 <td>{assessment.status}</td>
 
                 <td className="p-4">
-                  {assessment.sections}
+                  {assessment.section.name}
                 </td>
 
                 <td className="p-4">
-                  {assessment.students}
+                  {assessment._count.examQuestions}
                 </td>
 
                 <td className="p-4">
-                  {assessment.averageScore}%
+                  {assessment._count.attempts}
                 </td>
               </tr>
             ))}

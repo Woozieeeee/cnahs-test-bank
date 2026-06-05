@@ -1563,3 +1563,393 @@ Faculty Module: ~92% Complete
 Question Bank System: ~98% Complete
 Assessment System: ~50% Complete
 Adaptive Learning Engine: Planned
+
+# Exam Management System (Phase 2)
+
+## Purpose
+
+The Exam Management System is the core assessment engine of CNAHS.
+
+It allows faculty members to:
+
+- Build exams
+- Configure exam rules
+- Schedule assessments
+- Monitor live attempts
+- Review violations
+- Analyze results
+- Manage drafts
+
+The system is designed around a multi-step exam builder with automatic draft recovery.
+
+---
+
+# Faculty Responsibilities
+
+Faculty owns the full exam lifecycle.
+
+Faculty can:
+
+- Create exams
+- Edit exams
+- Save drafts
+- Publish exams
+- Schedule exams
+- Monitor students
+- Review violations
+- Flag attempts
+- Terminate attempts
+- Analyze results
+
+Faculty acts as the examiner.
+
+---
+
+# Admin Responsibilities
+
+Admin does not manage exam content.
+
+Admin responsibilities:
+
+- Monitor activity logs
+- Review escalated incidents
+- Review terminated attempts
+- Generate reports
+- Audit faculty actions
+- Monitor examination integrity
+
+Admin acts as oversight.
+
+---
+
+# Exam Creation Workflow
+
+## Step 0
+
+Exam Configuration
+
+Before opening the Exam Builder:
+
+Faculty selects:
+
+- Section
+- Question Limit
+- Difficulty Scope
+
+Examples:
+
+- 10 Easy Questions
+- 20 Mixed Questions
+- 50 Hard Questions
+
+Validation:
+
+Question count cannot exceed available question pool.
+
+---
+
+## Step 1
+
+Question Builder
+
+Purpose:
+
+Build the exam questionnaire.
+
+Layout:
+
+Left Panel (2fr)
+
+Selected Questions
+
+Features:
+
+- Drag reorder
+- Remove question
+- Question numbering
+- Pagination
+
+Right Panel (1fr)
+
+Question Pool
+
+Features:
+
+- Difficulty filter
+- Topic filter
+- Search
+- Pagination
+- Add Question
+- Auto Add Questions
+
+Rules:
+
+- No duplicate questions
+- Disabled rows when already selected
+- Cannot exceed question limit
+
+Auto Add:
+
+Automatically selects questions based on:
+
+- Difficulty
+- Topic
+- Available pool
+- Remaining slots
+
+---
+
+## Step 2
+
+Exam Rules
+
+Configurable Rules:
+
+- Randomize Questions
+- Randomize Answers
+- Disable Copy
+- Disable Paste
+- Require Fullscreen
+- Tab Switching Detection
+- Window Blur Detection
+- Device Change Detection
+
+Future:
+
+- Webcam Monitoring
+- Face Detection
+
+---
+
+## Step 3
+
+Exam Information
+
+Required Fields:
+
+- Exam Title
+- Exam Description
+- Section
+- Start Date
+- Start Time
+- End Date
+- End Time
+- Duration
+- Passing Score
+
+Generated:
+
+- Exam Code
+
+Validation:
+
+All required fields must be completed before proceeding.
+
+---
+
+## Step 4
+
+Review and Publish
+
+Displays:
+
+- Exam Information
+- Rules
+- Questions
+- Schedule
+
+Actions:
+
+- Save Draft
+- Publish Exam
+
+---
+
+# Draft Recovery System
+
+Purpose:
+
+Prevent data loss during exam creation.
+
+Triggers:
+
+- Browser Refresh
+- Browser Crash
+- Network Loss
+- Accidental Tab Close
+
+Stored Data:
+
+- Current Step
+- Exam Information
+- Rules
+- Selected Questions
+- Question Order
+- Schedule
+- Filters
+
+Behavior:
+
+When faculty returns:
+
+"Draft Found"
+
+Options:
+
+- Continue Draft
+- Discard Draft
+
+---
+
+# Exam Status Lifecycle
+
+DRAFT
+
+Exam builder in progress.
+
+↓
+
+SCHEDULED
+
+Exam published.
+
+↓
+
+ONGOING
+
+Exam active.
+
+↓
+
+COMPLETED
+
+Exam finished.
+
+↓
+
+ARCHIVED
+
+Exam archived.
+
+---
+
+# Violation Management System
+
+## Student Violations
+
+Violation Types:
+
+- TAB_SWITCH
+- WINDOW_BLUR
+- FULLSCREEN_EXIT
+- COPY_ATTEMPT
+- PASTE_ATTEMPT
+- MULTIPLE_FACE_DETECTED
+- NO_FACE_DETECTED
+- DEVICE_CHANGE
+- SUSPICIOUS_ACTIVITY
+
+All violations are automatically logged.
+
+---
+
+## Faculty Actions
+
+Faculty may:
+
+- Ignore Violation
+- Flag Attempt
+- Terminate Attempt
+- Escalate Incident
+
+All actions create Activity Logs.
+
+---
+
+## Admin Review Workflow
+
+Violation Created
+
+↓
+
+Faculty Review
+
+↓
+
+Faculty Action
+
+↓
+
+Activity Log
+
+↓
+
+Admin Audit
+
+Admin may review:
+
+- Who acted
+- Why action was taken
+- Student involved
+- Supporting evidence
+
+---
+
+# Exam Module Development Order
+
+Phase 1
+
+✅ Question Bank
+
+Phase 2
+
+🚧 Exam Builder
+
+- Draft System
+- Question Builder
+- Rules Engine
+- Scheduling
+
+Phase 3
+
+📋 Student Exam Taking
+
+Phase 4
+
+📋 Faculty Monitoring
+
+Phase 5
+
+📋 Faculty Analytics
+
+Phase 6
+
+📋 Admin Audit Dashboard
+
+## current priority
+
+EXAM MODULE
+
+1. Prisma Models
+   ✅ Exam
+   ✅ ExamQuestion
+   🚧 ExamDraft
+   🚧 ExamViolation
+
+2. Backend
+   🚧 Create Draft
+   🚧 Update Draft
+   🚧 Recover Draft
+   🚧 Publish Exam
+
+3. Faculty Frontend
+   🚧 Assessment Cards
+   🚧 Assessment Details Page
+   🚧 Create Exam Wizard
+   🚧 Draft Recovery Modal
+
+4. Student Exam System
+
+5. Faculty Monitoring
+
+6. Admin Audit Revision

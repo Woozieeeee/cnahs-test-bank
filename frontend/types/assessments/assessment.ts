@@ -22,25 +22,20 @@ export interface Assessment {
 
   section: {
     id: number;
-
     name: string;
   };
 
   _count: {
     examQuestions: number;
-
     attempts: number;
   };
-}
-
-export interface AssessmentSection {
-  id: number;
-
-  name: string;
 }
 
 export interface SubjectAssessmentsResponse {
   assessments: Assessment[];
 
-  sections: AssessmentSection[];
+  sections: {
+    id: number;
+    name: string;
+  }[];
 }

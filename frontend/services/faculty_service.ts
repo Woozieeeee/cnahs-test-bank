@@ -325,3 +325,61 @@ export const getSubjectAssessments = async (
 
   return response.data;
 };
+
+// ==================
+// GET EXAM DRAFT
+// ==================
+
+export const getExamDraft = async (subjectId: number) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/exams/draft`
+  );
+
+  return response.data;
+};
+
+// ==================
+// SAVE EXAM DRAFT
+// ==================
+
+export const saveExamDraft = async (
+  subjectId: number,
+  payload: {
+    currentStep: number;
+
+    title?: string;
+
+    draftData: any;
+  }
+) => {
+  const response = await api.post(
+    `/faculty/subjects/${subjectId}/exams/draft`,
+    payload
+  );
+
+  return response.data;
+};
+
+// ==================
+// DELETE EXAM DRAFT
+// ==================
+
+export const deleteExamDraft = async (
+  subjectId: number
+) => {
+  const response = await api.delete(
+    `/faculty/subjects/${subjectId}/exams/draft`
+  );
+
+  return response.data;
+};
+
+// ==================
+// GET FACULTY EXAM
+// ==================
+
+export const getFacultyExams = async () => {
+  const response = await api.get("/faculty/exams");
+
+  return response.data;
+};

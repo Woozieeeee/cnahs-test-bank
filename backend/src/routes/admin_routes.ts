@@ -39,7 +39,7 @@ import { getSectionQuestionBankStatsController } from "../controllers/admin/acad
 
 const router = express.Router();
 
-//router.use(authMiddleware, authorizeRoles("ADMIN"));
+router.use(authMiddleware, authorizeRoles("ADMIN"));
 router.use(adminActivityLogger);
 
 // DASHBOARD

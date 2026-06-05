@@ -35,11 +35,13 @@ export default function SubjectAssessmentsPage() {
     useSubject(subjectId);
 
   const {
-    assessments,
+    data,
     loading: assessmentsLoading,
     error: assessmentsError,
     refresh: refreshAssessments,
   } = useSubjectAssessments(subjectId);
+
+  const assessments = data?.assessments ?? [];
 
   const [search, setSearch] = useState("");
 
@@ -94,9 +96,7 @@ export default function SubjectAssessmentsPage() {
   // STATS
   // =========================
 
-  const scores = assessments.map(
-    (assessment) => assessment.averageScore
-  );
+  const scores: number[] = [];
 
   const averageScore =
     scores.length === 0
