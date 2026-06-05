@@ -1,4 +1,4 @@
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 import ActivityDetailItem from "./activityDetailItem";
 

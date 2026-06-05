@@ -14,7 +14,7 @@ import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
 import NotFoundState from "@/components/common/states/notFoundState";
 
-import useSubject from "@/hooks/useSubject";
+import useSubject from "@/hooks/academic/useSubject";
 
 import AssessmentHeader from "@/components/admin/academic/subjects/assessments/assessmentHeader";
 
@@ -24,7 +24,7 @@ import AssessmentFilters from "@/components/admin/academic/subjects/assessments/
 
 import AssessmentTable from "@/components/admin/academic/subjects/assessments/assessmentTable";
 
-import useSubjectAssessments from "@/hooks/useSubjectAssessments";
+import useSubjectAssessments from "@/hooks/faculty/subjects/useSubjectAssessments";
 
 export default function SubjectAssessmentsPage() {
   const params = useParams();

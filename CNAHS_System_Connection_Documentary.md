@@ -584,70 +584,52 @@ Backend
 ### Subject Management
 
 ✅ Assigned Subjects
-
 ✅ Subject Details
 
 ### Topic Management
 
 ✅ Create Topic
-
 ✅ Edit Topic
-
 ✅ Archive Topic
-
 ✅ Restore Topic
-
 ✅ Topic Dependency Validation
 
 ### Question Bank
 
 ✅ Retrieve Questions
-
 ✅ Question Table
-
 ✅ Pagination
-
 ✅ Search
-
 ✅ Filtering
-
 ✅ Archive Question
-
 ✅ Restore Question
-
 ✅ Dependency Validation Backend
-
 ✅ Create Question
-
 ✅ Create Question Backend
-
 ✅ Edit Question Backend
-
 ✅ Edit Question Modal
-
 ✅ Question Dependency Modal
-
 ✅ Upload CSV
-
 ✅ Template Download
-
 ✅ Import Validation
-
 ✅ Duplicate Detection
-
 ✅ Import History
-
 ✅ Import Details
-
 ✅ Error Viewer
-
 ✅ Import Jobs
-
 ✅ Import Batches
-
 ✅ Question Import Hooks
-
 ✅ Question Import Modals
+✅ Difficulty Ordering
+✅ Archived Question Ordering
+✅ Question Search Autocomplete
+✅ Question Bank Analytics
+✅ Difficulty Distribution Analytics
+✅ Question Performance Analytics
+✅ Question Pagination
+✅ Import File Metadata Tracking
+✅ Import Error Viewer
+✅ Question Accuracy Tracking
 
 ### Question Bank CSV Import
 
@@ -656,7 +638,7 @@ Route Base:
 
 Endpoints:
 
-POST `/upload`
+POST `/uploads`
 
 - Upload question CSV
 - Creates ImportJob
@@ -680,9 +662,15 @@ and downloadable templates.
 
 ## In Progress
 
-🚧 CSV Import Error Viewer
+🚧 Subject Assessment Analytics
 
 🚧 Assessment Builder
+
+🚧 Assessment Management
+
+🚧 Exam Scheduling
+
+🚧 Assessment Attempts Analytics
 
 ## Planned
 
@@ -731,11 +719,8 @@ Done
 2. Question Bank CRUD
 3. Question Dependency Validation
 4. Question Archive/Restore
-
-Next
-
-1. CSV Import
-2. Faculty Assessment Builder
+5. CSV Import
+6. Faculty Assessment Builder
 
 Then
 
@@ -772,6 +757,483 @@ Questions imported through CSV are automatically linked to:
 ---
 
 # Database Models
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+provider = "mysql"
+url = env("DATABASE_URL")
+}
+
+model User {
+id Int @id @default(autoincrement())
+name String
+username String? @unique
+studentId String? @unique
+studentRecord StudentRecord? @relation(fields: [studentId], references: [studentId])
+password String
+role Role
+status String @default("PENDING")
+sectionId Int?
+isFirstLogin Boolean @default(true)
+examAttempts ExamAttempt[]
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+section Section? @relation(fields: [sectionId], references: [id])
+subjectAssignments SubjectFaculty[] @relation("FacultyPool")
+sectionSubjects SectionSubject[] @relation("SectionInstructor")
+studentProgress StudentProgress?
+createdQuestions Question[] @relation("QuestionCreator")
+questionImportBatches QuestionImportBatch[] @relation("QuestionImportCreator")
+importJobs ImportJob[]
+
+@@index([role])
+@@index([status])
+@@index([sectionId])
+}
+
+model StudentRecord {
+id Int @id @default(autoincrement())
+studentId String @unique
+firstName String
+middleName String?
+lastName String
+suffix String?
+program String
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+// =========================
+// SECTION RELATION
+// =========================
+
+sectionId Int?
+section Section? @relation(fields: [sectionId], references: [id])
+
+// =========================
+// USER RELATION
+// =========================
+
+user User?
+
+@@index([program])
+@@index([sectionId])
+}
+
+model Section {
+id Int @id @default(autoincrement())
+name String @unique
+sectionCode String
+yearLevel Int
+program String
+createdAt DateTime @default(now())
+isArchived Boolean @default(false)
+updatedAt DateTime @updatedAt
+users User[]
+studentRecords StudentRecord[]
+exams Exam[]
+sectionSubjects SectionSubject[]
+
+@@unique([program, yearLevel, sectionCode])
+@@index([program])
+@@index([yearLevel])
+}
+
+model Subject {
+id Int @id @default(autoincrement())
+name String
+code String @unique
+description String?
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+isArchived Boolean @default(false)
+faculties SubjectFaculty[]
+exams Exam[]
+topics Topic[]
+sectionSubjects SectionSubject[]
+questions Question[]
+totalQuestions Int @default(0)
+totalExams Int @default(0)
+
+@@index([isArchived])
+}
+
+model SubjectFaculty {
+id Int @id @default(autoincrement())
+subjectId Int
+facultyId Int
+createdAt DateTime @default(now())
+
+subject Subject @relation(fields: [subjectId], references: [id])
+
+faculty User @relation("FacultyPool", fields: [facultyId], references: [id])
+
+@@unique([subjectId, facultyId])
+@@index([subjectId])
+@@index([facultyId])
+}
+
+model SectionSubject {
+id Int @id @default(autoincrement())
+sectionId Int
+subjectId Int
+facultyId Int?
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+section Section @relation(fields: [sectionId], references: [id])
+subject Subject @relation(fields: [subjectId], references: [id])
+faculty User? @relation("SectionInstructor", fields: [facultyId], references: [id])
+
+@@unique([sectionId, subjectId])
+@@index([sectionId])
+@@index([subjectId])
+@@index([facultyId])
+}
+
+model Exam {
+id Int @id @default(autoincrement())
+title String
+description String?
+difficulty ExamDifficulty
+
+duration Int
+
+passingScore Float @default(75)
+
+randomizeQuestions Boolean @default(true)
+
+randomizeOptions Boolean @default(true)
+
+status ExamStatus @default(SCHEDULED)
+
+startsAt DateTime?
+endsAt DateTime?
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+isArchived Boolean @default(false)
+
+subjectId Int
+sectionId Int
+
+subject Subject @relation(fields: [subjectId], references: [id])
+section Section @relation(fields: [sectionId], references: [id])
+
+examQuestions ExamQuestion[]
+attempts ExamAttempt[]
+
+@@index([status])
+@@index([subjectId])
+@@index([sectionId])
+@@index([isArchived])
+}
+
+model StudentProgress {
+id Int @id @default(autoincrement())
+studentId Int
+currentDifficulty ExamDifficulty @default(EASY)
+easyPassed Boolean @default(false)
+mediumPassed Boolean @default(false)
+hardPassed Boolean @default(false)
+expertPassed Boolean @default(false)
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+// =========================
+// RELATION
+// =========================
+
+student User @relation(fields: [studentId], references: [id])
+
+@@unique([studentId])
+@@index([studentId])
+}
+
+model ActivityLog {
+id Int @id @default(autoincrement())
+action String
+categories Json
+severity String @default("INFO")
+description String?
+performedBy String
+targetUser String?
+metadata Json?
+createdAt DateTime @default(now())
+
+@@index([severity])
+@@index([performedBy])
+@@index([createdAt])
+}
+
+model Question {
+id Int @id @default(autoincrement())
+subjectId Int
+topicId Int
+question String
+correctAnswer String
+explanation String?
+difficulty ExamDifficulty
+totalAttempts Int @default(0)
+totalCorrect Int @default(0)
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+isArchived Boolean @default(false)
+createdById Int?
+
+createdBy User? @relation("QuestionCreator", fields: [createdById], references: [id])
+subject Subject @relation(fields: [subjectId], references: [id])
+topic Topic @relation(fields: [topicId], references: [id])
+importBatch QuestionImportBatch? @relation(fields: [importBatchId], references: [id])
+
+importBatchId Int?
+
+studentAnswers StudentAnswer[]
+options QuestionOption[]
+examQuestions ExamQuestion[]
+
+@@index([subjectId])
+@@index([topicId])
+@@index([isArchived])
+@@index([difficulty])
+@@index([createdById])
+@@index([importBatchId])
+}
+
+model ExamQuestion {
+id Int @id @default(autoincrement())
+
+examId Int
+questionId Int
+
+exam Exam @relation(fields: [examId], references: [id])
+question Question @relation(fields: [questionId], references: [id])
+
+@@unique([examId, questionId])
+@@index([examId])
+@@index([questionId])
+}
+
+model ExamAttempt {
+id Int @id @default(autoincrement())
+examId Int
+studentId Int
+score Float @default(0)
+startedAt DateTime
+submittedAt DateTime?
+status AttemptStatus @default(IN_PROGRESS)
+
+exam Exam @relation(fields: [examId], references: [id])
+student User @relation(fields: [studentId], references: [id])
+
+answers StudentAnswer[]
+
+@@index([examId])
+@@index([studentId])
+}
+
+model StudentAnswer {
+id Int @id @default(autoincrement())
+attemptId Int
+questionId Int
+selectedOptionId Int
+isCorrect Boolean
+timeSpentSeconds Int? @default(0)
+
+selectedOption QuestionOption @relation(fields: [selectedOptionId], references: [id])
+attempt ExamAttempt @relation(fields: [attemptId], references: [id])
+question Question @relation(fields: [questionId], references: [id])
+
+@@unique([attemptId, questionId])
+@@index([attemptId])
+@@index([questionId])
+@@index([selectedOptionId])
+}
+
+model QuestionOption {
+id Int @id @default(autoincrement())
+questionId Int
+optionText String
+isCorrect Boolean
+
+question Question @relation(fields: [questionId], references: [id])
+studentAnswers StudentAnswer[]
+
+@@index([questionId])
+}
+
+model Topic {
+id Int @id @default(autoincrement())
+
+subjectId Int
+
+name String
+
+description String?
+totalQuestions Int @default(0)
+importJobs ImportJob[]
+
+createdAt DateTime @default(now())
+isArchived Boolean @default(false)
+updatedAt DateTime @updatedAt
+
+subject Subject @relation(fields: [subjectId], references: [id])
+
+questions Question[]
+
+@@unique([subjectId, name])
+@@index([subjectId])
+@@index([isArchived])
+}
+
+model ImportJob {
+id Int @id @default(autoincrement())
+
+filename String
+filePath String
+fileSize Int?
+mimeType String?
+
+totalRows Int @default(0)
+importedRows Int @default(0)
+skippedRows Int @default(0)
+
+status ImportJobStatus @default(PROCESSING)
+
+errorReport Json?
+completedAt DateTime?
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+createdById Int
+
+createdBy User @relation(fields: [createdById], references: [id])
+
+topicId Int
+topic Topic @relation(fields: [topicId], references: [id])
+batches QuestionImportBatch[]
+
+@@index([createdById])
+@@index([topicId])
+@@index([status])
+@@index([createdAt])
+}
+
+model QuestionImportBatch {
+id Int @id @default(autoincrement())
+
+filename String
+
+totalRows Int
+importedRows Int
+skippedRows Int
+
+createdAt DateTime @default(now())
+completedAt DateTime?
+
+importJobId Int?
+
+importJob ImportJob? @relation(fields: [importJobId], references: [id])
+createdById Int?
+
+createdBy User? @relation("QuestionImportCreator", fields: [createdById], references: [id])
+questions Question[]
+
+@@index([importJobId])
+@@index([createdAt])
+@@index([createdById])
+}
+
+enum Role {
+ADMIN
+FACULTY
+STUDENT
+}
+
+enum ExamStatus {
+DRAFT
+SCHEDULED
+ONGOING
+COMPLETED
+ARCHIVED
+}
+
+enum ExamDifficulty {
+EASY
+MEDIUM
+HARD
+EXPERT
+}
+
+enum AttemptStatus {
+IN_PROGRESS
+SUBMITTED
+AUTO_SUBMITTED
+}
+
+enum ImportJobStatus {
+PROCESSING
+COMPLETED
+FAILED
+}
+
+# Subject Question Bank Analytics
+
+Route:
+
+/faculty/subjects/:subjectId/question-bank
+
+Purpose:
+
+Provides faculty-level analytics for an entire subject.
+
+Features:
+
+- Difficulty Distribution
+- Success Rate Analytics
+- Question Performance Analysis
+- High Performance Questions
+- Low Performance Questions
+- Question Usage Tracking
+- Question Accuracy Tracking
+- Pagination
+- Performance Tabs
+
+# Subject Assessment Analytics
+
+Route:
+
+/faculty/subjects/:subjectId/assessments
+
+Purpose:
+
+Provides assessment monitoring for a specific subject.
+
+Features:
+
+- Assessment Overview
+- Section Filtering
+- Status Tabs
+- Assessment Statistics
+- Assessment Cards
+- Assessment Performance Monitoring
+
+Statuses:
+
+- Draft
+- Scheduled
+- Ongoing
+- Completed
+- Archived
 
 ## ImportJob
 
@@ -951,11 +1413,42 @@ get_import_job_details_service.ts
 
 ## Hooks
 
-src/hooks/
+Location
 
-useQuestionImportHistory.ts
+frontend/hooks
 
-useImportJobDetails.ts
+Structure:
+
+hooks/
+
+├── auth/
+├── faculty/
+│ ├── dashboard/
+│ ├── subjects/
+│ ├── topics/
+│ └── questions/
+├── academic/
+├── exams/
+└── shared/
+
+## Types
+
+Location
+
+frontend/types
+
+Structure:
+
+types/
+
+├── auth/
+├── faculty/
+├── academic/
+├── assessments/
+├── imports/
+├── questions/
+├── activity/
+└── exams/
 
 ---
 
@@ -1065,13 +1558,8 @@ Planned:
 Authentication: Stable
 
 Admin Module: ~90% Complete
-
 Student Module: ~15% Complete
-
-Faculty Module: ~88% Complete
-
-Question Bank System: ~95% Complete
-
-Assessment System: ~40% Complete
-
+Faculty Module: ~92% Complete
+Question Bank System: ~98% Complete
+Assessment System: ~50% Complete
 Adaptive Learning Engine: Planned

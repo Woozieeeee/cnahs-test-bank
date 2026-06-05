@@ -2,48 +2,47 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import type { Exam } from "@/types/exam";
+import { getSections } from "@/services/academic_service";
 
-import { getExamById } from "@/services/exam_service";
+import type { Section } from "@/types/academic/section";
 
-export default function useExam(id: number) {
-  const [exam, setExam] = useState<Exam | null>(null);
+export default function useSections() {
+  const [sections, setSections] = useState<Section[]>([]);
 
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
-    if (!id) return;
-
     try {
       setLoading(true);
 
       setError(null);
 
-      const data = await getExamById(id);
+      const data = await getSections();
 
-      setExam(data);
+      setSections(data);
     } catch (error: any) {
       console.error(error);
 
       setError(
         error?.response?.data?.message ||
-          "Failed to load exam."
+          "Failed to load sections."
       );
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
   return {
-    exam,
+    sections,
     loading,
     error,
     refresh,
+    setSections,
   };
 }

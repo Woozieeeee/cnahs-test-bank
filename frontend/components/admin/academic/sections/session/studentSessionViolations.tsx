@@ -8,7 +8,7 @@ import { mockSessionViolations } from "@/components/admin/academic/sections/data
 
 import ViolationItem from "./violations/violationItem";
 
-import type { Violation } from "@/types/violation";
+import type { Violation } from "@/types/activity/violation";
 
 const ViolationDetailsModal = dynamic(
   () => import("./violations/violationDetailsModal"),

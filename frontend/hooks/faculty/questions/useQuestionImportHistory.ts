@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getQuestionImportHistory } from "@/services/faculty_service";
 
-import { ImportJob } from "@/types/importJob";
+import { ImportJob } from "@/types/imports/importJob";
 
 export default function useQuestionImportHistory(
   topicId: number

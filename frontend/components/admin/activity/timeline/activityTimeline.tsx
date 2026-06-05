@@ -5,7 +5,7 @@ import MotionCard from "@/components/motion/motionCard";
 import ActivityTimelineContent from "./activityTimelineContent";
 import ActivityTimelineEmpty from "./activityTimelineEmpty";
 import ActivityTimelinePagination from "./activityTimelinePagination";
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 import ActivityTimelineLoading from "./activityTimelineLoading";
 
 interface Props {

@@ -13,7 +13,7 @@ import ErrorState from "@/components/common/states/errorState";
 
 import Pagination from "@/components/common/pagination";
 
-import useFacultyQuestions from "@/hooks/useFacultyQuestions";
+import useFacultyQuestions from "@/hooks/faculty/questions/useFacultyQuestions";
 
 import QuestionBankHeader from "@/components/faculty/questions/questionBankHeader";
 import QuestionBankStats from "@/components/faculty/questions/questionBankStats";
@@ -25,14 +25,14 @@ import UpdateQuestionModal from "@/components/faculty/questions/modals/updateQue
 import UploadQuestionCsvModal from "@/components/faculty/questions/modals/uploadQuestionCsvModal";
 import ImportHistoryModal from "@/components/faculty/questions/modals/importHistoryModal";
 import { downloadQuestionTemplate } from "@/services/faculty_service";
-import useImportJobDetails from "@/hooks/useImportJobDetails";
+import useImportJobDetails from "@/hooks/faculty/questions/useImportJobDetails";
 import ImportErrorsModal from "@/components/faculty/questions/modals/importErrorsModal";
 
 import DependencyModal from "@/components/common/modal/dependencyModal";
 
-import useQuestionImportHistory from "@/hooks/useQuestionImportHistory";
+import useQuestionImportHistory from "@/hooks/faculty/questions/useQuestionImportHistory";
 
-import { FacultyQuestion } from "@/types/facultyQuestion";
+import { FacultyQuestion } from "@/types/faculty/facultyQuestion";
 
 import {
   archiveFacultyQuestion,

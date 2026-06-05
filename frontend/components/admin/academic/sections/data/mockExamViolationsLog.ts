@@ -1,4 +1,4 @@
-import type { ExamViolation } from "@/types/examViolation";
+import type { ExamViolation } from "@/types/assessments/examViolation";
 
 export const mockExamViolationLogs: ExamViolation[] = [
   {

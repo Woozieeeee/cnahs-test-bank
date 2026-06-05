@@ -5,7 +5,7 @@ import ActivityTimelineMeta from "./activityTimelineMeta";
 import ActivityTimelineHeader from "./activityTimelineHeader";
 import ActivityTimelineCategories from "./activityTimelineCategories";
 import { ACTIVITY_SEVERITY_COLORS } from "@/lib/constants/activitySeverity";
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 interface Props {
   activity: ActivityLog;

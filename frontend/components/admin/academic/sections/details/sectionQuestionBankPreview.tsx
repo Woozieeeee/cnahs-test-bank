@@ -4,8 +4,8 @@ import { memo } from "react";
 
 import Link from "next/link";
 
-import type { Section } from "@/types/section";
-import useSectionQuestionBankStats from "@/hooks/useSectionQuestionBankStats";
+import type { Section } from "@/types/academic/section";
+import useSectionQuestionBankStats from "@/hooks/shared/useSectionQuestionBankStats";
 
 interface Props {
   section: Section;

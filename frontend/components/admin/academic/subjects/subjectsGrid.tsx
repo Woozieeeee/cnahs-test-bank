@@ -1,6 +1,6 @@
 import SubjectCard from "./subjectCard";
 
-import type { Subject } from "@/types/subject";
+import type { Subject } from "@/types/academic/subject";
 
 interface Props {
   subjects: Subject[];

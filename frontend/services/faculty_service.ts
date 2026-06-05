@@ -1,5 +1,6 @@
 import api from "@/lib/axios";
-import { ImportSummary } from "@/types/importSummary";
+import { ImportSummary } from "@/types/imports/importSummary";
+import { SubjectAssessmentsResponse } from "@/types/assessments/assessment";
 
 // =========================
 // GET STUDENT DASHBOARD
@@ -306,6 +307,20 @@ export const getSubjectQuestionBank = async (
 ) => {
   const response = await api.get(
     `/faculty/subjects/${subjectId}/question-bank`
+  );
+
+  return response.data;
+};
+
+// =========================
+// GET SUBJECT ASSESSMENTS
+// =========================
+
+export const getSubjectAssessments = async (
+  subjectId: number
+): Promise<SubjectAssessmentsResponse> => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/assessments`
   );
 
   return response.data;

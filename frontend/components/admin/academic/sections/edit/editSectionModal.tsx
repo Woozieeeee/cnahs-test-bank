@@ -12,7 +12,7 @@ import { updateSection } from "@/services/academic_service";
 
 import { successToast, errorToast } from "@/lib/swal";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 import EditSectionForm from "./editSectionForm";
 
@@ -82,11 +82,14 @@ function EditSectionModal({
     try {
       setLoading(true);
 
-      const updatedSection = await updateSection(section.id, {
-        program,
-        yearLevel,
-        sectionCode: trimmedSectionCode,
-      });
+      const updatedSection = await updateSection(
+        section.id,
+        {
+          program,
+          yearLevel,
+          sectionCode: trimmedSectionCode,
+        }
+      );
 
       successToast("Section updated successfully.");
 
@@ -106,7 +109,11 @@ function EditSectionModal({
   if (!open || !section) return null;
 
   return (
-    <MotionModal open={open} maxWidth="max-w-2xl" contentClassName="max-h-[90vh] overflow-y-auto">
+    <MotionModal
+      open={open}
+      maxWidth="max-w-2xl"
+      contentClassName="max-h-[90vh] overflow-y-auto"
+    >
       <div className="p-6">
         <ModalHeader
           title="Edit Section"

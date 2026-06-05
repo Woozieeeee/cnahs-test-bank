@@ -4,7 +4,7 @@ import { memo } from "react";
 
 import BackButton from "@/components/common/backButton";
 
-import type { Subject } from "@/types/subject";
+import type { Subject } from "@/types/academic/subject";
 
 interface Props {
   sectionId: number;

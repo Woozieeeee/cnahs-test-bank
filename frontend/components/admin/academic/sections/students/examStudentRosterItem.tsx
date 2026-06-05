@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { memo } from "react";
-import type { ExamStudent } from "@/types/examStudent";
+import type { ExamStudent } from "@/types/assessments/examStudent";
 
 interface Props {
   student: ExamStudent;

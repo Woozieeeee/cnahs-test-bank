@@ -15,7 +15,7 @@ import FacultySubjectsPreview from "@/components/faculty/dashboard/facultySubjec
 
 import FacultyUpcomingExams from "@/components/faculty/dashboard/facultyUpcomingExams";
 
-import useFacultyDashboard from "@/hooks/useFacultyDashboard";
+import useFacultyDashboard from "@/hooks/faculty/dashboard/useFacultyDashboard";
 
 export default function FacultyDashboardPage() {
   const { dashboard, loading, error, refresh } =

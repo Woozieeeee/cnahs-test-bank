@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { getFacultySubjectById } from "@/services/faculty_service";
 
-import { FacultySubjectDetails } from "@/types/facultySubjectDetails";
+import { FacultySubjectDetails } from "@/types/faculty/facultySubjectDetails";
 
 export default function useFacultySubject(
   subjectId: number

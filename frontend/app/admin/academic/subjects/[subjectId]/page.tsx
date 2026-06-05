@@ -10,7 +10,7 @@ import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
 import NotFoundState from "@/components/common/states/notFoundState";
 
-import useSubject from "@/hooks/useSubject";
+import useSubject from "@/hooks/academic/useSubject";
 
 import SubjectDetailsHeader from "@/components/admin/academic/subjects/details/subjectDetailsHeader";
 import SubjectDetailsStats from "@/components/admin/academic/subjects/details/subjectDetailsStats";
@@ -19,8 +19,8 @@ import SubjectReadinessAnalytics from "@/components/admin/academic/subjects/deta
 import SubjectQuestionBankSummary from "@/components/admin/academic/subjects/details/subjectQuestionBankSummary";
 import SubjectAssessmentSummary from "@/components/admin/academic/subjects/details/subjectAssessmentSummary";
 import { mockSubjectDetails } from "@/components/admin/academic/subjects/data/mockSubjectDetails";
-import useSubjectQuestionStats from "@/hooks/useSubjectQuestionStats";
-import useSubjectAssessmentSummary from "@/hooks/useSubjectAssessmentSummary";
+import useSubjectQuestionStats from "@/hooks/faculty/subjects/useSubjectQuestionStats";
+import useSubjectAssessmentSummary from "@/hooks/faculty/subjects/useSubjectAssessmentSummary";
 
 export default function SubjectDetailsPage() {
   const params = useParams();

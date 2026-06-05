@@ -4,7 +4,7 @@ import PageContainer from "@/components/layout/pages/pageContainer";
 
 import BackButton from "@/components/common/backButton";
 
-import useSectionId from "@/hooks/useSectionId";
+import useSectionId from "@/hooks/shared/useSectionId";
 
 import StudentProfileHero from "@/components/admin/academic/sections/students/profile/studentProfileHero";
 

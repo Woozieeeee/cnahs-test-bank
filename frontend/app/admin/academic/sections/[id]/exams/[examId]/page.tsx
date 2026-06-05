@@ -1,8 +1,8 @@
 "use client";
 
-import useSectionId from "@/hooks/useSectionId";
+import useSectionId from "@/hooks/shared/useSectionId";
 
-import useExamId from "@/hooks/useExamId";
+import useExamId from "@/hooks/exams/useExamId";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 

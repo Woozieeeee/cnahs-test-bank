@@ -1,4 +1,4 @@
-import type { Exam } from "@/types/exam";
+import type { Exam } from "@/types/assessments/exam";
 
 export const mockSectionExams: Exam[] = [
   {

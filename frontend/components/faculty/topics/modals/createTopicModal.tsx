@@ -10,7 +10,7 @@ import { successToast, errorToast } from "@/lib/swal";
 
 import { createFacultyTopic } from "@/services/faculty_service";
 
-import type { FacultyTopic } from "@/types/facultyTopic";
+import type { FacultyTopic } from "@/types/faculty/facultyTopic";
 
 interface Props {
   open: boolean;
@@ -38,10 +38,13 @@ export default function CreateTopicModal({
     try {
       setLoading(true);
 
-      const createdTopic = await createFacultyTopic(subjectId, {
-        name,
-        description,
-      });
+      const createdTopic = await createFacultyTopic(
+        subjectId,
+        {
+          name,
+          description,
+        }
+      );
 
       successToast("Topic created successfully.");
 
@@ -69,7 +72,11 @@ export default function CreateTopicModal({
   if (!open) return null;
 
   return (
-    <MotionModal open={open} maxWidth="max-w-lg" contentClassName="max-h-[90vh] overflow-y-auto">
+    <MotionModal
+      open={open}
+      maxWidth="max-w-lg"
+      contentClassName="max-h-[90vh] overflow-y-auto"
+    >
       <div className="p-6">
         <ModalHeader
           title="Create Topic"

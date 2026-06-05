@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { getFacultyDashboard } from "@/services/faculty_service";
 
-import { FacultyDashboard } from "@/types/facultyDashboard";
+import { FacultyDashboard } from "@/types/faculty/facultyDashboard";
 
 export default function useFacultyDashboard() {
   const [dashboard, setDashboard] =

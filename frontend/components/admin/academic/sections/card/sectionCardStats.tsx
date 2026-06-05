@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 interface Props {
   section: Section;

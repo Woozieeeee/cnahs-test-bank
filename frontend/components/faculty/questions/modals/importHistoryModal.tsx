@@ -7,7 +7,7 @@ import EmptyState from "@/components/common/states/emptyState";
 
 import MotionButton from "@/components/motion/motionButton";
 
-import { ImportJob } from "@/types/importJob";
+import { ImportJob } from "@/types/imports/importJob";
 
 import { formatFileSize } from "@/lib/formatFileSize";
 

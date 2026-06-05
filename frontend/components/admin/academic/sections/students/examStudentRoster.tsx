@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import ExamStudentRosterItem from "./examStudentRosterItem";
 
-import type { ExamStudent } from "@/types/examStudent";
+import type { ExamStudent } from "@/types/assessments/examStudent";
 
 interface Props {
   students: ExamStudent[];

@@ -8,9 +8,9 @@ import BackButton from "@/components/common/backButton";
 
 import Pagination from "@/components/common/pagination";
 
-import useSectionId from "@/hooks/useSectionId";
+import useSectionId from "@/hooks/shared/useSectionId";
 
-import useExamId from "@/hooks/useExamId";
+import useExamId from "@/hooks/exams/useExamId";
 
 import ExamViolationsHeader from "@/components/admin/academic/sections/exams/violations/examViolationsHeader";
 
@@ -28,7 +28,7 @@ import { mockExamViolationLogs } from "@/components/admin/academic/sections/data
 
 import ExamViolationsToolbar from "@/components/admin/academic/sections/exams/violations/examViolationsToolbar";
 
-import type { ExamViolation } from "@/types/examViolation";
+import type { ExamViolation } from "@/types/assessments/examViolation";
 
 const PAGE_SIZE = 10;
 

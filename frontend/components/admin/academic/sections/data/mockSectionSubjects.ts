@@ -1,4 +1,4 @@
-import type { SectionSubject } from "@/types/section";
+import type { SectionSubject } from "@/types/academic/section";
 
 export const mockSectionSubjects: SectionSubject[] = [
   {

@@ -4,7 +4,7 @@ import { memo } from "react";
 
 import Link from "next/link";
 
-import type { SectionSubject } from "@/types/section";
+import type { SectionSubject } from "@/types/academic/section";
 
 import MotionCard from "@/components/motion/motionCard";
 

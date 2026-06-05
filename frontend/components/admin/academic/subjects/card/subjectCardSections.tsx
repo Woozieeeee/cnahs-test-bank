@@ -1,4 +1,4 @@
-import { SectionSubject } from "@/types/subject";
+import { SectionSubject } from "@/types/academic/subject";
 
 interface Props {
   sectionSubjects: SectionSubject[];

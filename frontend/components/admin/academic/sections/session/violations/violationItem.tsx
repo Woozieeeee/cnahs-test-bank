@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import type { Violation } from "@/types/violation";
+import type { Violation } from "@/types/activity/violation";
 
 import TimelineItem from "@/components/common/timeline/timelineItem";
 import TimelineTime from "@/components/common/timeline/timelineTime";

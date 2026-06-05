@@ -4,7 +4,7 @@ import { memo } from "react";
 
 import Link from "next/link";
 
-import type { Exam } from "@/types/exam";
+import type { Exam } from "@/types/assessments/exam";
 
 import SectionExamCard from "./sectionExamsCard";
 

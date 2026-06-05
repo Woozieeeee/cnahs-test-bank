@@ -1,6 +1,6 @@
 "use client";
 
-import useGuestGuard from "@/hooks/useGuestGuard";
+import useGuestGuard from "@/hooks/auth/useGuestGuard";
 
 import AuthLayout from "@/components/auth/layout/authLayout";
 

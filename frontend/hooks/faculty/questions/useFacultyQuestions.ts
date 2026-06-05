@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getFacultyQuestions } from "@/services/faculty_service";
 
-import { FacultyQuestion } from "@/types/facultyQuestion";
+import { FacultyQuestion } from "@/types/faculty/facultyQuestion";
 
 export default function useFacultyQuestions(
   topicId: number

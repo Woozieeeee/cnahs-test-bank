@@ -6,7 +6,7 @@ import Navbar from "@/components/layout/navbar/navbar";
 
 import { SidebarProvider } from "@/components/layout/sidebar/sidebarContext";
 
-import useProtectedRoute from "@/hooks/useProtectedRoute";
+import useProtectedRoute from "@/hooks/auth/useProtectedRoute";
 
 import { adminNav } from "@/config/navigation/adminNav";
 

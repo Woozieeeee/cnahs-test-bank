@@ -1,6 +1,6 @@
 "use client";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 import BackButton from "@/components/common/backButton";
 

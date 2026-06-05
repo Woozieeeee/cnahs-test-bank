@@ -18,7 +18,7 @@ import ActivityDetailsModal from "@/components/admin/activity/modal/activityDeta
 
 import { getActivityLogs } from "@/services/admin_service";
 
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 export default function ActivityLogsPage() {
   const [logs, setLogs] = useState<ActivityLog[]>([]);

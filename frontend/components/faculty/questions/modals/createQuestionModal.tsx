@@ -10,7 +10,7 @@ import ModalContainer from "@/components/common/modal/modalContainer";
 import { memo } from "react";
 import { createFacultyQuestion } from "@/services/faculty_service";
 
-import type { FacultyQuestion } from "@/types/facultyQuestion";
+import type { FacultyQuestion } from "@/types/faculty/facultyQuestion";
 
 interface Props {
   open: boolean;

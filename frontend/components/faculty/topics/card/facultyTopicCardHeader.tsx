@@ -1,6 +1,6 @@
 "use client";
 
-import { FacultyTopic } from "@/types/facultyTopic";
+import { FacultyTopic } from "@/types/faculty/facultyTopic";
 
 import FacultyTopicCardDropdown from "./facultyTopicCardDropdown";
 

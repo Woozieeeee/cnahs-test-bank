@@ -1,6 +1,6 @@
 import ActivitySeverityBadge from "../activitySeverityBadge";
 
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 interface Props {
   activity: ActivityLog;

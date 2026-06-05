@@ -4,9 +4,9 @@ import { useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
-import useSections from "@/hooks/useSections";
+import useSections from "@/hooks/academic/useSections";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
@@ -51,7 +51,9 @@ export default function SectionsPage() {
     setOpenCreateModal(false);
   };
 
-  const handleSectionUpdated = (updatedSection: Section) => {
+  const handleSectionUpdated = (
+    updatedSection: Section
+  ) => {
     setSections((current) =>
       current.map((section) =>
         section.id === updatedSection.id
@@ -63,7 +65,9 @@ export default function SectionsPage() {
     setOpenEditModal(false);
   };
 
-  const handleSectionArchiveSuccess = (sectionId: number) => {
+  const handleSectionArchiveSuccess = (
+    sectionId: number
+  ) => {
     setSections((current) =>
       current.map((section) =>
         section.id === sectionId
@@ -73,7 +77,9 @@ export default function SectionsPage() {
     );
   };
 
-  const handleSectionRestoreSuccess = (sectionId: number) => {
+  const handleSectionRestoreSuccess = (
+    sectionId: number
+  ) => {
     setSections((current) =>
       current.map((section) =>
         section.id === sectionId

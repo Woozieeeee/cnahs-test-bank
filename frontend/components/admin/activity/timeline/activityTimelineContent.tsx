@@ -1,5 +1,5 @@
 import ActivityTimelineItem from "./item/activityTimelineItem";
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 interface Props {
   logs: ActivityLog[];

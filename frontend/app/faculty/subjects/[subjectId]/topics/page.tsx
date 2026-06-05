@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import type { FacultyTopic } from "@/types/facultyTopic";
+import type { FacultyTopic } from "@/types/faculty/facultyTopic";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
@@ -11,7 +11,7 @@ import BackButton from "@/components/common/backButton";
 import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
 
-import useFacultyTopics from "@/hooks/useFacultyTopics";
+import useFacultyTopics from "@/hooks/faculty/topics/useFacultyTopics";
 import CreateTopicModal from "@/components/faculty/topics/modals/createTopicModal";
 import EditTopicModal from "@/components/faculty/topics/modals/editTopicModal";
 

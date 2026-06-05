@@ -4,7 +4,7 @@ import { Moon, Sun } from "lucide-react";
 
 import { useTheme } from "next-themes";
 
-import useMounted from "@/hooks/useMounted";
+import useMounted from "@/hooks/shared/useMounted";
 
 export default function NavbarDarkMode() {
   const { theme, setTheme } = useTheme();

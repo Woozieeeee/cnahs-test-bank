@@ -13,7 +13,7 @@ import FacultyAssessmentPreview from "@/components/faculty/subjects/details/facu
 import FacultyQuestionBankPreview from "@/components/faculty/subjects/details/facultyQuestionBankPreview";
 import FacultyTopicsPreview from "@/components/faculty/subjects/details/facultyTopicsPreview";
 
-import useFacultySubject from "@/hooks/useFacultySubject";
+import useFacultySubject from "@/hooks/faculty/subjects/useFacultySubject";
 
 import FacultySubjectHeader from "@/components/faculty/subjects/details/facultySubjectHeader";
 

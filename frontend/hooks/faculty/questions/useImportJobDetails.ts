@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getImportJobDetails } from "@/services/faculty_service";
 
-import { ImportJobDetails } from "@/types/importJobDetails";
+import { ImportJobDetails } from "@/types/imports/importJobDetails";
 
 export default function useImportJobDetails(
   jobId: number | null

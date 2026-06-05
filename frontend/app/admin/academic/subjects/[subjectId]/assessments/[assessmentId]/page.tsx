@@ -20,7 +20,7 @@ import AssessmentConfigurationCard from "@/components/admin/academic/subjects/as
 
 import AssessmentWeakQuestions from "@/components/admin/academic/subjects/assessments/details/assessmentWeakQuestions";
 
-import useAssessmentDetails from "@/hooks/useAssessmentDetails";
+import useAssessmentDetails from "@/hooks/assessments/useAssessmentDetails";
 
 export default function AssessmentDetailsPage() {
   const params = useParams();

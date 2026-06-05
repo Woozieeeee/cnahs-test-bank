@@ -4,7 +4,7 @@ import { memo } from "react";
 
 import Link from "next/link";
 import PreviewMetricCard from "./previewMetricCard";
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 import { mockSectionSubjects } from "../data/mockSectionSubjects";
 
 interface Props {

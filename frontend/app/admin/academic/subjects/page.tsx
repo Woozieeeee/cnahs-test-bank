@@ -22,8 +22,8 @@ import {
 import { getFacultyUsers } from "@/services/admin_service";
 import { successToast, errorToast } from "@/lib/swal";
 import { getSubjects } from "@/services/academic_service";
-import type { Subject } from "@/types/subject";
-import type { Section } from "@/types/section";
+import type { Subject } from "@/types/academic/subject";
+import type { Section } from "@/types/academic/section";
 import PageContainer from "@/components/layout/pages/pageContainer";
 
 export default function SubjectsPage() {

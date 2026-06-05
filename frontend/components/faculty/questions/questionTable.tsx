@@ -2,7 +2,7 @@
 
 import EmptyState from "@/components/common/states/emptyState";
 
-import { FacultyQuestion } from "@/types/facultyQuestion";
+import { FacultyQuestion } from "@/types/faculty/facultyQuestion";
 
 import QuestionRowActions from "./questionRowActions";
 

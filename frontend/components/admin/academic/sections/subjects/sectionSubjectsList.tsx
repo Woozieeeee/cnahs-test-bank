@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import type { SectionSubject } from "@/types/section";
+import type { SectionSubject } from "@/types/academic/section";
 
 import SectionSubjectCard from "./sectionSubjectsCard";
 

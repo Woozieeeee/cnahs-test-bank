@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import MotionCard from "@/components/motion/motionCard";
 
-import { FacultyTopic } from "@/types/facultyTopic";
+import { FacultyTopic } from "@/types/faculty/facultyTopic";
 
 import FacultyTopicCardHeader from "./facultyTopicCardHeader";
 

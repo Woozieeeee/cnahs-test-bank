@@ -1,4 +1,4 @@
-import type { Exam } from "./exam";
+import type { Exam } from "../assessments/exam";
 
 export interface SectionSubject {
   id: number;

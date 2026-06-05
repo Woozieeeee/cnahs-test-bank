@@ -17,28 +17,29 @@ import { getTopicQuestionsController } from "../controllers/faculty/questions/ge
 import { createQuestionController } from "../controllers/faculty/questions/create_question_controller";
 import { updateQuestionController } from "../controllers/faculty/questions/update_question_controller";
 import { getSubjectQuestionBankController } from "../controllers/faculty/questions/get_subject_question_bank_controller";
+import { getSubjectAssessmentsController } from "../controllers/faculty/assessments/get_subject_assessments_controller";
 
 const router = express.Router();
 
 router.use(authMiddleware, authorizeRoles("FACULTY"));
+router.use("/", questionImportRoutes);
 
 router.get("/dashboard", getDashboardController);
 router.get("/subjects", getSubjectsController);
 router.get("/subjects/:subjectId", getSubjectByIdController);
-router.get("/topics/:topicId/questions", getTopicQuestionsController);
 router.get("/subjects/:subjectId/topics", getTopicsController);
 router.post("/subjects/:subjectId/topics", createTopicController);
-router.post("/topics/:topicId/questions", createQuestionController);
-router.put("/topics/:topicId", updateTopicController);
-router.put("/topics/:topicId/archive", archiveTopicController);
-router.put("/topics/:topicId/restore", restoreTopicController);
-router.put("/questions/:questionId/archive", archiveQuestionController);
-router.put("/questions/:questionId/restore", restoreQuestionController);
-router.put("/questions/:questionId", updateQuestionController);
 router.get(
   "/subjects/:subjectId/question-bank",
   getSubjectQuestionBankController,
 );
-router.use("/", questionImportRoutes);
-
+router.get("/subjects/:subjectId/assessments", getSubjectAssessmentsController);
+router.post("/topics/:topicId/questions", createQuestionController);
+router.put("/topics/:topicId", updateTopicController);
+router.put("/topics/:topicId/archive", archiveTopicController);
+router.put("/topics/:topicId/restore", restoreTopicController);
+router.get("/topics/:topicId/questions", getTopicQuestionsController);
+router.put("/questions/:questionId/archive", archiveQuestionController);
+router.put("/questions/:questionId/restore", restoreQuestionController);
+router.put("/questions/:questionId", updateQuestionController);
 export default router;

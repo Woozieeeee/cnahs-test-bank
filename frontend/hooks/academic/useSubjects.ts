@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getSubjects } from "@/services/academic_service";
 
-import type { Subject } from "@/types/subject";
+import type { Subject } from "@/types/academic/subject";
 
 export default function useSubjects(tab = "ALL") {
   const [subjects, setSubjects] = useState<Subject[]>([]);

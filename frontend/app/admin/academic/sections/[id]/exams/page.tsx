@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import useSectionId from "@/hooks/useSectionId";
-import useSection from "@/hooks/useSection";
+import useSectionId from "@/hooks/shared/useSectionId";
+import useSection from "@/hooks/academic/useSection";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 

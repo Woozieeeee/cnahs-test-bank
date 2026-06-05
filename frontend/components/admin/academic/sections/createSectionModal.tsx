@@ -14,7 +14,7 @@ import { successToast, errorToast } from "@/lib/swal";
 
 import { createSection } from "@/services/academic_service";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 interface Props {
   open: boolean;
@@ -95,7 +95,11 @@ function CreateSectionModal({
   if (!open) return null;
 
   return (
-    <MotionModal open={open} maxWidth="max-w-2xl" contentClassName="max-h-[90vh] overflow-y-auto">
+    <MotionModal
+      open={open}
+      maxWidth="max-w-2xl"
+      contentClassName="max-h-[90vh] overflow-y-auto"
+    >
       <div className="p-6">
         <ModalHeader
           title="Create Section"

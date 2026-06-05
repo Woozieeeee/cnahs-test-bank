@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 import StatCard from "@/components/common/cards/statCard";
 import StatsGrid from "@/components/common/cards/statsGrid";

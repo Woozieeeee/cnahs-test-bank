@@ -16,7 +16,7 @@ import ActionButton from "@/components/common/buttons/actionButton";
 
 import ModalSectionTitle from "@/components/common/modal/modalSectionTitle";
 
-import type { Violation } from "@/types/violation";
+import type { Violation } from "@/types/activity/violation";
 
 interface Props {
   violation: Violation | null;
@@ -31,7 +31,11 @@ function ViolationDetailsModal({
   if (!violation) return null;
 
   return (
-    <MotionModal open={!!violation} maxWidth="max-w-4xl" contentClassName="max-h-[90vh] overflow-y-auto">
+    <MotionModal
+      open={!!violation}
+      maxWidth="max-w-4xl"
+      contentClassName="max-h-[90vh] overflow-y-auto"
+    >
       <div className="p-6">
         <ModalHeader
           title={violation.type}

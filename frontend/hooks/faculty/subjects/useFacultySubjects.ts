@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { getFacultySubjects } from "@/services/faculty_service";
 
-import { FacultySubject } from "@/types/facultySubject";
+import { FacultySubject } from "@/types/faculty/facultySubject";
 
 export default function useFacultySubjects() {
   const [subjects, setSubjects] = useState<

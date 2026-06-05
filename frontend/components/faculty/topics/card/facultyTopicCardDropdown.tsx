@@ -7,7 +7,7 @@ import MotionButton from "@/components/motion/motionButton";
 
 import { MoreVertical } from "lucide-react";
 
-import { FacultyTopic } from "@/types/facultyTopic";
+import { FacultyTopic } from "@/types/faculty/facultyTopic";
 
 interface Props {
   topic: FacultyTopic;

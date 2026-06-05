@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import type { Subject } from "@/types/subject";
+import type { Subject } from "@/types/academic/subject";
 import BackButton from "@/components/common/backButton";
 
 interface Props {

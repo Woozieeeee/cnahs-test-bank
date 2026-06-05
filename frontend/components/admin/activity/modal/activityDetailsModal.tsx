@@ -1,6 +1,6 @@
 "use client";
 
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 import ActivityDetailsHeader from "./activityDetailsHeader";
 import ActivityDetailsGrid from "./activityDetailsGrid";

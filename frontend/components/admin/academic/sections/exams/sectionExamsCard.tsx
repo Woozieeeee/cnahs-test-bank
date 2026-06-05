@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import type { Exam } from "@/types/exam";
+import type { Exam } from "@/types/assessments/exam";
 
 import StatCard from "@/components/common/cards/statCard";
 import CardFooterLink from "@/components/common/cards/cardFooterLink";

@@ -2,7 +2,7 @@
 
 import EmptyState from "@/components/common/states/emptyState";
 
-import { FacultyTopic } from "@/types/facultyTopic";
+import { FacultyTopic } from "@/types/faculty/facultyTopic";
 
 import FacultyTopicCard from "./card/facultyTopicCard";
 

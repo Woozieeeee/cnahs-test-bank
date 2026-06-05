@@ -10,7 +10,7 @@ import BackButton from "@/components/common/backButton";
 import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
 
-import useSubjectQuestionBank from "@/hooks/useSubjectQuestionBank";
+import useSubjectQuestionBank from "@/hooks/faculty/subjects/useSubjectQuestionBank";
 
 import QuestionBankAnalyticsStats from "@/components/faculty/question-bank/questionBankAnalyticsStats";
 import WeakQuestionsTable from "@/components/faculty/question-bank/weakQuestionsTable";

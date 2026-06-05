@@ -16,7 +16,7 @@ import SectionsGrid from "./sectionsGrid";
 
 import { getSections } from "@/services/academic_service";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 import Pagination from "@/components/common/pagination";
 
@@ -83,9 +83,12 @@ function SectionsDashboard() {
     setSections(data);
   }, []);
 
-  const handleSectionCreated = useCallback((section: Section) => {
-    setSections((current) => [section, ...current]);
-  }, []);
+  const handleSectionCreated = useCallback(
+    (section: Section) => {
+      setSections((current) => [section, ...current]);
+    },
+    []
+  );
 
   const handleSectionArchiveSuccess = useCallback(
     (sectionId: number) => {

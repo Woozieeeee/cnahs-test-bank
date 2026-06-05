@@ -1,7 +1,7 @@
 "use client";
 
 import MotionCard from "@/components/motion/motionCard";
-import type { ExamViolation } from "@/types/examViolation";
+import type { ExamViolation } from "@/types/assessments/examViolation";
 import ActivitySeverityBadge from "@/components/admin/activity/activitySeverityBadge";
 import ActivityTimelineDot from "@/components/admin/activity/timeline/item/activityTimelineDot";
 

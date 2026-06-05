@@ -1,4 +1,4 @@
-import type { Violation } from "@/types/violation";
+import type { Violation } from "@/types/activity/violation";
 
 export const mockSessionViolations: Violation[] = [
   {

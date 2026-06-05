@@ -9,7 +9,7 @@ import { successToast, errorToast } from "@/lib/swal";
 import ModalContainer from "@/components/common/modal/modalContainer";
 import { memo } from "react";
 
-import { FacultyQuestion } from "@/types/facultyQuestion";
+import { FacultyQuestion } from "@/types/faculty/facultyQuestion";
 
 import { updateFacultyQuestion } from "@/services/faculty_service";
 

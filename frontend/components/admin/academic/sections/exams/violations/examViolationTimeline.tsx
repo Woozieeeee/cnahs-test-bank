@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import type { ExamViolation } from "@/types/examViolation";
+import type { ExamViolation } from "@/types/assessments/examViolation";
 
 import ExamViolationTimelineItem from "./examViolationTimelineItem";
 

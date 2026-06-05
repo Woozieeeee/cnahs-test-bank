@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import MotionCard from "@/components/motion/motionCard";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 import SectionCardHeader from "./card/sectionCardHeader";
 

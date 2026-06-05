@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 import EmptyState from "@/components/common/states/emptyState";
 
@@ -27,8 +27,8 @@ function SectionsGrid({
   if (sections.length === 0) {
     return (
       <EmptyState
-      title="No sections found."
-      description="Try creating a new section or adjusting your filters."
+        title="No sections found."
+        description="Try creating a new section or adjusting your filters."
       />
     );
   }

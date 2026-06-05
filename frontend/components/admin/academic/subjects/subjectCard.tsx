@@ -1,7 +1,7 @@
 "use client";
 
 import MotionCard from "@/components/motion/motionCard";
-import { Subject } from "@/types/subject";
+import { Subject } from "@/types/academic/subject";
 import Link from "next/link";
 import SubjectCardHeader from "./card/subjectCardHeader";
 

@@ -4,7 +4,7 @@ import ActivityViolationBadge from "../../activityViolationBadge";
 
 import { ACTIVITY_ICONS } from "@/lib/constants/activityIcons";
 
-import type { ActivityLog } from "@/types/activity";
+import type { ActivityLog } from "@/types/activity/activity";
 
 interface Props {
   activity: ActivityLog;

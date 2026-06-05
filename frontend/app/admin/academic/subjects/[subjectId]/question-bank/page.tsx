@@ -18,11 +18,11 @@ import QuestionBankFilters from "@/components/admin/academic/subjects/question-b
 
 import QuestionBankTable from "@/components/admin/academic/subjects/question-bank/questionBankTable";
 
-import useSubjectQuestions from "@/hooks/useSubjectQuestions";
+import useSubjectQuestions from "@/hooks/faculty/subjects/useSubjectQuestions";
 
-import useSubjectQuestionStats from "@/hooks/useSubjectQuestionStats";
+import useSubjectQuestionStats from "@/hooks/faculty/subjects/useSubjectQuestionStats";
 
-import useSubject from "@/hooks/useSubject";
+import useSubject from "@/hooks/academic/useSubject";
 
 import LoadingState from "@/components/common/states/loadingState";
 

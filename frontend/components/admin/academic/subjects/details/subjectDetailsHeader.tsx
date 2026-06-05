@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 
-import type { Subject } from "@/types/subject";
+import type { Subject } from "@/types/academic/subject";
 
 interface Props {
   subject: Subject;

@@ -1,4 +1,4 @@
-import type { ExamStatus } from "@/types/exam";
+import type { ExamStatus } from "@/types/assessments/exam";
 
 interface Props {
   status: ExamStatus;

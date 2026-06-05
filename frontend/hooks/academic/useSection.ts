@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getSectionById } from "@/services/academic_service";
 
-import type { Section } from "@/types/section";
+import type { Section } from "@/types/academic/section";
 
 export default function useSection(id: number) {
   const [section, setSection] = useState<Section | null>(

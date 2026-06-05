@@ -8,7 +8,7 @@ import InfoCardHeader from "@/components/common/cards/infoCardHeader";
 
 import InfoCardValue from "@/components/common/cards/infoCardValue";
 
-import type { Subject } from "@/types/subject";
+import type { Subject } from "@/types/academic/subject";
 
 interface Props {
   subject: Subject;
@@ -27,9 +27,7 @@ function SubjectFacultyCard({ subject }: Props) {
     <InfoCard>
       <InfoCardHeader label="Faculty Assignment" />
 
-      <InfoCardValue>
-        {facultyName}
-      </InfoCardValue>
+      <InfoCardValue>{facultyName}</InfoCardValue>
 
       <p className="text-muted-foreground mt-2 text-sm">
         {hasFaculty

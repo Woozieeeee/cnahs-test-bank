@@ -1,7 +1,7 @@
 import type {
   SubjectPerformance,
   SubjectStatistics,
-} from "@/types/subject";
+} from "@/types/academic/subject";
 
 export const mockSubjectStatistics: SubjectStatistics = {
   students: 45,

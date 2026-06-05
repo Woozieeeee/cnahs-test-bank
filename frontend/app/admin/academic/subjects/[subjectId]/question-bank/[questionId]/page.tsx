@@ -7,7 +7,7 @@ import QuestionDetailsHeader from "@/components/admin/academic/sections/question
 import QuestionDetailsStats from "@/components/admin/academic/sections/question-bank/details/questionDetailsStats";
 import QuestionOverviewSection from "@/components/admin/academic/sections/question-bank/details/questionOverviewSection";
 import QuestionAnswerDistribution from "@/components/admin/academic/sections/question-bank/details/questionAnswerDistribution";
-import useQuestionDetails from "@/hooks/useQuestionDetails";
+import useQuestionDetails from "@/hooks/faculty/questions/useQuestionDetails";
 import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
 import NotFoundState from "@/components/common/states/notFoundState";

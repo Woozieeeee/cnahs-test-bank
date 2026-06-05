@@ -6,7 +6,7 @@ import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
 import EmptyState from "@/components/common/states/emptyState";
 
-import useFacultySubjects from "@/hooks/useFacultySubjects";
+import useFacultySubjects from "@/hooks/faculty/subjects/useFacultySubjects";
 
 import FacultySubjectsHeader from "@/components/faculty/subjects/facultySubjectsHeader";
 import FacultySubjectsStats from "@/components/faculty/subjects/facultySubjectsStats";

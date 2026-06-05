@@ -1,4 +1,7 @@
-import { Subject, SectionSubject } from "@/types/subject";
+import {
+  Subject,
+  SectionSubject,
+} from "@/types/academic/subject";
 
 import SubjectCardActions from "../subjectCardActions";
 
