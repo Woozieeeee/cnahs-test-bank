@@ -1,4 +1,20 @@
+export type ExamDifficultyMode =
+  | "EASY"
+  | "MEDIUM"
+  | "HARD"
+  | "EXPERT";
+
+export interface ExamSetupData {
+  questionLimit: number;
+
+  difficultyMode: ExamDifficultyMode;
+}
+
 export interface ExamDraftData {
+  questionLimit?: number;
+
+  difficultyMode?: ExamDifficultyMode;
+
   selectedQuestions: number[];
 
   rules: {
