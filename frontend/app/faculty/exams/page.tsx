@@ -12,6 +12,7 @@ import ExamFilters from "@/components/faculty/exams/examFilters";
 import ExamStatusTabs from "@/components/faculty/exams/examStatusTabs";
 import ExamCard from "@/components/faculty/exams/examCard";
 import CreateExamSetupModal from "@/components/faculty/exams/modal/createExamSetupModal";
+import type { ExamSetupData } from "@/types/exams/examDraft";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -30,7 +31,8 @@ export default function FacultyExamsPage() {
   const [showSetupModal, setShowSetupModal] =
     useState(false);
 
-  const [examSetup, setExamSetup] = useState<any>(null);
+  const [examSetup, setExamSetup] =
+    useState<ExamSetupData | null>(null);
 
   const sections = useMemo(() => {
     return Array.from(
@@ -142,6 +144,9 @@ export default function FacultyExamsPage() {
       <CreateExamSetupModal
         open={showSetupModal}
         onClose={() => setShowSetupModal(false)}
+        initialQuestionLimit={examSetup?.questionLimit}
+        initialDifficultyMode={examSetup?.difficultyMode}
+        onSetupChange={setExamSetup}
         onContinue={(data) => {
           setExamSetup(data);
 

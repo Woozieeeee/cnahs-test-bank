@@ -7,43 +7,93 @@ import ModalHeader from "@/components/common/modal/modalHeader";
 import ModalActions from "@/components/common/modal/modalActions";
 
 import { errorToast } from "@/lib/swal";
+import type {
+  ExamDifficultyMode,
+  ExamSetupData,
+} from "@/types/exams/examDraft";
+
+const PRESET_QUESTION_LIMITS = [10, 20, 30, 40, 50];
 
 interface Props {
   open: boolean;
 
   onClose: () => void;
 
-  onContinue: (data: {
-    questionLimit: number;
+  initialQuestionLimit?: number;
 
-    difficultyMode:
-      | "EASY"
-      | "MEDIUM"
-      | "HARD"
-      | "EXPERT"
-      | "MIXED";
-  }) => void;
+  initialDifficultyMode?: ExamDifficultyMode;
+
+  onSetupChange?: (data: ExamSetupData) => void;
+
+  onContinue: (data: ExamSetupData) => void;
 }
 
 function CreateExamSetupModal({
   open,
   onClose,
+  initialQuestionLimit,
+  initialDifficultyMode,
+  onSetupChange,
   onContinue,
 }: Props) {
-  const [questionLimit, setQuestionLimit] = useState(10);
+  const [questionLimit, setQuestionLimit] = useState(
+    initialQuestionLimit &&
+      !PRESET_QUESTION_LIMITS.includes(
+        initialQuestionLimit
+      )
+      ? 0
+      : (initialQuestionLimit ?? 10)
+  );
 
   const [customQuestionLimit, setCustomQuestionLimit] =
-    useState("");
+    useState(
+      initialQuestionLimit &&
+        !PRESET_QUESTION_LIMITS.includes(
+          initialQuestionLimit
+        )
+        ? String(initialQuestionLimit)
+        : ""
+    );
 
-  const [difficultyMode, setDifficultyMode] = useState<
-    "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "MIXED"
-  >("MIXED");
+  const [difficultyMode, setDifficultyMode] =
+    useState<ExamDifficultyMode>(
+      initialDifficultyMode ?? "EASY"
+    );
+
+  const getFinalQuestionLimit = (
+    nextQuestionLimit = questionLimit,
+    nextCustomQuestionLimit = customQuestionLimit
+  ) =>
+    nextQuestionLimit === 0
+      ? Number(nextCustomQuestionLimit)
+      : nextQuestionLimit;
+
+  const handleSetupChange = (
+    nextQuestionLimit: number,
+    nextDifficultyMode: ExamDifficultyMode,
+    nextCustomQuestionLimit = customQuestionLimit
+  ) => {
+    const finalQuestionLimit = getFinalQuestionLimit(
+      nextQuestionLimit,
+      nextCustomQuestionLimit
+    );
+
+    if (
+      !finalQuestionLimit ||
+      finalQuestionLimit < 1 ||
+      finalQuestionLimit > 200
+    ) {
+      return;
+    }
+
+    onSetupChange?.({
+      questionLimit: finalQuestionLimit,
+      difficultyMode: nextDifficultyMode,
+    });
+  };
 
   const handleContinue = () => {
-    const finalQuestionLimit =
-      questionLimit === 0
-        ? Number(customQuestionLimit)
-        : questionLimit;
+    const finalQuestionLimit = getFinalQuestionLimit();
 
     if (!finalQuestionLimit || finalQuestionLimit < 1) {
       errorToast("Please enter a valid question count.");
@@ -56,6 +106,11 @@ function CreateExamSetupModal({
 
       return;
     }
+
+    onSetupChange?.({
+      questionLimit: finalQuestionLimit,
+      difficultyMode,
+    });
 
     onContinue({
       questionLimit: finalQuestionLimit,
@@ -79,7 +134,7 @@ function CreateExamSetupModal({
 
           <select
             value={
-              [10, 20, 30, 40, 50].includes(questionLimit)
+              PRESET_QUESTION_LIMITS.includes(questionLimit)
                 ? questionLimit
                 : "CUSTOM"
             }
@@ -89,10 +144,21 @@ function CreateExamSetupModal({
               if (value === "CUSTOM") {
                 setQuestionLimit(0);
 
+                handleSetupChange(0, difficultyMode);
+
                 return;
               }
 
-              setQuestionLimit(Number(value));
+              const nextQuestionLimit = Number(value);
+
+              setQuestionLimit(nextQuestionLimit);
+
+              setCustomQuestionLimit("");
+
+              handleSetupChange(
+                nextQuestionLimit,
+                difficultyMode
+              );
             }}
             className="border-border bg-card w-full rounded-xl border px-4 py-2"
           >
@@ -126,6 +192,12 @@ function CreateExamSetupModal({
                   );
 
                   setCustomQuestionLimit(value);
+
+                  handleSetupChange(
+                    0,
+                    difficultyMode,
+                    value
+                  );
                 }}
                 maxLength={3}
                 placeholder="Enter question count (1-200)"
@@ -142,22 +214,19 @@ function CreateExamSetupModal({
 
           <select
             value={difficultyMode}
-            onChange={(e) =>
-              setDifficultyMode(
-                e.target.value as
-                  | "EASY"
-                  | "MEDIUM"
-                  | "HARD"
-                  | "EXPERT"
-                  | "MIXED"
-              )
-            }
+            onChange={(e) => {
+              const nextDifficultyMode = e.target
+                .value as ExamDifficultyMode;
+
+              setDifficultyMode(nextDifficultyMode);
+
+              handleSetupChange(
+                questionLimit,
+                nextDifficultyMode
+              );
+            }}
             className="border-border bg-card w-full rounded-xl border px-4 py-2"
           >
-            <option value="MIXED">
-              Mixed Difficulties
-            </option>
-
             <option value="EASY">Easy Only</option>
 
             <option value="MEDIUM">Medium Only</option>
