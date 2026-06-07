@@ -36,6 +36,8 @@ export default function FacultySubjectsPreview({
   error = "",
   onRetry,
 }: Props) {
+  const displaySubjects = subjects.slice(0, 5);
+
   if (loading) {
     return (
       <LoadingState
@@ -71,14 +73,25 @@ export default function FacultySubjectsPreview({
           Assigned Subjects
         </h2>
 
-        <span className="text-muted-foreground text-sm">
-          {subjects.length} Subject
-          {subjects.length > 1 ? "s" : ""}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground text-sm">
+            {subjects.length} Subject
+            {subjects.length > 1 ? "s" : ""}
+          </span>
+
+          {subjects.length > 5 && (
+            <Link
+              href="/faculty/subjects"
+              className="text-primary text-sm hover:underline"
+            >
+              View All
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="mt-4 space-y-3">
-        {subjects.map((subject) => (
+        {displaySubjects.map((subject) => (
           <Link
             key={subject.id}
             href={`/faculty/subjects/${subject.id}`}

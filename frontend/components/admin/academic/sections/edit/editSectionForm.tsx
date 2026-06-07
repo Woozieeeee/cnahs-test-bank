@@ -4,13 +4,13 @@ import { memo } from "react";
 
 import { PROGRAM_OPTIONS } from "@/constant/academic";
 
-import FormField from "@/components/common/form/formField";
+import FormField from "@/components/common/forms/formField";
 
-import FormInput from "@/components/common/form/formInput";
+import FormInput from "@/components/common/forms/formInput";
 
-import FormSelect from "@/components/common/form/formSelect";
+import FormSelect from "@/components/common/forms/formSelect";
 
-import { YEAR_LEVEL_OPTIONS } from "@/components/common/form/formOptions";
+import { YEAR_LEVEL_OPTIONS } from "@/components/common/forms/formOptions";
 
 interface Props {
   sectionCode: string;

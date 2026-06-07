@@ -40,10 +40,8 @@ function AssessmentStats({
   completed,
 }: Props) {
   return (
-    <div className="grid gap-4 md:grid-cols-5">
+    <div className="grid gap-4 md:grid-cols-4">
       <StatCard label="Assessments" value={total} />
-
-      <StatCard label="Draft" value={draft} />
 
       <StatCard label="Scheduled" value={scheduled} />
 

@@ -18,10 +18,19 @@ import { createQuestionController } from "../controllers/faculty/questions/creat
 import { updateQuestionController } from "../controllers/faculty/questions/update_question_controller";
 import { getSubjectQuestionBankController } from "../controllers/faculty/questions/get_subject_question_bank_controller";
 import { getSubjectAssessmentsController } from "../controllers/faculty/assessments/get_subject_assessments_controller";
+import { getFacultyAssessmentDetails } from "../controllers/faculty/assessments/get_assessment_details_controller";
+import { archiveExamController } from "../controllers/faculty/assessments/archive_exam_controller";
+import { restoreExamController } from "../controllers/faculty/assessments/restore_exam_controller";
+import { cancelExamController } from "../controllers/faculty/assessments/cancel_exam_controller";
 import { saveExamDraftController } from "../controllers/faculty/exams/save_exam_draft_controller";
 import { getExamDraftController } from "../controllers/faculty/exams/get_exam_draft_controller";
 import { deleteExamDraftController } from "../controllers/faculty/exams/delete_exam_draft_controller";
 import { getFacultyExamsController } from "../controllers/faculty/exams/get_faculty_exams_controller";
+import { getFacultySectionsController } from "../controllers/faculty/exams/get_faculty_sections_controller";
+import { createExamController } from "../controllers/faculty/exams/create_exam_controller";
+import { getExamBuilderQuestionsController } from "../controllers/faculty/exams/get_exam_builder_questions_controller";
+import { getExamSectionsController } from "../controllers/faculty/exams/get_exam_sections_controller";
+import { getFacultyActivityLogs } from "../controllers/faculty/activity/get_faculty_activity_log_controller";
 
 const router = express.Router();
 
@@ -38,10 +47,18 @@ router.get(
   getSubjectQuestionBankController,
 );
 router.get("/exams", getFacultyExamsController);
+router.get("/exams/sections", getFacultySectionsController);
 router.get("/subjects/:subjectId/exams/draft", getExamDraftController);
 router.post("/subjects/:subjectId/exams/draft", saveExamDraftController);
 router.delete("/subjects/:subjectId/exams/draft", deleteExamDraftController);
 router.get("/subjects/:subjectId/assessments", getSubjectAssessmentsController);
+router.get(
+  "/subjects/:subjectId/assessments/:assessmentId",
+  getFacultyAssessmentDetails,
+);
+router.put("/exams/:examId/archive", archiveExamController);
+router.put("/exams/:examId/restore", restoreExamController);
+router.put("/exams/:examId/cancel", cancelExamController);
 router.post("/topics/:topicId/questions", createQuestionController);
 router.put("/topics/:topicId", updateTopicController);
 router.put("/topics/:topicId/archive", archiveTopicController);
@@ -50,5 +67,12 @@ router.get("/topics/:topicId/questions", getTopicQuestionsController);
 router.put("/questions/:questionId/archive", archiveQuestionController);
 router.put("/questions/:questionId/restore", restoreQuestionController);
 router.put("/questions/:questionId", updateQuestionController);
+router.post("/subjects/:subjectId/exams", createExamController);
+router.get(
+  "/subjects/:subjectId/exams/questions",
+  getExamBuilderQuestionsController,
+);
+router.get("/subjects/:subjectId/exams/sections", getExamSectionsController);
+router.get("/activity-logs", getFacultyActivityLogs);
 
 export default router;

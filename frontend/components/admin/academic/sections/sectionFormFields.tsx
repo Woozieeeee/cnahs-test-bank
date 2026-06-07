@@ -2,9 +2,9 @@
 
 import { memo, useMemo } from "react";
 
-import FormField from "@/components/common/form/formField";
-import FormInput from "@/components/common/form/formInput";
-import FormSelect from "@/components/common/form/formSelect";
+import FormField from "@/components/common/forms/formField";
+import FormInput from "@/components/common/forms/formInput";
+import FormSelect from "@/components/common/forms/formSelect";
 
 import {
   PROGRAM_OPTIONS,

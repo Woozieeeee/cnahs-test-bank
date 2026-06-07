@@ -19,6 +19,8 @@ interface Props {
   severity: string;
 
   setSeverity: (value: string) => void;
+
+  categories?: readonly string[];
 }
 
 export default function ActivityFilters({
@@ -28,40 +30,41 @@ export default function ActivityFilters({
   setCategory,
   severity,
   setSeverity,
+  categories = ACTIVITY_CATEGORIES,
 }: Props) {
   return (
     <MotionCard className="bg-card flex flex-col gap-4 rounded-2xl p-4 shadow-sm md:flex-row">
-        <input
-          type="text"
-          placeholder="Search activity..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border-input focus:border-ring flex-1 rounded-xl border px-4 py-3 transition outline-none"
-        />
+      <input
+        type="text"
+        placeholder="Search activity..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border-input focus:border-ring flex-1 rounded-xl border px-4 py-3 transition outline-none"
+      />
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border-input bg-background rounded-xl border px-4 py-3"
-        >
-          {ACTIVITY_CATEGORIES.map((item) => (
-            <option key={item} value={item}>
-              {item.replaceAll("_", " ")}
-            </option>
-          ))}
-        </select>
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="border-input bg-background rounded-xl border px-4 py-3"
+      >
+        {categories.map((item) => (
+          <option key={item} value={item}>
+            {item.replaceAll("_", " ")}
+          </option>
+        ))}
+      </select>
 
-        <select
-          value={severity}
-          onChange={(e) => setSeverity(e.target.value)}
-          className="border-input bg-background rounded-xl border px-4 py-3"
-        >
-          {ACTIVITY_SEVERITIES.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+      <select
+        value={severity}
+        onChange={(e) => setSeverity(e.target.value)}
+        className="border-input bg-background rounded-xl border px-4 py-3"
+      >
+        {ACTIVITY_SEVERITIES.map((item) => (
+          <option key={item} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
     </MotionCard>
   );
 }

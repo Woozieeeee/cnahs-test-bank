@@ -1,5 +1,37 @@
 import prisma from "../../../lib/prisma";
 
+const updateExamStatus = (exam: any) => {
+  const now = new Date();
+  const startTime = exam.startsAt ? new Date(exam.startsAt) : null;
+  const endTime = exam.endsAt ? new Date(exam.endsAt) : null;
+
+  if (
+    exam.status === "ARCHIVED" ||
+    exam.status === "DRAFT" ||
+    exam.status === "CANCELLED"
+  ) {
+    return exam.status;
+  }
+
+  if (startTime && endTime) {
+    if (now < startTime) {
+      return "SCHEDULED";
+    } else if (now >= startTime && now < endTime) {
+      return "ONGOING";
+    } else {
+      return "COMPLETED";
+    }
+  } else if (startTime) {
+    if (now < startTime) {
+      return "SCHEDULED";
+    } else {
+      return "ONGOING";
+    }
+  }
+
+  return exam.status;
+};
+
 export const getSubjectAssessmentsService = async (
   facultyId: number,
   subjectId: number,
@@ -25,7 +57,27 @@ export const getSubjectAssessmentsService = async (
       subjectId,
     },
 
-    include: {
+    select: {
+      id: true,
+
+      title: true,
+
+      difficulty: true,
+
+      status: true,
+
+      duration: true,
+
+      passingScore: true,
+
+      startsAt: true,
+
+      endsAt: true,
+
+      subjectId: true,
+
+      createdAt: true,
+
       section: {
         select: {
           id: true,
@@ -58,6 +110,11 @@ export const getSubjectAssessmentsService = async (
     },
   });
 
+  const assessmentsWithDynamicStatus = assessments.map((exam) => ({
+    ...exam,
+    status: updateExamStatus(exam),
+  }));
+
   const statusOrder = {
     DRAFT: 1,
     SCHEDULED: 2,
@@ -73,15 +130,18 @@ export const getSubjectAssessmentsService = async (
     EXPERT: 4,
   };
 
-  const sortedAssessments = assessments.sort((a, b) => {
-    const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+  const sortedAssessments = assessmentsWithDynamicStatus.sort((a, b) => {
+    const statusComparison =
+      statusOrder[a.status as keyof typeof statusOrder] -
+      statusOrder[b.status as keyof typeof statusOrder];
 
     if (statusComparison !== 0) {
       return statusComparison;
     }
 
     const difficultyComparison =
-      difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+      difficultyOrder[a.difficulty as keyof typeof difficultyOrder] -
+      difficultyOrder[b.difficulty as keyof typeof difficultyOrder];
 
     if (difficultyComparison !== 0) {
       return difficultyComparison;

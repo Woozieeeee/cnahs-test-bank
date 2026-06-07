@@ -10,7 +10,8 @@ export interface Assessment {
     | "SCHEDULED"
     | "ONGOING"
     | "COMPLETED"
-    | "ARCHIVED";
+    | "ARCHIVED"
+    | "CANCELLED";
 
   duration: number;
 
@@ -19,6 +20,8 @@ export interface Assessment {
   startsAt?: string | null;
 
   endsAt?: string | null;
+
+  subjectId: number;
 
   section: {
     id: number;

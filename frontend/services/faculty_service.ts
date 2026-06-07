@@ -1,6 +1,7 @@
 import api from "@/lib/axios";
 import { ImportSummary } from "@/types/imports/importSummary";
 import { SubjectAssessmentsResponse } from "@/types/assessments/assessment";
+import { CreateExamPayload } from "@/types/exams/createExamPayload";
 
 // =========================
 // GET STUDENT DASHBOARD
@@ -380,6 +381,127 @@ export const deleteExamDraft = async (
 
 export const getFacultyExams = async () => {
   const response = await api.get("/faculty/exams");
+
+  return response.data;
+};
+
+// ==================
+// GET FACULTY SECTIONS
+// ==================
+
+export const getFacultySections = async () => {
+  const response = await api.get("/faculty/exams/sections");
+
+  return response.data;
+};
+
+// ==================
+// GET EXAM QUESTIONS
+// ==================
+
+export const getExamBuilderQuestions = async (
+  subjectId: number,
+  difficulty: string
+) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/exams/questions`,
+    {
+      params: {
+        difficulty,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+// ==================
+// GET EXAM SECTIONS
+// ==================
+
+export const getExamSections = async (
+  subjectId: number
+) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/exams/sections`
+  );
+
+  return response.data;
+};
+
+// ==================
+// CREATE EXAM
+// ==================
+
+export const createExam = async (
+  subjectId: number,
+  payload: CreateExamPayload
+) => {
+  const response = await api.post(
+    `/faculty/subjects/${subjectId}/exams`,
+    payload
+  );
+
+  return response.data;
+};
+
+// =========================
+// ACTIVITY LOGS
+// =========================
+
+export const getFacultyActivityLogs = async (params: {
+  page: number;
+
+  limit: number;
+
+  search: string;
+
+  category: string;
+
+  severity: string;
+}) => {
+  const response = await api.get("/faculty/activity-logs", {
+    params,
+  });
+
+  return response.data;
+};
+
+// =========================
+// ASSESSMENT DETAILS
+// =========================
+
+export const getFacultyAssessmentDetails = async (
+  subjectId: number,
+  assessmentId: number
+) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/assessments/${assessmentId}`
+  );
+
+  return response.data;
+};
+
+export const archiveExam = async (examId: number) => {
+  const response = await api.put(
+    `/faculty/exams/${examId}/archive`
+  );
+
+  return response.data;
+};
+
+export const restoreExam = async (examId: number) => {
+  const response = await api.put(
+    `/faculty/exams/${examId}/restore`
+  );
+
+  return response.data;
+};
+
+export const cancelExam = async (examId: number) => {
+  const response = await api.put(
+    `/faculty/exams/${examId}/cancel`
+  );
 
   return response.data;
 };

@@ -131,4 +131,12 @@
   html {
     @apply font-sans;
   }
+
+  button,
+  a,
+  [role="button"],
+  [onclick],
+  .cursor-pointer {
+    @apply cursor-pointer;
+  }
 }

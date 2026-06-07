@@ -2,6 +2,8 @@
 
 import { memo } from "react";
 
+import Link from "next/link";
+
 import EmptyState from "@/components/common/states/emptyState";
 
 interface Props {
@@ -19,6 +21,8 @@ interface Props {
 }
 
 function FacultyUpcomingExams({ exams }: Props) {
+  const displayExams = exams.slice(0, 5);
+
   if (!exams.length) {
     return (
       <EmptyState
@@ -35,14 +39,25 @@ function FacultyUpcomingExams({ exams }: Props) {
           Upcoming Exams
         </h2>
 
-        <span className="text-muted-foreground text-sm">
-          {exams.length} Exam
-          {exams.length > 1 ? "s" : ""}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground text-sm">
+            {exams.length} Exam
+            {exams.length > 1 ? "s" : ""}
+          </span>
+
+          {exams.length > 5 && (
+            <Link
+              href="/faculty/exams"
+              className="text-primary text-sm hover:underline"
+            >
+              View All
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="mt-4 space-y-3">
-        {exams.map((exam) => (
+        {displayExams.map((exam) => (
           <ExamCard key={exam.id} exam={exam} />
         ))}
       </div>

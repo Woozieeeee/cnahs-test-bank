@@ -12,6 +12,15 @@ export const ACTIVITY_CATEGORIES = [
   "VIOLATIONS",
 ] as const;
 
+export const FACULTY_ACTIVITY_CATEGORIES = [
+  "ALL",
+  "EXAMS",
+  "QUESTIONS",
+  "TOPICS",
+  "VIOLATIONS",
+  "ACADEMIC",
+] as const;
+
 export const ACTIVITY_SEVERITIES = [
   "ALL",
   "ERROR",

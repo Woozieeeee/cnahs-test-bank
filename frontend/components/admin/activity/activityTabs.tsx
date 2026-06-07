@@ -4,15 +4,18 @@ interface Props {
   activeTab: string;
 
   setActiveTab: (tab: string) => void;
+
+  categories?: readonly string[];
 }
 
 export default function ActivityTabs({
   activeTab,
   setActiveTab,
+  categories = ACTIVITY_CATEGORIES,
 }: Props) {
   return (
     <div className="flex flex-wrap gap-2">
-      {ACTIVITY_CATEGORIES.map((category) => (
+      {categories.map((category) => (
         <button
           key={category}
           onClick={() => setActiveTab(category)}

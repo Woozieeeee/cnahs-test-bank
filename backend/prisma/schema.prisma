@@ -148,7 +148,7 @@ model Exam {
 
   duration Int
 
-  passingScore Float @default(75)
+  passingScore Int   @default(75)
   averageScore Float @default(0)
 
   randomizeQuestions Boolean @default(true)
@@ -158,9 +158,8 @@ model Exam {
   status      ExamStatus @default(SCHEDULED)
   publishedAt DateTime?
 
-  startsAt  DateTime?
-  endsAt    DateTime?
-  draftData Json?
+  startsAt DateTime?
+  endsAt   DateTime?
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -172,6 +171,27 @@ model Exam {
 
   subjectId Int
   sectionId Int
+
+  examCode String @unique
+
+  showResultAfterSubmission Boolean @default(true)
+  showCorrectAnswers        Boolean @default(true)
+  showExplanations          Boolean @default(true)
+
+  requireFullscreen Boolean @default(false)
+
+  detectTabSwitch  Boolean @default(true)
+  detectWindowBlur Boolean @default(true)
+
+  blockCopy       Boolean @default(true)
+  blockPaste      Boolean @default(true)
+  blockRightClick Boolean @default(true)
+
+  detectDeviceChange Boolean @default(true)
+
+  violationThreshold Int @default(10)
+
+  thresholdAction ViolationAction @default(FLAG_REVIEW)
 
   subject Subject @relation(fields: [subjectId], references: [id])
   section Section @relation(fields: [sectionId], references: [id])
@@ -443,6 +463,7 @@ enum ExamStatus {
   ONGOING
   COMPLETED
   ARCHIVED
+  CANCELLED
 }
 
 enum ExamDifficulty {
@@ -462,4 +483,10 @@ enum ImportJobStatus {
   PROCESSING
   COMPLETED
   FAILED
+}
+
+enum ViolationAction {
+  AUTO_SUBMIT
+  END_EXAM
+  FLAG_REVIEW
 }

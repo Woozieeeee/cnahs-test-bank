@@ -25,8 +25,9 @@ export default function useExamDraft(subjectId: number) {
 
       const data = await getExamDraft(subjectId);
 
-      setDraft(data);
+      console.log("Fetched Draft:", data);
 
+      setDraft(data);
       setError(null);
     } catch (err: any) {
       setError(

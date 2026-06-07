@@ -16,12 +16,7 @@ interface Props {
   onContinue: (data: {
     questionLimit: number;
 
-    difficultyMode:
-      | "EASY"
-      | "MEDIUM"
-      | "HARD"
-      | "EXPERT"
-      | "MIXED";
+    examLevel: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
   }) => void;
 }
 
@@ -35,9 +30,9 @@ function CreateExamSetupModal({
   const [customQuestionLimit, setCustomQuestionLimit] =
     useState("");
 
-  const [difficultyMode, setDifficultyMode] = useState<
-    "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "MIXED"
-  >("MIXED");
+  const [examLevel, setExamLevel] = useState<
+    "EASY" | "MEDIUM" | "HARD" | "EXPERT"
+  >("EASY");
 
   const handleContinue = () => {
     const finalQuestionLimit =
@@ -59,7 +54,7 @@ function CreateExamSetupModal({
 
     onContinue({
       questionLimit: finalQuestionLimit,
-      difficultyMode,
+      examLevel,
     });
   };
 
@@ -141,30 +136,25 @@ function CreateExamSetupModal({
           </label>
 
           <select
-            value={difficultyMode}
+            value={examLevel}
             onChange={(e) =>
-              setDifficultyMode(
+              setExamLevel(
                 e.target.value as
                   | "EASY"
                   | "MEDIUM"
                   | "HARD"
                   | "EXPERT"
-                  | "MIXED"
               )
             }
             className="border-border bg-card w-full rounded-xl border px-4 py-2"
           >
-            <option value="MIXED">
-              Mixed Difficulties
-            </option>
+            <option value="EASY">Easy</option>
 
-            <option value="EASY">Easy Only</option>
+            <option value="MEDIUM">Medium</option>
 
-            <option value="MEDIUM">Medium Only</option>
+            <option value="HARD">Hard</option>
 
-            <option value="HARD">Hard Only</option>
-
-            <option value="EXPERT">Expert Only</option>
+            <option value="EXPERT">Expert</option>
           </select>
         </div>
 

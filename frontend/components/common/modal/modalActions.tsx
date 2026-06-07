@@ -6,15 +6,14 @@ import MotionButton from "@/components/motion/motionButton";
 
 interface Props {
   submitLabel?: string;
-
   cancelLabel?: string;
 
   submitDisabled?: boolean;
-
   cancelDisabled?: boolean;
 
-  onSubmit: () => void;
+  loading?: boolean;
 
+  onSubmit: () => void;
   onCancel: () => void;
 }
 
@@ -29,13 +28,15 @@ function ModalActions({
 
   onSubmit,
 
+  loading,
+
   onCancel,
 }: Props) {
   return (
     <div className="mt-6 flex justify-end gap-3">
       <MotionButton
         onClick={onCancel}
-        disabled={cancelDisabled}
+        disabled={cancelDisabled || loading}
         className="border-border bg-card text-muted-foreground rounded-xl border px-4 py-2 text-sm font-medium"
       >
         {cancelLabel}
@@ -43,10 +44,10 @@ function ModalActions({
 
       <MotionButton
         onClick={onSubmit}
-        disabled={submitDisabled}
+        disabled={submitDisabled || loading}
         className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {submitLabel}
+        {loading ? "Loading..." : submitLabel}
       </MotionButton>
     </div>
   );

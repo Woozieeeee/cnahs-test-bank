@@ -13,11 +13,17 @@ import ErrorState from "@/components/common/states/errorState";
 import EmptyState from "@/components/common/states/emptyState";
 
 import useSubjectAssessments from "@/hooks/faculty/subjects/useSubjectAssessments";
+import useExamCreationFlow from "@/hooks/exams/useExamCreationFlow";
 
+import AssessmentHeader from "@/components/faculty/assessments/assessmentHeader";
 import AssessmentStats from "@/components/faculty/assessments/assessmentStats";
 import AssessmentStatusTabs from "@/components/faculty/assessments/assessmentStatusTabs";
 import AssessmentFilters from "@/components/faculty/assessments/assessmentFilters";
 import AssessmentCard from "@/components/faculty/assessments/assessmentCard";
+
+import CreateExamSetupModal from "@/components/faculty/exams/modal/createExamSetupModal";
+import CreateExamWizardModal from "@/components/faculty/exams/modal/createExamWizardModal";
+import DraftRecoveryModal from "@/components/faculty/exams/modal/draftRecoveryModal";
 
 export default function FacultySubjectAssessmentsPage() {
   const params = useParams();
@@ -39,6 +45,38 @@ export default function FacultySubjectAssessmentsPage() {
   >("ALL");
 
   const [sectionId, setSectionId] = useState("ALL");
+
+  const {
+    draft,
+    refreshDraft,
+
+    showSetupModal,
+    showWizardModal,
+    showDraftRecoveryModal,
+
+    examSetup,
+    activeDraft,
+
+    handleCreateExam,
+
+    closeSetup,
+
+    startWizard,
+
+    closeWizard,
+    cancelWizard,
+
+    handleContinueDraft,
+
+    handleStartNewExam,
+
+    closeDraftRecovery,
+
+    isDeletingDraft,
+    wizardInstance,
+
+    handleResumeDraft,
+  } = useExamCreationFlow(subjectId);
 
   const filteredAssessments = useMemo(() => {
     if (!data) {
@@ -70,6 +108,23 @@ export default function FacultySubjectAssessmentsPage() {
 
     return result;
   }, [data, search, activeTab, sectionId]);
+
+  const allItems = useMemo(() => {
+    const items = [...filteredAssessments];
+
+    if (
+      draft &&
+      (activeTab === "ALL" || activeTab === "DRAFT")
+    ) {
+      items.unshift({
+        id: draft.id,
+        isDraft: true,
+        draft,
+      } as any);
+    }
+
+    return items;
+  }, [filteredAssessments, draft, activeTab]);
 
   const stats = useMemo(() => {
     if (!data) {
@@ -135,14 +190,7 @@ export default function FacultySubjectAssessmentsPage() {
         label="Back to Subject"
       />
 
-      <div>
-        <h1 className="text-3xl font-bold">Assessments</h1>
-
-        <p className="text-muted-foreground mt-2">
-          View and monitor assessments for this subject
-          across all assigned sections.
-        </p>
-      </div>
+      <AssessmentHeader onCreate={handleCreateExam} />
 
       <AssessmentStats
         total={stats.total}
@@ -168,20 +216,58 @@ export default function FacultySubjectAssessmentsPage() {
         )}
       />
 
-      {filteredAssessments.length === 0 ? (
+      {allItems.length === 0 ? (
         <EmptyState
           title="No assessments found"
           description="No assessments match the selected filters."
         />
       ) : (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredAssessments.map((assessment) => (
-            <AssessmentCard
-              key={assessment.id}
-              assessment={assessment}
-            />
-          ))}
+          {allItems.map((item: any) =>
+            item.isDraft ? (
+              <AssessmentCard
+                key={`draft-${item.draft.id}`}
+                draft={item.draft}
+                onContinueDraft={handleResumeDraft}
+              />
+            ) : (
+              <AssessmentCard
+                key={item.id}
+                assessment={item}
+              />
+            )
+          )}
         </div>
+      )}
+      <CreateExamSetupModal
+        open={showSetupModal}
+        onClose={closeSetup}
+        onContinue={startWizard}
+      />
+
+      {examSetup && (
+        <CreateExamWizardModal
+          key={wizardInstance}
+          open={showWizardModal}
+          onClose={closeWizard}
+          onCancel={cancelWizard}
+          subjectId={subjectId}
+          draft={activeDraft}
+          questionLimit={examSetup.questionLimit}
+          examLevel={examSetup.examLevel}
+          onDraftSaved={refreshDraft}
+          onExamCreated={refresh}
+        />
+      )}
+      {draft && (
+        <DraftRecoveryModal
+          open={showDraftRecoveryModal}
+          draft={draft}
+          onClose={closeDraftRecovery}
+          onContinueDraft={handleContinueDraft}
+          onStartNewExam={handleStartNewExam}
+          isDeletingDraft={isDeletingDraft}
+        />
       )}
     </PageContainer>
   );
