@@ -33,7 +33,7 @@ export default function QuickAccessSection() {
 
         <QuickAccessCard
           title="Manage Exams"
-          description="Create and organize exams"
+          description="Live exam monitoring"
           href="/admin/exams"
           icon={<FileText size={28} />}
         />

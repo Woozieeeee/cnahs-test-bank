@@ -11,7 +11,8 @@ interface Props {
     | "SCHEDULED"
     | "ONGOING"
     | "COMPLETED"
-    | "ARCHIVED";
+    | "ARCHIVED"
+    | "CANCELLED";
 
   setActiveTab: (
     value:
@@ -21,6 +22,7 @@ interface Props {
       | "ONGOING"
       | "COMPLETED"
       | "ARCHIVED"
+      | "CANCELLED"
   ) => void;
 }
 
@@ -35,6 +37,7 @@ function AssessmentStatusTabs({
     "ONGOING",
     "COMPLETED",
     "ARCHIVED",
+    "CANCELLED",
   ] as const;
 
   return (

@@ -55,7 +55,7 @@ export default function FacultyTopicCard({
           <div className="mt-4 grid grid-cols-2 gap-3">
             <MetricCard
               label="Questions"
-              value={topic.totalQuestions}
+              value={Number(topic.totalQuestions) || 0}
             />
 
             <MetricCard

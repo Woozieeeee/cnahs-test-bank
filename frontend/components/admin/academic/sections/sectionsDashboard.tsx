@@ -162,6 +162,9 @@ function SectionsDashboard() {
             onEdit={(section) => {
               console.log("Edit:", section);
             }}
+            onManageStudents={(section) => {
+              console.log("Manage Students:", section);
+            }}
           />
 
           <Pagination

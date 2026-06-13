@@ -68,22 +68,18 @@ export default function FacultyTopicsPage() {
     setSelectedTopic(null);
   };
 
-  const handleTopicArchiveSuccess = (topicId: number) => {
+  const handleTopicArchiveSuccess = (updatedTopic: FacultyTopic) => {
     setTopics((current) =>
       current.map((topic) =>
-        topic.id === topicId
-          ? { ...topic, isArchived: true }
-          : topic
+        topic.id === updatedTopic.id ? updatedTopic : topic
       )
     );
   };
 
-  const handleTopicRestoreSuccess = (topicId: number) => {
+  const handleTopicRestoreSuccess = (updatedTopic: FacultyTopic) => {
     setTopics((current) =>
       current.map((topic) =>
-        topic.id === topicId
-          ? { ...topic, isArchived: false }
-          : topic
+        topic.id === updatedTopic.id ? updatedTopic : topic
       )
     );
   };
@@ -138,11 +134,11 @@ export default function FacultyTopicsPage() {
   }
   const handleArchive = async (topicId: number) => {
     try {
-      await archiveFacultyTopic(topicId);
+      const updatedTopic = await archiveFacultyTopic(topicId);
 
       successToast("Topic archived successfully.");
 
-      handleTopicArchiveSuccess(topicId);
+      handleTopicArchiveSuccess(updatedTopic);
     } catch (error: any) {
       const dependencies =
         error.response?.data?.dependencies;
@@ -162,11 +158,11 @@ export default function FacultyTopicsPage() {
 
   const handleRestore = async (topicId: number) => {
     try {
-      await restoreFacultyTopic(topicId);
+      const updatedTopic = await restoreFacultyTopic(topicId);
 
       successToast("Topic restored successfully.");
 
-      handleTopicRestoreSuccess(topicId);
+      handleTopicRestoreSuccess(updatedTopic);
     } catch (error: any) {
       errorToast(
         error.response?.data?.message ||
@@ -203,7 +199,7 @@ export default function FacultyTopicsPage() {
           topics.filter((topic) => !topic.isArchived).length
         }
         totalQuestions={topics.reduce(
-          (sum, topic) => sum + topic.totalQuestions,
+          (sum, topic) => sum + (Number(topic.totalQuestions) || 0),
           0
         )}
       />

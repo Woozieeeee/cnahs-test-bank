@@ -10,13 +10,13 @@ export const restoreExamService = async (examId: number) => {
     throw new Error("Exam not found.");
   }
 
-  if (exam.status !== "ARCHIVED") {
-    throw new Error("Only archived exams can be restored.");
+  if (exam.status !== "ARCHIVED" && exam.status !== "CANCELLED") {
+    throw new Error("Only archived or cancelled exams can be restored.");
   }
 
   const updatedExam = await prisma.exam.update({
     where: { id: examId },
-    data: { status: "COMPLETED" },
+    data: { status: "SCHEDULED" as any },
   });
 
   return updatedExam;

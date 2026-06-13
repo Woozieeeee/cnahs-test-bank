@@ -1,46 +1,30 @@
 import { memo } from "react";
-
-interface User {
-  id: number;
-
-  name: string;
-
-  studentId: string;
-
-  role: string;
-
-  status: string;
-
-  createdAt: string;
-}
+import UserActionsMenu from "./userActionsMenu";
+import type { ManagedUser } from "@/hooks/admin/users/useUserActions";
 
 interface Props {
-  user: User;
-
+  user: ManagedUser;
+  onEdit: (user: ManagedUser) => void;
   onApprove: (id: number) => Promise<void>;
-
   onReject: (id: number) => Promise<void>;
-
+  onDisable: (id: number, userName: string) => Promise<void>;
+  onEnable: (id: number, userName: string) => Promise<void>;
   selected: boolean;
-
   onSelect: () => void;
 }
 
 function UserTableRow({
   user,
-
+  onEdit,
   onApprove,
-
   onReject,
-
+  onDisable,
+  onEnable,
   selected,
-
   onSelect,
 }: Props) {
   return (
     <tr className="hover:bg-muted/50 border-b transition">
-      {/* CHECKBOX */}
-
       <td className="p-4">
         <input
           type="checkbox"
@@ -50,25 +34,13 @@ function UserTableRow({
         />
       </td>
 
-      {/* NAME */}
-
-      <td className="text-foreground p-4 font-medium">
-        {user.name}
-      </td>
-
-      {/* STUDENT ID */}
+      <td className="text-foreground p-4 font-medium">{user.name}</td>
 
       <td className="text-muted-foreground p-4">
-        {user.studentId}
+        {user.studentId || user.username || "—"}
       </td>
 
-      {/* ROLE */}
-
-      <td className="text-muted-foreground p-4">
-        {user.role}
-      </td>
-
-      {/* STATUS */}
+      <td className="text-muted-foreground p-4">{user.role}</td>
 
       <td className="p-4">
         <span
@@ -77,44 +49,28 @@ function UserTableRow({
               ? "bg-emerald-100 text-emerald-700"
               : user.status === "PENDING"
                 ? "bg-yellow-100 text-yellow-700"
-                : "bg-red-100 text-red-700"
-          } `}
+                : user.status === "DISABLED"
+                  ? "bg-slate-100 text-slate-700"
+                  : "bg-red-100 text-red-700"
+          }`}
         >
           {user.status}
         </span>
       </td>
 
-      {/* CREATED */}
-
       <td className="text-muted-foreground p-4">
         {new Date(user.createdAt).toLocaleDateString()}
       </td>
 
-      {/* ACTIONS */}
-
-      <td className="p-4">
-        {user.role === "STUDENT" &&
-        user.status === "PENDING" ? (
-          <div className="flex gap-2">
-            <button
-              onClick={() => onApprove(user.id)}
-              className="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
-            >
-              Approve
-            </button>
-
-            <button
-              onClick={() => onReject(user.id)}
-              className="cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700"
-            >
-              Reject
-            </button>
-          </div>
-        ) : (
-          <span className="text-muted-foreground text-sm">
-            —
-          </span>
-        )}
+      <td className="p-4 text-right">
+        <UserActionsMenu
+          user={user}
+          onEdit={onEdit}
+          onApprove={onApprove}
+          onReject={onReject}
+          onDisable={onDisable}
+          onEnable={onEnable}
+        />
       </td>
     </tr>
   );

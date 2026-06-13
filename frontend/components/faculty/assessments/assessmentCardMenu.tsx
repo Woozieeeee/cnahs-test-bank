@@ -64,7 +64,8 @@ function AssessmentCardMenu({
           </button>
         )}
 
-        {assessment.status === "ARCHIVED" && (
+        {(assessment.status === "ARCHIVED" ||
+          assessment.status === "CANCELLED") && (
           <button
             onClick={onRestore}
             disabled={isRestoring}

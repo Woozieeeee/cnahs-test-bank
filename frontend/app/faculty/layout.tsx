@@ -10,6 +10,8 @@ import MobileSidebar from "@/components/layout/sidebar/mobileSidebar";
 
 import { SidebarProvider } from "@/components/layout/sidebar/sidebarContext";
 
+import useProtectedRoute from "@/hooks/auth/useProtectedRoute";
+
 import { facultyNav } from "@/config/navigation/facultyNav";
 
 export default function FacultyLayout({
@@ -18,6 +20,11 @@ export default function FacultyLayout({
   children: React.ReactNode;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, loading } = useProtectedRoute(["FACULTY"]);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <SidebarProvider>
@@ -32,13 +39,18 @@ export default function FacultyLayout({
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
           navItems={facultyNav}
+          title="CNAHS Faculty"
+          subtitle="Teaching & Assessment Portal"
         />
 
-        <div className="flex-1">
+        <div className="flex min-w-0 flex-1 flex-col">
           <Navbar
-            userName="Faculty User"
-            role="Faculty"
-            onMenuClick={() => setMobileOpen(true)}
+            userName={user?.name ?? "Faculty"}
+            userRole="FACULTY"
+            hasAvatar={user?.hasAvatar}
+            avatarVersion={user?.updatedAt}
+            mobileMenuOpen={mobileOpen}
+            onMenuClick={() => setMobileOpen((open) => !open)}
           />
 
           {children}

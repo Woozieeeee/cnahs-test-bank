@@ -1,114 +1,190 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getUsers } from "@/services/admin_service";
-import UsersTable from "@/components/admin/users/usersTable";
 import UsersLoader from "@/components/admin/users/usersLoader";
 import UsersStatsBar from "@/components/admin/users/usersStatsBar";
-import UsersTabs from "@/components/admin/users/usersTabs";
 import UsersManagementTable from "@/components/admin/users/usersManagementTable";
-import { useUserActions } from "@/hooks/admin/users/useUserActions";
+import {
+  useUserActions,
+  type ManagedUser,
+} from "@/hooks/admin/users/useUserActions";
 import AnimatedPage from "@/components/common/animatedPage";
 import AddFacultyModal from "@/components/admin/users/addFacultyModal";
 import PageContainer from "@/components/layout/pages/pageContainer";
 import UsersHeader from "@/components/admin/users/usersHeader";
+import UsersTabs, {
+  type UserFilterTab,
+  filterTabToQuery,
+} from "@/components/admin/users/usersTabs";
 
-interface User {
-  id: number;
-  name: string;
-  studentId: string;
-  username?: string;
-  role: string;
-  status: string;
-  createdAt: string;
+const ROLE_ORDER: Record<string, number> = {
+  STUDENT: 0,
+  FACULTY: 1,
+  ADMIN: 2,
+};
+
+const SEARCH_DEBOUNCE_MS = 300;
+
+function buildSearchSuggestions(users: ManagedUser[]): string[] {
+  const suggestions = new Set<string>();
+
+  for (const user of users) {
+    if (user.name?.trim()) suggestions.add(user.name.trim());
+    if (user.studentId?.trim()) suggestions.add(user.studentId.trim());
+    if (user.username?.trim()) suggestions.add(user.username.trim());
+  }
+
+  return Array.from(suggestions).sort((a, b) => a.localeCompare(b));
 }
 
 export default function UsersPage() {
-  const [activeTab, setActiveTab] = useState("ALL");
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filterTab, setFilterTab] = useState<UserFilterTab>("ALL");
+  const [users, setUsers] = useState<ManagedUser[]>([]);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [search, setSearch] = useState("");
-  const [openFacultyModal, setOpenFacultyModal] =
-    useState(false);
-  const [roleFilter, setRoleFilter] = useState("ALL");
-  const [selectedUsers, setSelectedUsers] = useState<
-    number[]
-  >([]);
+  const [openFacultyModal, setOpenFacultyModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<ManagedUser | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [sortField, setSortField] = useState("createdAt");
-  const [sortOrder, setSortOrder] = useState<
-    "asc" | "desc"
-  >("desc");
-  const fetchUsers = async () => {
-    try {
-      const data = await getUsers({
-        page,
-        limit: 10,
-        search,
-        role: roleFilter,
-        status: activeTab,
-      });
-
-      setUsers(data.users);
-
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // =========================
-  // USER ACTIONS HOOK
-  // =========================
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const hasLoadedOnce = useRef(false);
 
   const {
     approveUser,
-
     rejectUser,
+    disableUser,
+    enableUser,
+    updateUserProfile,
+    bulkApprovePending,
+    bulkRejectPending,
   } = useUserActions(setUsers);
 
-  // =========================
-  // FETCH USERS
-  // =========================
+  const { role, status } = filterTabToQuery(filterTab);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [search]);
+
+  const fetchUsers = useCallback(async () => {
+    const showInitialLoader = !hasLoadedOnce.current;
+
+    try {
+      if (showInitialLoader) {
+        setInitialLoading(true);
+      } else {
+        setIsRefreshing(true);
+      }
+
+      const data = await getUsers({
+        page,
+        limit: 10,
+        search: debouncedSearch,
+        role,
+        status,
+      });
+
+      setUsers(data.users);
+      setTotalPages(data.totalPages);
+      hasLoadedOnce.current = true;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setInitialLoading(false);
+      setIsRefreshing(false);
+    }
+  }, [page, debouncedSearch, role, status]);
+
+  const fetchSearchSuggestions = useCallback(async () => {
+    try {
+      const data = await getUsers({
+        page: 1,
+        limit: 250,
+        search: "",
+        role: "ALL",
+        status: "ALL",
+      });
+
+      setSearchSuggestions(buildSearchSuggestions(data.users));
+    } catch {
+      // Keep existing suggestions on failure
+    }
+  }, []);
 
   useEffect(() => {
     fetchUsers();
-  }, [page, search, roleFilter, activeTab]);
+  }, [fetchUsers]);
 
-  // =========================
-  // LOADING
-  // =========================
+  useEffect(() => {
+    fetchSearchSuggestions();
+  }, [fetchSearchSuggestions]);
 
-  if (loading) {
-    return <UsersLoader />;
-  }
+  const handleFilterTabChange = (tab: UserFilterTab) => {
+    setFilterTab(tab);
+    setPage(1);
+    setSelectedUsers([]);
+  };
 
-  // =========================
-  // FILTER USERS
-  // =========================
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+    setSelectedUsers([]);
+  };
 
-  const filteredUsers = (
-    activeTab === "ALL"
-      ? users
-      : users.filter((user) => user.status === activeTab)
-  )
-    .filter((user) =>
-      [user.name, user.studentId, user.role, user.status]
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-    .sort((a, b) => {
-      const aValue = String(
-        a[sortField as keyof User] || ""
-      ).toLowerCase();
+  const handleEditUser = (user: ManagedUser) => {
+    setEditingUser(user);
+    setIsEditModalOpen(true);
+  };
 
-      const bValue = String(
-        b[sortField as keyof User] || ""
-      ).toLowerCase();
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingUser(null);
+  };
+
+  const handleSaveUser = async (
+    userId: number,
+    data: { name?: string; username?: string; password?: string },
+  ) => {
+    await updateUserProfile(userId, data);
+    if (editingUser?.id === userId) {
+      setEditingUser((prev) =>
+        prev
+          ? {
+              ...prev,
+              name: data.name ?? prev.name,
+              username: data.username ?? prev.username,
+            }
+          : prev,
+      );
+    }
+  };
+
+  const selectedRecords = useMemo(
+    () => users.filter((user) => selectedUsers.includes(user.id)),
+    [users, selectedUsers],
+  );
+
+  const sortedUsers = useMemo(() => {
+    return [...users].sort((a, b) => {
+      if (filterTab === "ALL" && sortField === "createdAt") {
+        const roleDiff = (ROLE_ORDER[a.role] ?? 99) - (ROLE_ORDER[b.role] ?? 99);
+        if (roleDiff !== 0) {
+          return sortOrder === "asc" ? -roleDiff : roleDiff;
+        }
+      }
+
+      const aValue = String(a[sortField as keyof ManagedUser] || "").toLowerCase();
+      const bValue = String(b[sortField as keyof ManagedUser] || "").toLowerCase();
 
       if (sortOrder === "asc") {
         return aValue.localeCompare(bValue);
@@ -116,66 +192,73 @@ export default function UsersPage() {
 
       return bValue.localeCompare(aValue);
     });
+  }, [users, sortField, sortOrder, filterTab]);
+
+  if (initialLoading && users.length === 0) {
+    return <UsersLoader />;
+  }
 
   return (
     <AnimatedPage>
       <PageContainer>
         <UsersHeader />
 
-        {/* STATS */}
-
         <UsersStatsBar
           total={users.length}
-          pending={
-            users.filter((u) => u.status === "PENDING")
-              .length
-          }
-          approved={
-            users.filter((u) => u.status === "APPROVED")
-              .length
-          }
-          rejected={
-            users.filter((u) => u.status === "REJECTED")
-              .length
-          }
+          pending={users.filter((u) => u.status === "PENDING").length}
+          approved={users.filter((u) => u.status === "APPROVED").length}
+          rejected={users.filter((u) => u.status === "REJECTED").length}
         />
 
-        {/* TABLE */}
-
         <UsersManagementTable
-          users={filteredUsers}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          users={sortedUsers}
+          activeTab={filterTab}
+          onTabChange={handleFilterTabChange}
           page={page}
           setPage={setPage}
           totalPages={totalPages}
+          isRefreshing={isRefreshing}
           onApprove={approveUser}
           onReject={rejectUser}
+          onDisable={disableUser}
+          onEnable={enableUser}
+          onEditUser={handleEditUser}
+          onCloseEditModal={handleCloseEditModal}
+          onSaveUser={handleSaveUser}
+          onBulkApprove={() => {
+            void bulkApprovePending(selectedRecords).then(() =>
+              setSelectedUsers([]),
+            );
+          }}
+          onBulkReject={() => {
+            void bulkRejectPending(selectedRecords).then(() =>
+              setSelectedUsers([]),
+            );
+          }}
           search={search}
-          setSearch={setSearch}
-          roleFilter={roleFilter}
-          setRoleFilter={setRoleFilter}
+          setSearch={handleSearchChange}
+          searchSuggestions={searchSuggestions}
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}
-          onOpenFacultyModal={() =>
-            setOpenFacultyModal(true)
-          }
+          editingUser={editingUser}
+          isEditModalOpen={isEditModalOpen}
+          onOpenFacultyModal={() => setOpenFacultyModal(true)}
           sortField={sortField}
           sortOrder={sortOrder}
           onSort={(field, order) => {
             setSortField(field);
-
             setSortOrder(order);
           }}
         />
       </PageContainer>
 
-      {/* MODAL */}
-
       <AddFacultyModal
         open={openFacultyModal}
         onOpenChange={setOpenFacultyModal}
-        onSuccess={fetchUsers}
+        onSuccess={() => {
+          fetchUsers();
+          fetchSearchSuggestions();
+        }}
       />
     </AnimatedPage>
   );

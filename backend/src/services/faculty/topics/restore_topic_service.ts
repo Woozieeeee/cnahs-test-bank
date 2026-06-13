@@ -22,7 +22,7 @@ export const restoreTopicService = async (
     throw new Error("Topic not found");
   }
 
-  return prisma.topic.update({
+  const restoredTopic = await prisma.topic.update({
     where: {
       id: topicId,
     },
@@ -30,5 +30,16 @@ export const restoreTopicService = async (
     data: {
       isArchived: false,
     },
+    include: {
+      questions: true,
+    },
   });
+
+  return {
+    id: restoredTopic.id,
+    name: restoredTopic.name,
+    description: restoredTopic.description,
+    totalQuestions: restoredTopic.questions.length,
+    isArchived: restoredTopic.isArchived,
+  };
 };

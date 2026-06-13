@@ -20,11 +20,13 @@ export const login = async (req: Request, res: Response) => {
     res.cookie("token", token, {
       httpOnly: true,
 
-      secure: isProduction,
+      secure: isProduction ? true : false,
 
-      sameSite: isProduction ? "none" : "lax",
+      sameSite: isProduction ? "strict" : "lax",
 
       maxAge: 1000 * 60 * 60 * 24,
+
+      path: "/",
     });
 
     try {

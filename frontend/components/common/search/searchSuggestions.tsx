@@ -17,7 +17,7 @@ function SearchSuggestions({
   if (suggestions.length === 0) {
     return null;
   }
-  console.log("Rendering suggestions");
+
   return (
     <MotionPopover
       open={suggestions.length > 0}

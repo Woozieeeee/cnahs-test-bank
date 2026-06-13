@@ -9,6 +9,8 @@ interface Props {
 
   onRestoreSuccess: (sectionId: number) => void;
   onEdit: () => void;
+
+  onManageStudents: () => void;
 }
 
 export default function SectionCardHeader({
@@ -16,6 +18,7 @@ export default function SectionCardHeader({
   onArchiveSuccess,
   onRestoreSuccess,
   onEdit,
+  onManageStudents,
 }: Props) {
   return (
     <div className="flex items-start justify-between">
@@ -41,6 +44,7 @@ export default function SectionCardHeader({
         onArchiveSuccess={onArchiveSuccess}
         onRestoreSuccess={onRestoreSuccess}
         onEdit={onEdit}
+        onManageStudents={onManageStudents}
       />
     </div>
   );

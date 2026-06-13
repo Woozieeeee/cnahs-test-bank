@@ -1,29 +1,53 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { LogOut, Settings, User } from "lucide-react";
+
 import MotionButton from "@/components/motion/motionButton";
-import MotionDropdown from "@/components/motion/motionDropdown";
 
 interface Props {
-  onLogout?: () => void;
+  settingsPath: string;
+  onLogout: () => void;
 }
 
 export default function NavbarProfileDropdown({
+  settingsPath,
   onLogout,
 }: Props) {
+  const router = useRouter();
+
+  const navigate = (path: string) => {
+    router.push(path);
+  };
+
   return (
-    <MotionDropdown className="border-border bg-popover absolute right-0 mt-2 w-48 rounded-xl border p-2 shadow-lg">
-      <MotionButton className="hover:bg-muted w-full rounded-lg px-4 py-2 text-left transition">
+    <div className="p-1">
+      <MotionButton
+        onClick={() => navigate(`${settingsPath}?tab=account`)}
+        className="hover:bg-muted flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition"
+      >
+        <User size={16} />
         Profile
       </MotionButton>
 
-      <MotionButton className="hover:bg-muted w-full rounded-lg px-4 py-2 text-left transition">
+      <MotionButton
+        onClick={() => navigate(settingsPath)}
+        className="hover:bg-muted flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition"
+      >
+        <Settings size={16} />
         Settings
       </MotionButton>
 
+      <div className="border-border my-1 border-t" />
+
       <MotionButton
         onClick={onLogout}
-        className="w-full rounded-lg px-4 py-2 text-left text-red-500 transition hover:bg-red-500/10"
+        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-500 transition hover:bg-red-500/10"
       >
+        <LogOut size={16} />
         Logout
       </MotionButton>
-    </MotionDropdown>
+    </div>
   );
 }

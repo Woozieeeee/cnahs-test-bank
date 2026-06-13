@@ -3,6 +3,7 @@ import {
   BookOpen,
   ClipboardList,
   Activity,
+  Settings,
 } from "lucide-react";
 
 export const facultyNav = [
@@ -31,5 +32,11 @@ export const facultyNav = [
     label: "Activity Logs",
     icon: Activity,
     nested: true,
+  },
+
+  {
+    href: "/faculty/settings",
+    label: "Settings",
+    icon: Settings,
   },
 ];

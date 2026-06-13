@@ -121,6 +121,7 @@ export const getSubjectAssessmentsService = async (
     ONGOING: 3,
     COMPLETED: 4,
     ARCHIVED: 5,
+    CANCELLED: 6,
   };
 
   const difficultyOrder = {

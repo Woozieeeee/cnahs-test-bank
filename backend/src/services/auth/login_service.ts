@@ -59,9 +59,9 @@ export const loginService = async ({ identifier, password }: LoginData) => {
     throw new Error("Account rejected");
   }
 
-  // =========================
-  // GENERATE TOKEN
-  // =========================
+  if (user.status === "DISABLED") {
+    throw new Error("Account disabled");
+  }
 
   const token = jwt.sign(
     {
@@ -71,7 +71,7 @@ export const loginService = async ({ identifier, password }: LoginData) => {
     process.env.JWT_SECRET as string,
 
     {
-      expiresIn: "1d",
+      expiresIn: "12h",
     },
   );
 

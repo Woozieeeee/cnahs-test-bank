@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import useSectionId from "@/hooks/shared/useSectionId";
 import useSection from "@/hooks/academic/useSection";
+import { getSectionStudents } from "@/services/admin_service";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
@@ -20,13 +21,44 @@ import SectionStudentsSearch from "@/components/admin/academic/sections/students
 import SectionStudentRoster from "@/components/admin/academic/sections/students/sectionStudentRoster";
 import SectionStudentsTabs from "@/components/admin/academic/sections/students/sectionStudentsTabs";
 
-import { mockSectionStudents } from "@/components/admin/academic/sections/data/mockSectionStudents";
+interface Student {
+  id: number;
+  name: string;
+  studentId: string;
+  accountStatus: string;
+  studentStatus: "PASSING" | "STRUGGLING" | "INACTIVE";
+  totalAttempts: number;
+  passedExams: number;
+  enrolledDate: string;
+}
+
+interface SectionStudentsResponse {
+  success: boolean;
+  data: {
+    section: {
+      id: number;
+      name: string;
+    };
+    students: Student[];
+    total: number;
+    stats: {
+      passing: number;
+      inactive: number;
+      struggling: number;
+    };
+  };
+}
 
 export default function SectionStudentsPage() {
   const id = useSectionId();
 
-  const { section, loading, error, refresh } =
+  const { section, loading: sectionLoading, error: sectionError, refresh } =
     useSection(id);
+
+  const [students, setStudents] = useState<Student[]>([]);
+  const [stats, setStats] = useState({ passing: 0, inactive: 0, struggling: 0 });
+  const [studentsLoading, setStudentsLoading] = useState(false);
+  const [studentsError, setStudentsError] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState("ALL");
 
@@ -36,8 +68,36 @@ export default function SectionStudentsPage() {
 
   const PAGE_SIZE = 12;
 
+  // Fetch students from API
+  useEffect(() => {
+    if (!id || sectionLoading) return;
+
+    const fetchStudents = async () => {
+      try {
+        setStudentsLoading(true);
+        setStudentsError(null);
+
+        const response = await getSectionStudents(id) as SectionStudentsResponse;
+
+        if (response.success) {
+          setStudents(response.data.students);
+          setStats(response.data.stats);
+        } else {
+          setStudentsError("Failed to load students");
+        }
+      } catch (err) {
+        console.error("Error fetching students:", err);
+        setStudentsError("Failed to load students data");
+      } finally {
+        setStudentsLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, [id, sectionLoading]);
+
   const filteredStudents = useMemo(() => {
-    return mockSectionStudents.filter((student) => {
+    return students.filter((student) => {
       const matchesSearch =
         student.name
           .toLowerCase()
@@ -49,11 +109,11 @@ export default function SectionStudentsPage() {
       const matchesTab =
         activeTab === "ALL"
           ? true
-          : student.status === activeTab;
+          : student.studentStatus === activeTab;
 
       return matchesSearch && matchesTab;
     });
-  }, [search, activeTab]);
+  }, [search, activeTab, students]);
 
   const startIndex = (page - 1) * PAGE_SIZE;
 
@@ -66,7 +126,7 @@ export default function SectionStudentsPage() {
   // LOADING
   // =========================
 
-  if (loading) {
+  if (sectionLoading || studentsLoading) {
     return (
       <PageContainer>
         <LoadingState
@@ -81,12 +141,12 @@ export default function SectionStudentsPage() {
   // ERROR
   // =========================
 
-  if (error) {
+  if (sectionError || studentsError) {
     return (
       <PageContainer>
         <ErrorState
           title="Failed to load students."
-          description={error}
+          description={sectionError || studentsError || "Unknown error"}
           onRetry={refresh}
         />
       </PageContainer>
@@ -132,22 +192,10 @@ export default function SectionStudentsPage() {
       {/* STATS */}
 
       <SectionStudentsStats
-        total={mockSectionStudents.length}
-        regular={
-          mockSectionStudents.filter(
-            (student) => student.status === "REGULAR"
-          ).length
-        }
-        irregular={
-          mockSectionStudents.filter(
-            (student) => student.status === "IRREGULAR"
-          ).length
-        }
-        atRisk={
-          mockSectionStudents.filter(
-            (student) => student.status === "AT_RISK"
-          ).length
-        }
+        total={stats.passing + stats.inactive + stats.struggling}
+        passing={stats.passing}
+        inactive={stats.inactive}
+        struggling={stats.struggling}
       />
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">

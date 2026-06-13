@@ -13,28 +13,40 @@ datasource db {
 }
 
 model User {
-  id                    Int                   @id @default(autoincrement())
-  name                  String
-  username              String?               @unique
-  studentId             String?               @unique
-  studentRecord         StudentRecord?        @relation(fields: [studentId], references: [studentId])
-  password              String
-  role                  Role
-  status                String                @default("PENDING")
-  sectionId             Int?
-  isFirstLogin          Boolean               @default(true)
-  examAttempts          ExamAttempt[]
-  createdAt             DateTime              @default(now())
-  updatedAt             DateTime              @updatedAt
-  section               Section?              @relation(fields: [sectionId], references: [id])
-  subjectAssignments    SubjectFaculty[]      @relation("FacultyPool")
-  sectionSubjects       SectionSubject[]      @relation("SectionInstructor")
-  studentProgress       StudentProgress?
-  createdQuestions      Question[]            @relation("QuestionCreator")
-  questionImportBatches QuestionImportBatch[] @relation("QuestionImportCreator")
-  createdExams          Exam[]                @relation("ExamCreator")
-  importJobs            ImportJob[]
-  examDrafts            ExamDraft[]
+  id                          Int                          @id @default(autoincrement())
+  name                        String
+  username                    String?                      @unique
+  studentId                   String?                      @unique
+  studentRecord               StudentRecord?               @relation(fields: [studentId], references: [studentId])
+  password                    String
+  role                        Role
+  status                      String                       @default("PENDING")
+  sectionId                   Int?
+  isFirstLogin                Boolean                      @default(true)
+  avatar                      Bytes?                       @db.LongBlob
+  avatarMimeType              String?
+  examAttempts                ExamAttempt[]
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @updatedAt
+  section                     Section?                     @relation(fields: [sectionId], references: [id])
+  subjectAssignments          SubjectFaculty[]             @relation("FacultyPool")
+  sectionSubjects             SectionSubject[]             @relation("SectionInstructor")
+  studentProgress             StudentProgress?
+  createdQuestions            Question[]                   @relation("QuestionCreator")
+  questionImportBatches       QuestionImportBatch[]        @relation("QuestionImportCreator")
+  createdExams                Exam[]                       @relation("ExamCreator")
+  facultyExams                Exam[]                       @relation("FacultyExams")
+  importJobs                  ImportJob[]
+  examDrafts                  ExamDraft[]
+  violations                  ExamViolation[]
+  notifications               Notification[]
+  passwordResetRequests       PasswordResetRequest[]
+  studentEnrollments          SubjectEnrollment[]          @relation("StudentEnrollments")
+  studentSubjectProgress      SubjectProgress[]            @relation("StudentSubjectProgress")
+  loginHistory                LoginHistory[]               @relation("LoginHistory")
+  facultyExamPreferences      FacultyExamPreferences?      @relation("FacultyExamPreferences")
+  facultyNotificationSettings FacultyNotificationSettings? @relation("FacultyNotificationSettings")
+  studentPreferences          StudentPreferences?          @relation("StudentPreferences")
 
   @@index([role])
   @@index([status])
@@ -89,23 +101,28 @@ model Section {
 }
 
 model Subject {
-  id              Int              @id @default(autoincrement())
-  name            String
-  code            String           @unique
-  description     String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  isArchived      Boolean          @default(false)
-  faculties       SubjectFaculty[]
-  exams           Exam[]
-  topics          Topic[]
-  sectionSubjects SectionSubject[]
-  questions       Question[]
-  totalQuestions  Int              @default(0)
-  totalExams      Int              @default(0)
-  examDrafts      ExamDraft[]
+  id                   Int                   @id @default(autoincrement())
+  name                 String
+  slug                 String?               @unique
+  code                 String                @unique
+  description          String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  isArchived           Boolean               @default(false)
+  faculties            SubjectFaculty[]
+  exams                Exam[]
+  topics               Topic[]
+  sectionSubjects      SectionSubject[]
+  questions            Question[]
+  totalQuestions       Int                   @default(0)
+  totalExams           Int                   @default(0)
+  examDrafts           ExamDraft[]
+  difficultyThresholds DifficultyThreshold[]
+  enrollments          SubjectEnrollment[]
+  studentProgress      SubjectProgress[]
 
   @@index([isArchived])
+  @@index([slug])
 }
 
 model SubjectFaculty {
@@ -121,6 +138,7 @@ model SubjectFaculty {
   @@unique([subjectId, facultyId])
   @@index([subjectId])
   @@index([facultyId])
+  @@index([facultyId, subjectId])
 }
 
 model SectionSubject {
@@ -165,6 +183,8 @@ model Exam {
   updatedAt   DateTime @updatedAt
   createdById Int
   createdBy   User     @relation("ExamCreator", fields: [createdById], references: [id])
+  facultyId   Int // Faculty that owns the exam
+  faculty     User     @relation("FacultyExams", fields: [facultyId], references: [id])
 
   isArchived Boolean   @default(false)
   archivedAt DateTime?
@@ -197,14 +217,18 @@ model Exam {
   section Section @relation(fields: [sectionId], references: [id])
 
   examQuestions  ExamQuestion[]
-  totalQuestions Int            @default(0)
+  totalQuestions Int             @default(0)
   attempts       ExamAttempt[]
+  violations     ExamViolation[]
 
   @@index([status])
   @@index([subjectId])
   @@index([sectionId])
   @@index([isArchived])
   @@index([createdById])
+  @@index([facultyId])
+  @@index([facultyId, status, startsAt])
+  @@index([subjectId, status])
 }
 
 model ExamDraft {
@@ -254,10 +278,70 @@ model StudentProgress {
   @@index([studentId])
 }
 
+model DifficultyThreshold {
+  id           Int            @id @default(autoincrement())
+  subjectId    Int
+  difficulty   ExamDifficulty
+  passingScore Int            @default(75)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // =========================
+  // RELATION
+  // =========================
+
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, difficulty])
+  @@index([subjectId])
+}
+
+model SubjectEnrollment {
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  subjectId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // =========================
+  // RELATION
+  // =========================
+
+  student User    @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, subjectId])
+  @@index([studentId])
+  @@index([subjectId])
+}
+
+model SubjectProgress {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  subjectId   Int
+  easyScore   Int      @default(0)
+  mediumScore Int      @default(0)
+  hardScore   Int      @default(0)
+  expertScore Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // =========================
+  // RELATION
+  // =========================
+
+  student User    @relation("StudentSubjectProgress", fields: [studentId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, subjectId])
+  @@index([studentId])
+  @@index([subjectId])
+}
+
 model ActivityLog {
   id          Int      @id @default(autoincrement())
   action      String
-  categories  Json
+  categories  Json?
   severity    String   @default("INFO")
   description String?
   performedBy String
@@ -268,6 +352,97 @@ model ActivityLog {
   @@index([severity])
   @@index([performedBy])
   @@index([createdAt])
+}
+
+model ExamViolation {
+  id          Int       @id @default(autoincrement())
+  examId      Int
+  studentId   Int
+  type        String // TAB_SWITCH, WINDOW_BLUR, DEVICE_CHANGE, MULTIPLE_FACES, NO_FACE, SUSPICIOUS_ACTIVITY
+  severity    String    @default("LOW") // LOW, MEDIUM, HIGH
+  timestamp   DateTime  @default(now())
+  description String?
+  details     String?
+  resolved    Boolean   @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+
+  exam    Exam @relation(fields: [examId], references: [id])
+  student User @relation(fields: [studentId], references: [id])
+
+  @@index([examId])
+  @@index([studentId])
+  @@index([severity])
+  @@index([timestamp])
+  @@index([resolved])
+  @@index([examId, timestamp, severity])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String // EXAM_NOTIFICATION, VIOLATION_ALERT, etc.
+  title     String
+  message   String   @db.LongText
+  read      Boolean  @default(false)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+model PasswordResetRequest {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  identifier String
+  status     String    @default("PENDING")
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+model SystemSettings {
+  id                   Int      @id @default(autoincrement())
+  sessionTimeoutHours  Int      @default(24)
+  maxLoginAttempts     Int      @default(5)
+  dataRetentionDays    Int      @default(90)
+  maxConcurrentUsers   Int      @default(1000)
+  passwordExpiryDays   Int      @default(90)
+  forcePasswordExpiry  Boolean  @default(true)
+  enableTwoFactor      Boolean  @default(false)
+  trackLoginHistory    Boolean  @default(true)
+  enableIpWhitelist    Boolean  @default(false)
+  ipWhitelistJson      Json? // Array of IP addresses
+  inAppNotifications   Boolean  @default(true)
+  dashboardAlerts      Boolean  @default(true)
+  criticalSystemAlerts Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([id]) // Only one record should exist
+}
+
+model LoginHistory {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  ipAddress  String?
+  userAgent  String?
+  loginTime  DateTime  @default(now())
+  logoutTime DateTime?
+  success    Boolean   @default(true)
+
+  user User @relation("LoginHistory", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([loginTime])
 }
 
 model Question {
@@ -297,6 +472,7 @@ model Question {
   studentAnswers StudentAnswer[]
   options        QuestionOption[]
   examQuestions  ExamQuestion[]
+  responses      ExamResponse[]
 
   @@index([subjectId])
   @@index([topicId])
@@ -333,7 +509,8 @@ model ExamAttempt {
   exam    Exam @relation(fields: [examId], references: [id])
   student User @relation(fields: [studentId], references: [id])
 
-  answers StudentAnswer[]
+  answers   StudentAnswer[]
+  responses ExamResponse[]  @relation("attemptResponses")
 
   @@index([examId])
   @@index([studentId])
@@ -355,6 +532,19 @@ model StudentAnswer {
   @@index([attemptId])
   @@index([questionId])
   @@index([selectedOptionId])
+}
+
+model ExamResponse {
+  id         Int      @id @default(autoincrement())
+  attemptId  Int
+  questionId Int
+  answeredAt DateTime @default(now())
+
+  attempt  ExamAttempt @relation("attemptResponses", fields: [attemptId], references: [id])
+  question Question    @relation(fields: [questionId], references: [id])
+
+  @@index([attemptId])
+  @@index([questionId])
 }
 
 model QuestionOption {
@@ -451,6 +641,50 @@ model QuestionImportBatch {
   @@index([createdById])
 }
 
+model FacultyExamPreferences {
+  id                     Int      @id @default(autoincrement())
+  facultyId              Int      @unique
+  examNotifications      Boolean  @default(true)
+  violationAlerts        Boolean  @default(true)
+  autoSubmitNotification Boolean  @default(true)
+  studentProgressUpdates Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  faculty User @relation("FacultyExamPreferences", fields: [facultyId], references: [id], onDelete: Cascade)
+
+  @@index([facultyId])
+}
+
+model FacultyNotificationSettings {
+  id                 Int      @id @default(autoincrement())
+  facultyId          Int      @unique
+  inAppNotifications Boolean  @default(true)
+  dashboardAlerts    Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  faculty User @relation("FacultyNotificationSettings", fields: [facultyId], references: [id], onDelete: Cascade)
+
+  @@index([facultyId])
+}
+
+model StudentPreferences {
+  id                Int      @id @default(autoincrement())
+  studentId         Int      @unique
+  pushNotifications Boolean  @default(true)
+  examReminders     Boolean  @default(true)
+  soundEnabled      Boolean  @default(true)
+  studyGoals        Boolean  @default(true)
+  analyticsTracking Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  student User @relation("StudentPreferences", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
 enum Role {
   ADMIN
   FACULTY
@@ -477,6 +711,8 @@ enum AttemptStatus {
   IN_PROGRESS
   SUBMITTED
   AUTO_SUBMITTED
+  COMPLETED
+  FLAGGED
 }
 
 enum ImportJobStatus {

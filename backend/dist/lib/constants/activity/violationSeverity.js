@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VIOLATION_SEVERITY = void 0;
+exports.VIOLATION_SEVERITY = {
+    TAB_SWITCH: "WARNING",
+    WINDOW_BLUR: "WARNING",
+    FULLSCREEN_EXIT: "ERROR",
+    COPY_ATTEMPT: "ERROR",
+    PASTE_ATTEMPT: "ERROR",
+    RIGHT_CLICK: "WARNING",
+    MULTIPLE_FACE_DETECTED: "ERROR",
+    NO_FACE_DETECTED: "WARNING",
+    DEVICE_CHANGE: "ERROR",
+    SUSPICIOUS_ACTIVITY: "ERROR",
+};

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import useSectionId from "@/hooks/shared/useSectionId";
@@ -20,8 +20,57 @@ import SubjectFacultyCard from "@/components/admin/academic/sections/subjects/de
 import SubjectStudentDistributionCard from "@/components/admin/academic/sections/subjects/details/subjectStudentDistributionCard";
 import SubjectQuickAccessSection from "@/components/admin/academic/sections/subjects/details/subjectQuickAccessSection";
 
-import { mockSectionSubjects } from "@/components/admin/academic/sections/data/mockSectionSubjects";
-import { mockSubjectDashboard } from "@/components/admin/academic/sections/data/mockSubjectDashboard";
+import { getSectionSubjectDetails } from "@/services/admin_service";
+
+interface SectionSubjectDetails {
+  section: {
+    id: number;
+    name: string;
+  };
+  subject: {
+    id: number;
+    name: string;
+    code: string;
+    slug: string;
+    description: string;
+  };
+  faculty: {
+    id: number;
+    name: string;
+    username: string;
+  } | null;
+  statistics: {
+    totalQuestions: number;
+    totalExams: number;
+    totalStudents: number;
+    totalAttempts: number;
+    passedAttempts: number;
+    passRate: number;
+    averageScore: number;
+  };
+  exams: any[];
+  questions: {
+    count: number;
+    byDifficulty: {
+      EASY: number;
+      MEDIUM: number;
+      HARD: number;
+    };
+    byTopic: Array<{
+      topic: string;
+      count: number;
+    }>;
+  };
+  studentPerformance: Array<{
+    studentId: number;
+    name: string;
+    enrollmentId: string;
+    totalAttempts: number;
+    passedAttempts: number;
+    passRate: number;
+    averageScore: number;
+  }>;
+}
 
 export default function SubjectDetailsPage() {
   const sectionId = useSectionId();
@@ -32,6 +81,10 @@ export default function SubjectDetailsPage() {
 
   const { section, loading, error, refresh } =
     useSection(sectionId);
+
+  const [subjectDetails, setSubjectDetails] = useState<SectionSubjectDetails | null>(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [detailsError, setDetailsError] = useState<string | undefined>(undefined);
 
   // =========================
   // SUBJECT
@@ -44,18 +97,43 @@ export default function SubjectDetailsPage() {
       (item) => item.subject.id === subjectId
     );
 
-    if (found) return found;
-
-    return mockSectionSubjects.find(
-      (item) => item.subject.id === subjectId
-    );
+    return found || null;
   }, [section, subjectId]);
+
+  // =========================
+  // FETCH SECTION SUBJECT DETAILS (PHASE 4)
+  // =========================
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        setDetailsLoading(true);
+        setDetailsError(undefined);
+
+        const response = await getSectionSubjectDetails(sectionId, subjectId);
+        if (response.success) {
+          setSubjectDetails(response.data);
+        } else {
+          setDetailsError("Failed to load subject details");
+        }
+      } catch (err) {
+        console.error("Error fetching subject details:", err);
+        setDetailsError(err instanceof Error ? err.message : "Failed to fetch subject details");
+      } finally {
+        setDetailsLoading(false);
+      }
+    };
+
+    if (!loading && sectionSubject && sectionId) {
+      fetchDetails();
+    }
+  }, [sectionId, subjectId, loading, sectionSubject]);
 
   // =========================
   // LOADING
   // =========================
 
-  if (loading) {
+  if (loading || detailsLoading) {
     return (
       <PageContainer>
         <LoadingState
@@ -70,12 +148,12 @@ export default function SubjectDetailsPage() {
   // ERROR
   // =========================
 
-  if (error) {
+  if (error || detailsError) {
     return (
       <PageContainer>
         <ErrorState
           title="Failed to load subject."
-          description={error}
+          description={error || detailsError}
           onRetry={refresh}
         />
       </PageContainer>
@@ -86,7 +164,7 @@ export default function SubjectDetailsPage() {
   // NOT FOUND
   // =========================
 
-  if (!section || !sectionSubject) {
+  if (!section || !sectionSubject || !subjectDetails) {
     return (
       <PageContainer>
         <NotFoundState
@@ -97,7 +175,16 @@ export default function SubjectDetailsPage() {
     );
   }
 
-  const subject = sectionSubject.subject;
+  const subject = subjectDetails.subject;
+  const stats = subjectDetails.statistics;
+  
+  // Calculate student distribution for display
+  const passingStudents = subjectDetails.studentPerformance.filter(
+    (s) => s.passRate >= 70
+  ).length;
+  const inactiveStudents = subjectDetails.studentPerformance.filter(
+    (s) => s.totalAttempts === 0
+  ).length;
 
   return (
     <PageContainer>
@@ -109,18 +196,18 @@ export default function SubjectDetailsPage() {
       <SubjectHeroCard subject={subject} />
 
       <SubjectStatsGrid
-        averageScore={mockSubjectDashboard.averageRating}
-        passingRate={mockSubjectDashboard.passingRate}
-        highestScore={98}
-        lowestScore={61}
+        averageScore={stats.averageScore}
+        passingRate={stats.passRate}
+        highestScore={100}
+        lowestScore={0}
       />
 
       <div className="grid gap-6 xl:grid-cols-2">
         <SubjectFacultyCard subject={subject} />
 
         <SubjectStudentDistributionCard
-          regular={42}
-          irregular={5}
+          regular={passingStudents}
+          irregular={inactiveStudents}
         />
       </div>
 

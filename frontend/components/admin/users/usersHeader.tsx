@@ -7,7 +7,7 @@ export default function UsersHeader() {
     <PageHeader>
       <PageTitle
         title="User Management"
-        description="Manage student and faculty accounts."
+        description="Manage student, faculty, and admin accounts."
       />
     </PageHeader>
   );

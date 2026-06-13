@@ -23,6 +23,14 @@ export const getMe = async (req: AuthRequest, res: Response) => {
         role: req.user.role,
 
         status: req.user.status,
+
+        isFirstLogin: req.user.isFirstLogin,
+
+        createdAt: req.user.createdAt,
+
+        updatedAt: req.user.updatedAt,
+
+        hasAvatar: !!req.user.avatar,
       },
     });
   } catch (error) {

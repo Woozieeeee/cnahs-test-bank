@@ -21,9 +21,9 @@ function SubjectStudentDistributionCard({
       </h3>
 
       <div className="mt-5 space-y-4">
-        <Row label="Regular" value={regular} />
+        <Row label="Passing" value={regular} />
 
-        <Row label="Irregular" value={irregular} />
+        <Row label="Inactive" value={irregular} />
 
         <Row label="Total" value={regular + irregular} />
       </div>

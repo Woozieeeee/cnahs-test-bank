@@ -4,6 +4,7 @@ import {
   GraduationCap,
   ClipboardList,
   History,
+  Settings,
 } from "lucide-react";
 
 export const adminNav = [
@@ -15,7 +16,7 @@ export const adminNav = [
 
   {
     href: "/admin/users",
-    label: "Users",
+    label: "Users Management",
     icon: Users,
   },
 
@@ -38,5 +39,11 @@ export const adminNav = [
     label: "Activity Logs",
     icon: History,
     nested: true,
+  },
+
+  {
+    href: "/admin/settings",
+    label: "System Settings",
+    icon: Settings,
   },
 ];

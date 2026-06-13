@@ -18,6 +18,8 @@ interface Props {
 
   width?: string;
   className?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export default function MotionDropdown({
@@ -26,8 +28,21 @@ export default function MotionDropdown({
   align = "right",
   width = "w-56",
   className = "",
+  open: controlledOpen,
+  onOpenChange,
 }: Props) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+
+  const setOpen = (newOpen: boolean) => {
+    if (isControlled && onOpenChange) {
+      onOpenChange(newOpen);
+    } else {
+      setInternalOpen(newOpen);
+    }
+  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +67,7 @@ export default function MotionDropdown({
         handleClickOutside
       );
     };
-  }, []);
+  }, [setOpen]);
 
   return (
     <div ref={containerRef} className="relative">

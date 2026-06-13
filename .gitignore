@@ -1,5 +1,23 @@
-node_modules
-.next
-dist
+# Node dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Environment variables
 .env
 .env.local
+.env.*.local
+
+# Documents and temporary files
+*.md
+*.txt
+*.csv
+
+# Logs and system files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store

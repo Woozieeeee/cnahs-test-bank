@@ -13,9 +13,9 @@ function SectionStudentsPreview({ section }: Props) {
 
   // mock for now until backend supports it
 
-  const regularStudents = Math.floor(totalStudents * 0.8);
+  const passingStudents = Math.floor(totalStudents * 0.8);
 
-  const irregularStudents = totalStudents - regularStudents;
+  const inactiveStudents = totalStudents - passingStudents;
   return (
     <Link
       href={`/admin/academic/sections/${section.id}/students`}
@@ -44,13 +44,13 @@ function SectionStudentsPreview({ section }: Props) {
         <div className="mt-6 flex-1">
           <div className="mt-6 grid grid-cols-2 gap-3">
             <PreviewMetricCard
-              label="Regular"
-              value={regularStudents}
+              label="Passing"
+              value={passingStudents}
             />
 
             <PreviewMetricCard
-              label="Irregular"
-              value={irregularStudents}
+              label="Inactive"
+              value={inactiveStudents}
             />
 
             <PreviewMetricCard

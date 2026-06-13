@@ -24,6 +24,11 @@ export const VIOLATION_MESSAGES = {
     description: "Unauthorized content insertion was prevented.",
   },
 
+  RIGHT_CLICK: {
+    action: "Right-click blocked",
+    description: "Context menu access was blocked during the exam.",
+  },
+
   MULTIPLE_FACE_DETECTED: {
     action: "Multiple faces detected",
     description: "Additional individuals appeared in webcam monitoring.",

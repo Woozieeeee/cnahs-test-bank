@@ -15,11 +15,7 @@ export const archiveTopicController = async (
 
     const topic = await archiveTopicService(facultyId, topicId);
 
-    return res.status(200).json({
-      message: "Topic archived successfully",
-
-      topic,
-    });
+    return res.status(200).json(topic);
   } catch (error: any) {
     return res.status(400).json({
       message: error.message,

@@ -11,6 +11,8 @@ interface Props {
 
   onRestore: () => void;
 
+  onManageStudents: () => void;
+
   onClose: () => void;
 }
 
@@ -19,6 +21,7 @@ function SectionActionsDropdown({
   onEdit,
   onArchive,
   onRestore,
+  onManageStudents,
   onClose,
 }: Props) {
   const handleAction = useCallback(
@@ -36,6 +39,11 @@ function SectionActionsDropdown({
 
   return (
     <div className="border-border bg-popover absolute top-12 right-0 z-50 w-48 rounded-xl border p-2 shadow-lg">
+      <SectionDropdownItem
+        label="Manage Students"
+        onClick={(e) => handleAction(e, onManageStudents)}
+      />
+
       {!isArchived ? (
         <>
           <SectionDropdownItem

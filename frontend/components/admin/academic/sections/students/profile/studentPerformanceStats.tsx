@@ -6,40 +6,51 @@ import InfoCard from "@/components/common/cards/infoCard";
 import InfoCardHeader from "@/components/common/cards/infoCardHeader";
 import InfoCardValue from "@/components/common/cards/infoCardValue";
 
-import { mockStudentProfile } from "@/components/admin/academic/sections/data/mockStudentProfile";
+interface Props {
+  profile: {
+    performance: {
+      totalAttempts: number;
+      passedAttempts: number;
+      passRate: number;
+      averageScore: number;
+    };
+  };
+}
 
-function StudentPerformanceStats() {
+function StudentPerformanceStats({ profile }: Props) {
+  const perf = profile.performance;
+
   return (
     <div className="grid gap-4 md:grid-cols-4">
       <InfoCard>
-        <InfoCardHeader label="Average Grade" />
+        <InfoCardHeader label="Average Score" />
 
         <InfoCardValue>
-          {mockStudentProfile.averageGrade}%
+          {perf.averageScore.toFixed(1)}%
         </InfoCardValue>
       </InfoCard>
 
       <InfoCard>
-        <InfoCardHeader label="Attendance" />
+        <InfoCardHeader label="Pass Rate" />
 
         <InfoCardValue>
-          {mockStudentProfile.attendance}%
+          {perf.passRate.toFixed(1)}%
         </InfoCardValue>
       </InfoCard>
 
       <InfoCard>
-        <InfoCardHeader label="Assessments" />
+        <InfoCardHeader label="Exam Attempts" />
 
         <InfoCardValue>
-          {mockStudentProfile.totalAssessments}
+          {perf.totalAttempts}
         </InfoCardValue>
       </InfoCard>
 
       <InfoCard>
-        <InfoCardHeader label="Passed Subjects" />
+        <InfoCardHeader label="Passed" />
 
         <InfoCardValue>
-          {mockStudentProfile.passedSubjects}
+          {perf.passedAttempts}
         </InfoCardValue>
       </InfoCard>
     </div>

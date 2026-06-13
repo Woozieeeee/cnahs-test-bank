@@ -8,10 +8,9 @@ interface Props {
 
 const tabs = [
   "ALL",
-  "REGULAR",
-  "IRREGULAR",
-  "HONOR",
-  "AT_RISK",
+  "PASSING",
+  "INACTIVE",
+  "STRUGGLING",
 ];
 
 export default function SectionStudentsTabs({

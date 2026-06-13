@@ -39,9 +39,6 @@ export default function SearchAutocomplete({
       )
       .slice(0, 8);
   }, [value, suggestions]);
-  console.log("Questions:", suggestions.length);
-
-  console.log("Filtered:", filteredSuggestions.length);
 
   return (
     <div className="relative">

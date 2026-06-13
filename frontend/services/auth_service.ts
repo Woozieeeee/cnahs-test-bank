@@ -49,3 +49,11 @@ export const changePassword = async (data: {
 
   return response.data;
 };
+
+export const requestPasswordReset = async (identifier: string) => {
+  const response = await api.post("/auth/password-reset-request", {
+    identifier,
+  });
+
+  return response.data;
+};

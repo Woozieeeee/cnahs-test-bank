@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppThemeProvider from "@/components/providers/themeProvider";
+import AppProviders from "@/components/providers/appProviders";
 
 import "./globals.css";
 
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground min-h-screen antialiased">
-        <AppThemeProvider>{children}</AppThemeProvider>
+        <AppThemeProvider>
+          <AppProviders>{children}</AppProviders>
+        </AppThemeProvider>
       </body>
     </html>
   );

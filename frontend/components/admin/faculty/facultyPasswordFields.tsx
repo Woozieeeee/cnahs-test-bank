@@ -1,4 +1,4 @@
-import PasswordInput from "@/components/common/passwordInput";
+import PasswordInputSettings from "@/components/student/settings/passwordInputSettings";
 
 import PasswordRules from "@/components/auth/shared/passwordRules";
 
@@ -52,11 +52,10 @@ export default function FacultyPasswordFields({
       {/* PASSWORD */}
 
       <div>
-        <PasswordInput
+        <PasswordInputSettings
           value={password}
           onChange={setPassword}
           placeholder="Password"
-          className="border-input bg-background focus:border-ring w-full rounded-xl border px-4 py-3 transition outline-none"
         />
 
         <PasswordRules
@@ -71,11 +70,10 @@ export default function FacultyPasswordFields({
       {/* CONFIRM PASSWORD */}
 
       <div>
-        <PasswordInput
+        <PasswordInputSettings
           value={confirmPassword}
           onChange={setConfirmPassword}
           placeholder="Confirm Password"
-          className="border-input bg-background focus:border-ring w-full rounded-xl border px-4 py-3 transition outline-none"
         />
 
         <PasswordMatchIndicator

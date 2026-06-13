@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 import fs from "fs";
 
@@ -6,7 +6,14 @@ import csv from "csv-parser";
 
 import { uploadStudentRecordsService } from "../../../services/admin/student_records/upload_student_records_service";
 
-export const uploadStudentRecords = async (req: Request, res: Response) => {
+type UploadRequest = Request & {
+  file?: Express.Multer.File;
+};
+
+export const uploadStudentRecords = async (
+  req: UploadRequest,
+  res: Response,
+) => {
   try {
     if (!req.file) {
       return res.status(400).json({

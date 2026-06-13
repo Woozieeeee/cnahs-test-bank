@@ -16,13 +16,13 @@ import ErrorState from "@/components/common/states/errorState";
 
 import SectionsHeader from "@/components/admin/academic/sections/sectionsHeader";
 
-import SectionsTabs from "@/components/admin/academic/sections/sectionTabs";
-
 import SectionsStats from "@/components/admin/academic/sections/sectionsStats";
 
 import SectionsGrid from "@/components/admin/academic/sections/sectionsGrid";
 
 import EditSectionModal from "@/components/admin/academic/sections/edit/editSectionModal";
+
+import ManageStudentsModal from "@/components/admin/academic/sections/manage/manageStudentsModal";
 
 const CreateSectionModal = dynamic(
   () =>
@@ -45,6 +45,9 @@ export default function SectionsPage() {
 
   const [selectedSection, setSelectedSection] =
     useState<Section | null>(null);
+
+  const [openManageStudentsModal, setOpenManageStudentsModal] =
+    useState(false);
 
   const handleSectionCreated = (section: Section) => {
     setSections((current) => [section, ...current]);
@@ -149,13 +152,6 @@ export default function SectionsPage() {
         onCreate={() => setOpenCreateModal(true)}
       />
 
-      {/* FILTERS */}
-
-      <SectionsTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-
       {/* STATS */}
 
       <SectionsStats sections={sections} />
@@ -170,6 +166,11 @@ export default function SectionsPage() {
           setSelectedSection(section);
 
           setOpenEditModal(true);
+        }}
+        onManageStudents={(section) => {
+          setSelectedSection(section);
+
+          setOpenManageStudentsModal(true);
         }}
       />
 
@@ -188,6 +189,15 @@ export default function SectionsPage() {
         onOpenChange={setOpenEditModal}
         section={selectedSection}
         onSuccess={handleSectionUpdated}
+      />
+
+      {/* MANAGE STUDENTS */}
+
+      <ManageStudentsModal
+        open={openManageStudentsModal}
+        onOpenChange={setOpenManageStudentsModal}
+        section={selectedSection}
+        onSuccess={refresh}
       />
     </PageContainer>
   );

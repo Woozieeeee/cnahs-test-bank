@@ -62,6 +62,19 @@ export const getStudentRecords = async () => {
   return response.data;
 };
 
+// UNASSIGN STUDENT FROM SECTION
+
+export const unassignStudentSection = async (
+  studentRecordId: number
+) => {
+  const response = await api.patch(
+    `/admin/academic/student-records/${studentRecordId}/unassign-section`,
+    {}
+  );
+
+  return response.data;
+};
+
 // =========================
 // UPLOAD STUDENT RECORDS
 // =========================

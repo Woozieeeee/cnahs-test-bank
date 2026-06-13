@@ -84,6 +84,11 @@ export default function RecentActivitySection({
 
   const groups = Object.entries(groupedActivities);
 
+  const handleActivityClick = (activityId: number) => {
+    // Store the activity ID to highlight on the activity logs page
+    sessionStorage.setItem("highlightActivityId", String(activityId));
+  };
+
   return (
     <section className="border-border bg-card rounded-2xl border p-6 shadow-sm">
       <div className="mb-8 flex items-center justify-between gap-4">
@@ -129,14 +134,20 @@ export default function RecentActivitySection({
 
               <div className="space-y-3">
                 {group.map((activity, index) => (
-                  <ActivityTimelineItem
+                  <Link
                     key={activity.id}
-                    activity={activity}
-                    timeLabel={getTimeLabel(
-                      new Date(activity.createdAt)
-                    )}
-                    isLast={index === group.length - 1}
-                  />
+                    href={`/admin/activity-logs?highlight=${activity.id}`}
+                    onClick={() => handleActivityClick(activity.id)}
+                    className="block transition-colors hover:opacity-80"
+                  >
+                    <ActivityTimelineItem
+                      activity={activity}
+                      timeLabel={getTimeLabel(
+                        new Date(activity.createdAt)
+                      )}
+                      isLast={index === group.length - 1}
+                    />
+                  </Link>
                 ))}
               </div>
             </div>

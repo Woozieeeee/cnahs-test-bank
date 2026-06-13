@@ -17,12 +17,12 @@ function SectionsStats({ sections }: Props) {
       totalSections: sections.length,
 
       totalStudents: sections.reduce(
-        (total, section) => total + section.users.length,
+        (total, section) => total + (section.users?.length || 0),
         0
       ),
 
       totalExams: sections.reduce(
-        (total, section) => total + section.exams.length,
+        (total, section) => total + (section.exams?.length || 0),
         0
       ),
 

@@ -18,4 +18,6 @@ export const DEFAULT_EXAM_INFO: CreateExamInfo = {
   startsAt: "",
 
   endsAt: "",
+
+  minutesPerQuestion: 0,
 };

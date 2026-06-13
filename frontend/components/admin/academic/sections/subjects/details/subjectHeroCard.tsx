@@ -18,12 +18,6 @@ function SubjectHeroCard({ subject }: Props) {
 
   const hasFaculty = !!subject.faculty;
 
-  // MOCKS FOR NOW
-
-  const regularStudents = 42;
-
-  const irregularStudents = 5;
-
   return (
     <div className="border-border bg-card overflow-hidden rounded-2xl border">
       {/* HERO */}
@@ -68,13 +62,13 @@ function SubjectHeroCard({ subject }: Props) {
           <InfoBlock label="Faculty" value={facultyName} />
 
           <InfoBlock
-            label="Regular Students"
-            value={regularStudents}
+            label="Status"
+            value={hasFaculty ? "Active" : "Pending"}
           />
 
           <InfoBlock
-            label="Irregular Students"
-            value={irregularStudents}
+            label="Assigned"
+            value={hasFaculty ? "Yes" : "No"}
           />
         </div>
       </div>

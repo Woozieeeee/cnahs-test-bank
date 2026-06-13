@@ -23,7 +23,7 @@ function SectionStudentRosterItem({
 
   return (
     <Link
-      href={`/admin/academic/sections/${sectionId}/students/${student.studentId}`}
+      href={`/admin/academic/sections/${sectionId}/students/${student.id}`}
       className="border-border bg-background hover:border-primary/30 hover:bg-muted/20 block rounded-2xl border p-5 transition-all"
     >
       <div className="space-y-5">

@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 
 export const logout = (req: Request, res: Response) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.clearCookie("token", {
     httpOnly: true,
 
-    secure: process.env.NODE_ENV === "production",
+    secure: isProduction ? true : false,
 
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: isProduction ? "strict" : "lax",
+
+    path: "/",
   });
 
   return res.status(200).json({

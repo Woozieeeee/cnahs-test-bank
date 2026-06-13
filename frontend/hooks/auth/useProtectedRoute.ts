@@ -19,6 +19,10 @@ export default function useProtectedRoute(
     loading,
 
     isAuthenticated,
+
+    refreshUser,
+
+    setUser,
   } = useAuth();
 
   useEffect(() => {
@@ -59,5 +63,9 @@ export default function useProtectedRoute(
     loading,
 
     isAuthenticated,
+
+    refreshUser,
+
+    setUser,
   };
 }

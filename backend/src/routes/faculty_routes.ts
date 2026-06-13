@@ -25,12 +25,35 @@ import { cancelExamController } from "../controllers/faculty/assessments/cancel_
 import { saveExamDraftController } from "../controllers/faculty/exams/save_exam_draft_controller";
 import { getExamDraftController } from "../controllers/faculty/exams/get_exam_draft_controller";
 import { deleteExamDraftController } from "../controllers/faculty/exams/delete_exam_draft_controller";
-import { getFacultyExamsController } from "../controllers/faculty/exams/get_faculty_exams_controller";
 import { getFacultySectionsController } from "../controllers/faculty/exams/get_faculty_sections_controller";
 import { createExamController } from "../controllers/faculty/exams/create_exam_controller";
 import { getExamBuilderQuestionsController } from "../controllers/faculty/exams/get_exam_builder_questions_controller";
 import { getExamSectionsController } from "../controllers/faculty/exams/get_exam_sections_controller";
+import { getExamForEditController } from "../controllers/faculty/exams/get_exam_for_edit_controller";
+import { updateExamController } from "../controllers/faculty/exams/update_exam_controller";
 import { getFacultyActivityLogs } from "../controllers/faculty/activity/get_faculty_activity_log_controller";
+import {
+  getFacultyExamsController,
+  getRecentViolationsController,
+  getExamMonitoringDetailsController,
+  getExamActiveStudentsController,
+  getExamViolationsController,
+  getExamActivityFeedController,
+} from "../controllers/faculty/exams/monitoring_controller";
+import {
+  pauseExamController,
+  endExamController,
+  flagStudentController,
+  unlockStudentController,
+  notifyStudentController,
+  exportExamReportController,
+  markViolationResolvedController,
+  resetViolationsController,
+  sendAnnouncementController,
+} from "../controllers/faculty/exams/exam_actions_controller";
+import { changeFacultyPasswordController } from "../controllers/faculty/settings/change_password_controller";
+import { getFacultyExamPreferencesController, updateFacultyExamPreferencesController } from "../controllers/faculty/settings/faculty_exam_preferences_controller";
+import { getFacultyNotificationSettingsController, updateFacultyNotificationSettingsController } from "../controllers/faculty/settings/faculty_notification_settings_controller";
 
 const router = express.Router();
 
@@ -48,6 +71,12 @@ router.get(
 );
 router.get("/exams", getFacultyExamsController);
 router.get("/exams/sections", getFacultySectionsController);
+router.get("/exams/violations/recent", getRecentViolationsController);
+router.get("/exams/:examId/monitoring", getExamMonitoringDetailsController);
+router.get("/exams/:examId/students/active", getExamActiveStudentsController);
+router.get("/exams/:examId/violations", getExamViolationsController);
+router.get("/exams/:examId/activity-feed", getExamActivityFeedController);
+
 router.get("/subjects/:subjectId/exams/draft", getExamDraftController);
 router.post("/subjects/:subjectId/exams/draft", saveExamDraftController);
 router.delete("/subjects/:subjectId/exams/draft", deleteExamDraftController);
@@ -73,6 +102,26 @@ router.get(
   getExamBuilderQuestionsController,
 );
 router.get("/subjects/:subjectId/exams/sections", getExamSectionsController);
+router.get("/subjects/:subjectId/exams/:examId/edit", getExamForEditController);
+router.put("/subjects/:subjectId/exams/:examId", updateExamController);
 router.get("/activity-logs", getFacultyActivityLogs);
+
+// Exam action routes
+router.post("/exams/:examId/pause", pauseExamController);
+router.post("/exams/:examId/end", endExamController);
+router.post("/exams/:examId/flag-student", flagStudentController);
+router.post("/exams/:examId/unlock-student", unlockStudentController);
+router.post("/exams/:examId/notify-student", notifyStudentController);
+router.post("/exams/:examId/report", exportExamReportController);
+router.post("/exams/:examId/reset-violations", resetViolationsController);
+router.post("/exams/:examId/announcement", sendAnnouncementController);
+router.post("/violations/:violationId/resolve", markViolationResolvedController);
+
+// Settings Routes
+router.patch("/password", changeFacultyPasswordController);
+router.get("/settings/exam-preferences", getFacultyExamPreferencesController);
+router.patch("/settings/exam-preferences", updateFacultyExamPreferencesController);
+router.get("/settings/notifications", getFacultyNotificationSettingsController);
+router.patch("/settings/notifications", updateFacultyNotificationSettingsController);
 
 export default router;

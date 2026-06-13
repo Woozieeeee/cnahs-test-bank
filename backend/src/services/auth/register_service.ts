@@ -1,6 +1,7 @@
 import prisma from "../../lib/prisma";
 
 import bcrypt from "bcryptjs";
+import { adminNotificationHandler } from "../notification/admin_notification_handler";
 
 interface RegisterData {
   studentId: string;
@@ -117,6 +118,12 @@ export const registerService = async ({
       targetUser: fullName,
     },
   });
+
+  void adminNotificationHandler
+    .notifyUserApprovalRequired(user.id)
+    .catch((error) => {
+      console.error("Failed to send approval notification:", error);
+    });
 
   return user;
 };

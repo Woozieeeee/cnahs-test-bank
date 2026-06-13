@@ -30,6 +30,8 @@ interface Props {
 
   onEdit: () => void;
 
+  onManageStudents: () => void;
+
   onArchiveSuccess: (sectionId: number) => void;
 
   onRestoreSuccess: (sectionId: number) => void;
@@ -39,6 +41,7 @@ function SectionCardActions({
   sectionId,
   isArchived,
   onEdit,
+  onManageStudents,
   onArchiveSuccess,
   onRestoreSuccess,
 }: Props) {
@@ -136,6 +139,7 @@ function SectionCardActions({
         <SectionActionsDropdown
           isArchived={isArchived}
           onEdit={onEdit}
+          onManageStudents={onManageStudents}
           onArchive={handleArchive}
           onRestore={handleRestore}
           onClose={() => setOpen(false)}

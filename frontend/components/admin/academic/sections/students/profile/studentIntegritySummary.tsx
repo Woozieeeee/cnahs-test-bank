@@ -3,18 +3,35 @@
 import { memo } from "react";
 
 import InfoCard from "@/components/common/cards/infoCard";
-
 import StatCard from "@/components/common/cards/statCard";
 
-import { mockStudentProfile } from "@/components/admin/academic/sections/data/mockStudentProfile";
+interface Props {
+  profile: {
+    recentViolations: Array<{
+      id: number;
+      type: string;
+      severity: string;
+      description: string;
+      resolved: boolean;
+      timestamp: string;
+    }>;
+  };
+}
 
-function StudentIntegritySummary() {
+function StudentIntegritySummary({ profile }: Props) {
+  const violations = profile.recentViolations;
+  const totalViolations = violations.length;
+  const unresolvedViolations = violations.filter((v) => !v.resolved).length;
+
   const integrityRating =
-    mockStudentProfile.terminatedSessions > 0
+    unresolvedViolations > 2
       ? "Poor"
-      : mockStudentProfile.flaggedSessions > 2
+      : unresolvedViolations > 0
         ? "Warning"
         : "Excellent";
+
+  const highSeverity = violations.filter((v) => v.severity === "HIGH").length;
+  const mediumSeverity = violations.filter((v) => v.severity === "MEDIUM").length;
 
   return (
     <InfoCard>
@@ -31,20 +48,20 @@ function StudentIntegritySummary() {
       <div className="mt-5 grid gap-4 md:grid-cols-4">
         <StatCard
           compact
-          label="Violations"
-          value={mockStudentProfile.violations}
+          label="Total Violations"
+          value={totalViolations}
         />
 
         <StatCard
           compact
-          label="Flagged"
-          value={mockStudentProfile.flaggedSessions}
+          label="Unresolved"
+          value={unresolvedViolations}
         />
 
         <StatCard
           compact
-          label="Terminated"
-          value={mockStudentProfile.terminatedSessions}
+          label="High Severity"
+          value={highSeverity}
         />
 
         <StatCard

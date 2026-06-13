@@ -1,21 +1,20 @@
+"use client";
+
+import SearchAutocomplete from "@/components/common/search/searchAutocomplete";
+
 interface Props {
   value: string;
-
   onChange: (value: string) => void;
+  suggestions: string[];
 }
 
-export default function UsersSearch({
-  value,
-
-  onChange,
-}: Props) {
+export default function UsersSearch({ value, onChange, suggestions }: Props) {
   return (
-    <input
-      type="text"
-      placeholder="Search users..."
+    <SearchAutocomplete
       value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-xl border px-4 py-3 transition focus:border-black"
+      onChange={onChange}
+      suggestions={suggestions}
+      placeholder="Search by name, student ID, or username..."
     />
   );
 }

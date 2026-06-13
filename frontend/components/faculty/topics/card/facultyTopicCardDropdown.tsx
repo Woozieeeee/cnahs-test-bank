@@ -27,53 +27,55 @@ export default function FacultyTopicCardDropdown({
 }: Props) {
   const [open, setOpen] = useState(false);
 
+  const handleEdit = () => {
+    setOpen(false);
+    onEdit();
+  };
+
+  const handleArchive = () => {
+    setOpen(false);
+    onArchive();
+  };
+
+  const handleRestore = () => {
+    setOpen(false);
+    onRestore();
+  };
+
   return (
-    <div className="relative">
+    <MotionDropdown
+      className="p-2"
+      width="w-48"
+      open={open}
+      onOpenChange={setOpen}
+      trigger={
+        <MotionButton className="hover:bg-muted rounded-lg p-2">
+          <MoreVertical size={18} />
+        </MotionButton>
+      }
+    >
       <MotionButton
-        onClick={() => setOpen(!open)}
-        className="hover:bg-muted rounded-lg p-2"
+        onClick={handleEdit}
+        className="hover:bg-muted w-full rounded-lg px-3 py-2 text-left"
       >
-        <MoreVertical size={18} />
+        Edit Topic
       </MotionButton>
 
-      {open && (
-        <MotionDropdown className="border-border bg-popover absolute right-0 z-50 mt-2 w-48 rounded-xl border p-2 shadow-lg">
-          <MotionButton
-            onClick={() => {
-              setOpen(false);
-
-              onEdit();
-            }}
-            className="hover:bg-muted w-full rounded-lg px-3 py-2 text-left"
-          >
-            Edit Topic
-          </MotionButton>
-
-          {topic.isArchived ? (
-            <MotionButton
-              onClick={() => {
-                setOpen(false);
-
-                onRestore();
-              }}
-              className="w-full rounded-lg px-3 py-2 text-left text-green-600 hover:bg-green-500/10"
-            >
-              Restore Topic
-            </MotionButton>
-          ) : (
-            <MotionButton
-              onClick={() => {
-                setOpen(false);
-
-                onArchive();
-              }}
-              className="w-full rounded-lg px-3 py-2 text-left text-red-500 hover:bg-red-500/10"
-            >
-              Archive Topic
-            </MotionButton>
-          )}
-        </MotionDropdown>
+      {topic.isArchived ? (
+        <MotionButton
+          onClick={handleRestore}
+          className="w-full rounded-lg px-3 py-2 text-left text-green-600 hover:bg-green-500/10"
+        >
+          Restore Topic
+        </MotionButton>
+      ) : (
+        <MotionButton
+          onClick={handleArchive}
+          className="w-full rounded-lg px-3 py-2 text-left text-red-500 hover:bg-red-500/10"
+        >
+          Archive Topic
+        </MotionButton>
       )}
-    </div>
+    </MotionDropdown>
   );
 }

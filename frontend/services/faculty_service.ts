@@ -1,475 +1,245 @@
 import api from "@/lib/axios";
-import { ImportSummary } from "@/types/imports/importSummary";
-import { SubjectAssessmentsResponse } from "@/types/assessments/assessment";
-import { CreateExamPayload } from "@/types/exams/createExamPayload";
 
 // =========================
-// GET STUDENT DASHBOARD
+// TOPICS
 // =========================
-
-export const getFacultyDashboard = async () => {
-  const response = await api.get("/faculty/dashboard");
-
-  return response.data;
-};
-
-// =========================
-// GET FACULTY SUBJECTS
-// =========================
-
-export const getFacultySubjects = async () => {
-  const response = await api.get("/faculty/subjects");
-
-  return response.data;
-};
-
-// =========================
-// GET FACULTY SUBJECTS BY ID
-// =========================
-
-export const getFacultySubjectById = async (
-  subjectId: number
-) => {
-  const response = await api.get(
-    `/faculty/subjects/${subjectId}`
-  );
-
-  return response.data;
-};
-
-// =========================
-// GET FACULTY TOPICS
-// =========================
-
-export const getFacultyTopics = async (
-  subjectId: number
-) => {
-  const response = await api.get(
-    `/faculty/subjects/${subjectId}/topics`
-  );
-
-  return response.data;
-};
-
-// =========================
-// CREATE FACULTY TOPIC
-// =========================
-
 export const createFacultyTopic = async (
   subjectId: number,
-  data: {
-    name: string;
-    description?: string;
-  }
+  data: { name: string; description?: string }
 ) => {
-  const response = await api.post(
-    `/faculty/subjects/${subjectId}/topics`,
-    data
-  );
-
+  const response = await api.post(`/faculty/subjects/${subjectId}/topics`, data);
   return response.data;
 };
-
-// =========================
-// UPDATE FACULTY TOPIC
-// =========================
 
 export const updateFacultyTopic = async (
   topicId: number,
-  data: {
-    name: string;
-    description?: string;
-  }
+  data: { name?: string; description?: string }
 ) => {
-  const response = await api.put(
-    `/faculty/topics/${topicId}`,
-    data
-  );
+  const response = await api.put(`/faculty/topics/${topicId}`, data);
+  return response.data;
+};
 
+export const archiveFacultyTopic = async (topicId: number) => {
+  const response = await api.put(`/faculty/topics/${topicId}/archive`);
+  return response.data;
+};
+
+export const restoreFacultyTopic = async (topicId: number) => {
+  const response = await api.put(`/faculty/topics/${topicId}/restore`);
   return response.data;
 };
 
 // =========================
-// ARCHIVE FACULTY TOPIC
+// QUESTIONS
 // =========================
-
-export const archiveFacultyTopic = async (
-  topicId: number
-) => {
-  const response = await api.put(
-    `/faculty/topics/${topicId}/archive`
-  );
-
-  return response.data;
-};
-
-// =========================
-// RESTORE FACULTY TOPIC
-// =========================
-
-export const restoreFacultyTopic = async (
-  topicId: number
-) => {
-  const response = await api.put(
-    `/faculty/topics/${topicId}/restore`
-  );
-
-  return response.data;
-};
-
-// =========================
-// GET FACULTY QUESTIONS
-// =========================
-
-export const getFacultyQuestions = async (
-  topicId: number
-) => {
-  const response = await api.get(
-    `/faculty/topics/${topicId}/questions`
-  );
-
-  return response.data;
-};
-
-// =========================
-// RESTORE FACULTY QUESTION
-// =========================
-
-export const restoreFacultyQuestion = async (
-  questionId: number
-) => {
-  const response = await api.put(
-    `/faculty/questions/${questionId}/restore`
-  );
-
-  return response.data;
-};
-
-// =========================
-// ARCHIVE FACULTY QUESTION
-// =========================
-
-export const archiveFacultyQuestion = async (
-  questionId: number
-) => {
-  const response = await api.put(
-    `/faculty/questions/${questionId}/archive`
-  );
-
-  return response.data;
-};
-
-// =========================
-// CREATE FACULTY QUESTION
-// =========================
-
 export const createFacultyQuestion = async (
   topicId: number,
   data: {
     question: string;
-
-    explanation?: string;
-
-    difficulty: string;
-
-    options: string[];
-
     correctAnswer: string;
+    options: string[];
+    explanation?: string;
+    difficulty: string;
   }
 ) => {
-  const response = await api.post(
-    `/faculty/topics/${topicId}/questions`,
-    data
-  );
-
+  const response = await api.post(`/faculty/topics/${topicId}/questions`, data);
   return response.data;
 };
-
-// =========================
-// UPDATE FACULTY QUESTION
-// =========================
 
 export const updateFacultyQuestion = async (
   questionId: number,
   data: {
-    question: string;
-
+    question?: string;
+    correctAnswer?: string;
+    options?: string[];
     explanation?: string;
-
-    difficulty: string;
-
-    correctAnswer: string;
-
-    options: string[];
+    difficulty?: string;
   }
 ) => {
-  const response = await api.put(
-    `/faculty/questions/${questionId}`,
-    data
-  );
-
+  const response = await api.put(`/faculty/questions/${questionId}`, data);
   return response.data;
 };
 
-// =========================
-// GET QUESTION IMPORT HISTORY
-// =========================
-
-export const getQuestionImportHistory = async (
-  topicId: number
-) => {
-  const response = await api.get(
-    `/faculty/topics/${topicId}/import-history`
-  );
-
+export const archiveFacultyQuestion = async (questionId: number) => {
+  const response = await api.put(`/faculty/questions/${questionId}/archive`);
   return response.data;
 };
 
-// =========================
-// UPLOAD QUESTION CSV
-// =========================
+export const restoreFacultyQuestion = async (questionId: number) => {
+  const response = await api.put(`/faculty/questions/${questionId}/restore`);
+  return response.data;
+};
+
+export const downloadQuestionTemplate = async () => {
+  const response = await api.get("/faculty/questions/template", {
+    responseType: "blob",
+  });
+  return response.data;
+};
 
 export const uploadQuestionCsv = async (
   topicId: number,
   file: File
-): Promise<ImportSummary> => {
+) => {
   const formData = new FormData();
-
   formData.append("file", file);
 
   const response = await api.post(
-    `/faculty/topics/${topicId}/uploads`,
+    `/faculty/topics/${topicId}/questions/import`,
     formData,
     {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     }
   );
-
   return response.data;
 };
 
-// =============================
-// DOWNLOAD QUESTION CSV TEMPLATE
-// =============================
+export const getFacultyQuestions = async (topicId: number) => {
+  const response = await api.get(`/faculty/topics/${topicId}/questions`);
+  return response.data;
+};
 
-export const downloadQuestionTemplate = async (
-  topicId: number
+export const getImportJobDetails = async (importJobId: number) => {
+  const response = await api.get(`/faculty/import-jobs/${importJobId}`);
+  return response.data;
+};
+
+export const getQuestionImportHistory = async (topicId: number) => {
+  const response = await api.get(`/faculty/topics/${topicId}/import-history`);
+  return response.data;
+};
+
+// =========================
+// EXAMS
+// =========================
+export const getFacultyExams = async () => {
+  const response = await api.get("/faculty/exams");
+  return response.data;
+};
+
+export const getFacultySections = async () => {
+  const response = await api.get("/faculty/exams/sections");
+  return response.data;
+};
+
+export const createExam = async (
+  subjectId: number,
+  data: any
+) => {
+  const response = await api.post(`/faculty/subjects/${subjectId}/exams`, data);
+  return response.data;
+};
+
+export const updateExam = async (
+  subjectId: number,
+  examId: number,
+  data: any
+) => {
+  const response = await api.put(
+    `/faculty/subjects/${subjectId}/exams/${examId}`,
+    data
+  );
+  return response.data;
+};
+
+export const getExamForEdit = async (
+  subjectId: number,
+  examId: number
 ) => {
   const response = await api.get(
-    `/faculty/topics/${topicId}/template`,
-    {
-      responseType: "blob",
-    }
+    `/faculty/subjects/${subjectId}/exams/${examId}/edit`
   );
-
-  const blob = new Blob([response.data], {
-    type: "text/csv",
-  });
-
-  const url = window.URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-
-  link.href = url;
-
-  link.download = "question-import-template.csv";
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-  window.URL.revokeObjectURL(url);
-};
-
-// ========================
-// GET IMPORT JOB DETAILS
-// ========================
-
-export const getImportJobDetails = async (
-  jobId: number
-) => {
-  const response = await api.get(
-    `/faculty/history/${jobId}`
-  );
-
   return response.data;
 };
 
-// =========================
-// SUBJECT QUESTION BANK
-// =========================
-
-export const getSubjectQuestionBank = async (
-  subjectId: number
-) => {
-  const response = await api.get(
-    `/faculty/subjects/${subjectId}/question-bank`
-  );
-
+export const archiveExam = async (examId: number) => {
+  const response = await api.put(`/faculty/exams/${examId}/archive`);
   return response.data;
 };
 
-// =========================
-// GET SUBJECT ASSESSMENTS
-// =========================
-
-export const getSubjectAssessments = async (
-  subjectId: number
-): Promise<SubjectAssessmentsResponse> => {
-  const response = await api.get(
-    `/faculty/subjects/${subjectId}/assessments`
-  );
-
+export const restoreExam = async (examId: number) => {
+  const response = await api.put(`/faculty/exams/${examId}/restore`);
   return response.data;
 };
 
-// ==================
-// GET EXAM DRAFT
-// ==================
+export const cancelExam = async (examId: number) => {
+  const response = await api.put(`/faculty/exams/${examId}/cancel`);
+  return response.data;
+};
 
 export const getExamDraft = async (subjectId: number) => {
   const response = await api.get(
     `/faculty/subjects/${subjectId}/exams/draft`
   );
-
   return response.data;
 };
-
-// ==================
-// SAVE EXAM DRAFT
-// ==================
 
 export const saveExamDraft = async (
   subjectId: number,
-  payload: {
-    currentStep: number;
-
-    title?: string;
-
-    draftData: any;
-  }
+  data: any
 ) => {
   const response = await api.post(
     `/faculty/subjects/${subjectId}/exams/draft`,
-    payload
+    data
   );
-
   return response.data;
 };
 
-// ==================
-// DELETE EXAM DRAFT
-// ==================
-
-export const deleteExamDraft = async (
-  subjectId: number
-) => {
+export const deleteExamDraft = async (subjectId: number) => {
   const response = await api.delete(
     `/faculty/subjects/${subjectId}/exams/draft`
   );
-
   return response.data;
 };
 
-// ==================
-// GET FACULTY EXAM
-// ==================
-
-export const getFacultyExams = async () => {
-  const response = await api.get("/faculty/exams");
-
-  return response.data;
-};
-
-// ==================
-// GET FACULTY SECTIONS
-// ==================
-
-export const getFacultySections = async () => {
-  const response = await api.get("/faculty/exams/sections");
-
-  return response.data;
-};
-
-// ==================
-// GET EXAM QUESTIONS
-// ==================
-
-export const getExamBuilderQuestions = async (
-  subjectId: number,
-  difficulty: string
-) => {
-  const response = await api.get(
-    `/faculty/subjects/${subjectId}/exams/questions`,
-    {
-      params: {
-        difficulty,
-      },
-    }
-  );
-
-  return response.data;
-};
-
-// ==================
-// GET EXAM SECTIONS
-// ==================
-
-export const getExamSections = async (
-  subjectId: number
-) => {
+export const getExamSections = async (subjectId: number) => {
   const response = await api.get(
     `/faculty/subjects/${subjectId}/exams/sections`
   );
-
   return response.data;
 };
 
-// ==================
-// CREATE EXAM
-// ==================
-
-export const createExam = async (
-  subjectId: number,
-  payload: CreateExamPayload
-) => {
-  const response = await api.post(
-    `/faculty/subjects/${subjectId}/exams`,
-    payload
+export const getExamBuilderQuestions = async (subjectId: number, difficulty?: string) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/exams/questions`,
+    { params: difficulty ? { difficulty } : undefined }
   );
-
   return response.data;
 };
 
 // =========================
 // ACTIVITY LOGS
 // =========================
-
 export const getFacultyActivityLogs = async (params: {
   page: number;
-
   limit: number;
-
   search: string;
-
   category: string;
-
   severity: string;
 }) => {
-  const response = await api.get("/faculty/activity-logs", {
-    params,
-  });
-
+  const response = await api.get("/faculty/activity-logs", { params });
   return response.data;
 };
 
 // =========================
-// ASSESSMENT DETAILS
+// SUBJECTS
 // =========================
+export const getFacultySubjects = async () => {
+  const response = await api.get("/faculty/subjects");
+  return response.data;
+};
+
+export const getFacultySubjectById = async (subjectId: number) => {
+  const response = await api.get(`/faculty/subjects/${subjectId}`);
+  return response.data;
+};
+
+export const getSubjectAssessments = async (subjectId: number) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/assessments`
+  );
+  return response.data;
+};
 
 export const getFacultyAssessmentDetails = async (
   subjectId: number,
@@ -478,30 +248,76 @@ export const getFacultyAssessmentDetails = async (
   const response = await api.get(
     `/faculty/subjects/${subjectId}/assessments/${assessmentId}`
   );
+  return response.data;
+};
+
+export const getSubjectQuestionBank = async (subjectId: number) => {
+  const response = await api.get(
+    `/faculty/subjects/${subjectId}/question-bank`
+  );
+  return response.data;
+};
+
+// =========================
+// TOPICS
+// =========================
+export const getFacultyTopics = async (subjectId: number) => {
+  const response = await api.get(`/faculty/subjects/${subjectId}/topics`);
+  return response.data;
+};
+
+// =========================
+// DASHBOARD
+// =========================
+export const getFacultyDashboard = async () => {
+  const response = await api.get("/faculty/dashboard");
+  return response.data;
+};
+
+// =========================
+export const changeFacultyPassword = async (passwords: {
+  currentPassword: string;
+  newPassword: string;
+}) => {
+  const response = await api.patch("/faculty/password", passwords);
 
   return response.data;
 };
 
-export const archiveExam = async (examId: number) => {
-  const response = await api.put(
-    `/faculty/exams/${examId}/archive`
-  );
+// =========================
+// EXAM PREFERENCES
+// =========================
+export const getFacultyExamPreferences = async () => {
+  const response = await api.get("/faculty/settings/exam-preferences");
 
   return response.data;
 };
 
-export const restoreExam = async (examId: number) => {
-  const response = await api.put(
-    `/faculty/exams/${examId}/restore`
-  );
+export const updateFacultyExamPreferences = async (preferences: {
+  examNotifications?: boolean;
+  violationAlerts?: boolean;
+  autoSubmitNotification?: boolean;
+  studentProgressUpdates?: boolean;
+}) => {
+  const response = await api.patch("/faculty/settings/exam-preferences", preferences);
 
   return response.data;
 };
 
-export const cancelExam = async (examId: number) => {
-  const response = await api.put(
-    `/faculty/exams/${examId}/cancel`
-  );
+// =========================
+// NOTIFICATION SETTINGS
+// =========================
+export const getFacultyNotificationSettings = async () => {
+  const response = await api.get("/faculty/settings/notifications");
+
+  return response.data;
+};
+
+export const updateFacultyNotificationSettings = async (settings: {
+  inAppNotifications?: boolean;
+  dashboardAlerts?: boolean;
+}) => {
+  const response = await api.patch("/faculty/settings/notifications", settings);
 
   return response.data;
 };

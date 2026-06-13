@@ -1,15 +1,19 @@
 import prisma from "../../../lib/prisma";
 
 import { CreateExamPayload } from "../../../types/exams/create_exams_payload";
+import { facultyNotificationHandler } from "../../notification/faculty_notification_handler";
+import { studentNotificationHandler } from "../../notification/student_notification_handler";
 
 interface Props {
   facultyId: number;
+  facultyName: string;
   subjectId: number;
   payload: CreateExamPayload;
 }
 
 export const createExamService = async ({
   facultyId,
+  facultyName,
   subjectId,
   payload,
 }: Props) => {
@@ -17,105 +21,138 @@ export const createExamService = async ({
     throw new Error("At least one question must be selected.");
   }
 
-  return prisma.$transaction(async (tx) => {
-    const exam = await tx.exam.create({
-      data: {
-        title: payload.title,
+  return prisma
+    .$transaction(async (tx) => {
+      const exam = await tx.exam.create({
+        data: {
+          title: payload.title,
 
-        description: payload.description,
+          description: payload.description,
 
-        examCode: payload.examCode,
+          examCode: payload.examCode,
 
-        difficulty: payload.difficulty,
+          difficulty: payload.difficulty,
 
-        subjectId,
+          subjectId,
 
-        sectionId: payload.sectionIds[0],
+          sectionId: payload.sectionIds[0],
 
-        duration: payload.duration,
+          duration: payload.duration,
 
-        passingScore: payload.passingScore,
+          passingScore: payload.passingScore,
 
-        startsAt: new Date(payload.startsAt),
+          startsAt: new Date(payload.startsAt),
 
-        endsAt: new Date(payload.endsAt),
+          endsAt: new Date(payload.endsAt),
 
-        randomizeQuestions: payload.randomizeQuestions,
+          randomizeQuestions: payload.randomizeQuestions,
 
-        randomizeOptions: payload.randomizeAnswers,
+          randomizeOptions: payload.randomizeAnswers,
 
-        showResultAfterSubmission: payload.showResultAfterSubmission,
+          showResultAfterSubmission: payload.showResultAfterSubmission,
 
-        showCorrectAnswers: payload.showCorrectAnswers,
+          showCorrectAnswers: payload.showCorrectAnswers,
 
-        showExplanations: payload.showExplanations,
+          showExplanations: payload.showExplanations,
 
-        requireFullscreen: payload.requireFullscreen,
+          requireFullscreen: payload.requireFullscreen,
 
-        detectTabSwitch: payload.detectTabSwitch,
+          detectTabSwitch: payload.detectTabSwitch,
 
-        detectWindowBlur: payload.detectWindowBlur,
+          detectWindowBlur: payload.detectWindowBlur,
 
-        blockCopy: payload.blockCopy,
+          blockCopy: payload.blockCopy,
 
-        blockPaste: payload.blockPaste,
+          blockPaste: payload.blockPaste,
 
-        blockRightClick: payload.blockRightClick,
+          blockRightClick: payload.blockRightClick,
 
-        detectDeviceChange: payload.detectDeviceChange,
+          detectDeviceChange: payload.detectDeviceChange,
 
-        violationThreshold: payload.violationThreshold,
+          violationThreshold: payload.violationThreshold,
 
-        thresholdAction: payload.thresholdAction,
+          thresholdAction: payload.thresholdAction,
 
-        status: "SCHEDULED",
+          status: "SCHEDULED",
 
-        publishedAt: new Date(),
+          publishedAt: new Date(),
 
-        createdById: facultyId,
+          createdById: facultyId,
 
-        totalQuestions: payload.questionIds.length,
-      },
-    });
+          facultyId: facultyId,
 
-    await tx.examQuestion.createMany({
-      data: payload.questionIds.map((questionId) => ({
-        examId: exam.id,
-        questionId,
-      })),
-    });
-
-    await tx.subject.update({
-      where: {
-        id: subjectId,
-      },
-
-      data: {
-        totalExams: {
-          increment: 1,
+          totalQuestions: payload.questionIds.length,
         },
-      },
+      });
+
+      await tx.examQuestion.createMany({
+        data: payload.questionIds.map((questionId) => ({
+          examId: exam.id,
+          questionId,
+        })),
+      });
+
+      await tx.subject.update({
+        where: {
+          id: subjectId,
+        },
+
+        data: {
+          totalExams: {
+            increment: 1,
+          },
+        },
+      });
+
+      await tx.examDraft.deleteMany({
+        where: {
+          facultyId,
+          subjectId,
+        },
+      });
+
+      await tx.activityLog.create({
+        data: {
+          action: "Created exam",
+
+          categories: ["EXAMS"],
+
+          performedBy: facultyName,
+
+          description: `Created exam ${payload.title}`,
+        },
+      });
+
+      return exam;
+    })
+    .then((exam) => {
+      void facultyNotificationHandler
+        .notifyExamCreated(exam.id)
+        .catch((error) => {
+          console.error(
+            "Failed to send faculty exam created notification:",
+            error,
+          );
+        });
+
+      void facultyNotificationHandler
+        .notifyExamPublished(exam.id)
+        .catch((error) => {
+          console.error(
+            "Failed to send faculty exam published notification:",
+            error,
+          );
+        });
+
+      void studentNotificationHandler
+        .notifyExamScheduled(exam.id)
+        .catch((error) => {
+          console.error(
+            "Failed to send student exam scheduled notifications:",
+            error,
+          );
+        });
+
+      return exam;
     });
-
-    await tx.examDraft.deleteMany({
-      where: {
-        facultyId,
-        subjectId,
-      },
-    });
-
-    await tx.activityLog.create({
-      data: {
-        action: "CREATE_EXAM",
-
-        categories: ["EXAMS"],
-
-        performedBy: String(facultyId),
-
-        description: `Created exam ${payload.title}`,
-      },
-    });
-
-    return exam;
-  });
 };

@@ -10,10 +10,9 @@ import { logActivity } from "../utils/log_activity";
 
 const EXCLUDED_PATHS = new Set([
   "/activity-logs",
-
   "/recent-activity",
-
   "/faculty",
+  "/exams/sections",
 ]);
 
 // =========================
@@ -21,7 +20,7 @@ const EXCLUDED_PATHS = new Set([
 // =========================
 
 const getCategoryFromPath = (path: string) => {
-  if (path.startsWith("/academic")) {
+  if (path.startsWith("/academic") || path.startsWith("/exams")) {
     return "ACADEMIC";
   }
 
@@ -39,6 +38,10 @@ const getCategoryFromPath = (path: string) => {
     path.startsWith("/reject")
   ) {
     return "APPROVALS";
+  }
+
+  if (path.startsWith("/violations")) {
+    return "EXAM_VIOLATIONS";
   }
 
   if (path.startsWith("/dashboard")) {
@@ -147,6 +150,18 @@ const getActionLabel = (method: string, path: string) => {
 
   if (method === "POST" && path.includes("/student-records")) {
     return "Uploaded student records";
+  }
+
+  // =========================
+  // EXAM VIOLATIONS
+  // =========================
+
+  if (
+    method === "PATCH" &&
+    path.includes("/violations") &&
+    path.endsWith("/resolve")
+  ) {
+    return "Resolved exam violation";
   }
 
   // =========================

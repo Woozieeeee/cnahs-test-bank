@@ -229,7 +229,7 @@ export default function FacultyQuestionBankPage() {
         onUploadCsv={() => setShowUploadModal(true)}
         onHistory={() => setShowHistoryModal(true)}
         onDownloadTemplate={() =>
-          downloadQuestionTemplate(topicId)
+          downloadQuestionTemplate()
         }
       />
 

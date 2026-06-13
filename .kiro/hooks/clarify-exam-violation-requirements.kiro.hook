@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Clarify Exam Violation Requirements",
+  "description": "Ask clarifying questions about the exam and violation management requirements to ensure comprehensive feature specification",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Ask the following clarifying questions about the exam and violation management system:\n\n1. What specific exam management features do you want to add beyond the current exam grid view? For example:\n   - Should faculty be able to edit existing exams?\n   - Should they be able to view detailed exam statistics per student?\n   - Should they be able to manually intervene in ongoing exams?\n   - Should they be able to view student answer details?\n\n2. What violation management functionality is needed? For example:\n   - Should faculty be able to view a violation log per exam?\n   - Should they be able to review violations and take action (approve, reject, escalate)?\n   - Should violations be categorized or prioritized?\n   - Should there be an automated review queue for high-severity violations?\n\n3. Should violations be linked to specific exam attempts, or just to the exam in general?\n\n4. What actions should be available for violations? For example:\n   - Review and mark as reviewed\n   - Escalate to admin\n   - Issue warnings\n   - Auto-submission or exam termination\n\nPlease gather these details to help create a comprehensive requirements document."
+  }
+}

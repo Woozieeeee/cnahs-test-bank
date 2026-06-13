@@ -7,21 +7,24 @@ import { useSidebar } from "./sidebarContext";
 interface Props {
   title: string;
   subtitle: string;
+  forceExpanded?: boolean;
 }
 
 export default function SidebarHeader({
   title,
   subtitle,
+  forceExpanded = false,
 }: Props) {
   const { collapsed } = useSidebar();
+  const isCollapsed = forceExpanded ? false : collapsed;
 
   return (
     <div
       className={`mb-8 transition-all duration-300 ${
-        collapsed ? "flex justify-center" : ""
+        isCollapsed ? "flex justify-center" : ""
       }`}
     >
-      {collapsed ? (
+      {isCollapsed ? (
         <div className="bg-primary/10 text-primary flex h-10 w-10 items-center justify-center rounded-xl">
           <GraduationCap size={22} />
         </div>

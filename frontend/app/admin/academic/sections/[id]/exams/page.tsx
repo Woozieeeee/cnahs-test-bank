@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import useSectionId from "@/hooks/shared/useSectionId";
 import useSection from "@/hooks/academic/useSection";
+import { getSectionExams } from "@/services/admin_service";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
@@ -21,21 +22,87 @@ import SectionExamsStats from "@/components/admin/academic/sections/exams/sectio
 import SectionExamsTabs from "@/components/admin/academic/sections/exams/sectionExamsTabs";
 
 import SectionExamsSearch from "@/components/admin/academic/sections/exams/sectionExamsSearch";
-import { mockSectionExams } from "@/components/admin/academic/sections/data/mockSectionsExam";
+
+import type { Exam } from "@/types/assessments/exam";
+
+interface ExamWithStats extends Exam {
+  totalAttempts: number;
+  completedAttempts: number;
+  passedAttempts: number;
+  averageScore: number;
+  passRate: number;
+  totalQuestions: number;
+  passingScore: number;
+}
+
+interface SectionExamsResponse {
+  success: boolean;
+  data: {
+    section: {
+      id: number;
+      name: string;
+    };
+    exams: ExamWithStats[];
+    stats: {
+      totalExams: number;
+      totalAttempts: number;
+      averageScore: number;
+      overallPassRate: number;
+    };
+  };
+}
 
 const ITEMS_PER_PAGE = 9;
 
 export default function SectionExamsPage() {
   const id = useSectionId();
 
-  const { section, loading, error, refresh } =
+  const { section, loading: sectionLoading, error: sectionError, refresh } =
     useSection(id);
+
+  const [exams, setExams] = useState<ExamWithStats[]>([]);
+  const [stats, setStats] = useState({
+    totalExams: 0,
+    totalAttempts: 0,
+    averageScore: 0,
+    overallPassRate: 0,
+  });
+  const [examsLoading, setExamsLoading] = useState(false);
+  const [examsError, setExamsError] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const [activeTab, setActiveTab] = useState("ALL");
 
   const [search, setSearch] = useState("");
+
+  // Fetch exams from API
+  useEffect(() => {
+    if (!id || sectionLoading) return;
+
+    const fetchExams = async () => {
+      try {
+        setExamsLoading(true);
+        setExamsError(null);
+
+        const response = await getSectionExams(id) as SectionExamsResponse;
+
+        if (response.success) {
+          setExams(response.data.exams);
+          setStats(response.data.stats);
+        } else {
+          setExamsError("Failed to load exams");
+        }
+      } catch (err) {
+        console.error("Error fetching exams:", err);
+        setExamsError("Failed to load exams data");
+      } finally {
+        setExamsLoading(false);
+      }
+    };
+
+    fetchExams();
+  }, [id, sectionLoading]);
 
   // =========================
   // RESET PAGE
@@ -50,16 +117,8 @@ export default function SectionExamsPage() {
   }, [activeTab, search]);
 
   // =========================
-  // EXAMS
+  // FILTERED EXAMS
   // =========================
-
-  const exams = useMemo(() => {
-    if (!section) return [];
-
-    return section.exams.length > 0
-      ? section.exams
-      : mockSectionExams;
-  }, [section]);
 
   const filteredExams = useMemo(() => {
     const searchTerm = search.toLowerCase();
@@ -102,7 +161,7 @@ export default function SectionExamsPage() {
   // LOADING
   // =========================
 
-  if (loading) {
+  if (sectionLoading || examsLoading) {
     return (
       <PageContainer>
         <LoadingState
@@ -117,12 +176,12 @@ export default function SectionExamsPage() {
   // ERROR
   // =========================
 
-  if (error) {
+  if (sectionError || examsError) {
     return (
       <PageContainer>
         <ErrorState
           title="Failed to load exams."
-          description={error}
+          description={sectionError || examsError || "Unknown error"}
           onRetry={refresh}
         />
       </PageContainer>
@@ -176,7 +235,7 @@ export default function SectionExamsPage() {
       />
 
       <SectionExamsStats
-        total={exams.length}
+        total={stats.totalExams}
         scheduled={
           exams.filter(
             (exam) => exam.status === "SCHEDULED"

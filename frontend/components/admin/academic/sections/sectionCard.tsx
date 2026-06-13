@@ -22,6 +22,8 @@ interface Props {
   onRestoreSuccess: (sectionId: number) => void;
 
   onEdit: () => void;
+
+  onManageStudents: () => void;
 }
 
 function SectionCard({
@@ -29,6 +31,7 @@ function SectionCard({
   onArchiveSuccess,
   onRestoreSuccess,
   onEdit,
+  onManageStudents,
 }: Props) {
   return (
     <MotionCard>
@@ -47,6 +50,7 @@ function SectionCard({
           onArchiveSuccess={onArchiveSuccess}
           onRestoreSuccess={onRestoreSuccess}
           onEdit={onEdit}
+          onManageStudents={onManageStudents}
         />
 
         {/* STATS */}

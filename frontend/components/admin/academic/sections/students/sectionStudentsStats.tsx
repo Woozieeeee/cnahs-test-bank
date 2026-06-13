@@ -9,18 +9,18 @@ import InfoCardValue from "@/components/common/cards/infoCardValue";
 interface Props {
   total: number;
 
-  regular: number;
+  passing: number;
 
-  irregular: number;
+  inactive: number;
 
-  atRisk: number;
+  struggling: number;
 }
 
 function SectionStudentsStats({
   total,
-  regular,
-  irregular,
-  atRisk,
+  passing,
+  inactive,
+  struggling,
 }: Props) {
   return (
     <div className="grid gap-4 md:grid-cols-4">
@@ -33,26 +33,26 @@ function SectionStudentsStats({
       </InfoCard>
 
       <InfoCard>
-        <InfoCardHeader label="Regular" />
+        <InfoCardHeader label="Passing" />
 
-        <InfoCardValue className="text-3xl font-bold">
-          {regular}
+        <InfoCardValue className="text-3xl font-bold text-green-600">
+          {passing}
         </InfoCardValue>
       </InfoCard>
 
       <InfoCard>
-        <InfoCardHeader label="Irregular" />
+        <InfoCardHeader label="Inactive" />
 
-        <InfoCardValue className="text-3xl font-bold">
-          {irregular}
+        <InfoCardValue className="text-3xl font-bold text-yellow-600">
+          {inactive}
         </InfoCardValue>
       </InfoCard>
 
       <InfoCard>
-        <InfoCardHeader label="At Risk" />
+        <InfoCardHeader label="Struggling" />
 
         <InfoCardValue className="text-3xl font-bold text-red-600">
-          {atRisk}
+          {struggling}
         </InfoCardValue>
       </InfoCard>
     </div>

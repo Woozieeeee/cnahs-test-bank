@@ -11,7 +11,8 @@ export const assignSectionService = async ({
 
   sectionId,
 }: AssignSectionData) => {
-  return prisma.studentRecord.update({
+  // First, update StudentRecord
+  const studentRecord = await prisma.studentRecord.update({
     where: {
       id: studentRecordId,
     },
@@ -24,4 +25,17 @@ export const assignSectionService = async ({
       section: true,
     },
   });
+
+  // Then, update the associated User's sectionId
+  // Note: user.sectionId links to Section.id directly
+  await prisma.user.update({
+    where: {
+      studentId: studentRecord.studentId,
+    },
+    data: {
+      sectionId,
+    },
+  });
+
+  return studentRecord;
 };

@@ -15,6 +15,7 @@ interface Props {
   loading: boolean;
   onPageChange: (page: number) => void;
   onSelectActivity: (activity: ActivityLog) => void;
+  highlightId?: number;
 }
 
 export default function ActivityTimeline({
@@ -24,6 +25,7 @@ export default function ActivityTimeline({
   totalPages,
   onPageChange,
   onSelectActivity,
+  highlightId,
 }: Props) {
   return (
     <MotionCard className="bg-card rounded-2xl p-6 shadow-sm">
@@ -33,6 +35,7 @@ export default function ActivityTimeline({
         <ActivityTimelineContent
           logs={logs}
           onSelectActivity={onSelectActivity}
+          highlightId={highlightId}
         />
       ) : (
         <ActivityTimelineEmpty />

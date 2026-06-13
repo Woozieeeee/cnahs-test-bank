@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import MotionPage from "@/components/motion/motionPage";
 
@@ -21,6 +22,9 @@ import { getActivityLogs } from "@/services/admin_service";
 import type { ActivityLog } from "@/types/activity/activity";
 
 export default function ActivityLogsPage() {
+  const searchParams = useSearchParams();
+  const highlightId = searchParams.get("highlight");
+
   const [logs, setLogs] = useState<ActivityLog[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -58,6 +62,31 @@ export default function ActivityLogsPage() {
         setLogs(data.logs);
 
         setTotalPages(data.totalPages);
+
+        // If we have a highlight ID, find and open that activity
+        if (highlightId) {
+          const activityToHighlight = data.logs.find(
+            (log: ActivityLog) => log.id === parseInt(highlightId),
+          );
+          if (activityToHighlight) {
+            setSelectedActivity(activityToHighlight);
+            // Scroll to element if it exists
+            setTimeout(() => {
+              const element = document.getElementById(
+                `activity-${highlightId}`,
+              );
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "center" });
+                element.classList.add("ring-2", "ring-blue-500", "rounded");
+                
+                // Remove highlight after 2 seconds
+                setTimeout(() => {
+                  element.classList.remove("ring-2", "ring-blue-500", "rounded");
+                }, 1000);
+              }
+            }, 100);
+          }
+        }
       } catch (error) {
         console.error(
           "Failed to fetch activity logs:",
@@ -69,7 +98,7 @@ export default function ActivityLogsPage() {
     };
 
     fetchLogs();
-  }, [page, search, category, severity]);
+  }, [page, search, category, severity, highlightId]);
 
   return (
     <MotionPage>
@@ -113,6 +142,7 @@ export default function ActivityLogsPage() {
           totalPages={totalPages}
           onPageChange={setPage}
           onSelectActivity={setSelectedActivity}
+          highlightId={highlightId ? parseInt(highlightId) : undefined}
         />
       </PageContainer>
 

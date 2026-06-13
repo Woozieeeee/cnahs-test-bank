@@ -1,68 +1,36 @@
 import UserTableRow from "./userTableRow";
 import SortableTableHeader from "@/components/common/sortableTableHeader";
-
-interface User {
-  id: number;
-
-  name: string;
-
-  studentId: string;
-
-  role: string;
-
-  status: string;
-
-  createdAt: string;
-}
+import type { ManagedUser } from "@/hooks/admin/users/useUserActions";
 
 interface Props {
-  users: User[];
-
+  users: ManagedUser[];
+  onEdit: (user: ManagedUser) => void;
   onApprove: (id: number) => Promise<void>;
-
   onReject: (id: number) => Promise<void>;
-
+  onDisable: (id: number, userName: string) => Promise<void>;
+  onEnable: (id: number, userName: string) => Promise<void>;
   selectedUsers: number[];
-
-  setSelectedUsers: React.Dispatch<
-    React.SetStateAction<number[]>
-  >;
-
+  setSelectedUsers: React.Dispatch<React.SetStateAction<number[]>>;
   sortField: string;
-
   sortOrder: "asc" | "desc";
-
-  onSort: (
-    field: string,
-
-    order: "asc" | "desc"
-  ) => void;
+  onSort: (field: string, order: "asc" | "desc") => void;
 }
 
 export default function UsersTable({
   users,
-
+  onEdit,
   onApprove,
-
   onReject,
-
+  onDisable,
+  onEnable,
   selectedUsers,
-
   setSelectedUsers,
-
   sortField,
-
   sortOrder,
-
   onSort,
 }: Props) {
-  // =========================
-  // SELECT ALL
-  // =========================
-
   const allSelected =
-    users.length > 0 &&
-    users.every((user) => selectedUsers.includes(user.id));
+    users.length > 0 && users.every((user) => selectedUsers.includes(user.id));
 
   const handleSelectAll = () => {
     if (allSelected) {
@@ -72,15 +40,9 @@ export default function UsersTable({
     }
   };
 
-  // =========================
-  // SELECT SINGLE USER
-  // =========================
-
   const handleSelectUser = (id: number) => {
     setSelectedUsers((prev) =>
-      prev.includes(id)
-        ? prev.filter((userId) => userId !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((userId) => userId !== id) : [...prev, id],
     );
   };
 
@@ -89,8 +51,6 @@ export default function UsersTable({
       <table className="w-full">
         <thead>
           <tr className="text-muted-foreground border-b text-left">
-            {/* CHECKBOX */}
-
             <th className="p-4">
               <input
                 type="checkbox"
@@ -99,8 +59,6 @@ export default function UsersTable({
                 className="border-input h-4 w-4 rounded"
               />
             </th>
-
-            {/* HEADERS */}
 
             <SortableTableHeader
               label="Name"
@@ -111,7 +69,7 @@ export default function UsersTable({
             />
 
             <SortableTableHeader
-              label="Student ID"
+              label="ID / Username"
               field="studentId"
               sortField={sortField}
               sortOrder={sortOrder}
@@ -135,33 +93,28 @@ export default function UsersTable({
             />
 
             <th className="p-4">Registered</th>
-
-            <th className="p-4">Actions</th>
+            <th className="p-4 text-right">Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          {/* USERS */}
-
           {users.map((user) => (
             <UserTableRow
               key={user.id}
               user={user}
+              onEdit={onEdit}
               onApprove={onApprove}
               onReject={onReject}
+              onDisable={onDisable}
+              onEnable={onEnable}
               selected={selectedUsers.includes(user.id)}
               onSelect={() => handleSelectUser(user.id)}
             />
           ))}
 
-          {/* EMPTY STATE */}
-
           {users.length === 0 && (
             <tr>
-              <td
-                colSpan={7}
-                className="text-muted-foreground p-6 text-center"
-              >
+              <td colSpan={7} className="text-muted-foreground p-6 text-center">
                 No users found.
               </td>
             </tr>

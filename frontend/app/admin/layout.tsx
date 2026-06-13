@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
+
 import AppSidebar from "@/components/layout/sidebar/appSidebar";
 
 import Navbar from "@/components/layout/navbar/navbar";
+
+import MobileSidebar from "@/components/layout/sidebar/mobileSidebar";
 
 import { SidebarProvider } from "@/components/layout/sidebar/sidebarContext";
 
@@ -15,11 +19,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { loading } = useProtectedRoute(["ADMIN"]);
-
-  // =========================
-  // LOADING
-  // =========================
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, loading } = useProtectedRoute(["ADMIN"]);
 
   if (loading) {
     return null;
@@ -28,24 +29,31 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="bg-background text-foreground flex min-h-screen">
-        {/* SIDEBAR */}
-
         <AppSidebar
           title="CNAHS Admin"
           subtitle="Monitoring & oversight panel"
           navItems={adminNav}
         />
 
-        {/* MAIN CONTENT */}
+        <MobileSidebar
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          navItems={adminNav}
+          title="CNAHS Admin"
+          subtitle="Monitoring & oversight panel"
+        />
 
-        <div className="flex-1">
-          {/* NAVBAR */}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Navbar
+            userName={user?.name ?? "Administrator"}
+            userRole="ADMIN"
+            hasAvatar={user?.hasAvatar}
+            avatarVersion={user?.updatedAt}
+            mobileMenuOpen={mobileOpen}
+            onMenuClick={() => setMobileOpen((open) => !open)}
+          />
 
-          <Navbar userName="Administrator" role="Admin" />
-
-          {/* PAGE CONTENT */}
-
-          <main className="p-6">{children}</main>
+          <main className="p-4 sm:p-6">{children}</main>
         </div>
       </div>
     </SidebarProvider>

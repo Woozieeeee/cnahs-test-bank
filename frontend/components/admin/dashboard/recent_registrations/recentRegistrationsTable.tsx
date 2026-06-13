@@ -107,6 +107,7 @@ export default function RecentRegistrationsTable({
         <RegistrationSearch
           value={search}
           onChange={setSearch}
+          registrations={registrations}
         />
 
         <RegistrationFilter

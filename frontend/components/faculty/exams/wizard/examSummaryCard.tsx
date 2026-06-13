@@ -20,6 +20,29 @@ function ExamSummaryCard({
   examLevel,
   sectionNames,
 }: Props) {
+  // Calculate duration from start and end times
+  const getDuration = () => {
+    if (!info.startsAt || !info.endsAt) return "-";
+    
+    const start = new Date(info.startsAt).getTime();
+    const end = new Date(info.endsAt).getTime();
+    
+    if (end <= start) return "-";
+    
+    const durationMinutes = Math.round((end - start) / (1000 * 60));
+    return `${durationMinutes} mins`;
+  };
+
+  // Format datetime for display
+  const formatDateTime = (dateStr: string) => {
+    if (!dateStr) return "-";
+    try {
+      return new Date(dateStr).toLocaleString();
+    } catch {
+      return dateStr;
+    }
+  };
+
   return (
     <div className="border-border bg-card rounded-2xl border p-5">
       <h3 className="font-semibold">Exam Summary</h3>
@@ -30,63 +53,60 @@ function ExamSummaryCard({
 
       <div className="mt-5 space-y-4 text-sm">
         <div>
-          <p className="text-muted-foreground">Level</p>
+          <p className="text-muted-foreground">Difficulty Level</p>
 
           <p className="font-medium">{examLevel}</p>
         </div>
 
         <div>
-          <p className="text-muted-foreground">Questions</p>
+          <p className="text-muted-foreground">Total Questions</p>
 
           <p className="font-medium">{questionLimit}</p>
+        </div>
 
-          {sectionNames && (
-            <p>
-              <span className="font-medium">Section:</span>{" "}
-              {sectionNames}
-            </p>
-          )}
+        {sectionNames && (
+          <div>
+            <p className="text-muted-foreground">Assigned Sections</p>
+
+            <p className="font-medium text-xs">{sectionNames}</p>
+          </div>
+        )}
+
+        <div>
+          <p className="text-muted-foreground">Exam Duration</p>
+
+          <p className="font-medium">{getDuration()}</p>
         </div>
 
         <div>
-          <p className="text-muted-foreground">Duration</p>
-
-          <p className="font-medium">
-            {info.duration} mins
-          </p>
-        </div>
-
-        <div>
-          <p className="text-muted-foreground">
-            Passing Score
-          </p>
+          <p className="text-muted-foreground">Passing Score</p>
 
           <p className="font-medium">
             {info.passingScore}%
           </p>
         </div>
 
-        {sectionNames && (
-          <div>
-            <p className="text-muted-foreground">Section</p>
-
-            <p className="font-medium">{sectionNames}</p>
-          </div>
-        )}
-
         <div>
           <p className="text-muted-foreground">Starts At</p>
 
-          <p className="font-medium">
-            {info.startsAt || "-"}
+          <p className="font-medium text-xs">
+            {formatDateTime(info.startsAt)}
           </p>
         </div>
 
         <div>
-          <p className="text-muted-foreground">Ends At</p>
+          <p className="text-muted-foreground">Question Timer</p>
 
           <p className="font-medium">
-            {info.endsAt || "-"}
+            {info.minutesPerQuestion === 0 
+              ? "No timer (0:0)" 
+              : `${info.minutesPerQuestion} min${info.minutesPerQuestion !== 1 ? "s" : ""}/question`}
+          </p>
+        </div>
+
+        <div className="border-border border-t pt-3">
+          <p className="text-muted-foreground text-xs">
+            ✓ Automatically calculates duration from schedule
           </p>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function NavbarTitle() {
 
   if (pathname.startsWith("/faculty")) {
     return (
-      <h2 className="text-foreground text-2xl font-bold">
+      <h2 className="text-foreground truncate text-base font-bold sm:text-xl lg:text-2xl">
         Faculty Portal
       </h2>
     );
@@ -15,7 +15,7 @@ export default function NavbarTitle() {
 
   if (pathname.includes("/dashboard")) {
     return (
-      <h2 className="text-foreground text-2xl font-bold">
+      <h2 className="text-foreground truncate text-base font-bold sm:text-xl lg:text-2xl">
         Dashboard
       </h2>
     );
@@ -23,7 +23,7 @@ export default function NavbarTitle() {
 
   if (pathname.includes("/users")) {
     return (
-      <h2 className="text-foreground text-2xl font-bold">
+      <h2 className="text-foreground truncate text-base font-bold sm:text-xl lg:text-2xl">
         User Management
       </h2>
     );
@@ -31,7 +31,7 @@ export default function NavbarTitle() {
 
   if (pathname.includes("/academic")) {
     return (
-      <h2 className="text-foreground text-2xl font-bold">
+      <h2 className="text-foreground truncate text-base font-bold sm:text-xl lg:text-2xl">
         Academic Management
       </h2>
     );
@@ -39,14 +39,14 @@ export default function NavbarTitle() {
 
   if (pathname.includes("/exams")) {
     return (
-      <h2 className="text-foreground text-2xl font-bold">
+      <h2 className="text-foreground truncate text-base font-bold sm:text-xl lg:text-2xl">
         Examinations
       </h2>
     );
   }
 
   return (
-    <h2 className="text-foreground text-2xl font-bold">
+    <h2 className="text-foreground truncate text-base font-bold sm:text-xl lg:text-2xl">
       CNAHS
     </h2>
   );

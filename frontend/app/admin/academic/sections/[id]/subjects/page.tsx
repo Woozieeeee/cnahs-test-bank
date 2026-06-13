@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import useSectionId from "@/hooks/shared/useSectionId";
 import useSection from "@/hooks/academic/useSection";
@@ -21,7 +21,8 @@ import SectionSubjectsStats from "@/components/admin/academic/sections/subjects/
 import SectionSubjectsTabs from "@/components/admin/academic/sections/subjects/sectionSubjectsTabs";
 import SectionSubjectsSearch from "@/components/admin/academic/sections/subjects/sectionSubjectsSearch";
 
-import { mockSectionSubjects } from "@/components/admin/academic/sections/data/mockSectionSubjects";
+import { getSectionSubjects } from "@/services/admin_service";
+import type { SectionSubject } from "@/types/academic/section";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -37,17 +38,51 @@ export default function SectionSubjectsPage() {
 
   const [search, setSearch] = useState("");
 
+  const [subjects, setSubjects] = useState<SectionSubject[]>([]);
+  const [apiLoading, setApiLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | undefined>(undefined);
+
   // =========================
-  // SUBJECTS
+  // FETCH SUBJECTS FROM API
   // =========================
 
-  const subjects = useMemo(() => {
-    if (!section) return [];
+  useEffect(() => {
+    if (!id) return;
 
-    return section.sectionSubjects.length > 0
-      ? section.sectionSubjects
-      : mockSectionSubjects;
-  }, [section]);
+    const fetchSubjects = async () => {
+      try {
+        setApiLoading(true);
+        setApiError(undefined);
+        const response = await getSectionSubjects(id);
+        
+        // Transform flat API response to match SectionSubject type structure
+        // API returns: { name, code, faculty: { id, name } | null, ... }
+        // Component expects: { id, subject: { id, name, code, faculty } }
+        const transformedSubjects = response.data.subjects.map((subject: any, index: number) => ({
+          id: index,
+          subject: {
+            id: subject.id,
+            name: subject.name,
+            code: subject.code,
+            faculty: subject.faculty || null,
+          },
+        }));
+        
+        setSubjects(transformedSubjects);
+      } catch (err) {
+        console.error("Error fetching subjects:", err);
+        setApiError(
+          err instanceof Error ? err.message : "Failed to fetch subjects"
+        );
+      } finally {
+        setApiLoading(false);
+      }
+    };
+
+    if (!loading) {
+      fetchSubjects();
+    }
+  }, [id, loading]);
 
   // =========================
   // FILTERS
@@ -56,8 +91,8 @@ export default function SectionSubjectsPage() {
   const filteredSubjects = useMemo(() => {
     const searchTerm = search.toLowerCase();
 
-    return subjects.filter((item) => {
-      const subject = item.subject;
+    return subjects.filter((sectionSubject) => {
+      const subject = sectionSubject.subject;
 
       const matchesSearch =
         subject.name.toLowerCase().includes(searchTerm) ||
@@ -97,7 +132,7 @@ export default function SectionSubjectsPage() {
   // LOADING
   // =========================
 
-  if (loading) {
+  if (loading || apiLoading) {
     return (
       <PageContainer>
         <LoadingState
@@ -112,12 +147,12 @@ export default function SectionSubjectsPage() {
   // ERROR
   // =========================
 
-  if (error) {
+  if (error || apiError) {
     return (
       <PageContainer>
         <ErrorState
           title="Failed to load subjects."
-          description={error}
+          description={error || apiError}
           onRetry={refresh}
         />
       </PageContainer>
@@ -151,12 +186,14 @@ export default function SectionSubjectsPage() {
       <SectionSubjectsStats
         totalSubjects={subjects.length}
         assignedFaculty={
-          subjects.filter((item) => item.subject.faculty)
+          subjects.filter((sectionSubject) => sectionSubject.subject.faculty)
             .length
         }
-        withExams={subjects.length}
+        withExams={subjects.filter(
+          (sectionSubject) => true // All subjects shown
+        ).length}
         withoutFaculty={
-          subjects.filter((item) => !item.subject.faculty)
+          subjects.filter((sectionSubject) => !sectionSubject.subject.faculty)
             .length
         }
       />

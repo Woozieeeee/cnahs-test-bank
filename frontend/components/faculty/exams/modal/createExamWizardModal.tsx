@@ -27,6 +27,8 @@ import { successToast, errorToast } from "@/lib/swal";
 import type { ExamDraft } from "@/types/exams/examDraft";
 import type { CreateExamPayload } from "@/types/exams/createExamPayload";
 
+import { createExam, updateExam } from "@/services/faculty_service";
+
 interface Props {
   open: boolean;
 
@@ -45,6 +47,10 @@ interface Props {
   draft: ExamDraft | null;
 
   examLevel: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+
+  editExamData?: any;
+
+  onEditCompleted?: () => void;
 }
 
 function CreateExamWizardModal({
@@ -57,6 +63,8 @@ function CreateExamWizardModal({
   onExamCreated,
   draft,
   examLevel,
+  editExamData,
+  onEditCompleted,
 }: Props) {
   const [disableAutoSave, setDisableAutoSave] =
     useState(false);
@@ -153,6 +161,14 @@ function CreateExamWizardModal({
     try {
       setDisableAutoSave(true);
 
+      // Calculate duration from start and end times (in minutes)
+      const calculateDuration = () => {
+        if (!info.startsAt || !info.endsAt) return 0;
+        const start = new Date(info.startsAt).getTime();
+        const end = new Date(info.endsAt).getTime();
+        return Math.round((end - start) / (1000 * 60));
+      };
+
       const payload: CreateExamPayload = {
         title: info.title,
 
@@ -162,7 +178,8 @@ function CreateExamWizardModal({
 
         difficulty: examLevel,
 
-        duration: info.duration,
+        // Duration calculated from startsAt and endsAt
+        duration: calculateDuration(),
 
         passingScore: info.passingScore,
 
@@ -206,19 +223,26 @@ function CreateExamWizardModal({
         sectionIds: info.sectionIds,
       };
 
-      await handleCreateExam(subjectId, payload);
-
-      successToast("Exam created successfully.");
-
-      onExamCreated?.();
-
-      onDraftSaved?.();
+      if (editExamData) {
+        // Update mode
+        await updateExam(subjectId, editExamData.id, payload);
+        successToast("Exam updated successfully.");
+        onEditCompleted?.();
+      } else {
+        // Create mode
+        await handleCreateExam(subjectId, payload);
+        successToast("Exam created successfully.");
+        onExamCreated?.();
+        onDraftSaved?.();
+      }
 
       handleClose();
     } catch (error: any) {
       errorToast(
         error?.response?.data?.message ??
-          "Failed to create exam."
+          (editExamData
+            ? "Failed to update exam."
+            : "Failed to create exam.")
       );
     }
   };
@@ -230,6 +254,62 @@ function CreateExamWizardModal({
 
     restoreDraft(draft, questions);
   }, [draft, questions, restoreDraft]);
+
+  useEffect(() => {
+    if (!editExamData || questions.length === 0) {
+      return;
+    }
+
+    // Load exam data for editing by restoring like a draft
+    const selectedQs = questions.filter((q) =>
+      editExamData.questionIds.includes(q.id)
+    );
+
+    // Create a draft-like structure from exam data
+    const examAsDraft: ExamDraft = {
+      id: editExamData.id,
+      facultyId: 0,
+      subjectId: subjectId,
+      title: editExamData.title,
+      currentStep: 1,
+      draftData: {
+        questionLimit: selectedQs.length,
+        examLevel: editExamData.difficulty,
+        selectedQuestions: editExamData.questionIds,
+        rules: {
+          randomizeQuestions: editExamData.randomizeQuestions,
+          randomizeAnswers: editExamData.randomizeAnswers,
+          showResultAfterSubmission: editExamData.showResultAfterSubmission,
+          showCorrectAnswers: editExamData.showCorrectAnswers,
+          showExplanations: editExamData.showExplanations,
+          requireFullscreen: editExamData.requireFullscreen,
+          detectTabSwitch: editExamData.detectTabSwitch,
+          detectWindowBlur: editExamData.detectWindowBlur,
+          blockCopy: editExamData.blockCopy,
+          blockPaste: editExamData.blockPaste,
+          blockRightClick: editExamData.blockRightClick,
+          detectDeviceChange: editExamData.detectDeviceChange,
+          violationThreshold: editExamData.violationThreshold,
+          thresholdAction: editExamData.thresholdAction,
+        },
+        info: {
+          title: editExamData.title,
+          description: editExamData.description || "",
+          examCode: editExamData.examCode,
+          duration: editExamData.duration,
+          passingScore: editExamData.passingScore,
+          startsAt: editExamData.startsAt ? new Date(editExamData.startsAt).toISOString().slice(0, 16) : "",
+          endsAt: editExamData.endsAt ? new Date(editExamData.endsAt).toISOString().slice(0, 16) : "",
+          sectionIds: editExamData.sectionIds || [],
+          minutesPerQuestion: editExamData.minutesPerQuestion || 0,
+        },
+      },
+      createdAt: "",
+      updatedAt: "",
+    };
+
+    restoreDraft(examAsDraft, questions);
+  }, [editExamData, questions, restoreDraft, subjectId]);
 
   useEffect(() => {
     if (open) {
@@ -254,8 +334,8 @@ function CreateExamWizardModal({
     <ModalContainer open={open} maxWidth="max-w-8xl">
       <div className="p-6">
         <ModalHeader
-          title="Create Exam"
-          description="Build and configure your assessment."
+          title={editExamData ? "Edit Exam" : "Create Exam"}
+          description={editExamData ? "Update your assessment configuration." : "Build and configure your assessment."}
           onClose={handleClose}
         />
 
@@ -320,7 +400,11 @@ function CreateExamWizardModal({
           <ModalActions
             loading={loading}
             submitLabel={
-              currentStep === 4 ? "Create Exam" : "Next"
+              currentStep === 4
+                ? editExamData
+                  ? "Update Exam"
+                  : "Create Exam"
+                : "Next"
             }
             cancelLabel={
               currentStep === 1 ? "Cancel" : "Previous"

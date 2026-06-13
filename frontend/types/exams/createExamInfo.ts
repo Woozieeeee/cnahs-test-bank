@@ -14,4 +14,6 @@ export interface CreateExamInfo {
   startsAt: string;
 
   endsAt: string;
+
+  minutesPerQuestion: number;
 }

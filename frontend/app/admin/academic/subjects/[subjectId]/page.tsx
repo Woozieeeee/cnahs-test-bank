@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import PageContainer from "@/components/layout/pages/pageContainer";
 
@@ -18,9 +19,28 @@ import SubjectFacultyOverview from "@/components/admin/academic/subjects/details
 import SubjectReadinessAnalytics from "@/components/admin/academic/subjects/details/subjectReadinessAnalytics";
 import SubjectQuestionBankSummary from "@/components/admin/academic/subjects/details/subjectQuestionBankSummary";
 import SubjectAssessmentSummary from "@/components/admin/academic/subjects/details/subjectAssessmentSummary";
-import { mockSubjectDetails } from "@/components/admin/academic/subjects/data/mockSubjectDetails";
-import useSubjectQuestionStats from "@/hooks/faculty/subjects/useSubjectQuestionStats";
-import useSubjectAssessmentSummary from "@/hooks/faculty/subjects/useSubjectAssessmentSummary";
+import { getSubjectAnalytics } from "@/services/admin_service";
+
+interface SubjectAnalyticsData {
+  subject: { id: number; name: string; code: string; description: string };
+  overview: {
+    totalSections: number;
+    totalExams: number;
+    totalQuestions: number;
+    totalAttempts: number;
+    estimatedTotalStudents: number;
+  };
+  performance: {
+    averageScore: number;
+    passingRate: number;
+    averageQuestionSuccessRate: number;
+    readinessScore: number;
+  };
+  sections: Array<{ id: number; name: string; yearLevel: number; program: string; faculty: { id: number; name: string } | null }>;
+  questionsByDifficulty: { EASY: number; MEDIUM: number; HARD: number; EXPERT: number };
+  studentPerformance: { highPerformers: number; averagePerformers: number; lowPerformers: number };
+  readinessDistribution: { ready: number; atRisk: number };
+}
 
 export default function SubjectDetailsPage() {
   const params = useParams();
@@ -30,23 +50,36 @@ export default function SubjectDetailsPage() {
   const { subject, loading, error, refresh } =
     useSubject(subjectId);
 
-  const {
-    stats: questionStats,
-    loading: questionStatsLoading,
-    error: questionStatsError,
-  } = useSubjectQuestionStats(subjectId);
+  const [analytics, setAnalytics] = useState<SubjectAnalyticsData | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsError, setAnalyticsError] = useState<string | undefined>(undefined);
 
-  const {
-    summary: assessmentSummary,
-    loading: assessmentSummaryLoading,
-    error: assessmentSummaryError,
-  } = useSubjectAssessmentSummary(subjectId);
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        setAnalyticsLoading(true);
+        setAnalyticsError(undefined);
 
-  if (
-    loading ||
-    questionStatsLoading ||
-    assessmentSummaryLoading
-  ) {
+        const response = await getSubjectAnalytics(subjectId);
+        if (response.success) {
+          setAnalytics(response.data);
+        } else {
+          setAnalyticsError("Failed to load analytics");
+        }
+      } catch (err) {
+        console.error("Error fetching analytics:", err);
+        setAnalyticsError(err instanceof Error ? err.message : "Failed to fetch analytics");
+      } finally {
+        setAnalyticsLoading(false);
+      }
+    };
+
+    if (!loading && subject) {
+      fetchAnalytics();
+    }
+  }, [subjectId, subject, loading]);
+
+  if (loading || analyticsLoading) {
     return (
       <PageContainer>
         <LoadingState
@@ -57,28 +90,19 @@ export default function SubjectDetailsPage() {
     );
   }
 
-  if (
-    error ||
-    questionStatsError ||
-    assessmentSummaryError
-  ) {
+  if (error || analyticsError) {
     return (
       <PageContainer>
         <ErrorState
           title="Failed to load subject."
-          description={
-            error ||
-            questionStatsError ||
-            assessmentSummaryError ||
-            ""
-          }
+          description={error || analyticsError || ""}
           onRetry={refresh}
         />
       </PageContainer>
     );
   }
 
-  if (!subject) {
+  if (!subject || !analytics) {
     return (
       <PageContainer>
         <NotFoundState
@@ -99,69 +123,41 @@ export default function SubjectDetailsPage() {
       <SubjectDetailsHeader subject={subject} />
 
       <SubjectDetailsStats
-        sections={
-          subject.sectionSummary?.totalSections ?? 0
-        }
-        students={
-          subject.sectionSummary?.totalStudents ?? 0
-        }
-        questions={
-          subject.questionBankSummary?.totalQuestions ?? 0
-        }
-        assessments={
-          subject.assessmentSummary?.totalAssessments ?? 0
-        }
+        sections={analytics.overview.totalSections}
+        students={analytics.overview.estimatedTotalStudents}
+        questions={analytics.overview.totalQuestions}
+        assessments={analytics.overview.totalExams}
       />
 
       <div className="grid gap-6 xl:grid-cols-2">
         <SubjectFacultyOverview
           faculties={subject.faculties || []}
-          sections={
-            subject.sectionSummary?.totalSections ?? 0
-          }
-          students={
-            subject.sectionSummary?.totalStudents ?? 0
-          }
+          sections={analytics.overview.totalSections}
+          students={analytics.overview.estimatedTotalStudents}
         />
 
         <SubjectReadinessAnalytics
-          average={mockSubjectDetails.readiness.average}
-          passingRate={
-            mockSubjectDetails.readiness.passingRate
-          }
-          expertReady={
-            mockSubjectDetails.readiness.expertReady
-          }
-          atRisk={mockSubjectDetails.readiness.atRisk}
+          average={analytics.performance.readinessScore}
+          passingRate={analytics.performance.passingRate}
+          expertReady={analytics.readinessDistribution.ready}
+          atRisk={analytics.readinessDistribution.atRisk}
         />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
         <SubjectQuestionBankSummary
-          totalQuestions={
-            questionStats?.totalQuestions ?? 0
-          }
-          totalTopics={questionStats?.totalTopics ?? 0}
-          weakQuestions={questionStats?.weakQuestions ?? 0}
-          averageSuccessRate={
-            questionStats?.averageSuccessRate ?? 0
-          }
+          totalQuestions={analytics.overview.totalQuestions}
+          totalTopics={0} // Not provided in analytics
+          weakQuestions={0} // Not tracked separately
+          averageSuccessRate={analytics.performance.averageQuestionSuccessRate}
           subjectId={subjectId}
         />
 
         <SubjectAssessmentSummary
-          totalAssessments={
-            assessmentSummary?.totalAssessments ?? 0
-          }
-          averageScore={
-            assessmentSummary?.averageScore ?? 0
-          }
-          completedAssessments={
-            assessmentSummary?.completedAssessments ?? 0
-          }
-          activeAssessments={
-            assessmentSummary?.activeAssessments ?? 0
-          }
+          totalAssessments={analytics.overview.totalExams}
+          averageScore={analytics.performance.averageScore}
+          completedAssessments={analytics.overview.totalAttempts}
+          activeAssessments={analytics.overview.totalExams}
           subjectId={subjectId}
         />
       </div>

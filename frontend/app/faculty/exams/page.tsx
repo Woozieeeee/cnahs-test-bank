@@ -1,211 +1,98 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { CreateExamSetup } from "@/types/exams/createExamSetup";
+import { useState, memo } from "react";
+
+import MotionPage from "@/components/motion/motionPage";
 import PageContainer from "@/components/layout/pages/pageContainer";
+
 import LoadingState from "@/components/common/states/loadingState";
 import ErrorState from "@/components/common/states/errorState";
-import Pagination from "@/components/common/pagination";
-import useFacultyExams from "@/hooks/exams/useFacultyExams";
-import useFacultySections from "@/hooks/exams/useFacultySections";
-import ExamHeader from "@/components/faculty/exams/examHeader";
-import ExamStats from "@/components/faculty/exams/examStats";
-import ExamFilters from "@/components/faculty/exams/examFilters";
-import ExamStatusTabs from "@/components/faculty/exams/examStatusTabs";
-import ExamCard from "@/components/faculty/exams/examCard";
-import SectionCard from "@/components/faculty/exams/sectionCard";
 import EmptyState from "@/components/common/states/emptyState";
-import CreateExamSetupModal from "@/components/faculty/exams/modal/createExamSetupModal";
-import CreateExamWizardModal from "@/components/faculty/exams/modal/createExamWizardModal";
 
-const ITEMS_PER_PAGE = 12;
+import ExamMonitoringTabs from "@/components/faculty/exams/monitoring/examMonitoringTabs";
+import ExamMonitoringFilters from "@/components/faculty/exams/monitoring/examMonitoringFilters";
+import ExamMonitoringCard from "@/components/faculty/exams/monitoring/examMonitoringCard";
 
-export default function FacultyExamsPage() {
-  const { exams, loading, error, refresh } =
-    useFacultyExams();
+import { useExams } from "@/hooks/faculty/exams/useExamMonitoring";
 
-  const { sections, loading: sectionsLoading } =
-    useFacultySections();
+function FacultyExamsPage() {
+  const { loading, error, refresh, data: exams } = useExams({ pollInterval: 5000, autoRefresh: true });
 
-  const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState<"ALL" | "SCHEDULED" | "ONGOING" | "COMPLETED">("ALL");
+  const [filters, setFilters] = useState({ search: "", riskLevel: [] as string[] });
 
-  const [status, setStatus] = useState("ALL");
-
-  const [section, setSection] = useState("ALL");
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [selectedSectionId, setSelectedSectionId] =
-    useState<number | null>(null);
-
-  const [showSetupModal, setShowSetupModal] =
-    useState(false);
-
-  const [examSetup, setExamSetup] =
-    useState<CreateExamSetup | null>(null);
-
-  const [showWizardModal, setShowWizardModal] =
-    useState(false);
-
-  const sectionNames = useMemo(() => {
-    return Array.from(
-      new Set(exams.map((exam) => exam.sectionName))
-    );
-  }, [exams]);
-
-  const handleSectionCardClick = (sectionId: number) => {
-    if (selectedSectionId === sectionId) {
-      setSelectedSectionId(null);
-      setSection("ALL");
-    } else {
-      setSelectedSectionId(sectionId);
-      const sectionData = sections.find(
-        (s: any) => s.id === sectionId
-      );
-      if (sectionData) {
-        setSection(sectionData.name);
-      }
-    }
-    setCurrentPage(1);
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab as "ALL" | "SCHEDULED" | "ONGOING" | "COMPLETED");
   };
 
-  const filteredExams = useMemo(() => {
-    let result = [...exams];
+  // Calculate dynamic status for each exam based on time
+  const examsWithDynamicStatus = exams.map((exam) => {
+    if (!exam.startsAt) return exam;
 
-    if (search.trim()) {
-      result = result.filter(
-        (exam) =>
-          exam.title
-            .toLowerCase()
-            .includes(search.toLowerCase()) ||
-          exam.subjectName
-            .toLowerCase()
-            .includes(search.toLowerCase()) ||
-          exam.sectionName
-            .toLowerCase()
-            .includes(search.toLowerCase())
-      );
+    const now = new Date().getTime();
+    const startTime = new Date(exam.startsAt).getTime();
+    const endTime = exam.endsAt ? new Date(exam.endsAt).getTime() : startTime + exam.duration * 60 * 1000;
+
+    let dynamicStatus = exam.status;
+    if (now < startTime) {
+      dynamicStatus = "SCHEDULED";
+    } else if (now < endTime) {
+      dynamicStatus = "ONGOING";
+    } else {
+      dynamicStatus = "COMPLETED";
     }
 
-    if (status !== "ALL") {
-      result = result.filter(
-        (exam) => exam.status === status
-      );
-    }
+    return { ...exam, status: dynamicStatus };
+  });
 
-    if (section !== "ALL") {
-      result = result.filter(
-        (exam) => exam.sectionName === section
-      );
-    }
+  const filteredExams = examsWithDynamicStatus.filter((exam) => {
+    // Filter out ARCHIVED, CANCELLED, and DRAFT for Phase 1
+    if (["ARCHIVED", "CANCELLED", "DRAFT"].includes(exam.status)) return false;
+    if (activeTab !== "ALL" && exam.status !== activeTab) return false;
+    if (filters.search && !exam.title.toLowerCase().includes(filters.search.toLowerCase())) return false;
+    return true;
+  });
 
-    return result;
-  }, [exams, search, status, section]);
-
-  const totalPages =
-    Math.ceil(filteredExams.length / ITEMS_PER_PAGE) || 1;
-
-  const paginatedExams = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-
-    return filteredExams.slice(
-      start,
-      start + ITEMS_PER_PAGE
-    );
-  }, [filteredExams, currentPage]);
-
-  if (loading || sectionsLoading) {
+  if (loading && exams.length === 0) {
     return (
       <PageContainer>
-        <LoadingState
-          title="Loading exams..."
-          description="Please wait while we retrieve exam records."
-        />
+        <LoadingState title="Loading exams..." description="Please wait while we retrieve your exam data." />
       </PageContainer>
     );
   }
 
-  if (error) {
+  if (error && exams.length === 0) {
     return (
       <PageContainer>
-        <ErrorState
-          title="Failed to load exams."
-          description={error}
-          onRetry={refresh}
-        />
+        <ErrorState title="Failed to load exams." description={error} onRetry={refresh} />
       </PageContainer>
     );
   }
 
   return (
-    <PageContainer>
-      <ExamStats exams={exams} />
-
-      {sections.length > 0 && (
+    <MotionPage>
+      <PageContainer>
         <div className="mb-6">
-          <h2 className="mb-4 text-lg font-semibold">
-            Select Section
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {sections.map((sectionData) => (
-              <SectionCard
-                key={sectionData.id}
-                section={sectionData}
-                onClick={() =>
-                  handleSectionCardClick(sectionData.id)
-                }
-                isSelected={
-                  selectedSectionId === sectionData.id
-                }
-              />
+          <h1 className="text-3xl font-bold">Live Exam Monitoring</h1>
+          <p className="text-muted-foreground mt-1">Monitor ongoing examinations and student activity.</p>
+        </div>
+
+        <ExamMonitoringTabs activeTab={activeTab} setActiveTab={handleTabChange} exams={examsWithDynamicStatus} />
+
+        <ExamMonitoringFilters filters={filters} setFilters={setFilters} exams={exams} />
+
+        {filteredExams.length === 0 ? (
+          <EmptyState title="No exams found" description={exams.length === 0 ? "You don't have any exams yet." : "No exams match your filters."} />
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredExams.map((exam) => (
+              <ExamMonitoringCard key={exam.id} exam={exam} />
             ))}
           </div>
-        </div>
-      )}
-
-      <ExamFilters
-        search={search}
-        setSearch={(value) => {
-          setSearch(value);
-          setCurrentPage(1);
-        }}
-        section={section}
-        setSection={(value) => {
-          setSection(value);
-          setCurrentPage(1);
-        }}
-        sections={sectionNames}
-        suggestions={exams.map((exam) => exam.title)}
-      />
-
-      <ExamStatusTabs
-        activeTab={status}
-        setActiveTab={(value) => {
-          setStatus(value);
-          setCurrentPage(1);
-        }}
-      />
-
-      {paginatedExams.length === 0 ? (
-        <div className="flex min-h-[500px] items-center justify-center">
-          <EmptyState
-            title="No exams found"
-            description="Create your first exam to begin assessing students."
-          />
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {paginatedExams.map((exam) => (
-            <ExamCard key={exam.id} exam={exam} />
-          ))}
-        </div>
-      )}
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
-    </PageContainer>
+        )}
+      </PageContainer>
+    </MotionPage>
   );
 }
+
+export default memo(FacultyExamsPage);

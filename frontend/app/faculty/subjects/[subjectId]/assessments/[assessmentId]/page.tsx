@@ -72,11 +72,28 @@ export default function FacultyAssessmentDetailsPage() {
       <PageContainer>
         <NotFoundState
           title="Assessment not found."
-          description="The requested assessment may have been removed."
+          description="The requested assessment may have been removed or you don't have access to it."
         />
       </PageContainer>
     );
   }
+
+  // Safe data access with defaults
+  const assessmentData = {
+    title: assessment.title ?? "Untitled Assessment",
+    difficulty: assessment.difficulty ?? "MEDIUM",
+    status: assessment.status ?? "DRAFT",
+    averageScore: assessment.averageScore ?? 0,
+    passingRate: assessment.passingRate ?? 0,
+    highestScore: assessment.highestScore ?? 0,
+    lowestScore: assessment.lowestScore ?? 0,
+    duration: assessment.duration ?? 0,
+    passingScore: assessment.passingScore ?? 0,
+    randomizeQuestions: assessment.randomizeQuestions ?? false,
+    randomizeOptions: assessment.randomizeOptions ?? false,
+    students: assessment.students ?? 0,
+    weakestQuestions: assessment.weakestQuestions ?? [],
+  };
 
   return (
     <PageContainer>
@@ -86,43 +103,43 @@ export default function FacultyAssessmentDetailsPage() {
       />
 
       <AssessmentDetailsHeader
-        title={assessment.title}
-        difficulty={assessment.difficulty}
-        status={assessment.status}
+        title={assessmentData.title}
+        difficulty={assessmentData.difficulty}
+        status={assessmentData.status}
       />
 
       <AssessmentDetailsStats
-        averageScore={assessment.averageScore}
-        passingRate={assessment.passingRate}
-        highestScore={assessment.highestScore}
-        lowestScore={assessment.lowestScore}
+        averageScore={assessmentData.averageScore}
+        passingRate={assessmentData.passingRate}
+        highestScore={assessmentData.highestScore}
+        lowestScore={assessmentData.lowestScore}
       />
 
       <AssessmentOverviewSection
-        difficulty={assessment.difficulty}
-        status={assessment.status}
-        duration={assessment.duration}
-        passingScore={assessment.passingScore}
-        randomizeQuestions={assessment.randomizeQuestions}
-        randomizeOptions={assessment.randomizeOptions}
-        students={assessment.students}
-        averageScore={assessment.averageScore}
-        passingRate={assessment.passingRate}
+        difficulty={assessmentData.difficulty}
+        status={assessmentData.status}
+        duration={assessmentData.duration}
+        passingScore={assessmentData.passingScore}
+        randomizeQuestions={assessmentData.randomizeQuestions}
+        randomizeOptions={assessmentData.randomizeOptions}
+        students={assessmentData.students}
+        averageScore={assessmentData.averageScore}
+        passingRate={assessmentData.passingRate}
       />
 
       <div className="grid gap-6 xl:grid-cols-2">
         <AssessmentConfigurationCard
-          difficulty={assessment.difficulty}
-          status={assessment.status}
-          duration={assessment.duration}
-          passingScore={assessment.passingScore}
-          randomizeQuestions={assessment.randomizeQuestions}
-          randomizeOptions={assessment.randomizeOptions}
+          difficulty={assessmentData.difficulty}
+          status={assessmentData.status}
+          duration={assessmentData.duration}
+          passingScore={assessmentData.passingScore}
+          randomizeQuestions={assessmentData.randomizeQuestions}
+          randomizeOptions={assessmentData.randomizeOptions}
         />
 
         <AssessmentWeakQuestions
           subjectId={subjectId}
-          questions={assessment.weakestQuestions ?? []}
+          questions={assessmentData.weakestQuestions}
         />
       </div>
     </PageContainer>

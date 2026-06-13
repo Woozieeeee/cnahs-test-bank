@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState, memo } from "react";
+import { useSubjectsPageData } from "@/hooks/admin/useSubjectsPageData";
 import SubjectsStats from "@/components/admin/academic/subjects/subjectsStats";
 import SubjectsGrid from "@/components/admin/academic/subjects/subjectsGrid";
 import SubjectsTabs from "@/components/admin/academic/subjects/subjectTabs";
@@ -13,132 +14,93 @@ import SubjectsActions from "@/components/admin/academic/subjects/sections/subje
 import {
   updateSubject,
   assignFacultiesToSubject,
-} from "@/services/academic_service";
-import { createSubject } from "@/services/academic_service";
-import {
+  createSubject,
   assignSubjectSections,
-  getSections,
 } from "@/services/academic_service";
-import { getFacultyUsers } from "@/services/admin_service";
 import { successToast, errorToast } from "@/lib/swal";
-import { getSubjects } from "@/services/academic_service";
 import type { Subject } from "@/types/academic/subject";
-import type { Section } from "@/types/academic/section";
 import PageContainer from "@/components/layout/pages/pageContainer";
 
 export default function SubjectsPage() {
-  // =========================
-  // STATES
-  // =========================
-
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-
-  const [facultyUsers, setFacultyUsers] = useState<
-    {
-      id: number;
-      name: string;
-    }[]
-  >([]);
-
-  const [sections, setSections] = useState<Section[]>([]);
-
-  const [initialLoading, setInitialLoading] =
-    useState(true);
-
-  const [search, setSearch] = useState("");
-
-  const [assignmentFilter, setAssignmentFilter] =
-    useState("ALL");
-
   const [activeTab, setActiveTab] = useState("ALL");
+  const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
 
-  const [selectedSubject, setSelectedSubject] =
-    useState<Subject | null>(null);
-
-  // =========================
-  // MODALS
-  // =========================
-
-  const [openCreateModal, setOpenCreateModal] =
-    useState(false);
-
+  // Modal states
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openAssignFaculty, setOpenAssignFaculty] = useState(false);
+  const [openAssignSections, setOpenAssignSections] = useState(false);
 
-  const [openAssignFaculty, setOpenAssignFaculty] =
-    useState(false);
+  // Use custom hook for data management
+  const {
+    subjects,
+    setSubjects,
+    facultyUsers,
+    sections,
+    initialLoading,
+    search,
+    setSearch,
+    assignmentFilter,
+    setAssignmentFilter,
+    filteredSubjects,
+    fetchSubjects,
+  } = useSubjectsPageData(activeTab);
 
-  const [openAssignSections, setOpenAssignSections] =
-    useState(false);
-
-  // =========================
-  // FETCH SUBJECTS
-  // =========================
-
-  const fetchDependencies = async () => {
+  // Handle create subject
+  const handleCreateSubject = async (data: any) => {
     try {
-      const [facultyData, sectionData] = await Promise.all([
-        getFacultyUsers(),
-        getSections(),
-      ]);
-
-      setFacultyUsers(facultyData);
-
-      setSections(sectionData);
-    } catch (error) {
+      await createSubject(data);
+      successToast("Subject created successfully.");
+      fetchSubjects();
+    } catch (error: any) {
       console.error(error);
+      errorToast(error?.response?.data?.message || "Failed to create subject.");
     }
   };
 
-  const fetchSubjects = async () => {
+  // Handle edit subject
+  const handleEditSubject = async (updatedSubject: any) => {
+    if (!selectedSubject) return;
+
     try {
-      const data = await getSubjects(activeTab);
-      setSubjects(data);
-    } catch (error) {
+      await updateSubject(selectedSubject.id, updatedSubject);
+      successToast("Subject updated successfully.");
+      setOpenEditModal(false);
+      fetchSubjects();
+    } catch (error: any) {
       console.error(error);
-    } finally {
-      setInitialLoading(false);
+      errorToast(error?.response?.data?.message || "Failed to update subject.");
     }
   };
 
-  useEffect(() => {
-    fetchSubjects();
-  }, [activeTab]);
+  // Handle assign faculty
+  const handleAssignFaculty = async (facultyIds: number[]) => {
+    if (!selectedSubject) return;
 
-  useEffect(() => {
-    fetchDependencies();
-  }, []);
+    try {
+      await assignFacultiesToSubject(selectedSubject.id, facultyIds);
+      successToast("Faculty pool updated successfully.");
+      setOpenAssignFaculty(false);
+      fetchSubjects();
+    } catch (error) {
+      console.error(error);
+      errorToast("Failed to update faculty pool.");
+    }
+  };
 
-  // =========================
-  // FILTERING
-  // =========================
+  // Handle assign sections
+  const handleAssignSections = async (sectionIds: number[]) => {
+    if (!selectedSubject) return;
 
-  const filteredSubjects = useMemo(() => {
-    return subjects.filter((subject) => {
-      const matchesSearch =
-        subject.name
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        subject.code
-          .toLowerCase()
-          .includes(search.toLowerCase());
-
-      const hasFaculty =
-        (subject.faculties?.length ?? 0) > 0;
-
-      const matchesAssignment =
-        assignmentFilter === "ALL"
-          ? true
-          : assignmentFilter === "ASSIGNED"
-            ? hasFaculty
-            : !hasFaculty;
-
-      return matchesSearch && matchesAssignment;
-    });
-  }, [subjects, search, assignmentFilter]);
-
-  // =========================
-  // LOADING
-  // =========================
+    try {
+      await assignSubjectSections(selectedSubject.id, sectionIds);
+      successToast("Sections assigned successfully.");
+      fetchSubjects();
+    } catch (error) {
+      console.error(error);
+      errorToast("Failed to assign sections.");
+    }
+  };
 
   if (initialLoading) {
     return <div className="p-6">Loading subjects...</div>;
@@ -147,45 +109,21 @@ export default function SubjectsPage() {
   return (
     <PageContainer>
       {/* HEADER */}
-
       <SubjectsHeader />
 
       {/* TABS */}
-
-      <SubjectsTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      <SubjectsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* STATS */}
-
       <SubjectsStats
         totalSubjects={subjects.length}
-        assignedFaculty={
-          subjects.filter(
-            (subject) =>
-              (subject.faculties?.length ?? 0) > 0
-          ).length
-        }
-        unassignedSubjects={
-          subjects.filter(
-            (subject) =>
-              (subject.faculties?.length ?? 0) === 0
-          ).length
-        }
-        totalSections={subjects.reduce(
-          (total, subject) =>
-            total + (subject.sectionSubjects?.length || 0),
-          0
-        )}
-        archivedSubjects={
-          subjects.filter((subject) => subject.isArchived)
-            .length
-        }
+        assignedFaculty={subjects.filter((s) => (s.faculties?.length ?? 0) > 0).length}
+        unassignedSubjects={subjects.filter((s) => (s.faculties?.length ?? 0) === 0).length}
+        totalSections={subjects.reduce((total, s) => total + (s.sectionSubjects?.length || 0), 0)}
+        archivedSubjects={subjects.filter((s) => s.isArchived).length}
       />
 
       {/* ACTIONS */}
-
       <SubjectsActions
         search={search}
         setSearch={setSearch}
@@ -195,77 +133,35 @@ export default function SubjectsPage() {
       />
 
       {/* GRID */}
-
       <SubjectsGrid
         subjects={filteredSubjects}
         onRefresh={fetchSubjects}
         onEdit={(subject) => {
           setSelectedSubject(subject);
-
           setOpenEditModal(true);
         }}
         onAssignFaculty={(subject) => {
           setSelectedSubject(subject);
-
           setOpenAssignFaculty(true);
         }}
         onAssignSections={(subject) => {
           setSelectedSubject(subject);
-
           setOpenAssignSections(true);
         }}
       />
 
       {/* MODALS */}
-
       <CreateSubjectModal
         open={openCreateModal}
         onOpenChange={setOpenCreateModal}
-        onCreate={async (data) => {
-          try {
-            await createSubject(data);
-
-            successToast("Subject created successfully.");
-
-            fetchSubjects();
-          } catch (error: any) {
-            console.error(error);
-
-            errorToast(
-              error?.response?.data?.message ||
-                "Failed to create subject."
-            );
-          }
-        }}
+        onCreate={handleCreateSubject}
       />
 
       <EditSubjectModal
         open={openEditModal}
         onOpenChange={setOpenEditModal}
         subject={selectedSubject}
-        onSave={async (updatedSubject) => {
-          if (!selectedSubject) return;
-
-          try {
-            await updateSubject(
-              selectedSubject.id,
-              updatedSubject
-            );
-
-            successToast("Subject updated successfully.");
-
-            setOpenEditModal(false);
-
-            fetchSubjects();
-          } catch (error: any) {
-            console.error(error);
-
-            errorToast(
-              error?.response?.data?.message ||
-                "Failed to update subject."
-            );
-          }
-        }}
+        onSave={handleEditSubject}
       />
 
       <AssignFacultyModal
@@ -273,33 +169,8 @@ export default function SubjectsPage() {
         onOpenChange={setOpenAssignFaculty}
         facultyList={facultyUsers}
         subjectName={selectedSubject?.name || ""}
-        initialFacultyIds={
-          selectedSubject?.faculties?.map(
-            (faculty) => faculty.faculty.id
-          ) ?? []
-        }
-        onAssign={async (facultyIds) => {
-          if (!selectedSubject) return;
-
-          try {
-            await assignFacultiesToSubject(
-              selectedSubject.id,
-              facultyIds
-            );
-
-            successToast(
-              "Faculty pool updated successfully."
-            );
-
-            setOpenAssignFaculty(false);
-
-            fetchSubjects();
-          } catch (error) {
-            console.error(error);
-
-            errorToast("Failed to update faculty pool.");
-          }
-        }}
+        initialFacultyIds={selectedSubject?.faculties?.map((f) => f.faculty.id) ?? []}
+        onAssign={handleAssignFaculty}
       />
 
       <AssignSectionsModal
@@ -307,29 +178,8 @@ export default function SubjectsPage() {
         onOpenChange={setOpenAssignSections}
         sections={sections}
         subjectName={selectedSubject?.name || ""}
-        initialSectionIds={
-          selectedSubject?.sectionSubjects?.map(
-            (item) => item.section.id
-          ) ?? []
-        }
-        onAssign={async (sectionIds) => {
-          if (!selectedSubject) return;
-
-          try {
-            await assignSubjectSections(
-              selectedSubject.id,
-              sectionIds
-            );
-
-            successToast("Sections assigned successfully.");
-
-            fetchSubjects();
-          } catch (error) {
-            console.error(error);
-
-            errorToast("Failed to assign sections.");
-          }
-        }}
+        initialSectionIds={selectedSubject?.sectionSubjects?.map((s) => s.section.id) ?? []}
+        onAssign={handleAssignSections}
       />
     </PageContainer>
   );

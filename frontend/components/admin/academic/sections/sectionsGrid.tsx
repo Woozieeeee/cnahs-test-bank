@@ -16,6 +16,8 @@ interface Props {
   onRestoreSuccess: (sectionId: number) => void;
 
   onEdit: (section: Section) => void;
+
+  onManageStudents: (section: Section) => void;
 }
 
 function SectionsGrid({
@@ -23,6 +25,7 @@ function SectionsGrid({
   onArchiveSuccess,
   onRestoreSuccess,
   onEdit,
+  onManageStudents,
 }: Props) {
   if (sections.length === 0) {
     return (
@@ -42,6 +45,7 @@ function SectionsGrid({
           onArchiveSuccess={onArchiveSuccess}
           onRestoreSuccess={onRestoreSuccess}
           onEdit={() => onEdit(section)}
+          onManageStudents={() => onManageStudents(section)}
         />
       ))}
     </div>

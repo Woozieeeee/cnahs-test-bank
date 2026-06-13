@@ -62,7 +62,7 @@ export const updateTopicService = async ({
     throw new Error("Topic already exists");
   }
 
-  return prisma.topic.update({
+  const updatedTopic = await prisma.topic.update({
     where: {
       id: topicId,
     },
@@ -72,5 +72,16 @@ export const updateTopicService = async ({
 
       description,
     },
+    include: {
+      questions: true,
+    },
   });
+
+  return {
+    id: updatedTopic.id,
+    name: updatedTopic.name,
+    description: updatedTopic.description,
+    totalQuestions: updatedTopic.questions.length,
+    isArchived: updatedTopic.isArchived || false,
+  };
 };

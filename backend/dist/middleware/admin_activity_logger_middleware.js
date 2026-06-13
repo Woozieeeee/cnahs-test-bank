@@ -1,0 +1,176 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminActivityLogger = void 0;
+const log_activity_1 = require("../utils/log_activity");
+// =========================
+// EXCLUDED ROUTES
+// =========================
+const EXCLUDED_PATHS = new Set([
+    "/activity-logs",
+    "/recent-activity",
+    "/faculty",
+    "/exams/sections",
+]);
+// =========================
+// CATEGORY MAPPING
+// =========================
+const getCategoryFromPath = (path) => {
+    if (path.startsWith("/academic") || path.startsWith("/exams")) {
+        return "ACADEMIC";
+    }
+    if (path.startsWith("/users") || path.startsWith("/faculty")) {
+        return "USER_MANAGEMENT";
+    }
+    if (path.startsWith("/student-records")) {
+        return "STUDENT_RECORDS";
+    }
+    if (path.startsWith("/pending-students") ||
+        path.startsWith("/approve") ||
+        path.startsWith("/reject")) {
+        return "APPROVALS";
+    }
+    if (path.startsWith("/violations")) {
+        return "EXAM_VIOLATIONS";
+    }
+    if (path.startsWith("/dashboard")) {
+        return "DASHBOARD";
+    }
+    return "SYSTEM";
+};
+// =========================
+// ACTION LABELS
+// =========================
+const getActionLabel = (method, path) => {
+    // =========================
+    // ACADEMIC
+    // =========================
+    if (method === "POST" && path === "/academic/sections") {
+        return "Created academic section";
+    }
+    if (method === "PATCH" && path.includes("/academic/sections/")) {
+        if (path.endsWith("/archive")) {
+            return "Archived academic section";
+        }
+        if (path.endsWith("/restore")) {
+            return "Restored academic section";
+        }
+        return "Updated academic section";
+    }
+    if (method === "PATCH" &&
+        path.includes("/academic/student-records/") &&
+        path.endsWith("/assign-section")) {
+        return "Assigned student to section";
+    }
+    if (method === "POST" && path === "/academic/subjects") {
+        return "Created academic subject";
+    }
+    if (method === "PATCH" && path.includes("/academic/subjects/")) {
+        if (path.endsWith("/archive")) {
+            return "Archived academic subject";
+        }
+        if (path.endsWith("/restore")) {
+            return "Restored academic subject";
+        }
+        if (path.endsWith("/assign-sections")) {
+            return "Updated subject section assignments";
+        }
+        if (path.endsWith("/assign-faculties")) {
+            return "Updated subject faculty pool";
+        }
+        return "Updated academic subject";
+    }
+    // =========================
+    // DASHBOARD
+    // =========================
+    if (method === "GET" && path.includes("/dashboard")) {
+        return "Viewed dashboard";
+    }
+    // =========================
+    // USERS
+    // =========================
+    if (method === "GET" && path.includes("/users")) {
+        return "Viewed user management";
+    }
+    // =========================
+    // FACULTY
+    // =========================
+    if (method === "POST" && path.includes("/faculty")) {
+        return "Created faculty account";
+    }
+    // =========================
+    // APPROVALS
+    // =========================
+    if (method === "PATCH" && path.includes("/approve")) {
+        return "Approved student account";
+    }
+    if (method === "PATCH" && path.includes("/reject")) {
+        return "Rejected student account";
+    }
+    // =========================
+    // STUDENT RECORDS
+    // =========================
+    if (method === "POST" && path.includes("/student-records")) {
+        return "Uploaded student records";
+    }
+    // =========================
+    // EXAM VIOLATIONS
+    // =========================
+    if (method === "PATCH" &&
+        path.includes("/violations") &&
+        path.endsWith("/resolve")) {
+        return "Resolved exam violation";
+    }
+    // =========================
+    // DEFAULT
+    // =========================
+    return "Performed administrative action";
+};
+// =========================
+// ADMIN ACTIVITY LOGGER
+// =========================
+const adminActivityLogger = (req, res, next) => {
+    const path = req.path || "";
+    // =========================
+    // SKIP ROUTES
+    // =========================
+    if (EXCLUDED_PATHS.has(path) ||
+        path.startsWith("/approve") ||
+        path.startsWith("/reject")) {
+        return next();
+    }
+    // =========================
+    // SKIP GET REQUESTS
+    // =========================
+    if (req.method === "GET") {
+        return next();
+    }
+    // =========================
+    // AFTER RESPONSE
+    // =========================
+    res.on("finish", async () => {
+        if (res.statusCode >= 400)
+            return;
+        const performedBy = req.user?.name || "Unknown Admin";
+        const categories = [getCategoryFromPath(path)];
+        try {
+            await (0, log_activity_1.logActivity)({
+                action: getActionLabel(req.method, path),
+                categories,
+                severity: "INFO",
+                performedBy,
+                metadata: {
+                    path,
+                    method: req.method,
+                    params: req.params,
+                    query: req.query,
+                    body: req.body,
+                },
+            });
+        }
+        catch (error) {
+            console.error("Admin activity log failed:", error);
+        }
+    });
+    next();
+};
+exports.adminActivityLogger = adminActivityLogger;

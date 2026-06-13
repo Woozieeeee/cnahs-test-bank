@@ -21,11 +21,7 @@ export const createTopicController = async (
       ...req.body,
     });
 
-    return res.status(201).json({
-      message: "Topic created successfully",
-
-      topic,
-    });
+    return res.status(201).json(topic);
   } catch (error: any) {
     return res.status(400).json({
       message: error.message,

@@ -52,7 +52,7 @@ export const createTopicService = async ({
     throw new Error("Topic already exists");
   }
 
-  return prisma.topic.create({
+  const createdTopic = await prisma.topic.create({
     data: {
       name,
 
@@ -61,4 +61,12 @@ export const createTopicService = async ({
       subjectId,
     },
   });
+
+  return {
+    id: createdTopic.id,
+    name: createdTopic.name,
+    description: createdTopic.description,
+    totalQuestions: 0,
+    isArchived: createdTopic.isArchived || false,
+  };
 };

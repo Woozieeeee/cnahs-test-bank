@@ -33,7 +33,7 @@ export const archiveTopicService = async (
     throw error;
   }
 
-  return prisma.topic.update({
+  const archivedTopic = await prisma.topic.update({
     where: {
       id: topicId,
     },
@@ -41,5 +41,16 @@ export const archiveTopicService = async (
     data: {
       isArchived: true,
     },
+    include: {
+      questions: true,
+    },
   });
+
+  return {
+    id: archivedTopic.id,
+    name: archivedTopic.name,
+    description: archivedTopic.description,
+    totalQuestions: archivedTopic.questions.length,
+    isArchived: archivedTopic.isArchived,
+  };
 };

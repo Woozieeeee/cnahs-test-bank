@@ -15,11 +15,7 @@ export const restoreTopicController = async (
 
     const topic = await restoreTopicService(facultyId, topicId);
 
-    return res.status(200).json({
-      message: "Topic restored successfully",
-
-      topic,
-    });
+    return res.status(200).json(topic);
   } catch (error: any) {
     return res.status(400).json({
       message: error.message,

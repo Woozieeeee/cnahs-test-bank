@@ -97,7 +97,7 @@ function QuestionUploadCsvModal({
 
   const handleDownloadTemplate = async () => {
     try {
-      await downloadQuestionTemplate(topicId);
+      await downloadQuestionTemplate();
     } catch {
       errorToast("Failed to download template.");
     }

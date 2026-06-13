@@ -22,13 +22,8 @@ function SectionSubjectCard({
 }: Props) {
   const subject = sectionSubject.subject;
 
-  // MOCKS FOR NOW
-
-  const regularStudents = 42;
-
-  const irregularStudents = 5;
-
-  const hasFaculty = !!subject.faculty;
+  // Status badge styling
+  const hasFaculty = !!(subject.faculty && typeof subject.faculty === 'object' && 'name' in subject.faculty);
 
   return (
     <MotionCard>
@@ -74,13 +69,13 @@ function SectionSubjectCard({
 
           <div className="mt-4 grid grid-cols-2 gap-3">
             <MetricCard
-              label="Regular"
-              value={regularStudents}
+              label="Faculty"
+              value={hasFaculty ? 1 : 0}
             />
 
             <MetricCard
-              label="Irregular"
-              value={irregularStudents}
+              label="Status"
+              value={hasFaculty ? 1 : 0}
             />
           </div>
 
