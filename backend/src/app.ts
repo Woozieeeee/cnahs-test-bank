@@ -9,6 +9,7 @@ import studentRoutes from "./routes/student_routes";
 import studentRecordRoutes from "./routes/admin/student_record_routes";
 import notificationRoutes from "./routes/notification_routes";
 import devRoutes from "./routes/dev_routes";
+import { errorHandler } from "./middleware/error_middleware";
 
 const app = express();
 
@@ -37,5 +38,8 @@ app.use(
   studentRecordRoutes,
 );
 app.use("/api/dev", devRoutes);
+
+// Global error handler middleware - must be after all routes
+app.use(errorHandler);
 
 export default app;
